@@ -29,3 +29,5 @@ jobs:
         run: node tests/needs_attention_engine.test.js
       - name: Run ARC data adapter tests
         run: node tests/needs_attention_arc_adapter.test.js
+      - name: Run Project Checkpoint tests
+        run: node tests/project_checkpoints.test.js

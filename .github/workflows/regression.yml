@@ -19,5 +19,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Run ARC regression gate
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run ARC static regression gate
         run: python tests/regression_static.py
+      - name: Run Needs Attention behavioral tests
+        run: node tests/needs_attention_engine.test.js

@@ -33,3 +33,5 @@ jobs:
         run: node tests/project_checkpoints.test.js
       - name: Run Project Checkpoint Controller tests
         run: node tests/project_checkpoint_controller.test.js
+      - name: Run Project Activity Scope tests
+        run: node tests/project_activity_scope.test.js

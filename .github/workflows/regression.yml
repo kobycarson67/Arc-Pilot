@@ -27,3 +27,5 @@ jobs:
         run: python tests/regression_static.py
       - name: Run Needs Attention behavioral tests
         run: node tests/needs_attention_engine.test.js
+      - name: Run ARC data adapter tests
+        run: node tests/needs_attention_arc_adapter.test.js

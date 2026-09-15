@@ -1,7 +1,7 @@
 const assert=require('assert');
 const A=require('../src/needs_attention_arc_adapter');
 const E=require('../src/needs_attention_engine');
-let pass=0;function test(name,fn){try{fn();pass++;console.log('PASS',name);}catch(e){console.error('FAIL',name,e.message);process.exitCode=1;}}
+let pass=0,total=0;function test(name,fn){total++;try{fn();pass++;console.log('PASS',name);}catch(e){console.error('FAIL',name,e.message);process.exitCode=1;}}
 function state(){return {academicYear:'2026-27',semester:'Semester 1',activeSectionId:'sec1',sections:[{id:'sec1',course:'wt',period:2}],classes:{wt:[{id:'s1',name:'Alex',enrollments:[{year:'2026-27',semester:'Semester 1',sectionId:'sec1',period:2,course:'wt',active:true}],ratings:{'WT-S1':2},ratingScopes:{'WT-S1':{academicYear:'2026-27',semester:'Semester 1',sectionId:'sec1',course:'wt'}},tech:[],workplacePoints:{}}],awt:[]},lessonBank:{wt:[],awt:[]},pacingPlans:{},attendanceRecords:{},technicalLibrary:{wt:[],awt:[]}};}
 function defs(){return {wt:[{code:'WT-S1',name:'PPE',standard:'WT 1.1'}],awt:[]};}
 function addPacing(s,status,standards,actualDates){s.lessonBank.wt=[{id:'lesson1',title:'Safety',standards:standards||['WT 1.1']}];s.pacingPlans.sec1={sectionId:'sec1',items:[{id:'pace1',lessonId:'lesson1',status:status,actualDates:actualDates||[]}]};return s;}
@@ -43,4 +43,4 @@ test('other-term Workplace week excluded',()=>{let s=addWork(state(),'2026-09-14
 test('legacy unscoped Workplace week excluded conservatively',()=>{let s=addWork(state(),'2026-09-14','mon',3);delete s.classes.wt[0].workplacePoints['2026-09-14'].semester;assert.equal(A.adapt(s,{today:'2026-09-15',sectionId:'sec1'}).students[0].workplace.length,0);});
 test('excluded Workplace day contributes no event',()=>{let s=addWork(state(),'2026-09-14','mon',3);s.classes.wt[0].workplacePoints['2026-09-14'].days.mon.status='excused';assert.equal(A.adapt(s,{today:'2026-09-15',sectionId:'sec1'}).students[0].workplace.length,0);});
 test('Workplace adapter no mutation',()=>{let s=addWork(state(),'2026-09-14','mon',3),b=JSON.stringify(s);A.adapt(s,{today:'2026-09-15',sectionId:'sec1'});assert.equal(JSON.stringify(s),b);});
-if(!process.exitCode)console.log('\n'+pass+'/48 ARC adapter tests passed.');
+if(!process.exitCode)console.log('\n'+pass+'/'+total+' ARC adapter tests passed.');

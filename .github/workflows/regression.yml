@@ -31,3 +31,5 @@ jobs:
         run: node tests/needs_attention_arc_adapter.test.js
       - name: Run Project Checkpoint tests
         run: node tests/project_checkpoints.test.js
+      - name: Run Project Checkpoint Controller tests
+        run: node tests/project_checkpoint_controller.test.js

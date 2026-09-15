@@ -1,0 +1,16 @@
+# ARC Pilot — never commit classroom/private data
+*.zip
+Welding_Classroom_Backup_*.json
+*Backup*.json
+backups/
+student-data/
+student-photos/
+photos/
+.env
+.env.*
+*.pem
+*.key
+secrets.*
+tokens.*
+.DS_Store
+Thumbs.db

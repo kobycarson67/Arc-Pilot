@@ -1,0 +1,5 @@
+ARC Pilot — Development Build
+Copyright notice: No open-source license is granted with this development build.
+Do not place student records, classroom backups, student photographs, passwords,
+Microsoft tokens, client secrets, or other private school data in a public hosting repository.
+Hosted files should contain application code/assets only.

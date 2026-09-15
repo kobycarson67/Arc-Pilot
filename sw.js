@@ -1,10 +1,9 @@
-const CACHE_NAME = 'welding-classroom-v0.17.0';
+const CACHE_NAME = 'arc-pilot-v0.17.1';
 const APP_SHELL = [
   './',
   './index.html',
   './app.webmanifest',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-192.png'
 ];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));

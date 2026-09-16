@@ -1,0 +1,33 @@
+/* ARC Visual Foundation v1
+   Industrial-premium tablet UI. Royal blue identity, restrained gold accent,
+   tactile controls with visible physical press feedback. */
+:root{
+  --arc-bg:#eef1f5;--arc-surface:#ffffff;--arc-surface-2:#f7f8fa;
+  --arc-ink:#111827;--arc-muted:#667085;--arc-charcoal:#171a21;--arc-black:#0b0d11;
+  --arc-blue:#2457d6;--arc-blue-deep:#173a94;--arc-blue-light:#e8efff;
+  --arc-gold:#c89b32;--arc-gold-light:#f4dc8a;--arc-gold-deep:#8f6815;
+  --arc-success:#16834a;--arc-warning:#c7790a;--arc-danger:#b42318;
+  --arc-line:#cfd5df;--arc-radius:12px;--arc-radius-lg:16px;
+  --arc-shadow:0 3px 0 #9aa4b2,0 6px 14px rgba(17,24,39,.13);
+  --arc-shadow-pressed:0 1px 0 #8e98a7,0 2px 5px rgba(17,24,39,.12);
+  --arc-press-distance:2px;--arc-press-speed:70ms;
+}
+.arc-panel{background:linear-gradient(180deg,#fff 0%,#f9fafb 100%);border:1px solid var(--arc-line);border-radius:var(--arc-radius-lg);box-shadow:0 7px 22px rgba(17,24,39,.09);overflow:hidden}
+.arc-panel-accent{border-top:3px solid var(--arc-gold)}
+.arc-btn{appearance:none;-webkit-appearance:none;min-height:46px;padding:10px 16px;border:1px solid #aeb7c5;border-bottom-color:#8792a3;border-radius:var(--arc-radius);background:linear-gradient(180deg,#fff 0%,#f2f4f7 52%,#e5e9ef 100%);color:var(--arc-ink);font:inherit;font-weight:800;letter-spacing:.01em;box-shadow:var(--arc-shadow);cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;transform:translateY(0);transition:transform var(--arc-press-speed) ease,box-shadow var(--arc-press-speed) ease,filter var(--arc-press-speed) ease}
+.arc-btn::before{content:"";position:absolute;inset:1px 8px auto;height:38%;border-radius:10px 10px 50% 50%;background:linear-gradient(180deg,rgba(255,255,255,.48),rgba(255,255,255,0));pointer-events:none}
+.arc-btn{position:relative;overflow:hidden}
+.arc-btn:active,.arc-btn.is-pressed{transform:translateY(var(--arc-press-distance));box-shadow:var(--arc-shadow-pressed);filter:brightness(.96)}
+.arc-btn:focus-visible{outline:3px solid rgba(36,87,214,.28);outline-offset:3px}
+.arc-btn:disabled,.arc-btn[aria-disabled="true"]{opacity:.52;cursor:not-allowed;box-shadow:0 1px 0 #aeb7c5;transform:none;filter:saturate(.65)}
+.arc-btn-primary{color:#fff;border-color:#173a94;border-bottom-color:#102b70;background:linear-gradient(180deg,#3b70ed 0%,var(--arc-blue) 48%,var(--arc-blue-deep) 100%);text-shadow:0 1px 1px rgba(0,0,0,.24);box-shadow:0 3px 0 #102b70,0 6px 14px rgba(23,58,148,.24)}
+.arc-btn-primary:active,.arc-btn-primary.is-pressed{box-shadow:0 1px 0 #102b70,0 2px 5px rgba(23,58,148,.22)}
+.arc-btn-gold{color:#251b06;border-color:#9b741d;border-bottom-color:#75530d;background:linear-gradient(180deg,#f5df91 0%,#d8ad45 48%,#b78620 100%);text-shadow:0 1px rgba(255,255,255,.45);box-shadow:0 3px 0 #75530d,0 6px 14px rgba(143,104,21,.22)}
+.arc-btn-gold:active,.arc-btn-gold.is-pressed{box-shadow:0 1px 0 #75530d,0 2px 5px rgba(143,104,21,.2)}
+.arc-btn-danger{color:#fff;border-color:#8f1c14;border-bottom-color:#6d160f;background:linear-gradient(180deg,#d84b40 0%,var(--arc-danger) 55%,#8f1c14 100%);box-shadow:0 3px 0 #6d160f,0 6px 14px rgba(180,35,24,.2)}
+.arc-status{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid var(--arc-line);background:var(--arc-surface-2)}
+.arc-status-review{background:#fff7dc;border-color:#d8ad45;color:#6c4b08}.arc-status-verified{background:#e8f6ee;border-color:#9bd3b4;color:#12663b}.arc-status-attention{background:#fff0ed;border-color:#efb0aa;color:#8e2118}
+.arc-progress-track{height:9px;border-radius:999px;background:#dce1e8;box-shadow:inset 0 1px 2px rgba(17,24,39,.18);overflow:hidden}.arc-progress-fill{height:100%;background:linear-gradient(90deg,var(--arc-blue-deep),var(--arc-blue) 70%,var(--arc-gold));border-radius:inherit}
+.arc-gold-rule{height:2px;background:linear-gradient(90deg,transparent,var(--arc-gold),var(--arc-gold-light),var(--arc-gold),transparent);opacity:.9}
+@media (pointer:coarse){.arc-btn{min-height:50px;padding:12px 18px}}
+@media (prefers-reduced-motion:reduce){.arc-btn{transition:none}}

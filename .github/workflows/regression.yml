@@ -43,3 +43,5 @@ jobs:
         run: node tests/project_checkpoint_persistence.test.js
       - name: Run Project Checkpoint Host Bridge tests
         run: node tests/project_checkpoint_host_bridge.test.js
+      - name: Run ARC Visual Foundation tests
+        run: node tests/visual_foundation.test.js

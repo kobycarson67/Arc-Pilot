@@ -41,3 +41,5 @@ jobs:
         run: node tests/project_tab_adapter.test.js
       - name: Run Project Checkpoint Persistence tests
         run: node tests/project_checkpoint_persistence.test.js
+      - name: Run Project Checkpoint Host Bridge tests
+        run: node tests/project_checkpoint_host_bridge.test.js

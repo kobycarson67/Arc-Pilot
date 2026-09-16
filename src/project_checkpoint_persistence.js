@@ -1,0 +1,17 @@
+/* ARC Project Checkpoint Persistence.
+   Builds an atomic save/history transaction after a tested Project Tab action.
+   The host app performs the actual storage write/autosave. */
+(function(root,factory){
+  var api=factory(root.ArcProjectTabAdapter||(typeof require==='function'?require('./project_tab_adapter'):null));
+  if(typeof module==='object'&&module.exports) module.exports=api;
+  else root.ArcProjectCheckpointPersistence=api;
+}(this,function(A){
+  function clone(x){return JSON.parse(JSON.stringify(x));}
+  function checkpoint(project,id){return project&&Array.isArray(project.checkpoints)?project.checkpoints.find(function(c){return c.id===id;})||null:null;}
+  function actionLabel(action){return {initialize:'Checkpoint tracking started',start:'Checkpoint started',ready:'Checkpoint ready for review',verify:'Checkpoint verified',reopen:'Checkpoint reopened'}[action]||'Checkpoint updated';}
+  function historyEntry(input){var before=checkpoint(input.beforeProject,input.checkpointId),after=checkpoint(input.afterProject,input.checkpointId);return {id:input.historyId||'',type:'project_checkpoint',date:input.date||'',timestamp:input.timestamp||'',academicYear:input.academicYear||'',semester:input.semester||'',sectionId:input.sectionId||'',studentId:input.studentId||'',projectId:input.projectId||'',projectName:(input.afterProject&&(input.afterProject.name||input.afterProject.title))||(input.beforeProject&&(input.beforeProject.name||input.beforeProject.title))||'Project',checkpointId:input.checkpointId||'',checkpointName:(after&&after.name)||(before&&before.name)||'',action:input.action||'',label:actionLabel(input.action),fromStatus:before&&before.status||'',toStatus:after&&after.status||'',verifiedBy:input.verifiedBy||'',note:input.note||''};}
+  function transact(state,student,projectId,action,checkpointId,extra){extra=extra||{};var found=A.findProject(student,projectId),before=found.project;if(!before)return {changed:false,state:state,student:student,historyEntry:null,undo:null};var result=A.apply(state,student,projectId,action,checkpointId,extra);if(!result.changed)return {changed:false,state:state,student:student,historyEntry:null,undo:null};var ctx=A.context(state||{},student||{},extra),entry=historyEntry({historyId:extra.historyId||'',date:ctx.date||(ctx.timestamp?String(ctx.timestamp).slice(0,10):''),timestamp:ctx.timestamp,academicYear:ctx.academicYear,semester:ctx.semester,sectionId:ctx.sectionId,studentId:student.id,projectId:projectId,beforeProject:before,afterProject:result.project,checkpointId:checkpointId,action:action,verifiedBy:ctx.verifiedBy,note:extra.historyNote||''});return {changed:true,state:state,student:result.student,project:result.project,historyEntry:entry,undo:{studentId:student.id,projectId:projectId,projectIndex:found.index,beforeProject:clone(before),historyId:entry.id}};}
+  function applyUndo(student,undo){if(!student||!undo||student.id!==undo.studentId)return {changed:false,student:student};var projects=Array.isArray(student.projects)?student.projects.slice():[];if(undo.projectIndex<0||undo.projectIndex>=projects.length)return {changed:false,student:student};projects[undo.projectIndex]=clone(undo.beforeProject);var copy=Object.assign({},student,{projects:projects});return {changed:true,student:copy};}
+  function appendHistory(history,entry){var list=Array.isArray(history)?history.slice():[];if(entry)list.push(entry);return list;}
+  return {actionLabel:actionLabel,historyEntry:historyEntry,transact:transact,applyUndo:applyUndo,appendHistory:appendHistory};
+}));

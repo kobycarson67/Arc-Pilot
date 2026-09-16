@@ -1,10 +1,16 @@
 name: ARC Checkpoint Card Dock
+
 on:
+  workflow_dispatch:
   push:
-    branches: [ 'dev/v0.18-needs-attention' ]
-    paths: [ '.github/workflows/checkpoint-card-dock.yml' ]
+    branches:
+      - dev/v0.18-needs-attention
+    paths:
+      - .github/workflows/checkpoint-card-dock.yml
+
 permissions:
   contents: write
+
 jobs:
   dock:
     runs-on: ubuntu-latest

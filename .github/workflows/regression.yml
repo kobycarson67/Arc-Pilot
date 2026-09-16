@@ -39,3 +39,5 @@ jobs:
         run: node tests/project_checkpoint_presenter.test.js
       - name: Run Project Tab Adapter tests
         run: node tests/project_tab_adapter.test.js
+      - name: Run Project Checkpoint Persistence tests
+        run: node tests/project_checkpoint_persistence.test.js

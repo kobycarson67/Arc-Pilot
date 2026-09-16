@@ -1,0 +1,18 @@
+const assert=require('assert');
+const B=require('../src/project_checkpoint_host_bridge');
+const K=require('../src/project_checkpoint_controller');
+let pass=0,total=0;function test(name,fn){total++;try{fn();pass++;console.log('PASS',name);}catch(e){console.error('FAIL',name,e.message);process.exitCode=1;}}
+function state(){return {academicYear:'2026-27',semester:'Semester 1',activeSectionId:'sec1'};}
+function student(){return {id:'s1',name:'Alex',enrollments:[{year:'2026-27',semester:'Semester 1',sectionId:'sec1',active:true}],projects:[K.initialize({templateId:'p1',name:'Table',status:'in_progress'})]};}
+function host(fail){let x={student:null,history:[],saves:0};return {x,getHistory:()=>x.history,setHistory:h=>x.history=h,replaceStudent:s=>x.student=s,save:()=>{x.saves++;if(fail)throw new Error('disk');}};}
+test('execute replaces student appends history and saves once',()=>{let h=host(),r=B.execute(h,state(),student(),'p1','start','plan',{timestamp:'2026-09-16T14:00:00',historyId:'h1'});assert.equal(r.ok,true);assert.equal(h.x.student.projects[0].checkpoints[0].status,'in_progress');assert.equal(h.x.history.length,1);assert.equal(h.x.saves,1);});
+test('no-op action does not save',()=>{let h=host(),s=student(),r=B.execute(h,state(),s,'p1','mystery','plan',{});assert.equal(r.changed,false);assert.equal(h.x.saves,0);});
+test('missing host save is rejected before mutation',()=>{let s=student(),replaced=false,r=B.execute({replaceStudent:()=>replaced=true},state(),s,'p1','start','plan',{});assert.equal(r.ok,false);assert.equal(replaced,false);});
+test('save failure rolls student and history back',()=>{let h=host(true),s=student();h.x.student=s;h.x.history=[{id:'old'}];let r=B.execute(h,state(),s,'p1','verify','plan',{timestamp:'2026-09-16T14:00:00',historyId:'new'});assert.equal(r.ok,false);assert.strictEqual(h.x.student,s);assert.deepEqual(h.x.history,[{id:'old'}]);});
+test('execute returns undo token',()=>{let h=host(),r=B.execute(h,state(),student(),'p1','verify','plan',{timestamp:'2026-09-16T14:00:00',historyId:'h1'});assert.equal(r.undo.projectId,'p1');assert.equal(r.undo.historyId,'h1');});
+test('undo restores project removes matching history and saves',()=>{let h=host(),s=student(),r=B.execute(h,state(),s,'p1','verify','plan',{timestamp:'2026-09-16T14:00:00',historyId:'h1'}),u=B.undo(h,r.student,r.undo,r.history);assert.equal(u.ok,true);assert.equal(u.student.projects[0].checkpoints[0].status,'not_started');assert.equal(u.history.length,0);assert.equal(h.x.saves,2);});
+test('undo preserves unrelated history',()=>{let h=host(),s=student(),r=B.execute(h,state(),s,'p1','start','plan',{timestamp:'2026-09-16T14:00:00',historyId:'h1'});r.history.unshift({id:'other'});let u=B.undo(h,r.student,r.undo,r.history);assert.deepEqual(u.history.map(x=>x.id),['other']);});
+test('undo wrong student is no-op and does not save again',()=>{let h=host(),r=B.execute(h,state(),student(),'p1','start','plan',{timestamp:'2026-09-16T14:00:00',historyId:'h1'}),other=Object.assign({},r.student,{id:'s2'}),u=B.undo(h,other,r.undo,r.history);assert.equal(u.changed,false);assert.equal(h.x.saves,1);});
+test('history is optional for hosts that store it elsewhere',()=>{let x={student:null,saves:0},h={replaceStudent:s=>x.student=s,save:()=>x.saves++},r=B.execute(h,state(),student(),'p1','start','plan',{timestamp:'2026-09-16T14:00:00'});assert.equal(r.ok,true);assert.equal(x.saves,1);});
+test('bridge does not mutate source student',()=>{let h=host(),s=student(),before=JSON.stringify(s);B.execute(h,state(),s,'p1','start','plan',{timestamp:'2026-09-16T14:00:00'});assert.equal(JSON.stringify(s),before);});
+if(!process.exitCode)console.log('\n'+pass+'/'+total+' Project Checkpoint Host Bridge tests passed.');

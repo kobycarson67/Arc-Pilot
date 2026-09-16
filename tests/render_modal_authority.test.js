@@ -1,0 +1,10 @@
+const fs=require('fs'),assert=require('assert');
+const html=fs.readFileSync('index.html','utf8');
+const count=(html.match(/function\s+renderModal\s*\(/g)||[]).length;
+assert.equal(count,1,'index.html must contain exactly one authoritative renderModal definition');
+assert(html.includes('if (tab === "projects")'),'authoritative renderer must retain Projects tab');
+assert(html.includes('showProjectAssigner()'),'Projects tab must retain assignment workflow');
+assert(html.includes('projectRow(p, i)'),'Projects tab must retain existing rubric/project rows until checkpoint card integration');
+console.log('PASS single authoritative renderModal');
+console.log('PASS Projects workflow retained');
+console.log('\n2/2 Render Modal Authority tests passed.');

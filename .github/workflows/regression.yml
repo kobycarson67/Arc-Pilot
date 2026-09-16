@@ -47,3 +47,5 @@ jobs:
         run: node tests/visual_foundation.test.js
       - name: Run Project Checkpoint Card tests
         run: node tests/project_checkpoint_card.test.js
+      - name: Run Render Modal Authority tests
+        run: node tests/render_modal_authority.test.js

@@ -1,0 +1,38 @@
+name: ARC Renderer Cleanup
+
+on:
+  push:
+    branches: [ 'dev/v0.18-needs-attention' ]
+    paths: [ '.github/workflows/renderer_cleanup.yml' ]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/v0.18-needs-attention
+      - name: Rename only the obsolete first renderer
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          needle='function renderModal() {'
+          assert s.count(needle)==2, f'Expected exactly 2 renderModal definitions before cleanup, found {s.count(needle)}'
+          s=s.replace(needle,'function renderModalObsolete() {',1)
+          assert s.count(needle)==1
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Verify authority test before commit
+        run: node tests/render_modal_authority.test.js
+      - name: Commit cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Remove obsolete renderModal shadow"
+          git push origin HEAD:dev/v0.18-needs-attention

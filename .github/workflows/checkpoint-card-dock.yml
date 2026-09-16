@@ -1,0 +1,63 @@
+name: ARC Checkpoint Card Dock
+on:
+  push:
+    branches: [ 'dev/v0.18-needs-attention' ]
+    paths: [ '.github/workflows/checkpoint-card-dock.yml' ]
+permissions:
+  contents: write
+jobs:
+  dock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev/v0.18-needs-attention
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Dock premium checkpoint card
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          let s=fs.readFileSync('index.html','utf8');
+          if((s.match(/function\s+renderModal\s*\(/g)||[]).length!==1) throw new Error('Expected exactly one authoritative renderModal');
+          if(!s.includes('src/project_checkpoint_card.js')){
+            const head='</head>';
+            if(!s.includes(head)) throw new Error('Missing </head>');
+            s=s.replace(head,'  <link rel="stylesheet" href="src/arc_visual_foundation.css">\n  <script src="src/project_checkpoint_card.js"></script>\n'+head);
+          }
+          const old=`if (tab === "projects") {
+        html += \`<div class="card"><div class="row"><h3>Fabrication & Projects</h3><button class="btn primary" onclick="showProjectAssigner()">+ Assign Project</button></div>
+   <p class="small">Create a project title once, then reuse it for other students. This reusable course-project list will later connect directly to the Project Bank.</p>
+   \${s.projects.length ? s.projects.map((p, i) => projectRow(p, i)).join("") : "<p class='small'>No projects assigned yet.</p>"}</div>\`;
+    }`;
+          const replacement=`if (tab === "projects") {
+        let checkpointCards = "";
+        if (window.ArcProjectCheckpointCard && window.ArcProjectTabAdapter && s.projects.length) {
+            checkpointCards = s.projects.map((p, i) => {
+                try {
+                    let vm = window.ArcProjectTabAdapter.projectCard ? window.ArcProjectTabAdapter.projectCard(s, p, i) : null;
+                    return vm ? window.ArcProjectCheckpointCard.render(vm) : projectRow(p, i);
+                } catch (e) { console.warn("ARC checkpoint card fallback", e); return projectRow(p, i); }
+            }).join("");
+        } else checkpointCards = s.projects.map((p, i) => projectRow(p, i)).join("");
+        html += \`<div class="card"><div class="row"><h3>Fabrication & Projects</h3><button class="arc-btn arc-btn-primary" onclick="showProjectAssigner()">+ Assign Project</button></div>
+   <p class="small">Project checkpoints track fabrication progress separately from rubric grading. Existing project grading remains available and unchanged.</p>
+   \${s.projects.length ? checkpointCards : "<p class='small'>No projects assigned yet.</p>"}</div>\`;
+    }`;
+          if(!s.includes(old)) throw new Error('Authoritative Projects block not found exactly; refusing unsafe patch');
+          s=s.replace(old,replacement);
+          fs.writeFileSync('index.html',s);
+          NODE
+      - name: Verify authority and card contracts
+        run: |
+          node tests/render_modal_authority.test.js
+          node tests/project_checkpoint_card.test.js
+          node -e "const s=require('fs').readFileSync('index.html','utf8'); if(!s.includes('ArcProjectCheckpointCard.render')) process.exit(1); console.log('PASS checkpoint card dock present')"
+      - name: Commit docking
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Integrate premium checkpoint cards into Projects tab"
+          git push

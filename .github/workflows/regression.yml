@@ -37,3 +37,5 @@ jobs:
         run: node tests/project_activity_scope.test.js
       - name: Run Project Checkpoint Presenter tests
         run: node tests/project_checkpoint_presenter.test.js
+      - name: Run Project Tab Adapter tests
+        run: node tests/project_tab_adapter.test.js

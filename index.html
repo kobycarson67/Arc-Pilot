@@ -24,11 +24,11 @@
 <script src="src/deployment_readiness.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
-*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+*{box-sizing:border-box} html,body{overscroll-behavior-y:none} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);touch-action:pan-y}
 button,input,select,textarea{font:inherit}
 header{position:sticky;top:0;z-index:60;background:#111827;color:#fff;padding:10px 15px;display:grid;gap:8px}
 .headerline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.navbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
-.navbtn,.navselect{border:1px solid #475569;background:#1f2937;color:#fff;border-radius:8px;padding:8px 10px;font-weight:700}.navbtn:disabled{opacity:.45}.navselect{max-width:250px}
+.navbtn,.navselect{border:1px solid #475569;background:#1f2937;color:#fff;border-radius:8px;padding:8px 10px;font-weight:700}.navbtn:disabled{opacity:.45}.navselect{max-width:250px}.class-menu-wrap{position:relative}.class-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:90;width:min(340px,calc(100vw - 24px));padding:6px;border:1px solid #62708a;border-radius:10px;background:#151a23;box-shadow:0 12px 28px #0008}.class-menu[hidden]{display:none}.class-menu button{display:block;width:100%;margin:2px 0;text-align:left}
 .navbadge{display:inline-block;min-width:18px;padding:1px 5px;border-radius:999px;background:#b91c1c;color:white;font-size:11px;margin-left:3px}.breadcrumb{font-size:12px;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand{font-size:21px;font-weight:800}.sub{font-size:12px;color:#cbd5e1}
 main{max-width:1200px;margin:auto;padding:14px}
@@ -39,7 +39,7 @@ main{max-width:1200px;margin:auto;padding:14px}
 .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:0 2px 8px #0000000c}
 .roster{display:grid;gap:8px}.student{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px;display:grid;grid-template-columns:1.5fr .6fr .7fr 1.1fr auto;gap:8px;align-items:center}
 .pill{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--light);font-size:12px;font-weight:700}.pill.good{background:var(--good)}.pill.warn{background:var(--warn)}.pill.bad{background:var(--bad)}
-.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:40;padding:12px}.modal.show{display:flex}.modalbox{background:white;border-radius:15px;width:min(1050px,100%);max-height:94vh;overflow:auto;padding:15px}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:40;padding:12px}.modal.show{display:flex}.modalbox{background:white;border-radius:15px;width:min(1050px,100%);max-height:94vh;overflow:auto;padding:15px}#modal{align-items:flex-start;padding-top:calc(var(--arc-header-height,100px) + 8px)}#modal .modalbox{max-height:calc(100dvh - var(--arc-header-height,100px) - 16px)}.student-profile-nav{position:sticky;top:-15px;z-index:8;margin:-15px -15px 12px;padding:15px 15px 10px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 5px 12px #1112}.student-profile-nav h2{margin:0 42px 6px 0}.student-profile-nav .tabs{margin-bottom:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.student-profile-nav .tab{flex:0 0 auto}
 .close{float:right}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.tab{border:1px solid var(--line);background:white;border-radius:8px;padding:8px 10px;font-weight:700}.tab.on{background:var(--accent);color:white}
 .small{font-size:12px;color:var(--muted)}.big{font-size:28px;font-weight:800}
 details{background:#fff;border:1px solid var(--line);border-radius:10px;margin:7px 0;overflow:hidden}details[open]{box-shadow:0 2px 8px #0001}
@@ -55,6 +55,7 @@ table{width:100%;border-collapse:collapse;background:white}th,td{border:1px soli
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.toolbar select{padding:9px;border:1px solid var(--line);border-radius:9px;background:white}
 
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}.photo-card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.photo-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;background:#e5e7eb;display:block}.photo-meta{padding:9px}.photo-placeholder{width:100%;aspect-ratio:4/3;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:8px}.photo-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.photo-toolbar select,.photo-toolbar input{padding:9px;border:1px solid var(--line);border-radius:9px;background:white}
+.competency-feedback{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0;padding:10px 12px;border:2px solid #15803d;border-radius:10px;background:#e8f6ee;color:#12663b}.workplace-deduction.is-active{border-color:#15803d!important;background:#e8f6ee!important;color:#12663b;box-shadow:inset 0 0 0 2px #15803d}.attendance-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}.attendance-choice{min-height:52px;text-align:left}.attendance-choice.is-selected{border-color:#173a94;background:#2457d6;color:#fff;box-shadow:inset 0 0 0 2px #fff,0 2px 0 #102b70}
 .app-status{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.statusdot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#94a3b8}.statusdot.good{background:#15803d}.statusdot.warn{background:#d97706}.statusdot.bad{background:#b91c1c}.install-card{border-left:5px solid var(--accent)}
 @media(display-mode:standalone){body{overscroll-behavior:none}header{padding-top:calc(10px + env(safe-area-inset-top))}main{padding-bottom:calc(14px + env(safe-area-inset-bottom))}}
 @media(max-width:800px){.headerline{align-items:flex-start}.navbar{width:100%}.navbtn,.navselect{padding:9px 10px}.student{grid-template-columns:1fr 1fr}.student .wide{grid-column:1/-1}.rates,.workrow{grid-template-columns:1fr 1fr}}
@@ -63,7 +64,7 @@ table{width:100%;border-collapse:collapse;background:white}th,td{border:1px soli
 <body>
 <header>
 <div class="headerline"><div><div class="brand">Welding Classroom</div><div class="sub">ARC Pilot v0.18 • Installable App Foundation</div></div>
-<div class="navbar"><button id="navBackBtn" class="navbtn" onclick="navBack()">← Back</button><button class="navbtn" onclick="renderMainMenu()">⌂ Main Menu</button><select id="navClassSelect" class="navselect" onchange="navSwitchClass(this.value)"></select><button class="navbtn" onclick="showQuickAdd()">＋ Quick Add</button><button class="navbtn" onclick="showGlobalSearch()">⌕ Search</button><button class="navbtn" onclick="showNotifications()">🔔<span id="navNotificationBadge" class="navbadge" style="display:none">0</span></button><button class="navbtn" onclick="renderAppSettings()">⚙ Settings</button></div></div>
+<div class="navbar"><button id="navBackBtn" class="navbtn" onclick="navBack()">← Back</button><button class="navbtn" onclick="renderMainMenu()">⌂ Main Menu</button><div class="class-menu-wrap"><button id="navClassButton" class="navbtn navselect" type="button" aria-haspopup="true" aria-expanded="false" onclick="toggleClassMenu(event)">Classes ▾</button><div id="navClassMenu" class="class-menu" hidden></div></div><button class="navbtn" onclick="showQuickAdd()">＋ Quick Add</button><button class="navbtn" onclick="showGlobalSearch()">⌕ Search</button><button class="navbtn" onclick="showNotifications()">🔔<span id="navNotificationBadge" class="navbadge" style="display:none">0</span></button><button class="navbtn" onclick="renderAppSettings()">⚙ Settings</button></div></div>
 <div id="navBreadcrumb" class="breadcrumb">Main Menu</div></header>
 <main><div class="banner">FICTIONAL STUDENT DATA ONLY — ARC Pilot v0.18. Full-screen Home Screen mode is prepared for hosted deployment. OneDrive sync is architected but NOT connected yet; device-local data/photos are not cross-device protection. No encryption or login yet.</div>
 <div id="app"></div>
@@ -136,6 +137,7 @@ const CURRENT_SCHEMA_VERSION = 5;
 const PREUPGRADE_RECOVERY_KEY = "weld_v013_preupgrade_recovery";
 const IMPORT_ROLLBACK_KEY = "weld_v013_import_rollback";
 const BACKUP_META_KEY = "weld_v013_backup_meta";
+const NAV_CONTEXT_KEY = "arc_v018_navigation_context";
 let storageAvailable = true;
 const memoryStorageFallback = {};
 const persistentStorage = {
@@ -471,6 +473,11 @@ function selectSection(id) { state.activeSectionId = id; let sec = activeSection
 function ordinal(n) { return n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"; }
 ensureScheduleModel();
 let current = null, tab = "summary";
+const RESTORABLE_VIEWS = ["main", "roster", "projects", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"];
+const RESTORABLE_STUDENT_TABS = ["summary", "competencies", "attendance", "workplace", "behavior", "projects", "technical", "photos", "grades", "openshop", "history"];
+function persistNavigationContext() { try { sessionStorage.setItem(NAV_CONTEXT_KEY, JSON.stringify({ view: RESTORABLE_VIEWS.includes(navCurrentView) ? navCurrentView : "main", sectionId: state.activeSectionId || "", studentId: current ? current.id : "", studentTab: RESTORABLE_STUDENT_TABS.includes(tab) ? tab : "summary", studentOpen: !!(current && document.getElementById("modal") && document.getElementById("modal").classList.contains("show")) })); } catch (e) { } }
+function restoreNavigationContext() { let saved; try { saved = JSON.parse(sessionStorage.getItem(NAV_CONTEXT_KEY) || "null"); } catch (e) { return false; } if (!saved || !RESTORABLE_VIEWS.includes(saved.view)) return false; let sec = state.sections.find(x => x.id === saved.sectionId); if (sec) { state.activeSectionId = sec.id; state.course = sec.course; } if (saved.view === "main") renderMainMenu(); else navRender(saved.view); if (saved.studentOpen && saved.studentId) { let student = allStudents().find(x => x.id === saved.studentId); if (student) { current = student; tab = RESTORABLE_STUDENT_TABS.includes(saved.studentTab) ? saved.studentTab : "summary"; document.getElementById("modal").classList.add("show"); renderModal(); updateNavigationBar(`${navViewLabel(navCurrentView)} › ${student.name}`); } } return true; }
+function setStudentTab(next) { if (!RESTORABLE_STUDENT_TABS.includes(next)) return; tab = next; renderModal(); }
 function save() { state.schemaVersion = CURRENT_SCHEMA_VERSION; validateCurrentStateShape(state); persistentStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function students() { let sec = activeSection(); return sec ? sectionStudents(sec.id) : (state.classes[state.course] || []); }
 function ensureProjectLibrary() {
@@ -703,7 +710,7 @@ function navMark(view, label) { if (navCurrentView !== view) {
     if (navCurrentView && !navSuppressHistory)
         navHistory.push(navCurrentView);
     navCurrentView = view;
-} navSuppressHistory = false; updateNavigationBar(label); }
+} navSuppressHistory = false; updateNavigationBar(label); persistNavigationContext(); }
 
 function isStandaloneMode(){ return !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || !!window.navigator.standalone; }
 function isHostedApp(){ return location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1'; }
@@ -777,15 +784,15 @@ window.addEventListener('online',function(){if(navCurrentView==='settings')rende
 window.addEventListener('offline',function(){if(navCurrentView==='settings')renderAppAndSyncSettings();});
 
 function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.period}${ordinal(sec.period)} Period › ${courseLabel(sec.course)}` : "Welding Classroom"; return { main: "Main Menu", schedule: "Today's Schedule", setup: "Schedule Setup", roster: base, projects: `${base} › Class Projects`, technical: `${base} › Technical Scoring`, gradebook: `${base} › Gradebook`, attendance: `${base} › Attendance & Passes`, workplace: `${base} › Workplace`, openshop: `${base} › Open Shop`, behavior: `${base} › Behavior & Incidents`, settings: "Settings", appsync: "App & Sync", photolibrary: "Student Work Library", inventory: "Shop Inventory" }[view] || base; }
-function updateNavigationBar(label) { ensureScheduleModel(); let sel = document.getElementById("navClassSelect"); if (sel) {
-    let sec = activeSection();
-    sel.innerHTML = `<option value="">Classes ▾</option>` + state.sections.slice().sort((a, b) => a.period - b.period).map(s => `<option value="${s.id}" ${sec && s.id === sec.id ? "selected" : ""}>${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</option>`).join("");
-} let bc = document.getElementById("navBreadcrumb"); if (bc)
+function classContextVisible() { return ["roster", "projects", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"].includes(navCurrentView); }
+function closeClassMenu() { let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (menu) menu.hidden = true; if (button) button.setAttribute("aria-expanded", "false"); }
+function toggleClassMenu(event) { if (event) event.stopPropagation(); let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (!menu || !button) return; let opening = menu.hidden; menu.hidden = !opening; button.setAttribute("aria-expanded", opening ? "true" : "false"); }
+function updateNavigationBar(label) { ensureScheduleModel(); let button = document.getElementById("navClassButton"), menu = document.getElementById("navClassMenu"), sec = activeSection(); if (button) button.textContent = classContextVisible() && sec ? `${sec.period}${ordinal(sec.period)} — ${courseLabel(sec.course)} ▾` : "Classes ▾"; if (menu) menu.innerHTML = state.sections.slice().sort((a, b) => a.period - b.period).map(s => `<button class="navbtn ${classContextVisible() && sec && s.id === sec.id ? "is-active" : ""}" type="button" onclick="navSwitchClass('${s.id}')">${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</button>`).join(""); let bc = document.getElementById("navBreadcrumb"); if (bc)
     bc.textContent = label || navViewLabel(navCurrentView); let back = document.getElementById("navBackBtn"); if (back)
     back.disabled = !navHistory.length && !document.getElementById("modal").classList.contains("show"); let badge = document.getElementById("navNotificationBadge"), cnt = activeNotifications().length; if (badge) {
     badge.textContent = cnt;
     badge.style.display = cnt ? "inline-block" : "none";
-} }
+} if (window.requestAnimationFrame) requestAnimationFrame(updateStickyHeaderOffset); }
 function navRender(view) { navSuppressHistory = true; if (view === "main")
     return renderMainMenu(); if (view === "schedule")
     return renderScheduleHome(); if (view === "setup")
@@ -811,7 +818,7 @@ function navBack() { if (document.getElementById("modal").classList.contains("sh
     }
 } let prev = navHistory.pop(); if (prev)
     navRender(prev); }
-function navSwitchClass(id) { if (!id)
+function navSwitchClass(id) { closeClassMenu(); if (!id)
     return; state.activeSectionId = id; let sec = activeSection(); if (sec)
     state.course = sec.course; save(); renderRoster(); }
 function monthName(d) { return d.toLocaleDateString(undefined, { month: "long", year: "numeric" }); }
@@ -2215,6 +2222,7 @@ function openStudent(id) {
     window.historyCategory = "all";
     tab = "summary";
     document.getElementById("modal").classList.add("show");
+    persistNavigationContext();
     updateNavigationBar(`${navViewLabel(navCurrentView)} › ${current.name}`);
     try {
         renderModal();
@@ -2224,12 +2232,12 @@ function openStudent(id) {
         document.getElementById("modalBody").innerHTML = `<h2>${current.name}</h2><p><b>Profile error:</b> ${err.message}</p><button class="btn" onclick="closeStudent()">Close</button>`;
     }
 }
-function closeStudent() { document.getElementById("modal").classList.remove("show"); current = null; updateNavigationBar(); }
+function closeStudent() { document.getElementById("modal").classList.remove("show"); current = null; window.lastCompetencyChange = null; persistNavigationContext(); updateNavigationBar(); }
 function historyEventHtml(x) {
     let cat = x.category || "competencies";
     let label = { competencies: "Competency", projects: "Project", workplace: "Workplace", behavior: "Behavior / Incident", technical: "Technical", grades: "Grade", profile: "Profile / System" }[cat] || "History";
     if (cat === "competencies")
-        return `<div class="entryrow"><div><span class="pill">${label}</span> <b>${x.code} — ${x.name}</b><br><span class="small">${new Date(x.time).toLocaleString()}</span></div><div><b>${x.old ? x.old + " " + ratingNames[x.old] : "Not Assessed"} → ${x.new ? x.new + " " + ratingNames[x.new] : "Not Assessed"}</b>${x.undone ? `<br><span class="pill warn">Undo action</span>` : ""}</div></div>`;
+        return `<div class="entryrow"><div><span class="pill">${label}</span> <b>${x.code} — ${x.name}</b><br><span class="small">${new Date(x.time).toLocaleString()}</span></div><div><b>${ratingDisplay(x.old)} → ${ratingDisplay(x.new)}</b>${x.undone ? `<br><span class="pill warn">Undo action</span>` : ""}</div></div>`;
     return `<div class="entryrow"><div><span class="pill">${label}</span> <b>${x.title || x.type}</b><br><span class="small">${new Date(x.time).toLocaleString()}</span>${x.details ? `<br><span class="small">${x.details}</span>` : ""}</div><div><b>${x.oldValue || "—"}${(x.oldValue || x.newValue) ? " → " : ""}${x.newValue || "—"}</b></div></div>`;
 }
 const ATTENDANCE_STATUSES = { present: "Present", unexcused: "Unexcused Absence", excused: "Excused Absence", tardy: "Tardy", activity: "School Activity", left_early: "Left Early", noclass: "No Class" };
@@ -2281,8 +2289,6 @@ function showQuickPassMenu(studentId) {
 }
 function attendanceRosterPriority(status, hasPass) {
     var _a;
-    if (hasPass)
-        return 1;
     return (_a = { present: 0, tardy: 0, left_early: 3, activity: 4, excused: 5, unexcused: 6, noclass: 7 }[status]) !== null && _a !== void 0 ? _a : 0;
 }
 function sortedRosterForToday(sec, list) {
@@ -2303,7 +2309,7 @@ function refreshRosterPassDurations() {
 }
 if (!window.rosterPassDurationTimer)
     window.rosterPassDurationTimer = setInterval(refreshRosterPassDurations, 30000);
-function attendanceStudentRow(st, d) { let sec = activeSection(), status = attendanceStatus(st.id, sec.id, d), pass = activePasses(sec.id).find(x => x.studentId === st.id); return `<div class="student"><div><b>${st.name}</b><br>${pass ? `<span class="pill warn">OUT — ${pass.reasonLabel} • ${passDurationMinutes(pass)} min</span>` : `<span class="small">${attendanceStatusLabel(status)}</span>`}</div><div class="wide"><select onchange="setAttendanceStatus('${st.id}',this.value,'${d}')" style="padding:9px;width:100%">${Object.entries(ATTENDANCE_STATUSES).map(([k, v]) => `<option value="${k}" ${status === k ? "selected" : ""}>${v}</option>`).join("")}</select></div><div style="display:flex;gap:5px;flex-wrap:wrap">${pass ? `<button class="btn primary" onclick="returnStudentPass('${pass.id}')">Returned</button>` : Object.entries(PASS_REASONS).map(([k, v]) => `<button class="btn" onclick="startStudentPass('${st.id}','${k}')">${v}</button>`).join("")}</div></div>`; }
+function attendanceStudentRow(st, d) { let sec = activeSection(), status = attendanceStatus(st.id, sec.id, d), pass = activePasses(sec.id).find(x => x.studentId === st.id); return `<div class="card attendance-student"><div class="row"><div><b>${st.name}</b><br>${pass ? `<span class="pill warn">OUT — ${pass.reasonLabel} • ${passDurationMinutes(pass)} min</span>` : `<span class="small">${attendanceStatusLabel(status)}</span>`}</div>${pass ? `<button class="btn primary" onclick="returnStudentPass('${pass.id}')">Returned</button>` : ""}</div><div class="attendance-choices">${Object.entries(ATTENDANCE_STATUSES).map(([k, v]) => `<button class="btn attendance-choice ${status === k ? "is-selected" : ""}" aria-pressed="${status === k ? "true" : "false"}" onclick="setAttendanceStatus('${st.id}','${k}','${d}')">${status === k ? "✓ " : ""}${v}</button>`).join("")}</div>${pass ? "" : `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:9px">${Object.entries(PASS_REASONS).map(([k, v]) => `<button class="btn" onclick="startStudentPass('${st.id}','${k}')">${v}</button>`).join("")}</div>`}</div>`; }
 function renderAttendance(d = dateKey()) { let sec = activeSection(); if (!sec)
     return renderRoster(); navMark("attendance", navViewLabel("attendance")); let plan = dayPlan(parseLocalDate(d)), list = sectionStudents(sec.id), out = activePasses(sec.id); let rows = list.map(st => attendanceStudentRow(st, d)).join(""); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><div class="row"><div><h2>${sec.period}${ordinal(sec.period)} Period — Attendance & Passes</h2><div class="small">${sec.name} • ${courseLabel(sec.course)}</div></div><div><label class="small">Date</label><br><input type="date" value="${d}" onchange="renderAttendance(this.value)" style="padding:9px"></div></div><div class="card"><div class="row"><div><h3>Attendance</h3><div class="small">${dayTypeLabel(plan.dayType)} • ${instructionModeLabel(plan.instructionMode)}. Students default to Present; record exceptions.</div></div><button class="btn" onclick="markAllAttendancePresent('${d}')">Mark All Present</button></div><p class="small"><b>Unexcused</b> and <b>Excused</b> are intentionally separate. This version records attendance; attendance-linked grade consequences require teacher confirmation rather than silently changing grades.</p></div>${out.length ? `<div class="card"><h3>Currently Out of Room — ${out.length}</h3>${out.map(x => { let st = list.find(s => s.id === x.studentId); return `<div class="entryrow"><div><b>${(st === null || st === void 0 ? void 0 : st.name) || "Student"}</b> — ${x.reasonLabel}<br><span class="small">Out ${passDurationMinutes(x)} min</span></div><button class="btn primary" onclick="returnStudentPass('${x.id}')">Returned</button></div>`; }).join("")}</div>` : ""}<div class="roster">${rows}</div>`; }
 function studentAttendancePassHtml(s) { let sec = activeSection(), sum = attendanceSummary(s, sec === null || sec === void 0 ? void 0 : sec.id), passes = studentPasses(s.id, sec === null || sec === void 0 ? void 0 : sec.id); let attendanceRows = sum.rows.length ? sum.rows.map(x => `<tr><td>${parseLocalDate(x.date).toLocaleDateString()}</td><td>${attendanceStatusLabel(x.status)}</td></tr>`).join("") : `<tr><td colspan="2">No attendance exceptions/history recorded yet.</td></tr>`; let passRows = passes.length ? passes.map(x => `<tr><td>${parseLocalDate(x.date).toLocaleDateString()}</td><td>${x.reasonLabel}</td><td>${new Date(x.outAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</td><td>${x.returnedAt ? new Date(x.returnedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "Still out"}</td><td>${passDurationMinutes(x)} min</td></tr>`).join("") : `<tr><td colspan="5">No out-of-room passes recorded.</td></tr>`; return `<div class="grid"><div class="card"><div class="small">Unexcused Absences</div><div class="big">${sum.counts.unexcused || 0}</div></div><div class="card"><div class="small">Excused Absences</div><div class="big">${sum.counts.excused || 0}</div></div><div class="card"><div class="small">Tardies</div><div class="big">${sum.counts.tardy || 0}</div></div></div><div class="card"><h3>Attendance History</h3><div style="overflow-x:auto"><table><tr><th>Date</th><th>Status</th></tr>${attendanceRows}</table></div></div><div class="card"><h3>Bathroom / Locker / Out-of-Room History</h3><p class="small">Pass history is accountability/documentation only. It does not automatically change a grade.</p><div style="overflow-x:auto"><table><tr><th>Date</th><th>Reason</th><th>Out</th><th>Returned</th><th>Duration</th></tr>${passRows}</table></div></div>`; }
@@ -2425,7 +2431,7 @@ function renderModalObsolete() {
     let s = current;
     let g = gradeSnapshot(s);
     let tabs = [["summary", "Summary"], ["competencies", "Competencies"], ["attendance", "Attendance & Passes"], ["workplace", "Workplace"], ["behavior", "Behavior"], ["projects", "Projects"], ["technical", "Technical"], ["photos", "Photos"], ["grades", "Grades"], ["openshop", "Open Shop"], ["history", "History"]];
-    let html = `<h2>${s.name}</h2><p><span class="pill">${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="tab='${x[0]}';renderModal()">${x[1]}</button>`).join("")}</div>`;
+    let html = `<div class="student-profile-nav"><h2>${s.name}</h2><p><span class="pill">${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="setStudentTab('${x[0]}')">${x[1]}</button>`).join("")}</div></div>`;
     if (tab === "summary") {
         let gs = gaps(s).slice(0, 3);
         html += `<div class="grid"><div class="card"><div class="small">Competency Average</div><div class="big">${avgRating(s).toFixed(1)}</div></div><div class="card"><div class="small">Proficient+</div><div class="big">${prof(s)}</div></div><div class="card"><div class="small">Current Grade Snapshot</div><div class="big">${g.total == null ? "—" : g.total.toFixed(1) + "%"}</div></div></div>
@@ -2443,7 +2449,8 @@ function renderModalObsolete() {
     if (tab === "workplace") {
         let day = workplaceDayKey(), d = ensureWorkDay(s, day), score = dayWorkplaceScore(d), week = workplaceWeekSummary(s), wk = ensureWorkplaceData(s);
         let statusButtons = ["present", "absent", "excused", "noclass"].map(st => `<button class="tab ${d.status === st ? "on" : ""}" onclick="setIndividualWorkStatus('${st}')">${{ present: "Present", absent: "Absent", excused: "Excused", noclass: "No Class" }[st]}</button>`).join("");
-        let deductionButtons = WORKPLACE_DEDUCTIONS.map(r => `<button class="btn" style="text-align:left" onclick="addIndividualDeduction('${r.id}')">-${r.points} ${r.label}</button>`).join("");
+        let activeRules = new Set(d.deductions.map(x => x.ruleId));
+        let deductionButtons = WORKPLACE_DEDUCTIONS.map(r => `<button class="btn workplace-deduction ${activeRules.has(r.id) ? "is-active" : ""}" aria-pressed="${activeRules.has(r.id) ? "true" : "false"}" style="text-align:left" onclick="addIndividualDeduction('${r.id}')">${activeRules.has(r.id) ? "✓ " : ""}-${r.points} ${r.label}</button>`).join("");
         let deductionList = d.deductions.length ? d.deductions.map(x => `<div class="entryrow"><div><b>-${x.points} ${x.label}</b><br><span class="small">${new Date(x.time).toLocaleTimeString()}</span></div><button class="btn" onclick="removeIndividualDeduction('${x.id}')">Remove</button></div>`).join("") : `<p class="small">No deductions. Student currently has 10/10.</p>`;
         let presentBody = d.status === "present" ? `<div class="grid">${deductionButtons}</div><h4>Today's Deductions</h4>${deductionList}` : `<p class="small">This day is excluded from the Workplace grade.</p>`;
         let weekRows = week.map(x => `<tr><td>${x.label}</td><td>${x.status || "—"}</td><td>${x.score == null ? "—" : x.score + "/10"}</td><td>${x.deductions.length}</td></tr>`).join("");
@@ -2568,8 +2575,11 @@ function renderModal() {
     }
     document.getElementById("modalBody").innerHTML = html;
     if (tab === "photos") hydratePhotoImages(document.getElementById("modalBody"));
+    persistNavigationContext();
 }
-function compCard(c, s) { let r = s.ratings[c.code], sc = ([1, 2].includes(r) || r === "NE") ? "warn" : ([3, 4].includes(r) ? "good" : ""); return `<details><summary><span><span class="code">${c.code}</span> — ${c.name}<br><span class="small">${c.standard || ""}</span></span><span class="pill ${sc}">${ratingDisplay(r)}</span></summary><div class="detail"><p><b>What this competency means at Proficient:</b><br>${c.levels["3"]}</p><div class="rates">${[1, 2, 3, 4].map(n => `<div class="rate ${r === n ? "sel" : ""}"><button onclick="setRating('${c.code}',${n})">${n} — ${ratingNames[n]}</button><small>${c.levels[String(n)]}</small></div>`).join("")}</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><button class="btn ${r === "NE" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','NE')">NE — No Evidence / No Attempt (0%)</button><button class="btn ${r === "ABS" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','ABS')">Absent / Excused</button><button class="btn" onclick="clearRating('${c.code}')">Not Assessed / Clear</button></div><div class="studentfriendly"><b>Student-friendly statement:</b><br>${c.student}</div></div></details>`; }
+function rememberOpenCompetency(code, open) { if (open) window.openCompetencyCode = code; else if (window.openCompetencyCode === code) window.openCompetencyCode = ""; }
+function competencyFeedbackHtml(code) { let x = window.lastCompetencyChange; if (!x || x.code !== code) return ""; return `<div class="competency-feedback" role="status"><b>Saved: ${ratingDisplay(x.old)} → ${ratingDisplay(x.next)}</b><button class="btn" onclick="undoCompetencyChange('${code}')">Undo</button></div>`; }
+function compCard(c, s) { let r = s.ratings[c.code], sc = ([1, 2].includes(r) || r === "NE") ? "warn" : ([3, 4].includes(r) ? "good" : ""), open = window.openCompetencyCode === c.code; return `<details ${open ? "open" : ""} ontoggle="rememberOpenCompetency('${c.code}',this.open)"><summary><span><span class="code">${c.code}</span> — ${c.name}<br><span class="small">${c.standard || ""}</span></span><span class="pill ${sc}">${ratingDisplay(r)}</span></summary><div class="detail">${competencyFeedbackHtml(c.code)}<p><b>What this competency means at Proficient:</b><br>${c.levels["3"]}</p><div class="rates">${[1, 2, 3, 4].map(n => `<div class="rate ${r === n ? "sel" : ""}"><button aria-pressed="${r === n ? "true" : "false"}" onclick="setRating('${c.code}',${n})">${n} — ${ratingNames[n]}</button><small>${c.levels[String(n)]}</small></div>`).join("")}</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><button class="btn ${r === "NE" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','NE')">NE — No Evidence / No Attempt (0%)</button><button class="btn ${r === "ABS" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','ABS')">Absent / Excused</button><button class="btn" onclick="clearRating('${c.code}')">Not Assessed / Clear</button></div><div class="studentfriendly"><b>Student-friendly statement:</b><br>${c.student}</div></div></details>`; }
 function logEvent(category, eventType, title, oldValue = "", newValue = "", details = "") {
     if (!current.history)
         current.history = [];
@@ -2581,19 +2591,15 @@ function logChange(code, oldVal, newVal, undone = false) {
     let c = byCode(code);
     current.history.push({ time: new Date().toISOString(), category: "competencies", type: undone ? "competency_undo" : "competency_change", code, name: c ? c.name : code, old: oldVal || 0, new: newVal || 0, undone });
 }
-function setRating(code, n) { var _a; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = old === n ? null : n; if (next === null) {
-    delete current.ratings[code]; if (current.ratingScopes) delete current.ratingScopes[code];
-}
-else {
-    current.ratings[code] = next; stampCompetencyRatingScope(current, code);
-} logChange(code, old, next, false); save(); renderModal(); }
-function setCompetencyState(code, state) { var _a, _b; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = old === state ? null : state; if (next === null) {
+function setRating(code, n) { var _a; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = n; window.openCompetencyCode = code; if (old === next) return; current.ratings[code] = next; stampCompetencyRatingScope(current, code); logChange(code, old, next, false); window.lastCompetencyChange = { code, old, next }; save(); renderModal(); }
+function undoCompetencyChange(code) { let x = window.lastCompetencyChange; if (!x || x.code !== code || current.ratings[code] !== x.next) return alert("This rating can no longer be undone from the quick confirmation."); let present = current.ratings[code]; if (x.old === null || x.old === undefined) { delete current.ratings[code]; if (current.ratingScopes) delete current.ratingScopes[code]; } else { current.ratings[code] = x.old; stampCompetencyRatingScope(current, code); } logChange(code, present, x.old, true); window.lastCompetencyChange = { code, old: present, next: x.old }; window.openCompetencyCode = code; save(); renderModal(); }
+function setCompetencyState(code, state) { var _a, _b; window.openCompetencyCode = code; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = old === state ? null : state; if (next === null) {
     delete current.ratings[code]; if (current.ratingScopes) delete current.ratingScopes[code];
 }
 else {
     current.ratings[code] = next; stampCompetencyRatingScope(current, code);
 } logEvent("competencies", "competency_state", code + " — " + (((_b = byCode(code)) === null || _b === void 0 ? void 0 : _b.name) || code), ratingDisplay(old), ratingDisplay(next), state === "NE" ? "Student had an opportunity but provided no evidence / no attempt." : "Student absent/excused; excluded from grade."); save(); renderModal(); }
-function clearRating(code) { var _a, _b; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null; if (old !== null) {
+function clearRating(code) { var _a, _b; window.openCompetencyCode = code; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null; if (old !== null) {
     delete current.ratings[code];
     if (current.ratingScopes) delete current.ratingScopes[code];
     logEvent("competencies", "competency_clear", code + " — " + (((_b = byCode(code)) === null || _b === void 0 ? void 0 : _b.name) || code), ratingDisplay(old), "Not Assessed", "Competency cleared.");
@@ -3548,7 +3554,7 @@ function confirmDeleteBehavior(studentId, eventId) { let s = allStudents().find(
 else if (navCurrentView === "behavior")
     renderClassBehavior(); }
 function renderWholeClassWorkplace() { navMark("workplace", navViewLabel("workplace")); let day = workplaceDayKey(); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><h2>${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} — Today's Workplace</h2><p class="small">Everyone begins at 10/10. Tap a student only when you need to document an exception.</p><div class="roster">${students().map(s => { let d = ensureWorkDay(s, day), score = dayWorkplaceScore(d); return `<div class="student"><div><b>${s.name}</b><br><span class="pill">${s.pathway}</span></div><div><span class="small">Status</span><br><b>${d.status}</b></div><div><span class="small">Today</span><br><b>${score == null ? "—" : score + "/10"}</b></div><div class="wide"><span class="small">Events</span><br>${d.deductions.length ? d.deductions.map(x => `<span class="pill warn">-${x.points} ${x.label}</span>`).join(" ") : `<span class="pill good">No deductions</span>`}</div><button class="btn primary" onclick="openWholeClassDeduction('${s.id}')">Update</button></div>`; }).join("")}</div>`; }
-function openWholeClassDeduction(studentId) { let s = students().find(x => x.id === studentId), d = ensureWorkDay(s, workplaceDayKey()), o = document.createElement("div"); o.id = "workOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(760px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeWorkOverlay()">Close</button><h2>${s.name} — Workplace</h2><div class="big">${dayWorkplaceScore(d) == null ? "—" : dayWorkplaceScore(d) + "/10"}</div><div class="tabs"><button class="tab" onclick="quickStatus('${s.id}','present')">Present</button><button class="tab" onclick="quickStatus('${s.id}','absent')">Absent</button><button class="tab" onclick="quickStatus('${s.id}','excused')">Excused</button></div>${d.status === "present" ? `<div class="grid">${WORKPLACE_DEDUCTIONS.map(r => `<button class="btn" style="text-align:left" onclick="quickDeduction('${s.id}','${r.id}')">-${r.points} ${r.label}</button>`).join("")}</div>` : `<p>This day is excluded from Workplace scoring.</p>`}</div>`; o.onclick = e => { if (e.target === o)
+function openWholeClassDeduction(studentId) { let s = students().find(x => x.id === studentId), d = ensureWorkDay(s, workplaceDayKey()), activeRules = new Set(d.deductions.map(x => x.ruleId)), o = document.createElement("div"); o.id = "workOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(760px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeWorkOverlay()">Close</button><h2>${s.name} — Workplace</h2><div class="big">${dayWorkplaceScore(d) == null ? "—" : dayWorkplaceScore(d) + "/10"}</div><div class="tabs"><button class="tab" onclick="quickStatus('${s.id}','present')">Present</button><button class="tab" onclick="quickStatus('${s.id}','absent')">Absent</button><button class="tab" onclick="quickStatus('${s.id}','excused')">Excused</button></div>${d.status === "present" ? `<div class="grid">${WORKPLACE_DEDUCTIONS.map(r => `<button class="btn workplace-deduction ${activeRules.has(r.id) ? "is-active" : ""}" aria-pressed="${activeRules.has(r.id) ? "true" : "false"}" style="text-align:left" onclick="quickDeduction('${s.id}','${r.id}')">${activeRules.has(r.id) ? "✓ " : ""}-${r.points} ${r.label}</button>`).join("")}</div>` : `<p>This day is excluded from Workplace scoring.</p>`}</div>`; o.onclick = e => { if (e.target === o)
     closeWorkOverlay(); }; document.body.appendChild(o); }
 function closeWorkOverlay() { let o = document.getElementById("workOverlay"); if (o)
     o.remove(); renderWholeClassWorkplace(); }
@@ -3584,6 +3590,9 @@ document.addEventListener("keydown", function (e) {
 document.addEventListener("keydown", function (event) { if (event.key === "Escape" && document.getElementById("modal").classList.contains("show"))
     closeStudent(); });
 document.addEventListener("click", function (event) {
+    let classWrap = event.target.closest ? event.target.closest(".class-menu-wrap") : null;
+    if (!classWrap)
+        closeClassMenu();
     let action = event.target.closest ? event.target.closest("[data-arc-project-action]") : null;
     if (action) {
         event.preventDefault();
@@ -3596,11 +3605,17 @@ document.addEventListener("click", function (event) {
         showProjectCheckpointDetails(details.getAttribute("data-arc-project-details"));
     }
 });
+function updateStickyHeaderOffset() { let header = document.querySelector("header"); if (header) document.documentElement.style.setProperty("--arc-header-height", Math.ceil(header.getBoundingClientRect().height) + "px"); }
+function installOverscrollGuard() { let startY = 0; document.addEventListener("touchstart", function(event) { if (event.touches.length === 1) startY = event.touches[0].clientY; }, { passive: true }); document.addEventListener("touchmove", function(event) { if (!isStandaloneMode() || event.touches.length !== 1 || event.touches[0].clientY - startY < 8) return; let node = event.target; while (node && node !== document.body) { if (node.scrollHeight > node.clientHeight + 1) { if (node.scrollTop > 0) return; break; } node = node.parentElement; } if (window.scrollY <= 0) event.preventDefault(); }, { passive: false }); }
+window.addEventListener("resize", updateStickyHeaderOffset);
+window.addEventListener("orientationchange", function() { setTimeout(updateStickyHeaderOffset, 100); });
 ensureProjectLibrary();
 ensureScheduleModel();
 ensureTechnicalData();
 registerAppShell();
-renderMainMenu();
+installOverscrollGuard();
+updateStickyHeaderOffset();
+if (!restoreNavigationContext()) renderMainMenu();
 save();
 showStorageCompatibilityWarning();
 

@@ -57,6 +57,11 @@ check('service worker caches index','./index.html' in SW)
 check('service worker caches manifest','./app.webmanifest' in SW)
 check('service worker caches 192','./icons/icon-192.png' in SW)
 check('service worker caches 512','./icons/icon-512.png' in SW)
+check('service worker caches deployment module','./src/deployment_readiness.js' in SW)
+check('service worker update is user controlled','SKIP_WAITING' in SW and 'self.skipWaiting()' not in SW.split("message",1)[0])
+check('navigation has offline fallback',"request.mode==='navigate'" in SW and "caches.match('./index.html')" in SW)
+check('backup integrity present',has('ArcDeployment.stateIntegrity') and has('ArcDeployment.verifyStateIntegrity'))
+check('persistent storage status present',has('navigator.storage.persist'))
 
 # Compatibility / privacy guardrails
 check('no executable optional chaining', not re.search(r'(?<![?])\?\.(?!\.)', HTML))

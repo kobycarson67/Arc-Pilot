@@ -33,3 +33,36 @@
 @media (pointer:coarse){.arc-btn{min-height:50px;padding:12px 18px}.arc-project-card__actions .arc-btn{min-height:54px;font-size:16px}.arc-project-card__details{min-height:44px}}
 @media (max-width:620px){.arc-project-card__top{align-items:stretch;flex-direction:column}.arc-project-card__top .arc-status{align-self:flex-start}.arc-project-card__actions{flex-direction:column}.arc-project-card__actions .arc-btn{width:100%}}
 @media (prefers-reduced-motion:reduce){.arc-btn{transition:none}}
+
+/* Titanium application shell v1.
+   These overrides lift the existing ARC interface onto the same visual system
+   without changing legacy markup, behavior, or functional status colors. */
+body{background:radial-gradient(circle at 15% 0%,#f9fbff 0,#eef1f5 34%,#e5e9ef 100%);color:var(--arc-ink)}
+header{background:linear-gradient(135deg,var(--arc-black) 0%,var(--arc-charcoal) 48%,#102b70 100%);border-bottom:2px solid var(--arc-gold);box-shadow:0 5px 18px rgba(11,13,17,.3)}
+.brand{letter-spacing:.025em;text-shadow:0 1px 2px rgba(0,0,0,.55)}
+.sub,.breadcrumb{color:#d8dee9}
+.navbar{gap:9px}
+.navbtn,.navselect{min-height:42px;border:1px solid #62708a;border-bottom-color:#3b465a;background:linear-gradient(180deg,#303846 0%,#202733 55%,#151a23 100%);color:#fff;border-radius:10px;box-shadow:0 2px 0 #07090d,0 4px 10px rgba(0,0,0,.22);transition:transform var(--arc-press-speed) ease,box-shadow var(--arc-press-speed) ease}
+.navbtn:active{transform:translateY(2px);box-shadow:0 0 0 #07090d,0 2px 4px rgba(0,0,0,.2)}
+.navbtn:focus-visible,.navselect:focus-visible{outline:3px solid rgba(244,220,138,.55);outline-offset:2px}
+main{max-width:1240px}
+.banner{background:linear-gradient(180deg,#fff8df,#f8e9b8);border:1px solid #c89b32;border-left:5px solid var(--arc-gold-deep);color:#4b380b;box-shadow:0 2px 7px rgba(143,104,21,.12)}
+.card,.student,details,.photo-card{border-color:var(--arc-line);background:linear-gradient(180deg,var(--arc-surface) 0%,#fafbfc 100%);box-shadow:0 4px 14px rgba(17,24,39,.08)}
+.card{border-radius:var(--arc-radius-lg)}
+.student{border-radius:var(--arc-radius);transition:border-color 120ms ease,box-shadow 120ms ease,transform 80ms ease}
+.student:hover{border-color:#aeb9cb;box-shadow:0 6px 16px rgba(17,24,39,.11)}
+.btn,.tab,.codebtn,.workbtn{min-height:44px;border:1px solid #aeb7c5;border-bottom-color:#8792a3;background:linear-gradient(180deg,#fff 0%,#f2f4f7 54%,#e5e9ef 100%);color:var(--arc-ink);border-radius:10px;box-shadow:0 2px 0 #9aa4b2,0 4px 9px rgba(17,24,39,.1);cursor:pointer;touch-action:manipulation;transition:transform var(--arc-press-speed) ease,box-shadow var(--arc-press-speed) ease,filter var(--arc-press-speed) ease}
+.btn:active,.tab:active,.codebtn:active,.workbtn:active{transform:translateY(2px);box-shadow:0 0 0 #8e98a7,0 2px 4px rgba(17,24,39,.1);filter:brightness(.97)}
+.btn:focus-visible,.tab:focus-visible,.codebtn:focus-visible,.workbtn:focus-visible{outline:3px solid rgba(36,87,214,.28);outline-offset:2px}
+.btn.primary,.tab.on{color:#fff;border-color:var(--arc-blue-deep);border-bottom-color:#102b70;background:linear-gradient(180deg,#3b70ed 0%,var(--arc-blue) 50%,var(--arc-blue-deep) 100%);box-shadow:0 2px 0 #102b70,0 4px 10px rgba(23,58,148,.22)}
+.btn:disabled,.tab:disabled,.codebtn:disabled,.workbtn:disabled{opacity:.52;cursor:not-allowed;box-shadow:0 1px 0 #aeb7c5;transform:none;filter:saturate(.65)}
+.modal{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);background:rgba(7,10,15,.68)}
+.modalbox{border:1px solid #c7ced9;border-top:3px solid var(--arc-gold);box-shadow:0 18px 55px rgba(0,0,0,.3)}
+.pill{border:1px solid #c9d6f5;background:var(--arc-blue-light);color:var(--arc-blue-deep)}
+.pill.good{border-color:#9bd3b4;background:#e8f6ee;color:#12663b}.pill.warn{border-color:#e8c36b;background:#fff7dc;color:#6c4b08}.pill.bad{border-color:#efb0aa;background:#fff0ed;color:#8e2118}
+th{background:linear-gradient(180deg,#eef3fb,#e1e7f0);color:#27364e}th,td{border-color:#cfd5df}
+input,select,textarea{border-color:#aeb7c5!important;border-radius:9px!important;background:#fff;color:var(--arc-ink)}
+input:focus,select:focus,textarea:focus{outline:3px solid rgba(36,87,214,.18);border-color:var(--arc-blue)!important}
+.arc-project-grading{margin:-4px 0 18px;padding:12px 14px;border:1px solid var(--arc-line);border-top:0;border-radius:0 0 var(--arc-radius) var(--arc-radius);background:#f7f8fa}
+@media (pointer:coarse){.btn,.tab,.codebtn,.workbtn,.navbtn,.navselect{min-height:48px;padding:11px 14px}}
+@media (prefers-reduced-motion:reduce){.navbtn,.student,.btn,.tab,.codebtn,.workbtn{transition:none}}

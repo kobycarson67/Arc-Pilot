@@ -11,6 +11,14 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="app.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="src/arc_visual_foundation.css">
+<script src="src/project_checkpoints.js"></script>
+<script src="src/project_checkpoint_controller.js"></script>
+<script src="src/project_checkpoint_presenter.js"></script>
+<script src="src/project_tab_adapter.js"></script>
+<script src="src/project_checkpoint_persistence.js"></script>
+<script src="src/project_checkpoint_host_bridge.js"></script>
+<script src="src/project_checkpoint_card.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
@@ -2455,9 +2463,10 @@ function renderModal() {
         html += `<div class="card"><div class="row"><div><h3>Behavior & Incident History</h3><div class="small">Private teacher documentation. These records do not automatically change Workplace points or any grade.</div></div><button class="btn primary" onclick="showBehaviorEditor('${s.id}')">+ Add Event</button></div>${evs.length ? evs.map(behaviorEventHtml).join("") : `<p class="small">No behavior or incident events recorded.</p>`}</div>`;
     }
     if (tab === "projects") {
+        let checkpointCards = renderProjectCheckpointCards(s);
         html += `<div class="card"><div class="row"><h3>Fabrication & Projects</h3><button class="btn primary" onclick="showProjectAssigner()">+ Assign Project</button></div>
-   <p class="small">Create a project title once, then reuse it for other students. This reusable course-project list will later connect directly to the Project Bank.</p>
-   ${s.projects.length ? s.projects.map((p, i) => projectRow(p, i)).join("") : "<p class='small'>No projects assigned yet.</p>"}</div>`;
+   <p class="small">Project checkpoints track fabrication progress separately from rubric grading. Existing project grading remains available and unchanged.</p>
+   ${s.projects.length ? checkpointCards : "<p class='small'>No projects assigned yet.</p>"}</div>`;
     }
     if (tab === "technical") {
         ensureStudentTechnicalData(s);
@@ -2566,6 +2575,113 @@ function projectRow(p, i) {
     let done = PROJECT_RUBRIC.filter(r => p.rubric[r.id]).length;
     return `<div class="entryrow"><div><b>${p.name}</b><br><span class="small">${done}/${PROJECT_RUBRIC.length} rubric areas rated</span></div><div><b>${sc == null ? "—" : sc.toFixed(1) + "%"}</b> <button class="btn" onclick="openProject(${i})">Assess</button> <button class="btn" onclick="copyProjectForCurrentStudent(${i})">Copy</button> <button class="btn" onclick="confirmRemoveProject(${i})">Remove</button></div></div>`;
 }
+function renderProjectCheckpointCards(student) {
+    if (!window.ArcProjectTabAdapter || !window.ArcProjectCheckpointCard)
+        return student.projects.map((p, i) => projectRow(p, i)).join("");
+    try {
+        let cards = window.ArcProjectTabAdapter.cards(student);
+        return cards.map((card, i) => `${window.ArcProjectCheckpointCard.render(card)}<div class="arc-project-grading"><div class="small"><b>Rubric & project grade</b> — checkpoint progress does not change the grade automatically.</div>${projectRow(student.projects[i], i)}</div>`).join("");
+    }
+    catch (err) {
+        console.warn("ARC checkpoint card fallback", err);
+        return student.projects.map((p, i) => projectRow(p, i)).join("");
+    }
+}
+function replaceCheckpointStudent(nextStudent) {
+    let replaced = false;
+    ["wt", "awt"].forEach(course => {
+        let list = state.classes[course] || [], index = list.findIndex(s => s.id === nextStudent.id);
+        if (index >= 0) {
+            list[index] = nextStudent;
+            replaced = true;
+        }
+    });
+    if (!replaced)
+        throw new Error("Student record could not be replaced.");
+    if (current && current.id === nextStudent.id)
+        current = nextStudent;
+}
+function checkpointHistoryForApp(history) {
+    return (history || []).map(entry => {
+        if (!entry || entry.type !== "project_checkpoint" || entry.category)
+            return entry;
+        return Object.assign({}, entry, {
+            time: entry.timestamp || new Date().toISOString(),
+            category: "projects",
+            title: `${entry.projectName || "Project"} — ${entry.checkpointName || "Checkpoint"}`,
+            oldValue: entry.fromStatus ? checkpointStatusLabel(entry.fromStatus) : "Not Started",
+            newValue: entry.toStatus ? checkpointStatusLabel(entry.toStatus) : entry.label,
+            details: `${entry.label}${entry.verifiedBy ? " by " + entry.verifiedBy : ""}${entry.note ? " — " + entry.note : ""}`
+        });
+    });
+}
+function checkpointStatusLabel(status) {
+    return { not_started: "Not Started", in_progress: "In Progress", ready_for_review: "Ready for Review", verified: "Verified" }[status] || status || "Not Started";
+}
+function checkpointHost(studentId) {
+    return {
+        getHistory: () => {
+            let s = allStudents().find(x => x.id === studentId);
+            return s && Array.isArray(s.history) ? s.history.slice() : [];
+        },
+        setHistory: history => {
+            let s = allStudents().find(x => x.id === studentId);
+            if (!s)
+                throw new Error("Student history could not be updated.");
+            s.history = checkpointHistoryForApp(history);
+            if (current && current.id === studentId)
+                current = s;
+        },
+        replaceStudent: replaceCheckpointStudent,
+        save: save
+    };
+}
+function applyProjectCheckpointAction(projectId, action, checkpointId) {
+    if (!current || !window.ArcProjectCheckpointHostBridge)
+        return alert("Checkpoint tracking is not available yet.");
+    let original = current, now = new Date(), section = activeSection();
+    let result = window.ArcProjectCheckpointHostBridge.execute(checkpointHost(original.id), state, original, projectId, action, checkpointId || "", {
+        timestamp: now.toISOString(),
+        date: dateKey(now),
+        sectionId: section ? section.id : "",
+        verifiedBy: action === "verify" ? "Instructor" : "",
+        attendanceStatus: section ? attendanceStatus(original.id, section.id, dateKey(now)) : "",
+        historyId: "project_checkpoint_" + now.getTime() + "_" + Math.random().toString(36).slice(2, 7)
+    });
+    if (!result.ok)
+        return alert("The checkpoint update could not be saved. ARC restored the previous student record.");
+    if (result.changed) {
+        window.arcLastCheckpointUndo = { studentId: original.id, token: result.undo };
+        renderModal();
+    }
+}
+function undoLastProjectCheckpoint() {
+    let pending = window.arcLastCheckpointUndo;
+    if (!current || !pending || pending.studentId !== current.id)
+        return alert("There is no checkpoint update to undo.");
+    let result = window.ArcProjectCheckpointHostBridge.undo(checkpointHost(current.id), current, pending.token, current.history || []);
+    if (!result.ok)
+        return alert("The checkpoint update could not be undone. ARC kept the saved record unchanged.");
+    if (result.changed) {
+        window.arcLastCheckpointUndo = null;
+        renderModal();
+    }
+}
+function showProjectCheckpointDetails(projectId) {
+    if (!current || !window.ArcProjectTabAdapter)
+        return;
+    let card = window.ArcProjectTabAdapter.cards(current).find(x => x.id === projectId);
+    if (!card)
+        return;
+    let rows = card.legacy ? `<p class="small">Start checkpoint tracking to see the fabrication sequence.</p>` : card.checkpointRows.map(row => `<div class="entryrow"><div><b>${window.ArcProjectCheckpointCard.escape(row.name)}</b>${row.current ? ` <span class="pill">Current</span>` : ""}<br><span class="small">${window.ArcProjectCheckpointCard.escape(row.note || "No notes")}${row.measurement ? " • " + window.ArcProjectCheckpointCard.escape(row.measurement) : ""}</span></div><span class="arc-status ${row.status === "verified" ? "arc-status-verified" : row.status === "ready_for_review" ? "arc-status-review" : ""}">${window.ArcProjectCheckpointCard.escape(row.statusLabel)}</span></div>`).join("");
+    let overlay = document.createElement("div");
+    overlay.id = "projectCheckpointDetailsOverlay";
+    overlay.className = "modal show";
+    overlay.innerHTML = `<div class="modalbox" style="width:min(760px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeProjectCheckpointDetails()">Close</button><h2>${window.ArcProjectCheckpointCard.escape(card.title)} — Checkpoints</h2><p class="small">Checkpoint evidence is progress documentation and does not automatically calculate the project grade.</p>${rows}<div style="margin-top:14px"><button class="btn" onclick="undoLastProjectCheckpoint();closeProjectCheckpointDetails()">Undo Last Checkpoint Update</button></div></div>`;
+    overlay.onclick = e => { if (e.target === overlay) closeProjectCheckpointDetails(); };
+    document.body.appendChild(overlay);
+}
+function closeProjectCheckpointDetails() { let overlay = document.getElementById("projectCheckpointDetailsOverlay"); if (overlay) overlay.remove(); }
 function copyProjectForCurrentStudent(i) { let p = current.projects[i]; if (!p)
     return; ensureProjectLibrary(); let tpl = p.templateId ? projectLibrary().find(x => x.id === p.templateId) : null; let base = tpl ? tpl.title : p.name, o = document.createElement('div'); o.id = 'projectManageOverlay'; o.className = 'modal show'; o.innerHTML = `<div class="modalbox" style="width:min(620px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeProjectManage()">Close</button><h2>Copy Project for ${current.name}</h2><p class="small">This creates a new reusable project but assigns the copy only to this student.</p><label><b>Project Title</b></label><input id="studentCopyProjectTitle" value="${base} - Copy" style="width:100%;padding:11px;border:1px solid #d6dde6;border-radius:8px;margin:6px 0 14px"><button class="btn primary" onclick="saveStudentProjectCopy(${i})">Create Copy for ${current.name}</button></div>`; o.onclick = e => { if (e.target === o)
     closeProjectManage(); }; document.body.appendChild(o); }
@@ -3398,6 +3514,19 @@ document.addEventListener("keydown", function (e) {
 });
 document.addEventListener("keydown", function (event) { if (event.key === "Escape" && document.getElementById("modal").classList.contains("show"))
     closeStudent(); });
+document.addEventListener("click", function (event) {
+    let action = event.target.closest ? event.target.closest("[data-arc-project-action]") : null;
+    if (action) {
+        event.preventDefault();
+        applyProjectCheckpointAction(action.getAttribute("data-arc-project-id"), action.getAttribute("data-arc-project-action"), action.getAttribute("data-arc-checkpoint-id"));
+        return;
+    }
+    let details = event.target.closest ? event.target.closest("[data-arc-project-details]") : null;
+    if (details) {
+        event.preventDefault();
+        showProjectCheckpointDetails(details.getAttribute("data-arc-project-details"));
+    }
+});
 ensureProjectLibrary();
 ensureScheduleModel();
 ensureTechnicalData();

@@ -21,6 +21,7 @@
 <script src="src/project_checkpoint_card.js"></script>
 <script src="src/teaching_tips.js"></script>
 <script src="src/inventory.js"></script>
+<script src="src/deployment_readiness.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
@@ -134,6 +135,7 @@ const BACKUP_FORMAT_VERSION = 1;
 const CURRENT_SCHEMA_VERSION = 5;
 const PREUPGRADE_RECOVERY_KEY = "weld_v013_preupgrade_recovery";
 const IMPORT_ROLLBACK_KEY = "weld_v013_import_rollback";
+const BACKUP_META_KEY = "weld_v013_backup_meta";
 let storageAvailable = true;
 const memoryStorageFallback = {};
 const persistentStorage = {
@@ -706,9 +708,16 @@ function navMark(view, label) { if (navCurrentView !== view) {
 function isStandaloneMode(){ return !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || !!window.navigator.standalone; }
 function isHostedApp(){ return location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1'; }
 function appModeLabel(){ if(isStandaloneMode()) return 'Full-screen app mode'; if(location.protocol === 'file:') return 'Local-file browser mode'; return 'Browser mode'; }
+let appShellRegistration=null, appShellReady=false, appReloadingForUpdate=false;
+function showAppUpdateReady(registration){
+    let old=document.getElementById('appUpdateReady'); if(old) old.remove();
+    let box=document.createElement('div'); box.id='appUpdateReady'; box.className='app-update-ready'; box.innerHTML='<div><b>ARC update ready</b><div class="small">Reload when you are between entries to use the new version.</div></div><button class="btn primary" onclick="applyAppUpdate()">Reload & Update</button>'; document.body.appendChild(box); appShellRegistration=registration;
+}
+function applyAppUpdate(){ if(appShellRegistration&&appShellRegistration.waiting) appShellRegistration.waiting.postMessage({type:'SKIP_WAITING'}); else location.reload(); }
 function registerAppShell(){
     if(!('serviceWorker' in navigator) || !isHostedApp()) return Promise.resolve(false);
-    return navigator.serviceWorker.register('./sw.js').then(function(){return true;}).catch(function(err){console.warn('App shell registration failed',err);return false;});
+    navigator.serviceWorker.addEventListener('controllerchange',function(){if(appReloadingForUpdate)return;appReloadingForUpdate=true;location.reload();});
+    return navigator.serviceWorker.register('./sw.js').then(function(reg){appShellRegistration=reg;appShellReady=true;if(reg.waiting)showAppUpdateReady(reg);reg.addEventListener('updatefound',function(){let worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',function(){if(worker.state==='installed'&&navigator.serviceWorker.controller)showAppUpdateReady(reg);});});reg.update().catch(function(){});return true;}).catch(function(err){appShellReady=false;console.warn('App shell registration failed',err);return false;});
 }
 let deferredInstallPrompt = null;
 window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferredInstallPrompt=e; });
@@ -738,16 +747,34 @@ const CLOUD_STORAGE = {
 };
 function cloudConnectionLabel(){ return CLOUD_STORAGE.connected ? 'OneDrive connected' : 'OneDrive not connected'; }
 function cloudArchitectureNote(){ return 'Planned cloud path: OneDrive app folder → Welding Classroom / academic year / student / photos. The production connection will use Microsoft sign-in and provider-backed file IDs rather than embedding image bytes in classroom JSON.'; }
+function backupMeta(){try{return JSON.parse(persistentStorage.getItem(BACKUP_META_KEY)||'null');}catch(e){return null;}}
+let deviceStorageStatus={persistent:null,usage:null,quota:null}, deviceStorageInspectionDone=false;
+function hasAppShellController(){return !!('serviceWorker' in navigator&&navigator.serviceWorker.controller);}
+function formatStorageBytes(value){if(value==null)return 'Unknown';if(value<1024*1024)return Math.round(value/1024)+' KB';return (value/(1024*1024)).toFixed(value<10*1024*1024?1:0)+' MB';}
+function inspectDeviceStorage(){
+    if(!(navigator.storage&&navigator.storage.estimate))return Promise.resolve(deviceStorageStatus);
+    let persisted=navigator.storage.persisted?navigator.storage.persisted().catch(function(){return false;}):Promise.resolve(false);
+    return Promise.all([persisted,navigator.storage.estimate().catch(function(){return {};})]).then(function(values){deviceStorageStatus.persistent=!!values[0];deviceStorageStatus.usage=values[1].usage==null?null:values[1].usage;deviceStorageStatus.quota=values[1].quota==null?null:values[1].quota;return deviceStorageStatus;});
+}
+function requestPersistentDeviceStorage(){if(!(navigator.storage&&navigator.storage.persist))return alert('This browser does not offer a persistent-storage request. Keep manual backups and complete the close/reopen tablet test.');navigator.storage.persist().then(function(granted){deviceStorageStatus.persistent=!!granted;alert(granted?'Persistent-storage protection was granted on this device.':'The browser did not grant persistent-storage protection. ARC can still work, but manual recovery backups remain required.');renderAppAndSyncSettings();}).catch(function(err){alert('Persistent storage could not be requested: '+err.message);});}
+function deploymentReadiness(){let meta=backupMeta();return ArcDeployment.readiness({hosted:isHostedApp(),storageAvailable:storageAvailable,serviceWorker:appShellReady||hasAppShellController(),backupExported:!!(meta&&meta.exportedAt),persistentStorage:deviceStorageStatus.persistent===true,cloudConnected:CLOUD_STORAGE.connected});}
+function readinessChecksHtml(report){return report.checks.map(function(x){return '<div class="entryrow"><div><b>'+escapePhotoText(x.label)+'</b><br><span class="small">'+(x.required?'Required for controlled tablet pilot':'Required before production use')+'</span></div><span class="pill '+(x.ok?'good':'warn')+'">'+(x.ok?'Ready':'Not ready')+'</span></div>';}).join('');}
 function renderAppAndSyncSettings(){
     navMark('settings','App & Sync');
-    let standalone=isStandaloneMode(), hosted=isHostedApp(), storageText=storageAvailable?'Browser record storage available':'Persistent record storage unavailable';
+    let standalone=isStandaloneMode(), hosted=isHostedApp(), storageText=storageAvailable?'Browser record storage available':'Persistent record storage unavailable', meta=backupMeta(), ready=deploymentReadiness();
     document.getElementById('app').innerHTML = '<button class="btn" onclick="renderAppSettings()">← Settings</button><h2>App & Sync</h2>'+
+      '<div class="banner"><b>Controlled pilot only.</b> Continue using the school gradebook and attendance system as authoritative. Use fictional data until close/reopen recovery, backup restore, migration, and privacy gates pass on the real tablet.</div>'+
+      '<div class="card"><div class="row"><div><h3>Tablet Pilot Readiness</h3><div class="small">'+(ready.pilotReady?'Core deployment checks are ready for the controlled fictional-data pilot.':'Complete the required checks below before the tablet pilot.')+'</div></div><span class="pill '+(ready.pilotReady?'good':'warn')+'">'+(ready.pilotReady?'Pilot checks ready':'Action needed')+'</span></div>'+readinessChecksHtml(ready)+'<p class="small"><b>Production status:</b> Not approved. OneDrive recovery, safer handling for real student information, and real-device validation remain open.</p></div>'+
       '<div class="grid">'+
       '<div class="card install-card"><h3>Full-Screen App Mode</h3><div class="app-status"><span class="statusdot '+(standalone?'good':'warn')+'"></span><b>'+appModeLabel()+'</b></div><p class="small">'+(standalone?'Welding Classroom is running without normal browser controls.':'The interface is prepared for standalone installation. The final app-like experience requires hosted HTTPS deployment and Add to Home Screen / Install App.')+'</p><button class="btn primary" onclick="installWeldingApp()">Install / Add to Home Screen</button><p class="small">Hosted app shell: '+(hosted?'available on this origin':'not available from local file')+'</p></div>'+
       '<div class="card"><h3>OneDrive Cross-Device Storage</h3><div class="app-status"><span class="statusdot warn"></span><b>'+cloudConnectionLabel()+'</b></div><p class="small">'+cloudArchitectureNote()+'</p><p class="small"><b>Next external requirement:</b> school Microsoft Entra app registration + approved redirect URL + delegated file permission. Until that is configured, the app will not claim that anything is cloud-synced.</p><button class="btn" disabled>Connect School OneDrive</button></div>'+
-      '<div class="card"><h3>Current Device</h3><div class="app-status"><span class="statusdot '+(storageAvailable?'good':'bad')+'"></span><b>'+storageText+'</b></div><p class="small">Device-local storage remains the working prototype store. Photos marked local-only are not protected across devices yet.</p></div>'+
+      '<div class="card"><h3>Current Device</h3><div class="app-status"><span class="statusdot '+(storageAvailable?'good':'bad')+'"></span><b>'+storageText+'</b></div><p class="small">Network: <b>'+(navigator.onLine?'Online':'Offline')+'</b> • Offline shell: <b>'+(appShellReady||hasAppShellController()?'Registered':'Not confirmed')+'</b></p><p class="small">Storage protection: <b>'+(deviceStorageStatus.persistent===true?'Persistent':deviceStorageStatus.persistent===false?'Best effort':'Checking…')+'</b> • Used: '+formatStorageBytes(deviceStorageStatus.usage)+' of '+formatStorageBytes(deviceStorageStatus.quota)+'</p><button class="btn" onclick="requestPersistentDeviceStorage()">Request Persistent Storage</button><p class="small">Device-local storage remains the working prototype store. Photos marked local-only are not protected across devices yet.</p></div>'+
+      '<div class="card"><h3>Recovery Backup</h3><div class="app-status"><span class="statusdot '+(meta&&meta.exportedAt?'good':'warn')+'"></span><b>'+(meta&&meta.exportedAt?'Last exported '+new Date(meta.exportedAt).toLocaleString():'No successful export recorded on this device')+'</b></div><p class="small">New exports include an integrity fingerprint so incomplete or altered files are rejected during import. Older valid backups remain importable.</p><button class="btn primary" onclick="exportBackup();setTimeout(renderAppAndSyncSettings,100)">Export Recovery Backup</button></div>'+
       '</div>';
+    if(!deviceStorageInspectionDone){deviceStorageInspectionDone=true;inspectDeviceStorage().then(function(){if(navCurrentView==='settings'&&document.querySelector('h2')&&document.querySelector('h2').textContent==='App & Sync')renderAppAndSyncSettings();});}
 }
+window.addEventListener('online',function(){if(navCurrentView==='settings')renderAppAndSyncSettings();});
+window.addEventListener('offline',function(){if(navCurrentView==='settings')renderAppAndSyncSettings();});
 
 function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.period}${ordinal(sec.period)} Period › ${courseLabel(sec.course)}` : "Welding Classroom"; return { main: "Main Menu", schedule: "Today's Schedule", setup: "Schedule Setup", roster: base, projects: `${base} › Class Projects`, technical: `${base} › Technical Scoring`, gradebook: `${base} › Gradebook`, attendance: `${base} › Attendance & Passes`, workplace: `${base} › Workplace`, openshop: `${base} › Open Shop`, behavior: `${base} › Behavior & Incidents`, settings: "Settings", appsync: "App & Sync", photolibrary: "Student Work Library", inventory: "Shop Inventory" }[view] || base; }
 function updateNavigationBar(label) { ensureScheduleModel(); let sel = document.getElementById("navClassSelect"); if (sel) {
@@ -1532,7 +1559,7 @@ function backupTimestamp(d = new Date()) {
 function backupPayload(sourceState = state) {
     let snap = cloneStateData(sourceState);
     snap.schemaVersion = CURRENT_SCHEMA_VERSION;
-    return { format: "WeldingClassroomBackup", backupVersion: BACKUP_FORMAT_VERSION, appVersion: APP_VERSION, schemaVersion: CURRENT_SCHEMA_VERSION, exportedAt: new Date().toISOString(), storageKey: STORAGE_KEY, state: snap };
+    return { format: "WeldingClassroomBackup", backupVersion: BACKUP_FORMAT_VERSION, appVersion: APP_VERSION, schemaVersion: CURRENT_SCHEMA_VERSION, exportedAt: new Date().toISOString(), storageKey: STORAGE_KEY, integrity: ArcDeployment.stateIntegrity(snap), state: snap };
 }
 function downloadBackupPayload(payload, prefix = "Welding_Classroom_Backup") {
     let blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }), url = URL.createObjectURL(blob), a = document.createElement("a");
@@ -1541,6 +1568,7 @@ function downloadBackupPayload(payload, prefix = "Welding_Classroom_Backup") {
     document.body.appendChild(a);
     a.click();
     a.remove();
+    if(payload&&payload.format==="WeldingClassroomBackup") persistentStorage.setItem(BACKUP_META_KEY,JSON.stringify({exportedAt:payload.exportedAt,fileName:a.download,integrity:payload.integrity||null}));
     setTimeout(() => URL.revokeObjectURL(url), 500);
     return a.download;
 }
@@ -1553,6 +1581,7 @@ function validateBackupWrapper(payload) {
     if (payload.backupVersion != null && Number(payload.backupVersion) > BACKUP_FORMAT_VERSION)
         throw new Error(`This backup container version (${payload.backupVersion}) is newer than this app supports (${BACKUP_FORMAT_VERSION}).`);
     validateLegacyStateShape(payload.state);
+    ArcDeployment.verifyStateIntegrity(payload.state,payload.integrity);
     return true;
 }
 function prepareImportedState(payload) {

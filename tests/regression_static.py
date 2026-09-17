@@ -20,7 +20,7 @@ def has(text): return text in HTML
 
 # Persistence / migration contracts
 check('storage key preserved', 'const STORAGE_KEY = "weld_v013";' in HTML)
-check('schema remains v4', 'const CURRENT_SCHEMA_VERSION = 4;' in HTML)
+check('schema is v5', 'const CURRENT_SCHEMA_VERSION = 5;' in HTML)
 check('pre-upgrade recovery preserved', 'weld_v013_preupgrade_recovery' in HTML)
 check('import rollback preserved', 'weld_v013_import_rollback' in HTML)
 check('migration function present', has('function migrateStateData('))

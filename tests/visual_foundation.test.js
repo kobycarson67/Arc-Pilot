@@ -16,4 +16,11 @@ test('functional danger remains red',()=>assert.ok(css.includes('--arc-danger:#b
 test('keyboard focus remains visible',()=>assert.ok(css.includes('.arc-btn:focus-visible')));
 test('disabled state cannot appear pressable',()=>assert.ok(css.includes('.arc-btn:disabled')&&css.includes('cursor:not-allowed')));
 test('reduced motion preference is respected',()=>assert.ok(css.includes('@media (prefers-reduced-motion:reduce)')));
+test('global app shell uses titanium background',()=>assert.ok(css.includes('body{background:radial-gradient')));
+test('header uses black and royal blue foundation',()=>assert.ok(css.includes('header{background:linear-gradient(135deg,var(--arc-black)')));
+test('header reserves gold for identity accent',()=>assert.ok(css.includes('border-bottom:2px solid var(--arc-gold)')));
+test('legacy buttons receive tablet touch height',()=>assert.ok(css.includes('.btn,.tab,.codebtn,.workbtn{min-height:44px')));
+test('legacy primary actions use royal blue',()=>assert.ok(css.includes('.btn.primary,.tab.on{color:#fff')));
+test('functional status pills retain semantic colors',()=>assert.ok(css.includes('.pill.good{border-color:#9bd3b4')&&css.includes('.pill.bad{border-color:#efb0aa')));
+test('project grading remains visually distinct from progress',()=>assert.ok(css.includes('.arc-project-grading{')));
 if(!process.exitCode)console.log('\n'+pass+'/'+total+' ARC Visual Foundation tests passed.');

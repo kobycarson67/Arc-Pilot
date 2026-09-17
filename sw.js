@@ -1,4 +1,4 @@
-const CACHE='arc-pilot-v0-18-checkpoints';
+const CACHE='arc-pilot-v0-18-titanium-1';
 const CORE=['./','./index.html','./app.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./src/arc_visual_foundation.css','./src/project_checkpoints.js','./src/project_checkpoint_controller.js','./src/project_checkpoint_presenter.js','./src/project_tab_adapter.js','./src/project_checkpoint_persistence.js','./src/project_checkpoint_host_bridge.js','./src/project_checkpoint_card.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});

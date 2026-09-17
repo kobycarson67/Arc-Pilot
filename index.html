@@ -19,6 +19,7 @@
 <script src="src/project_checkpoint_persistence.js"></script>
 <script src="src/project_checkpoint_host_bridge.js"></script>
 <script src="src/project_checkpoint_card.js"></script>
+<script src="src/teaching_tips.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
@@ -1056,7 +1057,7 @@ function renderLessonBank(course) {
     window.lessonBankCourse = course;
     navMark("lessonbank", "Lesson Plan Bank");
     let a = state.lessonBank[course] || [], c = lessonBankCounts(course);
-    let cards = a.map(l => { let search = [l.code, l.title, ...(l.standards || []), ...(l.learningTargets || []), ...(l.criteria || [])].join(" ").toLowerCase().replace(/"/g, "&quot;"); return `<details class="card lessonBankCard" data-reusable="${l.reusable ? "yes" : "no"}" data-search="${search}"><summary style="cursor:pointer"><b>Lesson ${l.code}: ${l.title}</b> ${l.reusable ? `<span class="pill">Reusable</span>` : ""}</summary><p><b>Standards to Select in Planbook</b></p><ul>${(l.standards || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Learning Targets</b></p><ul>${(l.learningTargets || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Criteria for Success</b></p><ul>${(l.criteria || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Engaging Instructional Strategies</b></p><p>${l.strategies}</p><p><b>Assessment</b></p><p>${l.assessment}</p><button class="btn primary" onclick="scheduleLessonFromBank('${course}','${l.id}')">Add to Pacing Plan</button></details>`; }).join("");
+    let cards = a.map(l => { let search = [l.code, l.title, ...(l.standards || []), ...(l.learningTargets || []), ...(l.criteria || [])].join(" ").toLowerCase().replace(/"/g, "&quot;"); return `<details class="card lessonBankCard" data-reusable="${l.reusable ? "yes" : "no"}" data-search="${search}"><summary style="cursor:pointer"><b>Lesson ${l.code}: ${l.title}</b> ${l.reusable ? `<span class="pill">Reusable</span>` : ""}</summary><p><b>Standards to Select in Planbook</b></p><ul>${(l.standards || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Learning Targets</b></p><ul>${(l.learningTargets || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Criteria for Success</b></p><ul>${(l.criteria || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Engaging Instructional Strategies</b></p><p>${l.strategies}</p><p><b>Assessment</b></p><p>${l.assessment}</p>${teachingTipsHtml(l)}<button class="btn primary" onclick="scheduleLessonFromBank('${course}','${l.id}')">Add to Pacing Plan</button></details>`; }).join("");
     document.getElementById("app").innerHTML = `<button class="btn" onclick="renderMainMenu()">← Main Menu</button><div class="row"><div><h2>Lesson Plan Bank</h2><div class="small">Master Planbook lessons already developed for both welding courses.</div></div><button class="btn" onclick="renderCurriculumHub('${course}')">View ${course === "wt" ? "WT" : "AWT"} Curriculum Map</button></div><div class="card"><button class="btn ${course === "wt" ? "primary" : ""}" onclick="renderLessonBank('wt')">Welding Technology</button> <button class="btn ${course === "awt" ? "primary" : ""}" onclick="renderLessonBank('awt')">Advanced Welding Technology</button><p><b>${courseLabel(course)}:</b> ${c.numbered} numbered lessons + ${c.reusable} reusable lessons = ${c.total} total entries.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="lessonBankSearch" placeholder="Search title, standard, target…" style="flex:1;min-width:220px;padding:10px;border:1px solid #d6dde6;border-radius:8px" oninput="filterLessonBank()"><select id="lessonBankFilter" onchange="filterLessonBank()" style="padding:10px"><option value="all">All lessons</option><option value="numbered">Numbered lessons</option><option value="reusable">Reusable lessons</option></select></div><p class="small">These entries preserve the existing Title, Standards, Learning Targets, Criteria for Success, Engaging Instructional Strategies, and Assessment content. Scheduled lesson instances will be added in the dynamic pacing phase without altering these master lessons.</p></div><div id="lessonBankCards">${cards}</div>`;
 }
 function filterLessonBank() {
@@ -2046,7 +2047,15 @@ function classForecastLookahead(course, sectionId, limit = 4) {
 function lessonPlanbookHtml(l) {
     if (!l)
         return `<p class="small">Master lesson details were not found.</p>`;
-    return `<div class="card"><h3>Lesson ${l.code}: ${l.title}</h3><p><b>Standards to Select in Planbook</b></p><ul>${(l.standards || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Learning Targets</b></p><ul>${(l.learningTargets || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Criteria for Success</b></p><ul>${(l.criteria || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Engaging Instructional Strategies</b></p><p>${l.strategies || "—"}</p><p><b>Assessment</b></p><p>${l.assessment || "—"}</p></div>`;
+    return `<div class="card"><h3>Lesson ${l.code}: ${l.title}</h3><p><b>Standards to Select in Planbook</b></p><ul>${(l.standards || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Learning Targets</b></p><ul>${(l.learningTargets || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Criteria for Success</b></p><ul>${(l.criteria || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Engaging Instructional Strategies</b></p><p>${l.strategies || "—"}</p><p><b>Assessment</b></p><p>${l.assessment || "—"}</p>${teachingTipsHtml(l)}</div>`;
+}
+function teachingTipsHtml(lesson) {
+    if (!window.ArcTeachingTips)
+        return "";
+    let tips = window.ArcTeachingTips.recommend(lesson);
+    if (!tips.length)
+        return "";
+    return `<details class="arc-teaching-tips"><summary><span><b>Teaching Tips</b> <span class="pill">Optional</span></span><span class="small">Practical instructor support</span></summary><div class="arc-teaching-tips__body">${tips.map(t => `<div class="arc-teaching-tip"><span class="arc-teaching-tip__label">${t.label}</span><p>${t.tip}</p></div>`).join("")}<p class="small">Use what fits your class and teaching style; ignore what does not.</p></div></details>`;
 }
 function showClassForecast() {
     var _a, _b, _c;

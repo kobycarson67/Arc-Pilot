@@ -1,0 +1,12 @@
+const assert=require('assert');
+const fs=require('fs');
+const html=fs.readFileSync('index.html','utf8');
+const sw=fs.readFileSync('sw.js','utf8');
+assert(html.includes('src/deployment_readiness.js'),'host must load deployment readiness module');
+assert(sw.includes('./src/deployment_readiness.js'),'offline shell must cache deployment readiness module');
+assert(html.includes("type:'SKIP_WAITING'"),'host must apply a waiting update intentionally');
+assert(html.includes('Controlled pilot only.'),'host must identify the pilot boundary');
+assert(html.includes('OneDrive recovery, safer handling for real student information'),'host must not claim production readiness');
+assert(html.includes('ArcDeployment.verifyStateIntegrity'),'backup imports must verify available integrity');
+assert(html.includes('navigator.storage.persist'),'host must expose persistent-storage request');
+console.log('PASS Deployment hardening host contracts');

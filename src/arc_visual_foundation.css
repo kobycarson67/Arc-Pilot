@@ -64,5 +64,7 @@ th{background:linear-gradient(180deg,#eef3fb,#e1e7f0);color:#27364e}th,td{border
 input,select,textarea{border-color:#aeb7c5!important;border-radius:9px!important;background:#fff;color:var(--arc-ink)}
 input:focus,select:focus,textarea:focus{outline:3px solid rgba(36,87,214,.18);border-color:var(--arc-blue)!important}
 .arc-project-grading{margin:-4px 0 18px;padding:12px 14px;border:1px solid var(--arc-line);border-top:0;border-radius:0 0 var(--arc-radius) var(--arc-radius);background:#f7f8fa}
+.arc-teaching-tips{margin-top:16px;border:1px solid #c9d6f5;border-left:4px solid var(--arc-blue);background:linear-gradient(180deg,#f8faff,#eef3ff)}
+.arc-teaching-tips summary{min-height:48px}.arc-teaching-tips__body{padding:4px 14px 14px;border-top:1px solid #c9d6f5}.arc-teaching-tip{margin-top:12px;padding:11px 12px;border-radius:10px;background:#fff;border:1px solid #d8deea}.arc-teaching-tip p{margin:6px 0 0;line-height:1.45}.arc-teaching-tip__label{font-size:11px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--arc-blue-deep)}
 @media (pointer:coarse){.btn,.tab,.codebtn,.workbtn,.navbtn,.navselect{min-height:48px;padding:11px 14px}}
 @media (prefers-reduced-motion:reduce){.navbtn,.student,.btn,.tab,.codebtn,.workbtn{transition:none}}

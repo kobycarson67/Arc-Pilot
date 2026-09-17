@@ -1,0 +1,11 @@
+const assert=require('assert');
+const fs=require('fs');
+const html=fs.readFileSync('index.html','utf8');
+const sw=fs.readFileSync('sw.js','utf8');
+assert(html.includes('src/inventory.js'),'host must load inventory module');
+assert(sw.includes('./src/inventory.js'),'offline shell must cache inventory module');
+assert(html.includes('ArcInventory.adjust'),'host adjustments must use tested inventory model');
+assert(html.includes('Project activity never deducts stock automatically'),'host must state manual deduction boundary');
+assert(html.includes('CURRENT_SCHEMA_VERSION = 5'),'inventory must be covered by state migration');
+assert(html.includes('renderInventory()'),'inventory must be reachable from the host');
+console.log('PASS Inventory host integration contracts');

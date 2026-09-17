@@ -1,0 +1,15 @@
+const assert=require('assert');
+const fs=require('fs');
+const html=fs.readFileSync('index.html','utf8');
+const sw=fs.readFileSync('sw.js','utf8');
+const scripts=['project_checkpoints.js','project_checkpoint_controller.js','project_checkpoint_presenter.js','project_tab_adapter.js','project_checkpoint_persistence.js','project_checkpoint_host_bridge.js','project_checkpoint_card.js'];
+scripts.forEach(name=>assert(html.includes('src/'+name),'index must load '+name));
+scripts.forEach(name=>assert(sw.includes('./src/'+name),'offline shell must cache '+name));
+assert(html.includes('ArcProjectTabAdapter.cards(student)'),'host must render cards from the tested Project Tab Adapter');
+assert(html.includes('ArcProjectCheckpointHostBridge.execute'),'host actions must use the tested transaction bridge');
+assert(html.includes('ArcProjectCheckpointHostBridge.undo'),'host undo must use the tested transaction bridge');
+assert(html.includes('checkpointHistoryForApp(history)'),'checkpoint history must be adapted to ARC student history');
+assert(html.includes('ARC restored the previous student record'),'save failure must report rollback');
+assert(html.includes('checkpoint progress does not change the grade automatically'),'checkpoint progress must remain separate from grading');
+assert(html.includes('projectRow(student.projects[i], i)'),'rubric grading controls must remain visible');
+console.log('PASS Project checkpoint host integration contracts');

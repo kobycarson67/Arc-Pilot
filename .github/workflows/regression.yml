@@ -23,29 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run ARC static regression gate
-        run: python tests/regression_static.py
-      - name: Run Needs Attention behavioral tests
-        run: node tests/needs_attention_engine.test.js
-      - name: Run ARC data adapter tests
-        run: node tests/needs_attention_arc_adapter.test.js
-      - name: Run Project Checkpoint tests
-        run: node tests/project_checkpoints.test.js
-      - name: Run Project Checkpoint Controller tests
-        run: node tests/project_checkpoint_controller.test.js
-      - name: Run Project Activity Scope tests
-        run: node tests/project_activity_scope.test.js
-      - name: Run Project Checkpoint Presenter tests
-        run: node tests/project_checkpoint_presenter.test.js
-      - name: Run Project Tab Adapter tests
-        run: node tests/project_tab_adapter.test.js
-      - name: Run Project Checkpoint Persistence tests
-        run: node tests/project_checkpoint_persistence.test.js
-      - name: Run Project Checkpoint Host Bridge tests
-        run: node tests/project_checkpoint_host_bridge.test.js
-      - name: Run ARC Visual Foundation tests
-        run: node tests/visual_foundation.test.js
-      - name: Run Project Checkpoint Card tests
-        run: node tests/project_checkpoint_card.test.js
-      - name: Run Render Modal Authority tests
-        run: node tests/render_modal_authority.test.js
+      - name: Run complete ARC regression suite
+        shell: bash
+        run: |
+          python tests/regression_static.py
+          for test_file in tests/*.test.js; do
+            node "$test_file"
+          done

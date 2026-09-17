@@ -1,4 +1,4 @@
-const VERSION='v0-18-samsung-stabilization-1';
+const VERSION='v0-18-samsung-stabilization-1-booth-v1';
 const CACHE='arc-pilot-'+VERSION;
 const CORE=['./','./index.html','./app.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./src/arc_visual_foundation.css','./src/project_checkpoints.js','./src/project_checkpoint_controller.js','./src/project_checkpoint_presenter.js','./src/project_tab_adapter.js','./src/project_checkpoint_persistence.js','./src/project_checkpoint_host_bridge.js','./src/project_checkpoint_card.js','./src/teaching_tips.js','./src/inventory.js','./src/deployment_readiness.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));});

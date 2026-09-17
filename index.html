@@ -20,6 +20,7 @@
 <script src="src/project_checkpoint_host_bridge.js"></script>
 <script src="src/project_checkpoint_card.js"></script>
 <script src="src/teaching_tips.js"></script>
+<script src="src/inventory.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
@@ -60,10 +61,10 @@ table{width:100%;border-collapse:collapse;background:white}th,td{border:1px soli
 </head>
 <body>
 <header>
-<div class="headerline"><div><div class="brand">Welding Classroom</div><div class="sub">Prototype v0.17.1 • Installable App Foundation</div></div>
+<div class="headerline"><div><div class="brand">Welding Classroom</div><div class="sub">ARC Pilot v0.18 • Installable App Foundation</div></div>
 <div class="navbar"><button id="navBackBtn" class="navbtn" onclick="navBack()">← Back</button><button class="navbtn" onclick="renderMainMenu()">⌂ Main Menu</button><select id="navClassSelect" class="navselect" onchange="navSwitchClass(this.value)"></select><button class="navbtn" onclick="showQuickAdd()">＋ Quick Add</button><button class="navbtn" onclick="showGlobalSearch()">⌕ Search</button><button class="navbtn" onclick="showNotifications()">🔔<span id="navNotificationBadge" class="navbadge" style="display:none">0</span></button><button class="navbtn" onclick="renderAppSettings()">⚙ Settings</button></div></div>
 <div id="navBreadcrumb" class="breadcrumb">Main Menu</div></header>
-<main><div class="banner">FICTIONAL STUDENT DATA ONLY — v0.17.1 Installable App Foundation. Full-screen Home Screen mode is prepared for hosted deployment. OneDrive sync is architected but NOT connected yet; device-local data/photos are not cross-device protection. No encryption or login yet.</div>
+<main><div class="banner">FICTIONAL STUDENT DATA ONLY — ARC Pilot v0.18. Full-screen Home Screen mode is prepared for hosted deployment. OneDrive sync is architected but NOT connected yet; device-local data/photos are not cross-device protection. No encryption or login yet.</div>
 <div id="app"></div>
 </main>
 
@@ -128,9 +129,9 @@ function seed() {
     };
 }
 const STORAGE_KEY = "weld_v013";
-const APP_VERSION = "0.17.1";
+const APP_VERSION = "0.18.0";
 const BACKUP_FORMAT_VERSION = 1;
-const CURRENT_SCHEMA_VERSION = 4;
+const CURRENT_SCHEMA_VERSION = 5;
 const PREUPGRADE_RECOVERY_KEY = "weld_v013_preupgrade_recovery";
 const IMPORT_ROLLBACK_KEY = "weld_v013_import_rollback";
 let storageAvailable = true;
@@ -206,6 +207,8 @@ function validateCurrentStateShape(candidate) {
         throw new Error("Backup pass log is invalid.");
     if (candidate.photoEvidence != null && !Array.isArray(candidate.photoEvidence))
         throw new Error("Photo evidence metadata is invalid.");
+    if (candidate.inventory != null && (typeof candidate.inventory !== "object" || Array.isArray(candidate.inventory)))
+        throw new Error("Inventory data is invalid.");
     return true;
 }
 function migrateStateData(input, declaredSchema = null) {
@@ -286,6 +289,12 @@ function migrateStateData(input, declaredSchema = null) {
         });
         x.schemaVersion = 4;
         from = 4;
+    }
+    if (from < 5) {
+        // Schema 5 adds teacher-managed shop inventory. No stock is inferred from projects or prior records.
+        x.inventory = ArcInventory.normalize(x.inventory);
+        x.schemaVersion = 5;
+        from = 5;
     }
     validateCurrentStateShape(x);
     return x;
@@ -470,6 +479,7 @@ function ensureProjectLibrary() {
     if (!state.projectLibrary.awt)
         state.projectLibrary.awt = [];
 }
+function ensureInventoryModel() { state.inventory = ArcInventory.normalize(state.inventory); return state.inventory; }
 function projectLibrary() { ensureProjectLibrary(); return state.projectLibrary[state.course]; }
 function ensureTechnicalLibrary() {
     if (!state.technicalLibrary)
@@ -739,7 +749,7 @@ function renderAppAndSyncSettings(){
       '</div>';
 }
 
-function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.period}${ordinal(sec.period)} Period › ${courseLabel(sec.course)}` : "Welding Classroom"; return { main: "Main Menu", schedule: "Today's Schedule", setup: "Schedule Setup", roster: base, projects: `${base} › Class Projects`, technical: `${base} › Technical Scoring`, gradebook: `${base} › Gradebook`, attendance: `${base} › Attendance & Passes`, workplace: `${base} › Workplace`, openshop: `${base} › Open Shop`, behavior: `${base} › Behavior & Incidents`, settings: "Settings", appsync: "App & Sync", photolibrary: "Student Work Library" }[view] || base; }
+function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.period}${ordinal(sec.period)} Period › ${courseLabel(sec.course)}` : "Welding Classroom"; return { main: "Main Menu", schedule: "Today's Schedule", setup: "Schedule Setup", roster: base, projects: `${base} › Class Projects`, technical: `${base} › Technical Scoring`, gradebook: `${base} › Gradebook`, attendance: `${base} › Attendance & Passes`, workplace: `${base} › Workplace`, openshop: `${base} › Open Shop`, behavior: `${base} › Behavior & Incidents`, settings: "Settings", appsync: "App & Sync", photolibrary: "Student Work Library", inventory: "Shop Inventory" }[view] || base; }
 function updateNavigationBar(label) { ensureScheduleModel(); let sel = document.getElementById("navClassSelect"); if (sel) {
     let sec = activeSection();
     sel.innerHTML = `<option value="">Classes ▾</option>` + state.sections.slice().sort((a, b) => a.period - b.period).map(s => `<option value="${s.id}" ${sec && s.id === sec.id ? "selected" : ""}>${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</option>`).join("");
@@ -752,7 +762,8 @@ function updateNavigationBar(label) { ensureScheduleModel(); let sel = document.
 function navRender(view) { navSuppressHistory = true; if (view === "main")
     return renderMainMenu(); if (view === "schedule")
     return renderScheduleHome(); if (view === "setup")
-    return renderScheduleSetup(); if (view === "projects")
+    return renderScheduleSetup(); if (view === "inventory")
+    return renderInventory(); if (view === "projects")
     return showClassProjects(); if (view === "technical")
     return renderTechnicalScoring(); if (view === "gradebook")
     return renderGradebook(); if (view === "attendance")
@@ -941,7 +952,8 @@ function renderMainMenu() {
  <div class="card"><h3>WT Curriculum Map</h3><p class="small">Forecast, actual progress, and dynamic pacing for Welding Technology.</p><button class="btn primary" onclick="renderCurriculumHub('wt')">Open WT Map</button></div>
  <div class="card"><h3>AWT Curriculum Map</h3><p class="small">Forecast, actual progress, and dynamic pacing for Advanced Welding Technology.</p><button class="btn primary" onclick="renderCurriculumHub('awt')">Open AWT Map</button></div>
  <div class="card"><h3>Lesson Plan Bank</h3><p class="small">Reusable WT/AWT lessons tied to standards and future calendar scheduling.</p><button class="btn" onclick="renderLessonBank()">Open Lesson Bank</button></div>
- <div class="card"><h3>Project Bank</h3><p class="small">Reusable welding projects, eventually tied to materials, standards, prerequisites, and timing.</p><button class="btn" onclick="renderProjectBank()">Open Project Bank</button></div></div>
+ <div class="card"><h3>Project Bank</h3><p class="small">Reusable welding projects, eventually tied to materials, standards, prerequisites, and timing.</p><button class="btn" onclick="renderProjectBank()">Open Project Bank</button></div>
+ <div class="card"><h3>Shop Inventory</h3><p class="small">Track materials, consumables, equipment, low stock, usable drops, waste, and scrap.</p><button class="btn primary" onclick="renderInventory()">Open Inventory</button></div></div>
  <h3>Students & Challenge</h3><div class="grid">
  <div class="card"><h3>All Student Profiles</h3><p class="small">Current and prior students. View permanent records, re-enroll students, or end a current enrollment without deleting history.</p><button class="btn primary" onclick="renderAllStudentProfiles()">Open Student Profiles</button></div>
  <div class="card"><h3>Student Work Library</h3><p class="small">Browse photographed student work across classes and profiles. Photos can be captured with the device camera or uploaded from files/photos.</p><button class="btn primary" onclick="renderPhotoLibrary()">Open Work Library</button></div>
@@ -1385,6 +1397,25 @@ function movePacingItem(course, sectionId, itemId, dir) { let p = pacingPlan(sec
 function removePacingItem(course, sectionId, itemId) { let p = pacingPlan(sectionId), x = p.items.find(y => y.id === itemId); if (!x)
     return; if (!confirm("Remove this scheduled lesson instance from the pacing plan? The master lesson-bank entry will remain available."))
     return; p.items = p.items.filter(y => y.id !== itemId); computePacingForecast(sectionId); save(); renderPacingPlanner(course, sectionId); }
+function inventoryCategoryLabel(value) { return { material: "Material", consumable: "Consumable", equipment: "Equipment" }[value] || value; }
+function inventoryNumber(value) { return Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 3 }); }
+function inventoryItemHtml(item) {
+    let available = ArcInventory.available(item), low = ArcInventory.isLow(item), recent = ensureInventoryModel().history.filter(x => x.itemId === item.id).slice(0, 4);
+    return `<div class="card inventory-item" data-category="${item.category}" data-search="${escapePhotoText((item.name + " " + item.location + " " + item.notes).toLowerCase())}"><div class="row"><div><span class="pill">${inventoryCategoryLabel(item.category)}</span>${low ? ` <span class="pill bad">Low stock</span>` : ""}<h3>${escapePhotoText(item.name)}</h3><div class="small">${escapePhotoText(item.location || "No location set")}</div></div><div style="text-align:right"><div class="big">${inventoryNumber(available)} <span class="small">${escapePhotoText(item.unit)} available</span></div><div class="small">${inventoryNumber(item.quantity)} on hand${item.reserved ? ` • ${inventoryNumber(item.reserved)} reserved` : ""}${item.lowStockAt ? ` • low at ${inventoryNumber(item.lowStockAt)}` : ""}</div></div></div><div class="inventory-metrics"><span>Usable drops <b>${inventoryNumber(item.usableDrops)}</b></span><span>Waste <b>${inventoryNumber(item.waste)}</b></span><span>Scrap <b>${inventoryNumber(item.scrap)}</b></span></div><div class="inventory-actions"><button class="btn primary" onclick="showInventoryAdjustment('${item.id}','add')">Add Stock</button><button class="btn" onclick="showInventoryAdjustment('${item.id}','use')">Use</button><button class="btn" onclick="showInventoryAdjustment('${item.id}','usable_drop')">Usable Drop</button><button class="btn" onclick="showInventoryMoreActions('${item.id}')">More…</button><button class="btn" onclick="showInventoryItemEditor('${item.id}')">Edit Item</button></div>${item.notes ? `<p class="small">${escapePhotoText(item.notes)}</p>` : ""}${recent.length ? `<details><summary>Recent adjustments <span class="small">${recent.length}</span></summary><div class="detail">${recent.map(x => `<div class="entryrow"><div><b>${escapePhotoText(x.label)}</b>${x.note ? `<br><span class="small">${escapePhotoText(x.note)}</span>` : ""}</div><span class="small">${inventoryNumber(x.amount)} ${escapePhotoText(x.unit || item.unit)}<br>${new Date(x.time).toLocaleDateString()}</span></div>`).join("")}</div></details>` : ""}</div>`;
+}
+function renderInventory() {
+    navMark("inventory", "Shop Inventory"); let inventory = ensureInventoryModel(), summary = ArcInventory.summary(inventory), lowNames = summary.lowItems.map(x => escapePhotoText(x.name)).join(", ");
+    document.getElementById("app").innerHTML = `<button class="btn" onclick="renderMainMenu()">← Main Menu</button><div class="row"><div><h2>Shop Inventory</h2><div class="small">Teacher-managed counts. Project activity never deducts stock automatically.</div></div><button class="btn primary" onclick="showInventoryItemEditor()">+ Add Item</button></div>${summary.low ? `<div class="banner"><b>${summary.low} low-stock item${summary.low === 1 ? "" : "s"}:</b> ${lowNames}</div>` : ""}<div class="grid inventory-summary"><div class="card"><div class="big">${summary.total}</div><span class="small">Total items</span></div><div class="card"><div class="big">${summary.materials}</div><span class="small">Materials</span></div><div class="card"><div class="big">${summary.consumables}</div><span class="small">Consumables</span></div><div class="card"><div class="big">${summary.equipment}</div><span class="small">Equipment</span></div></div><div class="card inventory-toolbar"><input id="inventorySearch" placeholder="Search item, location, or note…" oninput="filterInventory()"><select id="inventoryCategory" onchange="filterInventory()"><option value="">All categories</option><option value="material">Materials</option><option value="consumable">Consumables</option><option value="equipment">Equipment</option></select><button class="btn" onclick="showInventoryHistory()">Full Adjustment History</button></div><div id="inventoryItems">${inventory.items.length ? inventory.items.slice().sort((a, b) => Number(ArcInventory.isLow(b)) - Number(ArcInventory.isLow(a)) || a.name.localeCompare(b.name)).map(inventoryItemHtml).join("") : `<div class="card"><h3>No inventory items yet</h3><p class="small">Add steel, welding consumables, shop supplies, or equipment. ARC will not guess counts from existing projects.</p><button class="btn primary" onclick="showInventoryItemEditor()">Add First Item</button></div>`}</div>`;
+}
+function filterInventory() { let q = (document.getElementById("inventorySearch").value || "").toLowerCase(), category = document.getElementById("inventoryCategory").value; document.querySelectorAll(".inventory-item").forEach(el => { el.style.display = (!q || el.dataset.search.includes(q)) && (!category || el.dataset.category === category) ? "block" : "none"; }); }
+function inventoryUnitOptions(selected) { return ArcInventory.UNITS.map(x => `<option value="${x}" ${x === selected ? "selected" : ""}>${x}</option>`).join(""); }
+function inventoryCategoryOptions(selected) { return ArcInventory.CATEGORIES.map(x => `<option value="${x}" ${x === selected ? "selected" : ""}>${inventoryCategoryLabel(x)}</option>`).join(""); }
+function showInventoryItemEditor(id = "") { let item = id ? ensureInventoryModel().items.find(x => x.id === id) : null, o = document.createElement("div"); o.id = "inventoryOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(680px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="removeById('inventoryOverlay')">Close</button><h2>${item ? "Edit" : "Add"} Inventory Item</h2><div class="grid"><label><b>Name</b><input id="inventoryName" value="${escapePhotoText(item ? item.name : "")}" placeholder="Example: 1 in square tube"></label><label><b>Category</b><select id="inventoryItemCategory">${inventoryCategoryOptions(item ? item.category : "material")}</select></label><label><b>Unit</b><select id="inventoryUnit">${inventoryUnitOptions(item ? item.unit : "each")}</select></label><label><b>Storage location</b><input id="inventoryLocation" value="${escapePhotoText(item ? item.location : "")}" placeholder="Example: Steel rack A"></label><label><b>Low-stock threshold</b><input id="inventoryLowStock" type="number" min="0" step="any" value="${item ? item.lowStockAt : 0}"></label>${item ? "" : `<label><b>Starting quantity</b><input id="inventoryStartingQuantity" type="number" min="0" step="any" value="0"></label>`}</div><label><b>Notes</b><textarea id="inventoryNotes" rows="3" placeholder="Size, specification, supplier note, condition…">${escapePhotoText(item ? item.notes : "")}</textarea></label><p><button class="btn primary" onclick="saveInventoryItem('${id}')">${item ? "Save Changes" : "Add Item"}</button></p></div>`; o.onclick = e => { if (e.target === o) o.remove(); }; document.body.appendChild(o); }
+function saveInventoryItem(id = "") { let values = { name: document.getElementById("inventoryName").value, category: document.getElementById("inventoryItemCategory").value, unit: document.getElementById("inventoryUnit").value, location: document.getElementById("inventoryLocation").value, lowStockAt: document.getElementById("inventoryLowStock").value, notes: document.getElementById("inventoryNotes").value }; try { state.inventory = id ? ArcInventory.updateItem(ensureInventoryModel(), id, values) : ArcInventory.addItem(ensureInventoryModel(), Object.assign(values, { quantity: document.getElementById("inventoryStartingQuantity").value })); save(); removeById("inventoryOverlay"); renderInventory(); } catch (err) { alert(err.message); } }
+function showInventoryAdjustment(id, action) { let item = ensureInventoryModel().items.find(x => x.id === id); if (!item) return; let correction = action === "correction", o = document.createElement("div"); o.id = "inventoryOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(560px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="removeById('inventoryOverlay')">Close</button><h2>${escapePhotoText(ArcInventory.ACTIONS[action].label)}</h2><p><b>${escapePhotoText(item.name)}</b><br><span class="small">${inventoryNumber(ArcInventory.available(item))} ${escapePhotoText(item.unit)} available • ${inventoryNumber(item.quantity)} on hand</span></p><label><b>${correction ? "Correct on-hand quantity" : "Amount"}</b><input id="inventoryAdjustmentAmount" type="number" min="${correction ? 0 : 0.001}" step="any" value="${correction ? item.quantity : 1}"></label><label><b>Note (optional)</b><textarea id="inventoryAdjustmentNote" rows="3" placeholder="Delivery, class use, project, count reason…"></textarea></label><p><button class="btn primary" onclick="saveInventoryAdjustment('${id}','${action}')">Save Adjustment</button></p></div>`; o.onclick = e => { if (e.target === o) o.remove(); }; document.body.appendChild(o); }
+function saveInventoryAdjustment(id, action) { let amount = document.getElementById("inventoryAdjustmentAmount").value, note = document.getElementById("inventoryAdjustmentNote").value; try { state.inventory = ArcInventory.adjust(ensureInventoryModel(), id, action, amount, { targetQuantity: action === "correction" ? amount : undefined, note }); save(); removeById("inventoryOverlay"); renderInventory(); } catch (err) { alert(err.message); } }
+function showInventoryMoreActions(id) { let item = ensureInventoryModel().items.find(x => x.id === id); if (!item) return; let actions = ["reserve", "release", "waste", "scrap", "correction"], o = document.createElement("div"); o.id = "inventoryOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(560px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="removeById('inventoryOverlay')">Close</button><h2>More Adjustments</h2><p><b>${escapePhotoText(item.name)}</b></p><div class="inventory-action-menu">${actions.map(x => `<button class="btn" onclick="removeById('inventoryOverlay');showInventoryAdjustment('${id}','${x}')">${escapePhotoText(ArcInventory.ACTIONS[x].label)}</button>`).join("")}</div><p class="small">Reservations are manual planning holds. They reduce available stock without changing the on-hand count. ARC does not create them from projects automatically.</p></div>`; o.onclick = e => { if (e.target === o) o.remove(); }; document.body.appendChild(o); }
+function showInventoryHistory() { let rows = ensureInventoryModel().history, o = document.createElement("div"); o.id = "inventoryOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(900px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="removeById('inventoryOverlay')">Close</button><h2>Inventory Adjustment History</h2><p class="small">Newest first. Stock changes are retained as an audit trail.</p>${rows.length ? rows.map(x => `<div class="entryrow"><div><b>${escapePhotoText(x.itemName)}</b> — ${escapePhotoText(x.label)}${x.note ? `<br><span class="small">${escapePhotoText(x.note)}</span>` : ""}</div><div style="text-align:right">${inventoryNumber(x.amount)} ${escapePhotoText(x.unit || "")}<br><span class="small">${new Date(x.time).toLocaleString()}</span></div></div>`).join("") : `<div class="card"><p class="small">No adjustments recorded yet.</p></div>`}</div>`; o.onclick = e => { if (e.target === o) o.remove(); }; document.body.appendChild(o); }
 function renderProjectBank() { ensureProjectLibrary(); navMark("projectbank", "Project Bank"); let rows = ["wt", "awt"].map(c => `<div class="card"><h3>${courseLabel(c)}</h3>${state.projectLibrary[c].length ? state.projectLibrary[c].map(p => `<div class="entryrow"><b>${p.title}</b><span class="small">${p.source || "Reusable project"}</span></div>`).join("") : `<p class="small">No reusable projects yet.</p>`}</div>`).join(""); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderMainMenu()">← Main Menu</button><h2>Project Bank</h2><p class="small">This view uses the same reusable project templates already created from class/project workflows. Future fields will add materials, standards, prerequisites, estimated periods, drawings, and alternatives.</p>${rows}`; }
 function currentEnrollment(s) { return (s.enrollments || []).find(e => e.active && e.year === state.academicYear && e.semester === state.semester); }
 function renderAllStudentProfiles(filter = "") { navMark("students", "All Student Profiles"); let q = (filter || "").toLowerCase(), list = allStudents().filter(s => !q || s.name.toLowerCase().includes(q)).sort((a, b) => a.name.localeCompare(b.name)); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderMainMenu()">← Main Menu</button><div class="row"><div><h2>All Student Profiles</h2><div class="small">${allStudents().length} permanent profiles • records remain after enrollment ends</div></div></div><input id="allProfileSearch" value="${filter}" placeholder="Search students…" style="width:100%;padding:11px;border:1px solid #d6dde6;border-radius:8px;margin:8px 0" oninput="renderAllStudentProfiles(this.value)"><div>${list.map(s => { let e = currentEnrollment(s), sec = e ? state.sections.find(x => x.id === e.sectionId) : null; return `<div class="entryrow"><div><b>${s.name}</b><br><span class="small">Grade ${s.grade || "—"} • Class of ${s.gradYear || "—"} • ${e ? `Currently enrolled: ${courseLabel(e.course)} — ${sec ? sec.period + ordinal(sec.period) + " Period" : ""}` : "Not currently enrolled"}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn primary" onclick="openPermanentStudent('${s.id}')">View Profile</button>${e ? `<button class="btn danger" onclick="confirmArchiveUnenroll('${s.id}')">Un-enroll</button>` : `<button class="btn" onclick="showArchiveEnroll('${s.id}')">Re-enroll</button>`}</div></div>`; }).join("") || `<div class="card">No matching students.</div>`}</div>`; }

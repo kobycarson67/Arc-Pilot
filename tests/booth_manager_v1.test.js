@@ -2,7 +2,7 @@ const assert=require('assert');
 const fs=require('fs');
 const html=fs.readFileSync('index.html','utf8');
 const has=text=>html.includes(text);
-assert(has('const CURRENT_SCHEMA_VERSION = 6'),'additive schema migration required');
+assert(/CURRENT_SCHEMA_VERSION = ([7-9]|[1-9][0-9]+);/.test(html),'Booth Manager must remain covered by current additive schema migration');
 assert(has('Schema 6 adds booth resources, assignment history, and resolvable shop issues'),'migration contract missing');
 ['booths','boothAssignments','boothIssues'].forEach(name=>assert(has('x.'+name),name+' migration missing'));
 assert(has('function commitBoothAssignment'),'assignment command missing');

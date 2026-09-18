@@ -1,0 +1,59 @@
+name: ARC Pages Live Verification
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arc-pages-live-verification
+  cancel-in-progress: true
+
+jobs:
+  verify-live-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out intended deployment
+        uses: actions/checkout@v4
+      - name: Wait for Pages and verify public assets
+        shell: bash
+        env:
+          LIVE_BASE: https://kobycarson67.github.io/Arc-Pilot
+        run: |
+          set -euo pipefail
+          verify_dir="$(mktemp -d)"
+          trap 'rm -rf "$verify_dir"' EXIT
+          ready=false
+          for attempt in $(seq 1 24); do
+            if curl --fail --silent --show-error --location \
+              --header 'Cache-Control: no-cache' \
+              "$LIVE_BASE/app-build.js?verify=$GITHUB_SHA-$attempt" \
+              --output "$verify_dir/app-build.js" && cmp --silent app-build.js "$verify_dir/app-build.js"; then
+              ready=true
+              break
+            fi
+            sleep 10
+          done
+          if [ "$ready" != true ]; then
+            echo 'Public Pages build marker did not reach the pushed main commit.' >&2
+            exit 1
+          fi
+          for asset in index.html sw.js app-build.js src/project_bank.js src/app_update_controller.js; do
+            mkdir -p "$verify_dir/$(dirname "$asset")"
+            curl --fail --silent --show-error --location \
+              --header 'Cache-Control: no-cache' \
+              "$LIVE_BASE/$asset?verify=$GITHUB_SHA" \
+              --output "$verify_dir/$asset"
+            cmp --silent "$asset" "$verify_dir/$asset" || {
+              echo "Public asset does not match pushed main: $asset" >&2
+              exit 1
+            }
+          done
+          grep --fixed-strings 'App & Updates' "$verify_dir/index.html"
+          grep --fixed-strings 'CURRENT_SCHEMA_VERSION = 7' "$verify_dir/index.html"
+          grep --fixed-strings 'ensureBoothModel' "$verify_dir/index.html"
+          grep --fixed-strings 'src/project_bank.js' "$verify_dir/index.html"
+          grep --fixed-strings 'pwa-update-controls-1' "$verify_dir/app-build.js"
+          echo "Verified public ARC Pages deployment for $GITHUB_SHA"

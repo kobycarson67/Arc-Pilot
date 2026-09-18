@@ -40,3 +40,10 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Installed Android PWAs may not surface a newly deployed shell promptly enough for classroom testing. Settings therefore exposes the running version/build, online state, a real service-worker update check, waiting-update state, and an explicit Apply Update action.
 - Manual controls supplement the automatic **Reload & Update** prompt. ARC activates only a verified waiting worker and reloads on the service worker's `controllerchange` event.
 - Application-shell updates never intentionally clear classroom records or photo storage. Cache replacement and classroom-data migration remain separate responsibilities.
+
+## Public deployment truth
+
+- The September 18 Samsung reset proved the public Pages URL was still serving v0.17.1/schema 4 even though development HEAD and regression checks had advanced through Booth Manager, Project Bank, schema 7, and manual update controls.
+- Root cause: GitHub Pages publishes `main` from the repository root. Development work was pushed to `dev/v0.18-needs-attention`, whose workflow tested the code but did not promote or deploy it. The public artifact therefore remained the September 15 `main` deployment at `1b15374b32d0a189a18888af18a75fc5950e7377`.
+- Repository HEAD, regression success, and public deployment state are three separate facts. Engineering must verify all three rather than treating a green test workflow as proof that the tablet URL changed.
+- Releases preserve the existing branch-based Pages model: promote the tested development commit to `main`, allow Pages to deploy it, then compare the public build marker and critical assets with that exact commit.

@@ -14,10 +14,11 @@
 - Booth Manager v1: booth/resource setup, assignment history, shared booths, period closure, issue warnings/override, and Fast Roster booth visibility.
 - Project Bank v1 foundation: reusable definitions, independent student assignments, configurable stages/checkpoints, instructor-controlled needs, primary project context, clearance review/override, starter WT Level 1–2 content, and Fast Roster project/need visibility.
 - Samsung manual update controls: Settings shows the running build and online/update state, performs an explicit service-worker update request, and applies only a verified waiting shell through controlled activation/reload without clearing classroom data.
+- Pages deployment diagnosis: the public site remained on `main` commit `1b15374b32d0a189a18888af18a75fc5950e7377` while development advanced separately. The branch-based Pages source remains `main`/root; release now requires an explicit fast-forward promotion plus public-asset verification.
 
 ## Active milestone
 
-Physical Samsung retesting of manual update discovery/application, followed by Fast Roster and Project Bank workflows, using fictional data only.
+Verify the promoted Pages build on the physical Samsung, then retest manual update discovery/application followed by Fast Roster and Project Bank workflows, using fictional data only.
 
 ## Immediate settled decisions
 
@@ -26,6 +27,7 @@ Physical Samsung retesting of manual update discovery/application, followed by F
 - Stages, current needs, checkpoints, difficulty, competency evidence, growth, and grades remain separate.
 - Instructor ARC remains complete without ARC Student. Instructor override remains final.
 - Existing repository standards data remains authoritative until source-photo reconciliation.
+- Repository HEAD, regression success, and public Pages state must be verified independently. A green regression run does not prove deployment.
 
 ## Intentionally deferred
 
@@ -40,4 +42,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the release gate. After it is green, deploy a newer shell and verify Settings can check, report, and apply it on the installed Samsung PWA. Then retest portrait Fast Roster glanceability, class/individual assignment, clearance warnings, stage changes, current-need changes, primary-project switching, reload persistence, and Booth/Samsung behavior with fictional students.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately fast-forwarded to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify the build identifier on the Samsung and retest portrait Fast Roster, projects, persistence, and Booth/Samsung behavior with fictional students.

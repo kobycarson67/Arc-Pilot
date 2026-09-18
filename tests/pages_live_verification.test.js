@@ -1,0 +1,12 @@
+const assert=require('assert');
+const fs=require('fs');
+const workflow=fs.readFileSync('.github/workflows/pages-live-verification.yml','utf8');
+assert(workflow.includes('branches: [ main ]'),'live verification must follow the configured Pages source branch');
+assert(workflow.includes('https://kobycarson67.github.io/Arc-Pilot'),'guardrail must verify the real public pilot URL');
+assert(workflow.includes('app-build.js?verify=$GITHUB_SHA'),'guardrail must use the immutable build marker with cache busting');
+['index.html','sw.js','app-build.js','src/project_bank.js','src/app_update_controller.js'].forEach(asset=>assert(workflow.includes(asset),'guardrail must compare '+asset));
+assert(workflow.includes("grep --fixed-strings 'App & Updates'"),'guardrail must verify current Settings UI');
+assert(workflow.includes("grep --fixed-strings 'CURRENT_SCHEMA_VERSION = 7'"),'guardrail must verify current schema shell');
+assert(workflow.includes("grep --fixed-strings 'ensureBoothModel'"),'guardrail must verify Booth Manager shell');
+assert(workflow.includes("grep --fixed-strings 'pwa-update-controls-1'"),'guardrail must verify current build identifier');
+console.log('PASS Pages live-deployment guardrail contracts');

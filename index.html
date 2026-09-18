@@ -24,6 +24,7 @@
 <script src="src/project_bank.js"></script>
 <script src="src/teaching_tips.js"></script>
 <script src="src/inventory.js"></script>
+<script src="src/booth_assignment_lifecycle.js"></script>
 <script src="src/deployment_readiness.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
@@ -2027,8 +2028,8 @@ function ensureBoothModel() {
     if (!Array.isArray(state.boothIssues)) state.boothIssues = [];
 }
 function boothById(id) { ensureBoothModel(); return state.booths.find(b => b.id === id); }
-function activeBooths() { ensureBoothModel(); return state.booths.filter(b => !b.removedAt); }
-function activeBoothAssignment(studentId, sectionId, day = dateKey()) { ensureBoothModel(); return state.boothAssignments.find(a => a.studentId === studentId && a.sectionId === sectionId && a.date === day && !a.endedAt) || null; }
+function activeBooths() { ensureBoothModel(); return ArcBoothAssignments.assignableBooths(state.booths); }
+function activeBoothAssignment(studentId, sectionId, day = dateKey()) { ensureBoothModel(); return ArcBoothAssignments.active(state.boothAssignments, studentId, sectionId, day); }
 function boothEndForSection(sectionId, day = dateKey()) {
     let sec = state.sections.find(x => x.id === sectionId), d = new Date(day + "T12:00:00"), plan = dayPlan(d), times = sec ? (bellSchedule(plan.scheduleId).times[sec.period] || state.periodTimes[sec.period]) : null;
     if (!times || !times.end) return null;
@@ -2036,18 +2037,13 @@ function boothEndForSection(sectionId, day = dateKey()) {
     return isNaN(end.getTime()) ? null : end;
 }
 function closeExpiredBoothAssignments(now = new Date()) {
-    ensureBoothModel(); let changed = false, today = dateKey(now);
-    state.boothAssignments.forEach(a => {
-        if (a.endedAt) return;
-        let scheduledEnd = boothEndForSection(a.sectionId, a.date);
-        if (a.date !== today || (scheduledEnd && now >= scheduledEnd)) { a.endedAt = (scheduledEnd && scheduledEnd <= now ? scheduledEnd : now).toISOString(); a.endReason = "period_end"; changed = true; }
-    });
+    ensureBoothModel(); let today = dateKey(now), changed = ArcBoothAssignments.closeExpired(state.boothAssignments, now, today, a => boothEndForSection(a.sectionId, a.date));
     if (changed) save();
     return changed;
 }
 function boothOpenIssues(boothId) { ensureBoothModel(); return state.boothIssues.filter(i => i.boothId === boothId && !i.resolvedAt); }
 function boothOccupants(boothId, sectionId, exceptStudentId) {
-    return state.boothAssignments.filter(a => a.boothId === boothId && a.sectionId === sectionId && a.date === dateKey() && !a.endedAt && a.studentId !== exceptStudentId).map(a => allStudents().find(s => s.id === a.studentId)).filter(Boolean);
+    return ArcBoothAssignments.occupants(state.boothAssignments, boothId, sectionId, dateKey(), exceptStudentId).map(id => allStudents().find(s => s.id === id)).filter(Boolean);
 }
 function boothBadgeHtml(st, sec) {
     let a = sec ? activeBoothAssignment(st.id, sec.id) : null, booth = a ? boothById(a.boothId) : null, cls = booth && booth.status !== "ready" ? (booth.status === "unavailable" ? " unavailable" : " review") : "";
@@ -2075,19 +2071,17 @@ function requestBoothAssignment(studentId, boothId) {
     o.onclick = e => { if (e.target === o) o.remove(); }; if (!o.parentNode) document.body.appendChild(o);
 }
 function commitBoothAssignment(studentId, boothId, source = "instructor") {
-    let sec = activeSection(), booth = boothById(boothId); if (!sec || !booth) return; let now = new Date().toISOString(), prior = activeBoothAssignment(studentId, sec.id);
-    if (prior) { prior.endedAt = now; prior.endReason = "reassigned"; }
-    state.boothAssignments.push({ id: "ba_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), studentId, boothId, sectionId: sec.id, period: sec.period, academicYear: state.academicYear, semester: state.semester, date: dateKey(), startedAt: now, endedAt: null, endReason: null, source });
-    save(); closeBoothOverlay(); renderRoster();
+    let sec = activeSection(), student = allStudents().find(s => s.id === studentId), booth = boothById(boothId); if (!sec || !student) return alert("The student or class is no longer available. Reopen Fast Roster and try again."); if (!booth || booth.removedAt) return alert("That booth is no longer available. Choose another booth."); let now = new Date(), result = ArcBoothAssignments.assign(state.boothAssignments, { id: "ba_" + now.getTime() + "_" + Math.random().toString(36).slice(2, 7), studentId, boothId, sectionId: sec.id, period: sec.period, academicYear: state.academicYear, semester: state.semester, date: dateKey(now), startedAt: now.toISOString(), source });
+    if (!result.changed) return closeBoothOverlay(); save(); closeBoothOverlay(); renderRoster();
 }
 function endBoothAssignment(studentId) {
-    let sec = activeSection(), a = sec && activeBoothAssignment(studentId, sec.id); if (!a) return; a.endedAt = new Date().toISOString(); a.endReason = "instructor_ended"; save(); closeBoothOverlay(); renderRoster();
+    let sec = activeSection(), now = new Date(), result = sec && ArcBoothAssignments.end(state.boothAssignments, studentId, sec.id, dateKey(now), now.toISOString()); if (!result || !result.changed) return; save(); closeBoothOverlay(); renderRoster();
 }
 function showBoothManager() {
     ensureBoothModel(); closeExpiredBoothAssignments(); navMark("booths", navViewLabel("booths"));
     document.getElementById("app").innerHTML = '<section class="booth-manager-page"><div class="row"><div><h2>Booth Manager</h2><p class="small">Assignments are evidence of booth use, not automatic blame. Equipment issues can be recorded without marking the entire booth unavailable.</p></div><div class="booth-manager-actions"><button class="btn" onclick="closeBoothManager()">← Fast Roster</button><button class="btn primary" onclick="addBooth()">Add Booth</button></div></div><div class="roster">' + activeBooths().map(b => {
-        let open = boothOpenIssues(b.id), allHistory = state.boothAssignments.filter(a => a.boothId === b.id), history = allHistory.slice().sort((x, y) => new Date(y.startedAt) - new Date(x.startedAt)).slice(0, 8);
-        return '<div class="card"><div class="row"><div><h3>' + escapePhotoText(b.name) + '</h3><span class="pill ' + (b.status === "ready" ? "good" : b.status === "unavailable" ? "bad" : "warn") + '">' + BOOTH_STATUSES[b.status] + '</span></div><div class="booth-manager-actions"><button class="btn" onclick="editBooth(\'' + b.id + '\')">Manage</button><button class="btn" onclick="requestRemoveBooth(\'' + b.id + '\')">Remove</button></div></div><div class="small">' + (b.resources.length ? b.resources.map(r => escapePhotoText(r.name)).join(", ") : "No equipment/resources listed") + '</div>' + open.map(i => '<div class="card issue-card"><b>' + escapePhotoText((b.resources.find(r => r.id === i.resourceId) || {}).name || "Whole booth") + '</b> — ' + escapePhotoText(i.description) + ' <button class="btn" onclick="resolveBoothIssue(\'' + i.id + '\')">Resolve</button></div>').join("") + (history.length ? '<details><summary><b>Assignment history (' + allHistory.length + ')</b></summary>' + history.map(a => { let st = allStudents().find(s => s.id === a.studentId), sec = state.sections.find(s => s.id === a.sectionId); return '<div class="entryrow"><div><b>' + escapePhotoText(st ? st.name : "Unknown student") + '</b><br><span class="small">' + escapePhotoText(sec ? sec.name : a.sectionId) + ' • ' + escapePhotoText(a.date) + '</span></div><span class="small">' + new Date(a.startedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) + '–' + (a.endedAt ? new Date(a.endedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "Active") + '</span></div>'; }).join("") + '</details>' : '') + '</div>';
+        let open = boothOpenIssues(b.id), currentOccupants = boothOccupants(b.id, activeSection().id, ""), allHistory = state.boothAssignments.filter(a => a.boothId === b.id), history = allHistory.slice().sort((x, y) => new Date(y.startedAt) - new Date(x.startedAt)).slice(0, 8);
+        return '<div class="card"><div class="row"><div><h3>' + escapePhotoText(b.name) + '</h3><span class="pill ' + (b.status === "ready" ? "good" : b.status === "unavailable" ? "bad" : "warn") + '">' + BOOTH_STATUSES[b.status] + '</span></div><div class="booth-manager-actions"><button class="btn" onclick="editBooth(\'' + b.id + '\')">Manage</button><button class="btn" onclick="requestRemoveBooth(\'' + b.id + '\')">Remove</button></div></div><div class="small"><b>Current:</b> ' + (currentOccupants.length ? currentOccupants.map(s => escapePhotoText(s.name)).join(", ") : "Available") + '</div><div class="small">' + (b.resources.length ? b.resources.map(r => escapePhotoText(r.name)).join(", ") : "No equipment/resources listed") + '</div>' + open.map(i => '<div class="card issue-card"><b>' + escapePhotoText((b.resources.find(r => r.id === i.resourceId) || {}).name || "Whole booth") + '</b> — ' + escapePhotoText(i.description) + ' <button class="btn" onclick="resolveBoothIssue(\'' + i.id + '\')">Resolve</button></div>').join("") + (history.length ? '<details><summary><b>Assignment history (' + allHistory.length + ')</b></summary>' + history.map(a => { let st = allStudents().find(s => s.id === a.studentId), sec = state.sections.find(s => s.id === a.sectionId); return '<div class="entryrow"><div><b>' + escapePhotoText(st ? st.name : "Unknown student") + '</b><br><span class="small">' + escapePhotoText(sec ? sec.name : a.sectionId) + ' • ' + escapePhotoText(a.date) + '</span></div><span class="small">' + new Date(a.startedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) + '–' + (a.endedAt ? new Date(a.endedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "Active") + '</span></div>'; }).join("") + '</details>' : '') + '</div>';
     }).join("") + '</div></section>';
 }
 function closeBoothManager() { let previous = navHistory.pop(); if (previous) navRender(previous); else renderRoster(); }

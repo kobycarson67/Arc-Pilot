@@ -18,10 +18,12 @@
 - Booth Manager Samsung repair: Booth Manager is a normal navigable class view rather than a viewport-blocking modal, its full list scrolls below the global header, and instructors can add or safely soft-remove booths while preserving resource/assignment history.
 - Booth Manager repair physically verified on the Samsung tablet and closed.
 - Checkpoint/Fast Roster refresh repair: Ready for Review derives a temporary Instructor Review need; Verify and Needs More Work persist their authoritative checkpoint transitions, refresh the underlying Fast Roster immediately, and preserve the instructor-selected operational need.
+- Checkpoint/Fast Roster refresh physically verified on Samsung using Layout & Measurement → Verify → Fit-Up and closed.
+- Student booth-assignment lifecycle repair: assignment, move, End Assignment, occupancy, persistence, and automatic closure use one authoritative history; after-period assignments are no longer erased by the immediate roster refresh; Booth Manager displays current occupants from that same state.
 
 ## Active milestone
 
-Deploy and physically retest the checkpoint/Fast Roster lifecycle on the Samsung: Ready for Review must appear on the roster, then disappear immediately after either Verify or Needs More Work without corrupting the underlying manual operational need.
+Deploy and physically retest student booth assignment on the Samsung, including assign, move, End Assignment, Booth Manager agreement, reload, PWA close/reopen, shared-booth confirmation, passes, and after-period testing.
 
 ## Immediate settled decisions
 
@@ -33,6 +35,7 @@ Deploy and physically retest the checkpoint/Fast Roster lifecycle on the Samsung
 - Repository HEAD, regression success, and public Pages state must be verified independently. A green regression run does not prove deployment.
 - Booth removal is confirmed and non-destructive: active assignments and unresolved issues block removal, while equipment and assignment history remain stored.
 - Checkpoint records are authoritative workflow state. Fast Roster derives temporary review needs at render time; it does not persist a second need value. Derived instructor action takes temporary display priority and the instructor-selected operational need remains intact underneath it.
+- Booth assignment history is authoritative for both Fast Roster and Booth Manager. Shared occupancy is allowed; passes do not alter booths; soft-removed booths are not assignable.
 
 ## Intentionally deferred
 
@@ -47,4 +50,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify build `checkpoint-roster-refresh-1` on the Samsung and run the Ready for Review → Verify and Ready for Review → Needs More Work lifecycle, including navigation, class switching, reload, and installed-PWA restoration. Automated verification makes the repair deployed-ready; only that physical pass closes it.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify build `booth-assignment-lifecycle-1` on the Samsung and run the full assignment/move/unassign/reload/Booth Manager agreement sequence. Automated verification makes the repair deployed-ready; only that physical pass closes it.

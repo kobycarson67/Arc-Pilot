@@ -8,5 +8,5 @@ assert(workflow.includes('app-build.js?verify=$GITHUB_SHA'),'guardrail must use 
 assert(workflow.includes("grep --fixed-strings 'App & Updates'"),'guardrail must verify current Settings UI');
 assert(workflow.includes("grep --fixed-strings 'CURRENT_SCHEMA_VERSION = 7'"),'guardrail must verify current schema shell');
 assert(workflow.includes("grep --fixed-strings 'ensureBoothModel'"),'guardrail must verify Booth Manager shell');
-assert(workflow.includes('grep --fixed-strings "build:\'"'),'guardrail must verify the deployed build identifier');
+assert(workflow.includes("grep --fixed-strings 'checkpoint-roster-state-1'"),'guardrail must verify current build identifier');
 console.log('PASS Pages live-deployment guardrail contracts');

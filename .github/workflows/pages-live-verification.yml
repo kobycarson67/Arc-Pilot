@@ -55,5 +55,5 @@ jobs:
           grep --fixed-strings 'CURRENT_SCHEMA_VERSION = 7' "$verify_dir/index.html"
           grep --fixed-strings 'ensureBoothModel' "$verify_dir/index.html"
           grep --fixed-strings 'src/project_bank.js' "$verify_dir/index.html"
-          grep --fixed-strings "build:'" "$verify_dir/app-build.js"
+          grep --fixed-strings 'checkpoint-roster-state-1' "$verify_dir/app-build.js"
           echo "Verified public ARC Pages deployment for $GITHUB_SHA"

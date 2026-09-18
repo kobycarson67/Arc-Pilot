@@ -50,10 +50,10 @@ test('Needs More Work clears review without corrupting the underlying manual nee
   assert.equal(roster(JSON.parse(host.box.json)).currentNeed,'Needs Material');
 });
 
-test('host integration refreshes the roster beneath an open student profile',()=>{
+test('host integration refreshes the dependent class view beneath an open student profile',()=>{
   const html=fs.readFileSync('index.html','utf8');
   assert(html.includes('refreshProjectContextView(result.student)'));
-  assert(html.includes('if (navCurrentView === "roster") renderRoster(); if (studentOpen)'));
+  assert(html.includes('if (navCurrentView === "roster") renderRoster(); else if (navCurrentView === "forecast") renderClassForecast(); if (studentOpen)'));
 });
 
 if(!process.exitCode)console.log('PASS '+passed+' checkpoint/Fast Roster lifecycle tests');

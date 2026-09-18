@@ -69,3 +69,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The September 18 Samsung assignment failure occurred during an after-period physical test. Assignment and save succeeded, but the immediate Fast Roster render ran period-end cleanup and closed the brand-new record because the selected class's scheduled end time had already passed.
 - Scheduled cleanup now closes a same-day assignment at period end only when that assignment began on or before the cutoff. An assignment deliberately created after the cutoff remains visible for same-day navigation/reload testing and closes on the next day or through End Assignment. This preserves ordinary in-period automatic closure without instantly erasing an instructor action.
 - Booth Manager shows current occupants directly from the authoritative assignment history. Temporary passes never alter booth assignment or roster position.
+
+## Class Forecast v1
+
+- Class Forecast answers **What should I be prepared for?** Fast Roster remains the live answer to **Where are they, what are they doing, and what do they need right now?** Forecast must not become a duplicate roster.
+- Forecast is deterministic and read-only. It derives from current attendance, primary project/checkpoint, instructor-selected and checkpoint-derived needs, booth-assignment history, and Project Bank workflow definitions. It stores no forecast-specific student status and requires no routine instructor data entry.
+- Class Pulse reports factual counts only: present, active project, current instructor-action needs, and occupied booths. Attendance and active work remain separate. Temporary passes do not alter attendance or booth position.
+- Needs You Now uses the same operational/derived need authority as Fast Roster. Ready for Review appears as `Instructor Review — [checkpoint]`; existing actionable manual needs and Needs Next Project may appear; `Ready to Work` never appears in this queue.
+- Up Next identifies only the next defined checkpoint, instructor check, completion requirement, or next-project requirement after the current recorded position. It never claims that a student will reach that step today.
+- Shop Position groups current booth occupants with their primary project, current checkpoint/stage, and current need. Soft-removed booths are excluded. Fast Roster remains the detailed student list and all mutations continue through existing student/project/booth workflows.

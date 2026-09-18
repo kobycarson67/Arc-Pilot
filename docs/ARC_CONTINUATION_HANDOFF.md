@@ -20,10 +20,11 @@
 - Checkpoint/Fast Roster refresh repair: Ready for Review derives a temporary Instructor Review need; Verify and Needs More Work persist their authoritative checkpoint transitions, refresh the underlying Fast Roster immediately, and preserve the instructor-selected operational need.
 - Checkpoint/Fast Roster refresh physically verified on Samsung using Layout & Measurement → Verify → Fit-Up and closed.
 - Student booth-assignment lifecycle repair: assignment, move, End Assignment, occupancy, persistence, and automatic closure use one authoritative history; after-period assignments are no longer erased by the immediate roster refresh; Booth Manager displays current occupants from that same state.
+- Class Forecast v1: a deterministic, read-only class preparation view organizes current attendance, active-project, operational/derived need, booth, Project Bank, and checkpoint records into Class Pulse, Needs You Now, Up Next, and Shop Position without adding a second source of truth or claiming when work will occur.
 
 ## Active milestone
 
-Deploy and physically retest student booth assignment on the Samsung, including assign, move, End Assignment, Booth Manager agreement, reload, PWA close/reopen, shared-booth confirmation, passes, and after-period testing.
+Publish and tablet-test Class Forecast v1 while retaining the still-required student booth-assignment physical lifecycle retest.
 
 ## Immediate settled decisions
 
@@ -36,6 +37,7 @@ Deploy and physically retest student booth assignment on the Samsung, including 
 - Booth removal is confirmed and non-destructive: active assignments and unresolved issues block removal, while equipment and assignment history remain stored.
 - Checkpoint records are authoritative workflow state. Fast Roster derives temporary review needs at render time; it does not persist a second need value. Derived instructor action takes temporary display priority and the instructor-selected operational need remains intact underneath it.
 - Booth assignment history is authoritative for both Fast Roster and Booth Manager. Shared occupancy is allowed; passes do not alter booths; soft-removed booths are not assignable.
+- Class Forecast is preparation context, while Fast Roster remains the live shop-floor list. Forecast derives every value at render time; `Ready to Work` is excluded from Needs You Now, and Up Next names only the next defined workflow requirement—not a prediction that it will occur today.
 
 ## Intentionally deferred
 
@@ -50,4 +52,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify build `booth-assignment-lifecycle-1` on the Samsung and run the full assignment/move/unassign/reload/Booth Manager agreement sequence. Automated verification makes the repair deployed-ready; only that physical pass closes it.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets—including `src/class_forecast.js`—and build markers to that exact pushed commit. After it passes, verify build `class-forecast-v1` on the Samsung, test Forecast navigation/readability/authority agreement, and retain the full assignment/move/unassign/reload/Booth Manager agreement sequence. Automated verification makes the build deployed-ready; only physical passes close tablet findings.

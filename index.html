@@ -25,6 +25,7 @@
 <script src="src/teaching_tips.js"></script>
 <script src="src/inventory.js"></script>
 <script src="src/booth_assignment_lifecycle.js"></script>
+<script src="src/class_forecast.js"></script>
 <script src="src/deployment_readiness.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
@@ -505,7 +506,7 @@ function selectSection(id) { state.activeSectionId = id; let sec = activeSection
 function ordinal(n) { return n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"; }
 ensureScheduleModel();
 let current = null, tab = "summary";
-const RESTORABLE_VIEWS = ["main", "roster", "booths", "projects", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"];
+const RESTORABLE_VIEWS = ["main", "roster", "forecast", "booths", "projects", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"];
 const RESTORABLE_STUDENT_TABS = ["summary", "competencies", "attendance", "workplace", "behavior", "projects", "technical", "photos", "grades", "openshop", "history"];
 function persistNavigationContext() { try { sessionStorage.setItem(NAV_CONTEXT_KEY, JSON.stringify({ view: RESTORABLE_VIEWS.includes(navCurrentView) ? navCurrentView : "main", sectionId: state.activeSectionId || "", studentId: current ? current.id : "", studentTab: RESTORABLE_STUDENT_TABS.includes(tab) ? tab : "summary", studentOpen: !!(current && document.getElementById("modal") && document.getElementById("modal").classList.contains("show")) })); } catch (e) { } }
 function restoreNavigationContext() { let saved; try { saved = JSON.parse(sessionStorage.getItem(NAV_CONTEXT_KEY) || "null"); } catch (e) { return false; } if (!saved || !RESTORABLE_VIEWS.includes(saved.view)) return false; let sec = state.sections.find(x => x.id === saved.sectionId); if (sec) { state.activeSectionId = sec.id; state.course = sec.course; } if (saved.view === "main") renderMainMenu(); else navRender(saved.view); if (saved.studentOpen && saved.studentId) { let student = allStudents().find(x => x.id === saved.studentId); if (student) { current = student; tab = RESTORABLE_STUDENT_TABS.includes(saved.studentTab) ? saved.studentTab : "summary"; document.getElementById("modal").classList.add("show"); renderModal(); updateNavigationBar(`${navViewLabel(navCurrentView)} › ${student.name}`); } } return true; }
@@ -837,8 +838,8 @@ function renderAppAndSyncSettings(){
 window.addEventListener('online',function(){if(navCurrentView==='settings')renderAppAndSyncSettings();});
 window.addEventListener('offline',function(){if(navCurrentView==='settings')renderAppAndSyncSettings();});
 
-function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.period}${ordinal(sec.period)} Period › ${courseLabel(sec.course)}` : "Welding Classroom"; return { main: "Main Menu", schedule: "Today's Schedule", setup: "Schedule Setup", roster: base, booths: `${base} › Booth Manager`, projects: `${base} › Class Projects`, technical: `${base} › Technical Scoring`, gradebook: `${base} › Gradebook`, attendance: `${base} › Attendance & Passes`, workplace: `${base} › Workplace`, openshop: `${base} › Open Shop`, behavior: `${base} › Behavior & Incidents`, settings: "Settings", appsync: "App & Sync", photolibrary: "Student Work Library", inventory: "Shop Inventory" }[view] || base; }
-function classContextVisible() { return ["roster", "booths", "projects", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"].includes(navCurrentView); }
+function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.period}${ordinal(sec.period)} Period › ${courseLabel(sec.course)}` : "Welding Classroom"; return { main: "Main Menu", schedule: "Today's Schedule", setup: "Schedule Setup", roster: base, forecast: `${base} › Class Forecast`, booths: `${base} › Booth Manager`, projects: `${base} › Class Projects`, technical: `${base} › Technical Scoring`, gradebook: `${base} › Gradebook`, attendance: `${base} › Attendance & Passes`, workplace: `${base} › Workplace`, openshop: `${base} › Open Shop`, behavior: `${base} › Behavior & Incidents`, settings: "Settings", appsync: "App & Sync", photolibrary: "Student Work Library", inventory: "Shop Inventory" }[view] || base; }
+function classContextVisible() { return ["roster", "booths", "projects", "forecast", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"].includes(navCurrentView); }
 function closeClassMenu() { let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (menu) menu.hidden = true; if (button) button.setAttribute("aria-expanded", "false"); }
 function toggleClassMenu(event) { if (event) event.stopPropagation(); let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (!menu || !button) return; let opening = menu.hidden; menu.hidden = !opening; button.setAttribute("aria-expanded", opening ? "true" : "false"); }
 function updateNavigationBar(label) { ensureScheduleModel(); let button = document.getElementById("navClassButton"), menu = document.getElementById("navClassMenu"), sec = activeSection(); if (button) button.textContent = classContextVisible() && sec ? `${sec.period}${ordinal(sec.period)} — ${courseLabel(sec.course)} ▾` : "Classes ▾"; if (menu) menu.innerHTML = state.sections.slice().sort((a, b) => a.period - b.period).map(s => `<button class="navbtn ${classContextVisible() && sec && s.id === sec.id ? "is-active" : ""}" type="button" onclick="navSwitchClass('${s.id}')">${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</button>`).join(""); let bc = document.getElementById("navBreadcrumb"); if (bc)
@@ -851,7 +852,8 @@ function navRender(view) { navSuppressHistory = true; if (view === "main")
     return renderMainMenu(); if (view === "schedule")
     return renderScheduleHome(); if (view === "setup")
     return renderScheduleSetup(); if (view === "inventory")
-    return renderInventory(); if (view === "booths")
+    return renderInventory(); if (view === "forecast")
+    return renderClassForecast(); if (view === "booths")
     return showBoothManager(); if (view === "projects")
     return showClassProjects(); if (view === "technical")
     return renderTechnicalScoring(); if (view === "gradebook")
@@ -2139,7 +2141,7 @@ function renderRoster() {
     if (sec)
         list = sortedRosterForToday(sec, list);
     let today = dateKey(), passes = sec ? activePasses(sec.id) : [];
-    document.getElementById("app").innerHTML = `<div class="row"><div><h2>${sec ? sec.period + ordinal(sec.period) + " Period — " : ""}${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"}</h2><div class="small">${sec ? sec.name + " • " : ""}${list.length} students${passes.length ? ` • <b>${passes.length} currently out</b>` : ""}</div></div><div><button class="btn primary" onclick="showClassForecast()">Class Forecast</button><button class="btn" onclick="showBoothManager()">Booth Manager</button><button class="btn" onclick="renderGradebook()">Gradebook</button><button class="btn" onclick="renderAttendance()">Attendance & Passes</button><button class="btn" onclick="showClassProjects()">Class Projects</button><button class="btn" onclick="renderTechnicalScoring()">Technical Scoring</button><button class="btn" onclick="renderWholeClassWorkplace()">Whole-Class Workplace</button><button class="btn" onclick="renderClassBehavior()">Behavior & Incidents</button><button class="btn" onclick="renderOpenShopAll()">Open Shop</button></div></div>
+    document.getElementById("app").innerHTML = `<div class="row"><div><h2>${sec ? sec.period + ordinal(sec.period) + " Period — " : ""}${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"}</h2><div class="small">${sec ? sec.name + " • " : ""}${list.length} students${passes.length ? ` • <b>${passes.length} currently out</b>` : ""}</div></div><div><button class="btn primary" onclick="renderClassForecast()">Class Forecast</button><button class="btn" onclick="showBoothManager()">Booth Manager</button><button class="btn" onclick="renderGradebook()">Gradebook</button><button class="btn" onclick="renderAttendance()">Attendance & Passes</button><button class="btn" onclick="showClassProjects()">Class Projects</button><button class="btn" onclick="renderTechnicalScoring()">Technical Scoring</button><button class="btn" onclick="renderWholeClassWorkplace()">Whole-Class Workplace</button><button class="btn" onclick="renderClassBehavior()">Behavior & Incidents</button><button class="btn" onclick="renderOpenShopAll()">Open Shop</button></div></div>
  <div class="card"><p class="small"><b>Fast roster:</b> Where are they? What are they doing? What do they need? Temporary passes never change roster position.</p></div>
  <div class="roster">${list.map(st => {
         let g = gaps(st).slice(0, 3), status = sec ? attendanceStatus(st.id, sec.id, today) : "present", pass = passes.find(x => x.studentId === st.id);
@@ -2285,6 +2287,32 @@ function lessonPlanbookHtml(l) {
         return `<p class="small">Master lesson details were not found.</p>`;
     return `<div class="card"><h3>Lesson ${l.code}: ${l.title}</h3><p><b>Standards to Select in Planbook</b></p><ul>${(l.standards || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Learning Targets</b></p><ul>${(l.learningTargets || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Criteria for Success</b></p><ul>${(l.criteria || []).map(x => `<li>${x}</li>`).join("")}</ul><p><b>Engaging Instructional Strategies</b></p><p>${l.strategies || "—"}</p><p><b>Assessment</b></p><p>${l.assessment || "—"}</p>${teachingTipsHtml(l)}</div>`;
 }
+function classForecastProjectLabel(project) { return project ? (project.name || project.projectTitleSnapshot || "Project") : "No active project"; }
+function classForecastOpenStudent(studentId) { openStudent(studentId); tab = "projects"; renderModal(); }
+function classForecastEntryHtml(item, includeAction) {
+    let project = classForecastProjectLabel(item.project), checkpoint = item.project ? (item.project.currentStageName || "Assigned") : "Needs next project", booth = item.booth ? item.booth.name : "No booth assigned";
+    return `<div class="entryrow"><div><b>${escapePhotoText(item.studentName)}</b><br><span class="small">${escapePhotoText(project)} • ${escapePhotoText(checkpoint)} • ${escapePhotoText(booth)}</span></div><div><b>${escapePhotoText(item.need)}</b>${includeAction ? `<br><button class="btn" onclick="classForecastOpenStudent('${item.studentId}')">Open Project</button>` : ""}</div></div>`;
+}
+function renderClassForecast() {
+    ensureBoothModel(); closeExpiredBoothAssignments(); ensureProjectBank();
+    let sec = activeSection(); if (!sec) return alert("Open a class section first.");
+    let day = dateKey(), list = sectionStudents(sec.id), forecast = ArcClassForecast.build({ state, section: sec, students: list, day, definitions: state.projectBank });
+    navMark("forecast", navViewLabel("forecast"));
+    let pulse = forecast.pulse;
+    let needs = forecast.needs.length ? forecast.needs.map(item => classForecastEntryHtml(item, true)).join("") : `<p class="small">No current instructor-action needs are recorded.</p>`;
+    let upNext = forecast.upNext.length ? forecast.upNext.map(item => `<div class="entryrow"><div><span class="pill">Up Next — ${escapePhotoText(item.next.label)}</span> <b>${escapePhotoText(item.studentName)}</b><br><span class="small">${escapePhotoText(classForecastProjectLabel(item.project))}</span></div><div><b>${escapePhotoText(item.next.detail)}</b></div></div>`).join("") : `<p class="small">No preparation-significant next steps are defined in current project workflows.</p>`;
+    let boothGroups = {};
+    forecast.positions.filter(item => item.booth).forEach(item => { if (!boothGroups[item.booth.id]) boothGroups[item.booth.id] = { booth: item.booth, students: [] }; boothGroups[item.booth.id].students.push(item); });
+    let occupied = Object.keys(boothGroups).map(id => { let group = boothGroups[id]; return `<div class="card"><h3>${escapePhotoText(group.booth.name)}</h3>${group.students.map(item => classForecastEntryHtml(item, false)).join("")}</div>`; }).join("");
+    let unassigned = forecast.positions.filter(item => !item.booth && (item.project || item.actionable));
+    let unassignedHtml = unassigned.length ? `<details class="card" open><summary><b>Unassigned Active / Actionable (${unassigned.length})</b></summary>${unassigned.map(item => classForecastEntryHtml(item, false)).join("")}</details>` : "";
+    document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Fast Roster</button><div class="row"><div><h2>${sec.period}${ordinal(sec.period)} Period — Class Forecast</h2><div class="small">${escapePhotoText(sec.name)} • factual preparation view from current ARC records</div></div><button class="btn" onclick="renderPacingPlanner('${sec.course}','${sec.id}')">Instruction Pacing</button></div>
+    <div class="card"><p class="small"><b>Class Forecast:</b> What should I be prepared for? This view shows recorded facts and defined workflow steps. <b>Up Next is not a prediction that work will happen today.</b></p></div>
+    <section><h3>1. Class Pulse</h3><div class="grid"><div class="card"><div class="small">Present</div><div class="big">${pulse.present}</div><div class="small">of ${pulse.totalStudents}; passes do not change attendance</div></div><div class="card"><div class="small">Working / Active Project</div><div class="big">${pulse.working}</div></div><div class="card"><div class="small">Need You Now</div><div class="big">${pulse.needYouNow}</div></div><div class="card"><div class="small">Active Booths</div><div class="big">${pulse.activeBooths}</div></div></div></section>
+    <section><h3>2. Needs You Now</h3><div class="card"><p class="small">Current instructor actions derived from the same project and need records used by Fast Roster. Ready to Work is intentionally excluded.</p>${needs}</div></section>
+    <section><h3>3. Up Next</h3><div class="card"><p class="small">The next defined preparation-significant workflow requirement after each student's current project position—not a claim about when the student will reach it.</p>${upNext}</div></section>
+    <section><h3>4. Shop Position</h3><p class="small">Current booth groups with primary project, current checkpoint/stage, and current need. Fast Roster remains the detailed student-by-student shop-floor view.</p>${occupied || `<div class="card"><p class="small">No active booth assignments are recorded for this class.</p></div>`}${unassignedHtml}</section>`;
+}
 function teachingTipsHtml(lesson) {
     if (!window.ArcTeachingTips)
         return "";
@@ -2293,7 +2321,7 @@ function teachingTipsHtml(lesson) {
         return "";
     return `<details class="arc-teaching-tips"><summary><span><b>Teaching Tips</b> <span class="pill">Optional</span></span><span class="small">Practical instructor support</span></summary><div class="arc-teaching-tips__body">${tips.map(t => `<div class="arc-teaching-tip"><span class="arc-teaching-tip__label">${t.label}</span><p>${t.tip}</p></div>`).join("")}<p class="small">Use what fits your class and teaching style; ignore what does not.</p></div></details>`;
 }
-function showClassForecast() {
+function showPacingForecastReview() {
     var _a, _b, _c;
     ensurePlanningModel();
     let sec = activeSection();
@@ -2379,7 +2407,7 @@ function applyClassForecastAction(course, sectionId, itemId, action, d) {
     (_a = document.getElementById("forecastImpactOverlay")) === null || _a === void 0 ? void 0 : _a.remove();
     (_b = document.getElementById("classForecastOverlay")) === null || _b === void 0 ? void 0 : _b.remove();
     renderRoster();
-    showClassForecast();
+    showPacingForecastReview();
 }
 function openStudent(id) {
     let all = [...(state.classes.wt || []), ...(state.classes.awt || [])];

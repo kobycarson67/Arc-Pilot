@@ -12,4 +12,5 @@ assert(html.includes('checkpointHistoryForApp(history)'),'checkpoint history mus
 assert(html.includes('ARC restored the previous student record'),'save failure must report rollback');
 assert(html.includes('checkpoint progress does not change the grade automatically'),'checkpoint progress must remain separate from grading');
 assert(html.includes('projectRow(student.projects[i], i)'),'rubric grading controls must remain visible');
+assert(html.includes('refreshProjectContextView(result.student)'),'successful checkpoint actions must refresh dependent roster context');
 console.log('PASS Project checkpoint host integration contracts');

@@ -60,3 +60,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - A student's instructor-selected operational need is stored on the project assignment. **Instructor Review — [checkpoint]** is temporary derived display state computed from authoritative checkpoint records; it is never written over the instructor-selected need.
 - A checkpoint in **Ready for Review** takes temporary display priority because instructor action is required. **Verify** changes that checkpoint to verified and advances to the next active checkpoint; **Needs More Work** returns it to in-progress. Either transition immediately removes the derived review condition and reveals the still-preserved instructor-selected need.
 - The September 18 Samsung test proved checkpoint mutation and persistence could succeed while Fast Roster remained visually stale: the student profile modal was refreshed, but the already-rendered roster underneath it was not. Any operation that changes roster-derived project context must refresh both the authoritative student view and the dependent roster view before the modal is dismissed.
+- The Verify → Fast Roster refresh repair was physically verified on the Samsung tablet using Layout & Measurement → Verify → Fit-Up and is closed. Preserve that behavior.
+
+## Student booth-assignment lifecycle
+
+- Fast Roster and Booth Manager consume the same `boothAssignments` history. Assignment, reassignment, manual ending, period ending, occupancy, and reload restoration must never fork into separate booth state.
+- Shared booths remain intentional. Each student retains an independent history record, and the instructor receives the established confirmation when adding another occupant.
+- The September 18 Samsung assignment failure occurred during an after-period physical test. Assignment and save succeeded, but the immediate Fast Roster render ran period-end cleanup and closed the brand-new record because the selected class's scheduled end time had already passed.
+- Scheduled cleanup now closes a same-day assignment at period end only when that assignment began on or before the cutoff. An assignment deliberately created after the cutoff remains visible for same-day navigation/reload testing and closes on the next day or through End Assignment. This preserves ordinary in-period automatic closure without instantly erasing an instructor action.
+- Booth Manager shows current occupants directly from the authoritative assignment history. Temporary passes never alter booth assignment or roster position.

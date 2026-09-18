@@ -12,5 +12,6 @@ assert(html.includes('<h3>3. Up Next</h3>'),'Up Next section missing');
 assert(html.includes('<h3>4. Shop Position</h3>'),'Shop Position section missing');
 assert(html.includes('Up Next is not a prediction that work will happen today.'),'non-predictive semantic notice missing');
 assert(html.includes('Ready to Work is intentionally excluded.'),'action queue exclusion missing');
+assert(html.includes('else if (navCurrentView === "forecast") renderClassForecast()'),'checkpoint actions must refresh Forecast beneath the student modal');
 assert(sw.includes("'./src/class_forecast.js'"),'offline shell must include Class Forecast selector');
 console.log('PASS Class Forecast v1 index integration contracts');

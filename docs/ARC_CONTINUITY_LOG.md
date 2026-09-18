@@ -78,3 +78,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Needs You Now uses the same operational/derived need authority as Fast Roster. Ready for Review appears as `Instructor Review — [checkpoint]`; existing actionable manual needs and Needs Next Project may appear; `Ready to Work` never appears in this queue.
 - Up Next identifies only the next defined checkpoint, instructor check, completion requirement, or next-project requirement after the current recorded position. It never claims that a student will reach that step today.
 - Shop Position groups current booth occupants with their primary project, current checkpoint/stage, and current need. Soft-removed booths are excluded. Fast Roster remains the detailed student list and all mutations continue through existing student/project/booth workflows.
+
+## Class Forecast live-state refresh
+
+- Physical Samsung testing confirmed the Class Forecast model and initial render were correct, then exposed stale HTML after Taylor Reed's Fit-Up checkpoint changed to Ready for Review while Forecast remained underneath the student modal.
+- The checkpoint transition, persistence, Project Bank primary-project derivation, and Forecast calculation were correct. The failure was the dependent-view refresh boundary: `refreshProjectContextView` refreshed Fast Roster but not Class Forecast after a successful checkpoint transaction.
+- Project/checkpoint actions now refresh the active dependent class view beneath the modal. Forecast then rebuilds from current section students and the shared `ArcProjectBank.primary(...)` operational derivation. No Forecast-specific need is stored.
+- Ready for Review temporarily displays `Instructor Review — [checkpoint]` in both Fast Roster and Forecast while preserving the manual operational need. Verify or Needs More Work removes that derived condition, and both views reveal the preserved manual need from the updated authoritative project record.
+- Up Next remains a separate deterministic next-workflow requirement. A current instructor action in Needs You Now does not turn Up Next into a prediction or timing claim.

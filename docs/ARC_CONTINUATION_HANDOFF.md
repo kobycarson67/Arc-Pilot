@@ -13,10 +13,11 @@
 - Samsung tablet stabilization: overscroll protection, navigation restoration, direct attendance controls, sticky profile navigation, persistent competency/workplace feedback, and stable pass roster behavior.
 - Booth Manager v1: booth/resource setup, assignment history, shared booths, period closure, issue warnings/override, and Fast Roster booth visibility.
 - Project Bank v1 foundation: reusable definitions, independent student assignments, configurable stages/checkpoints, instructor-controlled needs, primary project context, clearance review/override, starter WT Level 1–2 content, and Fast Roster project/need visibility.
+- Samsung manual update controls: Settings shows the running build and online/update state, performs an explicit service-worker update request, and applies only a verified waiting shell through controlled activation/reload without clearing classroom data.
 
 ## Active milestone
 
-Physical Samsung retesting of the Fast Roster and Project Bank workflows using fictional data only.
+Physical Samsung retesting of manual update discovery/application, followed by Fast Roster and Project Bank workflows, using fictional data only.
 
 ## Immediate settled decisions
 
@@ -39,4 +40,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the release gate. After it is green, retest portrait Fast Roster glanceability, class/individual assignment, clearance warnings, stage changes, current-need changes, primary-project switching, reload persistence, and Booth/Samsung behavior on the physical Samsung tablet with fictional students.
+The repository's complete static and JavaScript regression suite is the release gate. After it is green, deploy a newer shell and verify Settings can check, report, and apply it on the installed Samsung PWA. Then retest portrait Fast Roster glanceability, class/individual assignment, clearance warnings, stage changes, current-need changes, primary-project switching, reload persistence, and Booth/Samsung behavior with fictional students.

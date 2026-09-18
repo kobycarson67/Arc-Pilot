@@ -2,6 +2,7 @@ const assert=require('assert');
 const fs=require('fs');
 const html=fs.readFileSync('index.html','utf8');
 const sw=fs.readFileSync('sw.js','utf8');
+const build=fs.readFileSync('app-build.js','utf8');
 function has(text){return html.includes(text);}
 
 assert(has('html,body{overscroll-behavior-y:none}'),'document must suppress browser overscroll refresh');
@@ -34,6 +35,6 @@ assert(attendanceRow.includes('attendance-choices'),'attendance row must render 
 assert(!attendanceRow.includes('<select'),'attendance row must not use a status dropdown');
 ['present','unexcused','excused','tardy','activity','left_early','noclass'].forEach(status=>assert(html.includes(status),`attendance status ${status} must remain supported`));
 
-assert(sw.includes("v0-18-samsung-stabilization-1"),'Samsung patch must use a fresh app-shell cache version');
+assert((sw+build).includes("v0-18-samsung-stabilization-1"),'Samsung patch must use a fresh app-shell cache version');
 assert(has('function showGlobalSearch()'),'existing student search must remain intact and unexpanded');
 console.log('PASS Samsung stabilization contracts');

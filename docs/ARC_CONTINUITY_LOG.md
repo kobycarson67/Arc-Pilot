@@ -34,3 +34,9 @@ This log preserves settled product reasoning that should survive individual engi
 ## Deferred docking ports
 
 ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module links, Planbook generation, essential-standard coverage, SLO reporting, inventory/material forecasting, and intelligent recommendations remain future integrations. Project Bank v1 stores clean identifiers and structured fields without activating those systems.
+
+## Samsung pilot update control
+
+- Installed Android PWAs may not surface a newly deployed shell promptly enough for classroom testing. Settings therefore exposes the running version/build, online state, a real service-worker update check, waiting-update state, and an explicit Apply Update action.
+- Manual controls supplement the automatic **Reload & Update** prompt. ARC activates only a verified waiting worker and reloads on the service worker's `controllerchange` event.
+- Application-shell updates never intentionally clear classroom records or photo storage. Cache replacement and classroom-data migration remain separate responsibilities.

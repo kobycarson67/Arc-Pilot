@@ -16,10 +16,12 @@
 - Samsung manual update controls: Settings shows the running build and online/update state, performs an explicit service-worker update request, and applies only a verified waiting shell through controlled activation/reload without clearing classroom data.
 - Pages deployment diagnosis: the public site remained on `main` commit `1b15374b32d0a189a18888af18a75fc5950e7377` while development advanced separately. The branch-based Pages source remains `main`/root; release now requires an explicit fast-forward promotion plus public-asset verification.
 - Booth Manager Samsung repair: Booth Manager is a normal navigable class view rather than a viewport-blocking modal, its full list scrolls below the global header, and instructors can add or safely soft-remove booths while preserving resource/assignment history.
+- Booth Manager repair physically verified on the Samsung tablet and closed.
+- Checkpoint/Fast Roster refresh repair: Ready for Review derives a temporary Instructor Review need; Verify and Needs More Work persist their authoritative checkpoint transitions, refresh the underlying Fast Roster immediately, and preserve the instructor-selected operational need.
 
 ## Active milestone
 
-Deploy the Booth Manager repair through the established `main`/root Pages process, verify the live build marker/assets, then physically retest Booth Manager navigation, full-list scrolling, and booth add/remove persistence on the Samsung with fictional data only.
+Deploy and physically retest the checkpoint/Fast Roster lifecycle on the Samsung: Ready for Review must appear on the roster, then disappear immediately after either Verify or Needs More Work without corrupting the underlying manual operational need.
 
 ## Immediate settled decisions
 
@@ -30,6 +32,7 @@ Deploy the Booth Manager repair through the established `main`/root Pages proces
 - Existing repository standards data remains authoritative until source-photo reconciliation.
 - Repository HEAD, regression success, and public Pages state must be verified independently. A green regression run does not prove deployment.
 - Booth removal is confirmed and non-destructive: active assignments and unresolved issues block removal, while equipment and assignment history remain stored.
+- Checkpoint records are authoritative workflow state. Fast Roster derives temporary review needs at render time; it does not persist a second need value. Derived instructor action takes temporary display priority and the instructor-selected operational need remains intact underneath it.
 
 ## Intentionally deferred
 
@@ -44,4 +47,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately fast-forwarded to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify build `booth-manager-tablet-repair-1` on the Samsung and retest Back, Main Menu, class switching, full booth-list scrolling, manage/return, and add/remove persistence with fictional data. The repair is deployed-ready, not physically confirmed, until that pass is complete.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify build `checkpoint-roster-refresh-1` on the Samsung and run the Ready for Review → Verify and Ready for Review → Needs More Work lifecycle, including navigation, class switching, reload, and installed-PWA restoration. Automated verification makes the repair deployed-ready; only that physical pass closes it.

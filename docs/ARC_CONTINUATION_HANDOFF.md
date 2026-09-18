@@ -15,10 +15,11 @@
 - Project Bank v1 foundation: reusable definitions, independent student assignments, configurable stages/checkpoints, instructor-controlled needs, primary project context, clearance review/override, starter WT Level 1–2 content, and Fast Roster project/need visibility.
 - Samsung manual update controls: Settings shows the running build and online/update state, performs an explicit service-worker update request, and applies only a verified waiting shell through controlled activation/reload without clearing classroom data.
 - Pages deployment diagnosis: the public site remained on `main` commit `1b15374b32d0a189a18888af18a75fc5950e7377` while development advanced separately. The branch-based Pages source remains `main`/root; release now requires an explicit fast-forward promotion plus public-asset verification.
+- Booth Manager Samsung repair: Booth Manager is a normal navigable class view rather than a viewport-blocking modal, its full list scrolls below the global header, and instructors can add or safely soft-remove booths while preserving resource/assignment history.
 
 ## Active milestone
 
-Verify the promoted Pages build on the physical Samsung, then retest manual update discovery/application followed by Fast Roster and Project Bank workflows, using fictional data only.
+Deploy the Booth Manager repair through the established `main`/root Pages process, verify the live build marker/assets, then physically retest Booth Manager navigation, full-list scrolling, and booth add/remove persistence on the Samsung with fictional data only.
 
 ## Immediate settled decisions
 
@@ -28,6 +29,7 @@ Verify the promoted Pages build on the physical Samsung, then retest manual upda
 - Instructor ARC remains complete without ARC Student. Instructor override remains final.
 - Existing repository standards data remains authoritative until source-photo reconciliation.
 - Repository HEAD, regression success, and public Pages state must be verified independently. A green regression run does not prove deployment.
+- Booth removal is confirmed and non-destructive: active assignments and unresolved issues block removal, while equipment and assignment history remain stored.
 
 ## Intentionally deferred
 
@@ -42,4 +44,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately fast-forwarded to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify the build identifier on the Samsung and retest portrait Fast Roster, projects, persistence, and Booth/Samsung behavior with fictional students.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately fast-forwarded to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets and build markers to that exact pushed commit. After it passes, verify build `booth-manager-tablet-repair-1` on the Samsung and retest Back, Main Menu, class switching, full booth-list scrolling, manage/return, and add/remove persistence with fictional data. The repair is deployed-ready, not physically confirmed, until that pass is complete.

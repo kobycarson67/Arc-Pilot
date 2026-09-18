@@ -47,3 +47,10 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Root cause: GitHub Pages publishes `main` from the repository root. Development work was pushed to `dev/v0.18-needs-attention`, whose workflow tested the code but did not promote or deploy it. The public artifact therefore remained the September 15 `main` deployment at `1b15374b32d0a189a18888af18a75fc5950e7377`.
 - Repository HEAD, regression success, and public deployment state are three separate facts. Engineering must verify all three rather than treating a green test workflow as proof that the tablet URL changed.
 - Releases preserve the existing branch-based Pages model: promote the tested development commit to `main`, allow Pages to deploy it, then compare the public build marker and critical assets with that exact commit.
+
+## Booth Manager tablet repair
+
+- Physical Samsung testing found that Booth Manager had been modeled as a viewport-covering modal even though it behaves as a primary class view. The persistent modal intercepted the visible experience while global navigation changed content behind it, and its centered viewport layout allowed the sticky header to obscure the first booth controls.
+- Booth Manager is now a normal routed ARC view beneath the global sticky header. Back, Main Menu, and class switching use the same navigation system as other class views; the document scroll owns the complete booth list in browser and installed modes.
+- Booth configuration is persisted in the existing `state.booths` model. Adding creates a stable booth record. Removing is an explicit, confirmed soft removal: the booth stops accepting new assignments while its resource and assignment history records remain intact. Active assignments and unresolved issues must be ended/resolved first.
+- The separate Fast Roster checkpoint-derived **Instructor Review** need remains intentionally deferred.

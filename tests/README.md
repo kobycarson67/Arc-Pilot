@@ -4,6 +4,11 @@ Run the permanent dependency-free gate from the repository root:
 
 ```bash
 python tests/regression_static.py
+
+# Simulation Foundation isolation, deterministic fixtures, and host contracts
+node tests/simulation_foundation.test.js
+node tests/simulation_fixtures.test.js
+node tests/simulation_index_integration.test.js
 ```
 
 The gate protects contracts that should never disappear silently: the `weld_v013` storage key, schema/migration/recovery paths, grade and attendance engines, pacing, projects, Technical scoring, behavior, photo adapters, PWA installability/offline shell, older-Safari syntax compatibility, and a basic client-secret guardrail.

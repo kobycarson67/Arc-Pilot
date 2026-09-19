@@ -22,10 +22,12 @@
 - Student booth-assignment lifecycle repair: assignment, move, End Assignment, occupancy, persistence, and automatic closure use one authoritative history; after-period assignments are no longer erased by the immediate roster refresh; Booth Manager displays current occupants from that same state.
 - Class Forecast v1: a deterministic, read-only class preparation view organizes current attendance, active-project, operational/derived need, booth, Project Bank, and checkpoint records into Class Pulse, Needs You Now, Up Next, and Shop Position without adding a second source of truth or claiming when work will occur.
 - Class Forecast live-state repair: checkpoint actions opened from Forecast refresh the Forecast page beneath the student modal after the authoritative transaction, preventing pre-action HTML from remaining visible while preserving shared Project Bank need derivation.
+- ARC Simulation Foundation v1: Live Classroom remains in its established persistence record while Presentation Mode and four deterministic test scenarios use independent, versioned stores. Verified Live Safety Snapshots gate entry, scenario changes persist independently, restart resumes the active simulation, and reset restores only the selected canonical fictional fixture.
+- Backup export confirmation now visibly reports a completed export action and generated filename.
 
 ## Active milestone
 
-Deploy and physically retest build `class-forecast-live-state-1` from Taylor Reed's existing Fit-Up Ready for Review state while retaining the still-required student booth-assignment physical lifecycle retest.
+Publish and physically test build `simulation-foundation-v1`. The Class Forecast live-state repair is recorded as deployed and physically verified by the current Engineering brief; Simulation Foundation remains unverified on Samsung until the full enter/mutate/leave/resume/reset sequence passes.
 
 ## Immediate settled decisions
 
@@ -40,6 +42,7 @@ Deploy and physically retest build `class-forecast-live-state-1` from Taylor Ree
 - Booth assignment history is authoritative for both Fast Roster and Booth Manager. Shared occupancy is allowed; passes do not alter booths; soft-removed booths are not assignable.
 - Class Forecast is preparation context, while Fast Roster remains the live shop-floor list. Forecast derives every value at render time; `Ready to Work` is excluded from Needs You Now, and Up Next names only the next defined workflow requirement—not a prediction that it will occur today.
 - A successful project/checkpoint transaction must refresh whichever dependent class view is underneath the student modal. Fast Roster and Class Forecast both recalculate from the updated student/project record; neither persists a copied display need.
+- Normal ARC is Live Classroom. Simulations are separate datasets, never a temporary replacement of the live persistence record. Entering requires a successfully written, read-back, integrity-verified Live Safety Snapshot. Leaving persists the scenario and restores the captured live state/navigation; reset never changes Live Classroom, other simulations, or safety snapshots.
 
 ## Intentionally deferred
 
@@ -54,4 +57,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow then compares public critical assets—including `src/class_forecast.js`—and build markers to that exact pushed commit. After it passes, verify build `class-forecast-live-state-1` on the Samsung beginning from Taylor's retained Fit-Up Ready for Review record. Automated verification makes the build deployed-ready; only the physical pass closes this finding.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow compares public critical assets—including both Simulation Foundation modules—and build markers to that exact pushed commit. Automated verification makes build `simulation-foundation-v1` deployment-ready; only the physical Samsung pass closes this milestone.

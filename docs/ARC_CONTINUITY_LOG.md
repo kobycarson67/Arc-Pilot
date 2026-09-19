@@ -86,3 +86,14 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Project/checkpoint actions now refresh the active dependent class view beneath the modal. Forecast then rebuilds from current section students and the shared `ArcProjectBank.primary(...)` operational derivation. No Forecast-specific need is stored.
 - Ready for Review temporarily displays `Instructor Review — [checkpoint]` in both Fast Roster and Forecast while preserving the manual operational need. Verify or Needs More Work removes that derived condition, and both views reveal the preserved manual need from the updated authoritative project record.
 - Up Next remains a separate deterministic next-workflow requirement. A current instructor action in Needs You Now does not turn Up Next into a prediction or timing claim.
+
+## Simulation Foundation v1
+
+- Live Classroom retains the established `weld_v013` state record. Presentation Mode and Test Scenarios 1–4 use explicit independent `arc_simulation_v1_state:*` persistence records; the active-session marker and bounded Live Safety Snapshot history are separate again.
+- Simulation entry is transactional. ARC clones current live state and navigation, writes a safety snapshot, reads it back, verifies the existing FNV-1a integrity fingerprint, validates schema v7, and only then activates and loads the selected simulation. Any failure aborts entry without activating simulation state.
+- The latest five Live Safety Snapshots are retained with timestamp, entry reason, scenario identity, integrity, navigation context, and state. They are recovery architecture only in v1; no casual restore control is exposed.
+- Each scenario has stable identity, scenario version, and canonical seed version. Its mutable state persists across navigation, leaving, and PWA restart. Reset replaces only that scenario with its deterministic fictional canonical fixture and leaves Live Classroom, other simulations, and safety snapshots unchanged.
+- A persistent text banner and large Leave Simulation control remain inside the measured sticky header. The banner does not rely on color and therefore participates in the existing Samsung header-offset contract.
+- Presentation Mode contains 28 deterministic fictional students distributed across the six WT/AWT sections. Smaller Normal Shop Day, Busy Instructor, Projects & Materials, and Edge Cases fixtures exercise existing ARC workflows without adding Fast Forward, predictive behavior, Prep Ahead, or a new material-inventory model.
+- Backup export now provides a visible completion message and generated filename after the browser download action is initiated. Backup import is blocked while a simulation is active to prevent crossing persistence boundaries.
+- Schema remains v7. Simulation storage has its own version and does not add fictional metadata to Live Classroom student records.

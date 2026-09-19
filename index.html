@@ -27,6 +27,8 @@
 <script src="src/booth_assignment_lifecycle.js"></script>
 <script src="src/class_forecast.js"></script>
 <script src="src/deployment_readiness.js"></script>
+<script src="src/simulation_foundation.js"></script>
+<script src="src/simulation_fixtures.js"></script>
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#17212b;--muted:#64748b;--line:#d6dde6;--accent:#1f4e78;--light:#d9eaf7;--good:#e4f1df;--warn:#fff0bf;--bad:#f8d9d6}
 *{box-sizing:border-box} html,body{overscroll-behavior-y:none} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);touch-action:pan-y}
@@ -62,6 +64,7 @@ table{width:100%;border-collapse:collapse;background:white}th,td{border:1px soli
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}.photo-card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.photo-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;background:#e5e7eb;display:block}.photo-meta{padding:9px}.photo-placeholder{width:100%;aspect-ratio:4/3;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:8px}.photo-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.photo-toolbar select,.photo-toolbar input{padding:9px;border:1px solid var(--line);border-radius:9px;background:white}
 .booth-badge{min-height:48px;min-width:132px;border:2px solid #1f4e78;background:#e8f2fb;color:#123b61;border-radius:10px;padding:10px 14px;font-weight:900;letter-spacing:.04em}.booth-badge.unassigned{border-style:dashed;background:#fff;color:#1f4e78}.booth-badge.review{border-color:#b7791f;background:#fff4cf;color:#684500}.booth-badge.unavailable{border-color:#b91c1c;background:#fde8e7;color:#7f1d1d}.booth-choice{min-height:58px;text-align:left}.booth-choice.is-active{border:2px solid #15803d;background:#e8f6ee}.booth-status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.booth-manager-page{padding-bottom:calc(20px + env(safe-area-inset-bottom))}.booth-manager-actions{display:flex;gap:8px;flex-wrap:wrap}.booth-manager-actions .btn{min-height:48px}.issue-card{border-left:5px solid #b7791f}.issue-card.unavailable{border-left-color:#b91c1c}.competency-feedback{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0;padding:10px 12px;border:2px solid #15803d;border-radius:10px;background:#e8f6ee;color:#12663b}.workplace-deduction.is-active{border-color:#15803d!important;background:#e8f6ee!important;color:#12663b;box-shadow:inset 0 0 0 2px #15803d}.attendance-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}.attendance-choice{min-height:52px;text-align:left}.attendance-choice.is-selected{border-color:#173a94;background:#2457d6;color:#fff;box-shadow:inset 0 0 0 2px #fff,0 2px 0 #102b70}
 .app-status{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.statusdot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#94a3b8}.statusdot.good{background:#15803d}.statusdot.warn{background:#d97706}.statusdot.bad{background:#b91c1c}.install-card{border-left:5px solid var(--accent)}.app-update-card{border-left:5px solid var(--accent)}.app-update-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.app-update-actions .btn{min-height:54px}.app-update-result{padding:10px 12px;border-radius:9px;background:#f1f5f9;margin-top:10px}.app-update-result.good{background:var(--good)}.app-update-result.warn{background:var(--warn)}.app-update-result.bad{background:var(--bad)}
+.simulation-banner{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 11px;border:2px solid #f59e0b;border-radius:10px;background:#451a03;color:#fff}.simulation-banner[hidden]{display:none}.simulation-banner strong{letter-spacing:.035em}.simulation-banner .navbtn{min-height:46px;background:#fff;color:#7c2d12;border-color:#fff}.simulation-card{border-left:5px solid #d97706}.simulation-confirm{border-top:6px solid #d97706}.backup-export-confirmation{padding:10px 12px;border:2px solid #15803d;border-radius:9px;background:var(--good);color:#12663b;font-weight:800;margin-top:10px}
 @media(display-mode:standalone){body{overscroll-behavior:none}header{padding-top:calc(10px + env(safe-area-inset-top))}main{padding-bottom:calc(14px + env(safe-area-inset-bottom))}}
 @media(max-width:800px){.headerline{align-items:flex-start}.navbar{width:100%}.navbtn,.navselect{padding:9px 10px}.student{grid-template-columns:1fr 1fr}.student .student-identity,.student .roster-actions{grid-column:1/-1}.student .wide{grid-column:1/-1}.rates,.workrow{grid-template-columns:1fr 1fr}.booth-badge{width:100%;min-width:0}.roster-actions .btn{flex:1;min-height:48px}.app-update-actions{grid-template-columns:1fr}}
 </style>
@@ -70,7 +73,8 @@ table{width:100%;border-collapse:collapse;background:white}th,td{border:1px soli
 <header>
 <div class="headerline"><div><div class="brand">Welding Classroom</div><div class="sub">ARC Pilot v0.18 • Installable App Foundation</div></div>
 <div class="navbar"><button id="navBackBtn" class="navbtn" onclick="navBack()">← Back</button><button class="navbtn" onclick="renderMainMenu()">⌂ Main Menu</button><div class="class-menu-wrap"><button id="navClassButton" class="navbtn navselect" type="button" aria-haspopup="true" aria-expanded="false" onclick="toggleClassMenu(event)">Classes ▾</button><div id="navClassMenu" class="class-menu" hidden></div></div><button class="navbtn" onclick="showQuickAdd()">＋ Quick Add</button><button class="navbtn" onclick="showGlobalSearch()">⌕ Search</button><button class="navbtn" onclick="showNotifications()">🔔<span id="navNotificationBadge" class="navbadge" style="display:none">0</span></button><button class="navbtn" onclick="renderAppSettings()">⚙ Settings</button></div></div>
-<div id="navBreadcrumb" class="breadcrumb">Main Menu</div></header>
+<div id="navBreadcrumb" class="breadcrumb">Main Menu</div>
+<div id="simulationBanner" class="simulation-banner" hidden><div><strong id="simulationBannerLabel">SIMULATION — FICTIONAL DATA</strong><div class="small" style="color:#fde68a">Live Classroom is isolated and protected.</div></div><button class="navbtn" type="button" onclick="leaveSimulation()">Leave Simulation</button></div></header>
 <main><div class="banner">FICTIONAL STUDENT DATA ONLY — ARC Pilot v0.18. Full-screen Home Screen mode is prepared for hosted deployment. OneDrive sync is architected but NOT connected yet; device-local data/photos are not cross-device protection. No encryption or login yet.</div>
 <div id="app"></div>
 </main>
@@ -359,7 +363,18 @@ function loadInitialState() {
     }
     return migrateStateData(raw, from);
 }
-let state = loadInitialState();
+function canonicalSimulationState(scenarioId) { return ArcSimulationFixtures.create(scenarioId, migrateStateData(seed(), 0)); }
+const simulationManager = ArcSimulationFoundation.create({
+    storage: persistentStorage,
+    integrity: value => ArcDeployment.stateIntegrity(value),
+    verifyIntegrity: (value, fingerprint) => ArcDeployment.verifyStateIntegrity(value, fingerprint),
+    validateState: value => validateCurrentStateShape(value),
+    canonicalState: canonicalSimulationState
+});
+let simulationStartupError = null, simulationSession = null;
+try { simulationSession = simulationManager.resume(); }
+catch (err) { simulationStartupError = err; }
+let state = simulationSession ? migrateStateData(simulationSession.state, CURRENT_SCHEMA_VERSION) : loadInitialState();
 function ensureScheduleModel() {
     if (!state.academicYear)
         state.academicYear = "2026-27";
@@ -511,7 +526,8 @@ const RESTORABLE_STUDENT_TABS = ["summary", "competencies", "attendance", "workp
 function persistNavigationContext() { try { sessionStorage.setItem(NAV_CONTEXT_KEY, JSON.stringify({ view: RESTORABLE_VIEWS.includes(navCurrentView) ? navCurrentView : "main", sectionId: state.activeSectionId || "", studentId: current ? current.id : "", studentTab: RESTORABLE_STUDENT_TABS.includes(tab) ? tab : "summary", studentOpen: !!(current && document.getElementById("modal") && document.getElementById("modal").classList.contains("show")) })); } catch (e) { } }
 function restoreNavigationContext() { let saved; try { saved = JSON.parse(sessionStorage.getItem(NAV_CONTEXT_KEY) || "null"); } catch (e) { return false; } if (!saved || !RESTORABLE_VIEWS.includes(saved.view)) return false; let sec = state.sections.find(x => x.id === saved.sectionId); if (sec) { state.activeSectionId = sec.id; state.course = sec.course; } if (saved.view === "main") renderMainMenu(); else navRender(saved.view); if (saved.studentOpen && saved.studentId) { let student = allStudents().find(x => x.id === saved.studentId); if (student) { current = student; tab = RESTORABLE_STUDENT_TABS.includes(saved.studentTab) ? saved.studentTab : "summary"; document.getElementById("modal").classList.add("show"); renderModal(); updateNavigationBar(`${navViewLabel(navCurrentView)} › ${student.name}`); } } return true; }
 function setStudentTab(next) { if (!RESTORABLE_STUDENT_TABS.includes(next)) return; tab = next; renderModal(); }
-function save() { state.schemaVersion = CURRENT_SCHEMA_VERSION; validateCurrentStateShape(state); persistentStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function simulationActive() { return simulationManager.active(); }
+function save() { state.schemaVersion = CURRENT_SCHEMA_VERSION; validateCurrentStateShape(state); if (simulationActive()) simulationManager.saveActive(state); else persistentStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function students() { let sec = activeSection(); return sec ? sectionStudents(sec.id) : (state.classes[state.course] || []); }
 function ensureProjectLibrary() {
     if (!state.projectLibrary)
@@ -830,7 +846,7 @@ function renderAppAndSyncSettings(){
       '<div class="card install-card"><h3>Full-Screen App Mode</h3><div class="app-status"><span class="statusdot '+(standalone?'good':'warn')+'"></span><b>'+appModeLabel()+'</b></div><p class="small">'+(standalone?'Welding Classroom is running without normal browser controls.':'The interface is prepared for standalone installation. The final app-like experience requires hosted HTTPS deployment and Add to Home Screen / Install App.')+'</p><button class="btn primary" onclick="installWeldingApp()">Install / Add to Home Screen</button><p class="small">Hosted app shell: '+(hosted?'available on this origin':'not available from local file')+'</p></div>'+
       '<div class="card"><h3>OneDrive Cross-Device Storage</h3><div class="app-status"><span class="statusdot warn"></span><b>'+cloudConnectionLabel()+'</b></div><p class="small">'+cloudArchitectureNote()+'</p><p class="small"><b>Next external requirement:</b> school Microsoft Entra app registration + approved redirect URL + delegated file permission. Until that is configured, the app will not claim that anything is cloud-synced.</p><button class="btn" disabled>Connect School OneDrive</button></div>'+
       '<div class="card"><h3>Current Device</h3><div class="app-status"><span class="statusdot '+(storageAvailable?'good':'bad')+'"></span><b>'+storageText+'</b></div><p class="small">Network: <b>'+(navigator.onLine?'Online':'Offline')+'</b> • Offline shell: <b>'+(appShellReady||hasAppShellController()?'Registered':'Not confirmed')+'</b></p><p class="small">Storage protection: <b>'+(deviceStorageStatus.persistent===true?'Persistent':deviceStorageStatus.persistent===false?'Best effort':'Checking…')+'</b> • Used: '+formatStorageBytes(deviceStorageStatus.usage)+' of '+formatStorageBytes(deviceStorageStatus.quota)+'</p><button class="btn" onclick="requestPersistentDeviceStorage()">Request Persistent Storage</button><p class="small">Device-local storage remains the working prototype store. Photos marked local-only are not protected across devices yet.</p></div>'+
-      '<div class="card"><h3>Recovery Backup</h3><div class="app-status"><span class="statusdot '+(meta&&meta.exportedAt?'good':'warn')+'"></span><b>'+(meta&&meta.exportedAt?'Last exported '+new Date(meta.exportedAt).toLocaleString():'No successful export recorded on this device')+'</b></div><p class="small">New exports include an integrity fingerprint so incomplete or altered files are rejected during import. Older valid backups remain importable.</p><button class="btn primary" onclick="exportBackup();setTimeout(renderAppAndSyncSettings,100)">Export Recovery Backup</button></div>'+
+      '<div class="card"><h3>Recovery Backup</h3><div class="app-status"><span class="statusdot '+(meta&&meta.exportedAt?'good':'warn')+'"></span><b>'+(meta&&meta.exportedAt?'Last exported '+new Date(meta.exportedAt).toLocaleString():'No successful export recorded on this device')+'</b></div><p class="small">New exports include an integrity fingerprint so incomplete or altered files are rejected during import. Older valid backups remain importable.</p><button class="btn primary" onclick="exportBackup();setTimeout(renderAppAndSyncSettings,100)">Export Recovery Backup</button>'+(lastBackupExportResult?'<div id="backupExportConfirmation" class="backup-export-confirmation">✓ Backup exported successfully — '+escapePhotoText(lastBackupExportResult.filename)+'</div>':'<div id="backupExportConfirmation" class="backup-export-confirmation" hidden></div>')+'</div>'+
       '</div>';
     refreshAppUpdateUi();
     if(!deviceStorageInspectionDone){deviceStorageInspectionDone=true;inspectDeviceStorage().then(function(){if(navCurrentView==='settings'&&document.querySelector('h2')&&document.querySelector('h2').textContent==='App & Updates')renderAppAndSyncSettings();});}
@@ -847,7 +863,7 @@ function updateNavigationBar(label) { ensureScheduleModel(); let button = docume
     back.disabled = !navHistory.length && !document.getElementById("modal").classList.contains("show"); let badge = document.getElementById("navNotificationBadge"), cnt = activeNotifications().length; if (badge) {
     badge.textContent = cnt;
     badge.style.display = cnt ? "inline-block" : "none";
-} if (window.requestAnimationFrame) requestAnimationFrame(updateStickyHeaderOffset); }
+} updateSimulationIndicator(); if (window.requestAnimationFrame) requestAnimationFrame(updateStickyHeaderOffset); }
 function navRender(view) { navSuppressHistory = true; if (view === "main")
     return renderMainMenu(); if (view === "schedule")
     return renderScheduleHome(); if (view === "setup")
@@ -878,6 +894,52 @@ function navBack() { if (document.getElementById("modal").classList.contains("sh
 function navSwitchClass(id) { closeClassMenu(); if (!id)
     return; state.activeSectionId = id; let sec = activeSection(); if (sec)
     state.course = sec.course; save(); renderRoster(); }
+function updateSimulationIndicator() {
+    let marker = simulationActive(), banner = document.getElementById("simulationBanner"), label = document.getElementById("simulationBannerLabel");
+    if (!banner) return;
+    banner.hidden = !marker;
+    if (marker && label) { let definition = ArcSimulationFoundation.scenario(marker.scenarioId); label.textContent = `${definition ? definition.displayName.toUpperCase() : "SIMULATION"} — FICTIONAL DATA`; }
+}
+function captureSimulationNavigation() { return { view: RESTORABLE_VIEWS.includes(navCurrentView) ? navCurrentView : "main", sectionId: state.activeSectionId || "", studentId: current ? current.id : "", studentTab: RESTORABLE_STUDENT_TABS.includes(tab) ? tab : "summary", studentOpen: !!(current && document.getElementById("modal").classList.contains("show")) }; }
+function clearTransientUi() {
+    document.querySelectorAll("body > .modal").forEach(element => { if (element.id !== "modal") element.remove(); });
+    document.getElementById("modal").classList.remove("show"); current = null; tab = "summary"; navHistory = []; navCurrentView = null; navSuppressHistory = false;
+}
+function renderRestoredNavigation(context) {
+    context = context || {}; let sec = state.sections.find(item => item.id === context.sectionId);
+    if (sec) { state.activeSectionId = sec.id; state.course = sec.course; }
+    let view = RESTORABLE_VIEWS.includes(context.view) ? context.view : "main"; navRender(view);
+    if (context.studentOpen && context.studentId) { let student = allStudents().find(item => item.id === context.studentId); if (student) { current = student; tab = RESTORABLE_STUDENT_TABS.includes(context.studentTab) ? context.studentTab : "summary"; document.getElementById("modal").classList.add("show"); renderModal(); updateNavigationBar(`${navViewLabel(view)} › ${student.name}`); } }
+}
+function showSimulationEntry(scenarioId) {
+    if (simulationActive()) return alert("Leave the current simulation before entering another one.");
+    let definition = ArcSimulationFoundation.scenario(scenarioId); if (!definition) return;
+    let overlay = document.createElement("div"); overlay.id = "simulationEntryOverlay"; overlay.className = "modal show";
+    overlay.innerHTML = `<div class="modalbox simulation-confirm" style="width:min(650px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeSimulationEntry()">Close</button><h2>Enter ${escapePhotoText(definition.displayName)}?</h2><p>ARC will create and verify a protected safety snapshot of your current Live Classroom before entering this fictional simulation.</p><div class="card"><b>Live Classroom stays separate.</b><p class="small">If snapshot persistence, readback, or integrity verification fails, entry will stop and Live Classroom will remain active.</p></div><p><button class="btn primary" style="min-height:52px" onclick="enterSimulation('${definition.id}')">Back Up & Enter Simulation</button></p></div>`;
+    overlay.onclick = event => { if (event.target === overlay) closeSimulationEntry(); }; document.body.appendChild(overlay);
+}
+function closeSimulationEntry() { let overlay = document.getElementById("simulationEntryOverlay"); if (overlay) overlay.remove(); }
+function enterSimulation(scenarioId) {
+    let liveBefore = cloneStateData(state), navigation = captureSimulationNavigation();
+    try {
+        let result = simulationManager.enter(scenarioId, liveBefore, navigation);
+        state = migrateStateData(result.state, CURRENT_SCHEMA_VERSION); closeSimulationEntry(); clearTransientUi();
+        let first = state.sections.slice().sort((a,b) => a.period-b.period)[0]; if (first) { state.activeSectionId = first.id; state.course = first.course; }
+        alert("✓ Live Classroom backed up\nSafety snapshot verified"); renderRoster(); updateSimulationIndicator();
+    } catch (err) { state = liveBefore; alert("Simulation entry stopped. Live Classroom remains active.\n\n" + err.message); updateSimulationIndicator(); }
+}
+function leaveSimulation() {
+    if (!simulationActive()) return;
+    if (simulationStartupError) return alert("The saved simulation could not be verified. ARC has not activated Live Classroom or changed either dataset. Use a recovery backup before continuing.");
+    try { let restored = simulationManager.leave(state); state = migrateStateData(restored.state, CURRENT_SCHEMA_VERSION); clearTransientUi(); renderRestoredNavigation(restored.navigation); updateSimulationIndicator(); }
+    catch (err) { alert("ARC could not leave the simulation safely. The simulation remains active.\n\n" + err.message); updateSimulationIndicator(); }
+}
+function resetCurrentSimulation() {
+    let marker = simulationActive(); if (!marker) return; let definition = ArcSimulationFoundation.scenario(marker.scenarioId);
+    if (!confirm(`Reset ${definition.displayName}?\n\nThis will discard all changes made in this simulation and restore its original fictional starting state.\n\nYour Live Classroom data will not be affected.`)) return;
+    try { let result = simulationManager.reset(); state = migrateStateData(result.state, CURRENT_SCHEMA_VERSION); clearTransientUi(); let first = state.sections.slice().sort((a,b) => a.period-b.period)[0]; if (first) { state.activeSectionId = first.id; state.course = first.course; } renderRoster(); updateSimulationIndicator(); alert(`${definition.displayName} was reset to its canonical fictional starting state.`); }
+    catch (err) { alert("Simulation reset failed. No Live Classroom data was changed.\n\n" + err.message); }
+}
 function monthName(d) { return d.toLocaleDateString(undefined, { month: "long", year: "numeric" }); }
 function calendarEventsForDate(key) { return (state.calendarEvents || []).filter(e => e.date === key); }
 let calendarSelection = new Set();
@@ -1636,8 +1698,9 @@ function downloadBackupPayload(payload, prefix = "Welding_Classroom_Backup") {
     setTimeout(() => URL.revokeObjectURL(url), 500);
     return a.download;
 }
-function exportBackup() { return downloadBackupPayload(backupPayload()); }
-function chooseBackupImport() { let input = document.getElementById("backupImportInput"); if (input)
+let lastBackupExportResult = null;
+function exportBackup() { let filename = downloadBackupPayload(backupPayload()); lastBackupExportResult = { filename, at: new Date().toISOString() }; let target = document.getElementById("backupExportConfirmation"); if (target) { target.hidden = false; target.textContent = `✓ Backup exported successfully — ${filename}`; } return filename; }
+function chooseBackupImport() { if (simulationActive()) return alert("Leave the simulation before importing a Live Classroom backup."); let input = document.getElementById("backupImportInput"); if (input)
     input.click(); }
 function validateBackupWrapper(payload) {
     if (!payload || typeof payload !== "object" || payload.format !== "WeldingClassroomBackup" || !payload.state)
@@ -1736,6 +1799,7 @@ function restoreImportRollback() {
     }
 }
 function importBackupFile(input) {
+    if (simulationActive()) { alert("Leave the simulation before importing a Live Classroom backup."); input.value = ""; return; }
     let file = input.files && input.files[0];
     if (!file)
         return;
@@ -1771,7 +1835,16 @@ function backupSummary() {
     let students = allStudents().length, projects = (((_a = state.projectLibrary) === null || _a === void 0 ? void 0 : _a.wt) || []).length + (((_b = state.projectLibrary) === null || _b === void 0 ? void 0 : _b.awt) || []).length, tech = (((_c = state.technicalLibrary) === null || _c === void 0 ? void 0 : _c.wt) || []).length + (((_d = state.technicalLibrary) === null || _d === void 0 ? void 0 : _d.awt) || []).length;
     ensurePhotoEvidenceModel(); return `${students} student profiles • ${projects} project templates • ${tech} technical templates • ${state.calendarEvents.length} calendar events • ${state.photoEvidence.length} photo records`;
 }
-function renderAppSettings() { navMark("settings", "Settings"); ensureScheduleModel(); document.getElementById("app").innerHTML = `<h2>Settings</h2><div class="grid"><div class="card"><h3>Schedule & Rosters</h3><p class="small">Manage bell schedule templates, periods, Planning, sections, and student enrollment.</p><button class="btn primary" onclick="renderScheduleSetup()">Schedule Setup</button></div><div class="card"><h3>Backup & Restore</h3><p class="small">Export the prototype record data currently stored in this browser. The JSON backup includes schedules, calendar, projects, assignments, student records, scores, history, notifications, and photo metadata. Image files themselves are currently stored separately in device browser image storage and are not included in this JSON backup.</p><p class="small"><b>Current data:</b> ${backupSummary()}</p><p class="small"><b>Data schema:</b> ${CURRENT_SCHEMA_VERSION} • <b>Storage key:</b> ${STORAGE_KEY}</p><button class="btn primary" onclick="exportBackup()">Export Backup</button> <button class="btn" onclick="chooseBackupImport()">Import Backup</button> <button class="btn" ${hasImportRollback() ? "" : "disabled"} onclick="restoreImportRollback()">Restore Pre-Import Rollback</button><input id="backupImportInput" type="file" accept=".json,application/json" style="display:none" onchange="importBackupFile(this)"><p class="small">Imports are validated and migrated before replacement. A timestamped safety backup is downloaded and a browser rollback snapshot is retained before an import is committed. Keep backups private: prototype backups are still plain JSON and can contain student/classroom information. Photo image files will move into OneDrive-backed storage in the production cross-device architecture.</p></div><div class="card"><h3>App & Updates</h3><p class="small">Check the running build, request updates, and review full-screen app, device storage, recovery, and connectivity status.</p><button class="btn primary" onclick="renderAppAndSyncSettings()">Open App & Updates</button></div></div>`; }
+function renderAppSettings() {
+    navMark("settings", "Settings"); ensureScheduleModel(); let active = simulationActive();
+    document.getElementById("app").innerHTML = `<h2>Settings</h2><div class="grid"><div class="card"><h3>Schedule & Rosters</h3><p class="small">Manage bell schedule templates, periods, Planning, sections, and student enrollment.</p><button class="btn primary" onclick="renderScheduleSetup()">Schedule Setup</button></div><div class="card"><h3>Backup & Restore</h3><p class="small">Export the record data currently open in ARC. JSON backups include schedules, projects, assignments, student records, scores, history, notifications, and photo metadata; image files are stored separately.</p><p class="small"><b>Current data:</b> ${backupSummary()}</p><p class="small"><b>Data schema:</b> ${CURRENT_SCHEMA_VERSION}</p><button class="btn primary" onclick="exportBackup()">Export Backup</button> <button class="btn" onclick="chooseBackupImport()">Import Backup</button> <button class="btn" ${hasImportRollback() ? "" : "disabled"} onclick="restoreImportRollback()">Restore Pre-Import Rollback</button><input id="backupImportInput" type="file" accept=".json,application/json" style="display:none" onchange="importBackupFile(this)"><div id="backupExportConfirmation" class="backup-export-confirmation" ${lastBackupExportResult ? "" : "hidden"}>${lastBackupExportResult ? `✓ Backup exported successfully — ${escapePhotoText(lastBackupExportResult.filename)}` : ""}</div><p class="small">Imports are validated and migrated before replacement. Keep backup files private.</p></div><div class="card"><h3>App & Updates</h3><p class="small">Check the running build and device storage status.</p><button class="btn primary" onclick="renderAppAndSyncSettings()">Open App & Updates</button></div><div class="card simulation-card"><h3>Demo & Testing</h3><p class="small">Open persistent fictional scenarios that are isolated from Live Classroom.</p><button class="btn primary" onclick="renderDemoAndTesting()">Open Demo & Testing</button></div></div>`;
+}
+function renderDemoAndTesting() {
+    navMark("settings", "Settings › Demo & Testing"); let marker = simulationActive(), currentDefinition = marker ? ArcSimulationFoundation.scenario(marker.scenarioId) : null;
+    let currentCard = currentDefinition ? `<div class="card simulation-card"><h3>Current Simulation</h3><p><b>${escapePhotoText(currentDefinition.displayName)}</b>${currentDefinition.subtitle ? ` — ${escapePhotoText(currentDefinition.subtitle)}` : ""}</p><p class="small">Changes persist until you reset this scenario. Live Classroom is not affected.</p><button class="btn" onclick="resetCurrentSimulation()">Reset Simulation</button> <button class="btn primary" onclick="leaveSimulation()">Leave Simulation</button></div>` : `<div class="card"><h3>Live Classroom</h3><p class="small">Normal ARC is active. Live Classroom is not a scenario choice.</p></div>`;
+    let scenarios = ArcSimulationFoundation.SCENARIOS.map(item => `<div class="card"><h3>${escapePhotoText(item.displayName)}</h3>${item.subtitle ? `<p><b>${escapePhotoText(item.subtitle)}</b></p>` : `<p><b>Polished mid-quarter demonstration</b></p>`}<p class="small">Persistent fictional data • scenario version ${item.scenarioVersion}</p><button class="btn primary" ${marker ? "disabled" : ""} onclick="showSimulationEntry('${item.id}')">${marker && marker.scenarioId === item.id ? "Currently Active" : "Enter Scenario"}</button></div>`).join("");
+    document.getElementById("app").innerHTML = `<button class="btn" onclick="renderAppSettings()">← Settings</button><h2>Demo & Testing</h2><p class="small">Every scenario uses real ARC workflows in a separate persistent store. Entering requires a verified Live Safety Snapshot.</p>${currentCard}<div class="grid">${scenarios}</div>`;
+}
 function renderScheduleSetup() {
     navMark("setup", "Schedule Setup");
     ensureScheduleModel();
@@ -3876,8 +3949,8 @@ ensureTechnicalData();
 registerAppShell();
 installOverscrollGuard();
 updateStickyHeaderOffset();
-if (!restoreNavigationContext()) renderMainMenu();
-save();
+if (simulationStartupError) { document.getElementById("app").innerHTML = `<div class="card"><h2>Simulation recovery required</h2><p>ARC could not verify the saved active simulation. Live Classroom has not been activated or modified.</p><p class="small">${escapePhotoText(simulationStartupError.message)}</p><p>Use a verified recovery backup before continuing.</p></div>`; updateSimulationIndicator(); }
+else { if (!restoreNavigationContext()) renderMainMenu(); save(); }
 showStorageCompatibilityWarning();
 
 </script>

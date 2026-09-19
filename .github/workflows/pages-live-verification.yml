@@ -40,7 +40,7 @@ jobs:
             echo 'Public Pages build marker did not reach the pushed main commit.' >&2
             exit 1
           fi
-          for asset in index.html sw.js app-build.js src/project_bank.js src/booth_assignment_lifecycle.js src/class_forecast.js src/app_update_controller.js; do
+          for asset in index.html sw.js app-build.js src/project_bank.js src/booth_assignment_lifecycle.js src/class_forecast.js src/simulation_foundation.js src/simulation_fixtures.js src/app_update_controller.js; do
             mkdir -p "$verify_dir/$(dirname "$asset")"
             curl --fail --silent --show-error --location \
               --header 'Cache-Control: no-cache' \
@@ -56,5 +56,7 @@ jobs:
           grep --fixed-strings 'ensureBoothModel' "$verify_dir/index.html"
           grep --fixed-strings 'src/project_bank.js' "$verify_dir/index.html"
           grep --fixed-strings 'src/class_forecast.js' "$verify_dir/index.html"
+          grep --fixed-strings 'src/simulation_foundation.js' "$verify_dir/index.html"
+          grep --fixed-strings 'Demo & Testing' "$verify_dir/index.html"
           grep --fixed-strings "build:'" "$verify_dir/app-build.js"
           echo "Verified public ARC Pages deployment for $GITHUB_SHA"

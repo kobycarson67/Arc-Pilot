@@ -1,0 +1,14 @@
+const assert=require('assert');
+const Bank=require('../src/project_bank');
+const Fixtures=require('../src/simulation_fixtures');
+const Forecast=require('../src/class_forecast');
+function base(){return {schemaVersion:7,academicYear:'2026-27',semester:'Semester 1',course:'wt',activeSectionId:'s1',sections:[{id:'s1',name:'AWT 1',course:'awt',period:1},{id:'s2',name:'WT 2',course:'wt',period:2},{id:'s3',name:'WT 3',course:'wt',period:3},{id:'s5',name:'AWT 5',course:'awt',period:5},{id:'s6',name:'WT 6',course:'wt',period:6},{id:'s7',name:'WT 7',course:'wt',period:7}],classes:{wt:[],awt:[]},projectBank:Bank.starterDefinitions(),booths:Array.from({length:12},(_,i)=>({id:'b'+(i+1),name:'Booth '+(i+1),removedAt:null})),attendanceRecords:{},passLog:[],boothAssignments:[],boothIssues:[],notifications:[],photoEvidence:[]};}
+function count(s){return s.classes.wt.length+s.classes.awt.length;}
+let p=Fixtures.create('presentation',base()),p2=Fixtures.create('presentation',base());
+assert.equal(count(p),28);assert.deepEqual(p,p2,'canonical presentation reset must be deterministic');assert.equal(p.simulationFixture.fictional,true);assert(p.boothAssignments.length>0);assert(p.passLog.length>0);
+let busy=Fixtures.create('test-2',base()),students=busy.classes.wt.concat(busy.classes.awt),projects=students.flatMap(s=>s.projects||[]);
+assert.equal(count(busy),12);assert(projects.filter(p=>p.checkpoints.some(c=>c.status==='ready_for_review')).length>=3);['Needs Help','Needs Material','Needs Demonstration','Equipment Problem'].forEach(need=>assert(projects.some(p=>p.currentNeed===need),need+' fixture missing'));assert(busy.passLog.length>=1);
+let busySection=busy.sections.find(s=>s.id===busy.activeSectionId),busyStudents=busy.classes[busySection.course].filter(s=>s.enrollments.some(e=>e.active&&e.sectionId===busySection.id)),forecast=Forecast.build({state:busy,section:busySection,students:busyStudents,day:Fixtures.DAY,definitions:busy.projectBank});assert(forecast.pulse.working>0);assert(forecast.needs.some(item=>item.need.indexOf('Instructor Review — ')===0),'real Forecast derivation must work inside scenario data');assert(forecast.pulse.activeBooths>0);
+let projectsScenario=Fixtures.create('test-3',base()),projectStudents=projectsScenario.classes.wt.concat(projectsScenario.classes.awt);assert.equal(count(projectsScenario),10);assert(projectStudents.some(s=>!s.projects.length));assert(projectStudents.some(s=>s.projects.some(p=>p.status==='completed')));
+let edge=Fixtures.create('test-4',base()),edgeStudents=edge.classes.wt.concat(edge.classes.awt);assert.equal(count(edge),9);assert(edgeStudents.some(s=>s.enrollments.some(e=>e.active===false)));assert(edge.booths.some(b=>b.removedAt));
+console.log('PASS deterministic Simulation scenario fixtures and expected major states');

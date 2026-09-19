@@ -21,5 +21,5 @@ assert(controller.includes('Update check failed — Try Again.'),'failure state 
 assert(!/(localStorage\.clear|indexedDB\.deleteDatabase)/.test(controller),'update workflow must not clear classroom data');
 assert(html.includes('installOverscrollGuard()'),'Samsung pull-to-refresh protection must remain');
 assert(sw.includes("request.mode==='navigate'")&&sw.includes("caches.match('./index.html')"),'offline navigation fallback must remain');
-assert(build.includes("build:'simulation-foundation-v1'"),'deployed shell must have a truthful stable build label');
+assert(build.includes("build:'material-inventory-v1'"),'deployed shell must have a truthful stable build label');
 console.log('PASS App update Settings and safety contracts');

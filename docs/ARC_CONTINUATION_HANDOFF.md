@@ -2,7 +2,7 @@
 
 ## Repository state
 
-- Branch: `dev/v0.18-needs-attention`
+- Branch: `samsung-stabilization` in the Engineering workspace; publication targets remain the established development branch and then `main`.
 - Pre-Project-Bank rollback checkpoint: `2eead96e94167b15d20839e7e1127c36c589771a`
 - Current HEAD: the commit containing this handoff (`git rev-parse HEAD` is authoritative)
 
@@ -24,10 +24,11 @@
 - Class Forecast live-state repair: checkpoint actions opened from Forecast refresh the Forecast page beneath the student modal after the authoritative transaction, preventing pre-action HTML from remaining visible while preserving shared Project Bank need derivation.
 - ARC Simulation Foundation v1: Live Classroom remains in its established persistence record while Presentation Mode and four deterministic test scenarios use independent, versioned stores. Verified Live Safety Snapshots gate entry, scenario changes persist independently, restart resumes the active simulation, and reset restores only the selected canonical fictional fixture.
 - Backup export confirmation now visibly reports a completed export action and generated filename.
+- Material Inventory v1: authoritative fabrication stock separates reusable material definitions from stable physical piece records. Linear availability is evaluated piece-by-piece, plate/sheet cuts preserve deterministic rectangular remnants, and receipts/use/waste/adjustments append audit rows. Project assignment never consumes stock automatically.
 
 ## Active milestone
 
-Publish and physically test build `simulation-foundation-v1`. The Class Forecast live-state repair is recorded as deployed and physically verified by the current Engineering brief; Simulation Foundation remains unverified on Samsung until the full enter/mutate/leave/resume/reset sequence passes.
+Publish and physically test build `material-inventory-v1`. The current Engineering brief records Simulation Foundation v1 as deployed and physically verified; Material Inventory v1 remains unverified on Samsung until the stock-piece, remainder, history, project-context, simulation-isolation, backup, restart, and offline sequence passes.
 
 ## Immediate settled decisions
 
@@ -43,6 +44,8 @@ Publish and physically test build `simulation-foundation-v1`. The Class Forecast
 - Class Forecast is preparation context, while Fast Roster remains the live shop-floor list. Forecast derives every value at render time; `Ready to Work` is excluded from Needs You Now, and Up Next names only the next defined workflow requirement—not a prediction that it will occur today.
 - A successful project/checkpoint transaction must refresh whichever dependent class view is underneath the student modal. Fast Roster and Class Forecast both recalculate from the updated student/project record; neither persists a copied display need.
 - Normal ARC is Live Classroom. Simulations are separate datasets, never a temporary replacement of the live persistence record. Entering requires a successfully written, read-back, integrity-verified Live Safety Snapshot. Leaving persists the scenario and restores the captured live state/navigation; reset never changes Live Classroom, other simulations, or safety snapshots.
+- Material stock is authoritative at the physical-piece level. Total length is a summary only and never proves that a continuous required length exists. Definitions, current stock, and append-oriented history remain separate; corrections add audit rows instead of rewriting history.
+- Student Project material use may carry student/project context, but assignment and checkpoint operations never deduct inventory. Skill Practice, Shop/School Project, Other Department, Waste/Scrap, and Adjustment remain valid without fake student records.
 
 ## Intentionally deferred
 
@@ -57,4 +60,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow compares public critical assets—including both Simulation Foundation modules—and build markers to that exact pushed commit. Automated verification makes build `simulation-foundation-v1` deployment-ready; only the physical Samsung pass closes this milestone.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow compares public critical assets and build markers to that exact pushed commit. Automated verification can make build `material-inventory-v1` publication-ready; only the physical Samsung pass closes this milestone.

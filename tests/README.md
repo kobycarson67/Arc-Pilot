@@ -9,6 +9,11 @@ python tests/regression_static.py
 node tests/simulation_foundation.test.js
 node tests/simulation_fixtures.test.js
 node tests/simulation_index_integration.test.js
+
+# Material Inventory physical-piece domain, host wiring, and Scenario 3 lab
+node tests/material_inventory_v1.test.js
+node tests/material_inventory_index_integration.test.js
+node tests/simulation_fixtures.test.js
 ```
 
 The gate protects contracts that should never disappear silently: the `weld_v013` storage key, schema/migration/recovery paths, grade and attendance engines, pacing, projects, Technical scoring, behavior, photo adapters, PWA installability/offline shell, older-Safari syntax compatibility, and a basic client-secret guardrail.

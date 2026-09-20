@@ -27,10 +27,11 @@
 - Material Inventory v1: authoritative fabrication stock separates reusable material definitions from stable physical piece records. Linear availability is evaluated piece-by-piece, plate/sheet cuts preserve deterministic rectangular remnants, and receipts/use/waste/adjustments append audit rows. Project assignment never consumes stock automatically.
 - Material Inventory Samsung repair: the nested project-context modal now owns a complete navigation/backdrop/Android-Back lifecycle above fixed chrome; linear teacher entry uses feet plus inches; Current Stock and History organize by authoritative material family; source selection uses exact material and grouped usable dimensions without displaying internal piece IDs; new ledger rows preserve transaction-time before/after, disposition, class, project, and checkpoint context; Student History derives Materials from that same ledger.
 - Pre-Titanium UX Stabilization: true global navigation clears the complete transient modal stack; the Material dialog's higher layer now wins the CSS cascade in Live and Simulation and owns an independently scrolling body; Booth Manager uses an ARC-native Manage Station form; Open Shop recommendations lead to exact competency detail; student assignments expose Project Bank information when it exists and clearly fall back to stored assignment authority when it does not; Live Material Inventory receives common zero-stock definition starters; Teaching Tips use a broader lesson-connected shop catalog.
+- Titanium Foundation: ARC now has a persistent, collapsible tablet sidebar/icon rail, compact contextual header, selected-route state, class switching, and a factual class dashboard. ARC Core navigation is separate from the class/program-derived Welding/Titanium identity. All former header capabilities retain their established function owners, while normal global navigation remains reachable above transient work surfaces.
 
 ## Active milestone
 
-Hold build `pre-titanium-ux-stabilization-1` for publication and focused Samsung retest. All Material Inventory Repair 1 physical passes remain regression requirements. The stabilization build is not deployed or physically verified.
+Hold build `titanium-foundation-1` for publication and focused Samsung retest. All Material Inventory Repair 1 and Pre-Titanium physical passes remain regression requirements. Titanium Foundation is not deployed or physically verified.
 
 ## Immediate settled decisions
 
@@ -52,7 +53,7 @@ Hold build `pre-titanium-ux-stabilization-1` for publication and focused Samsung
 
 ## Intentionally deferred
 
-ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding Competition, automated Planbook/SLO generation, intelligent recommendations, automatic material ordering, full Titanium redesign, global Search, OneDrive/auth/encryption, and full Project Bank population.
+ARC Student, automatic level promotion, Growth Milestones UI, completed Advanced Welding Competition rules, automated Planbook/SLO generation, intelligent recommendations, automatic material ordering/purchasing readiness, other pathway themes, OneDrive/auth/encryption, and full Project Bank population.
 
 The code contains pacing forecasts and actual instructional dates but no authoritative class/date lesson-assignment record or active-class Today's Lesson surface. Adding that relationship is lesson-scheduling architecture, not a missing one-line route, so it is docked for a dedicated milestone. Scenario-owned school date/time also remains docked for Titanium/Presentation; simulations continue to use device date. A comprehensive authored Teaching Tips library remains future content work beyond the bounded source cleanup in this repair. Full equipment/resource management and workstation capability intelligence remain docked; Manage Station only edits existing supported station fields and adds a resource or issue.
 
@@ -65,4 +66,4 @@ The code contains pacing forecasts and actual instructional dates but no authori
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `pre-titanium-ux-stabilization-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung pass closes this repair.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `titanium-foundation-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung pass closes this milestone.

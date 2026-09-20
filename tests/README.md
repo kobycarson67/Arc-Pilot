@@ -21,6 +21,10 @@ node tests/material_inventory_modal_lifecycle.test.js
 # Pre-Titanium global navigation, Samsung modal geometry, and bounded UX stabilization
 node tests/pre_titanium_ux_stabilization.test.js
 node tests/pre_titanium_modal_reproduction.test.js
+
+# Titanium Foundation shell, identity boundary, navigation ownership, and tablet behavior
+node tests/titanium_foundation.test.js
+node tests/titanium_foundation_integration.test.js
 ```
 
 The gate protects contracts that should never disappear silently: the `weld_v013` storage key, schema/migration/recovery paths, grade and attendance engines, pacing, projects, Technical scoring, behavior, photo adapters, PWA installability/offline shell, older-Safari syntax compatibility, and a basic client-secret guardrail.

@@ -29,10 +29,11 @@
 - Pre-Titanium UX Stabilization: true global navigation clears the complete transient modal stack; the Material dialog's higher layer now wins the CSS cascade in Live and Simulation and owns an independently scrolling body; Booth Manager uses an ARC-native Manage Station form; Open Shop recommendations lead to exact competency detail; student assignments expose Project Bank information when it exists and clearly fall back to stored assignment authority when it does not; Live Material Inventory receives common zero-stock definition starters; Teaching Tips use a broader lesson-connected shop catalog.
 - Titanium Foundation: ARC now has a persistent, collapsible tablet sidebar/icon rail, compact contextual header, selected-route state, class switching, and a factual class dashboard. ARC Core navigation is separate from the class/program-derived Welding/Titanium identity. All former header capabilities retain their established function owners, while normal global navigation remains reachable above transient work surfaces.
 - Titanium Foundation Repair 1: Current Class is now schedule/calendar/time-derived and distinct from Selected Class; scenarios enter/reset at Dashboard/Home without a selected class; Live and scenario session-navigation contexts are isolated; normal transients begin at the rail-reserved workspace boundary; portrait drawer and Android Back behavior are coherent; redundant legacy Main Menu cards are retired while unique resources remain.
+- Titanium Visual System 1: pathway-scoped semantic tokens and shared components replace the remaining prototype-light presentation with a coherent charcoal/silver/electric-blue Welding/Titanium system across the shell and representative ARC workflows. Functional state colors, tablet geometry, class context, Simulation isolation, domain calculations, and schema remain unchanged.
 
 ## Active milestone
 
-Hold build `titanium-foundation-repair-1` for publication and focused Samsung retest. All Titanium Foundation, Material Inventory Repair 1, and Pre-Titanium physical passes remain regression requirements. Repair 1 is not deployed or physically verified.
+Hold build `titanium-visual-system-1` for focused Samsung visual/functional retest. Titanium Foundation and Foundation Repair 1 are physically verified baselines. This Visual System milestone is not published, deployed, or physically verified.
 
 ## Immediate settled decisions
 
@@ -67,4 +68,4 @@ The code contains pacing forecasts and actual instructional dates but no authori
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `titanium-foundation-repair-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung pass closes this repair.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `titanium-visual-system-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung visual/functional pass closes this milestone.

@@ -150,3 +150,14 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The collapsed rail remains reserved at narrow widths. The expanded portrait drawer overlays temporarily, closes on navigation, and participates in Android Back history.
 - Dashboard is no longer a second menu-of-menus. Sidebar/class-selector duplicates were removed; schedule/calendar, factual selected-class context, permanent Student Profiles, Student Work Library, and the proposed Challenge remain available.
 - Build `titanium-foundation-repair-1`; schema remains v7. Do not describe the repair as published, deployed, or physically verified until the focused Samsung sequence passes.
+
+## Titanium Visual System 1
+
+- The exact deployed and physically verified starting point is commit `ff73f5149e1e475e19f56de493feaef8a68f52f7`, tree `947902805a031dab6a785e7af8e3a76ea8e517e8`, build `titanium-foundation-repair-1`, schema v7. Rollback ref `rollback/titanium-visual-system` targets that commit.
+- A late-loaded, pathway-scoped Titanium stylesheet now supplies semantic canvas, surface, border, type, interaction, focus, and functional-status tokens. Shared cards, controls, tabs, forms, tables, dialogs, statuses, shell identity, and responsive states consume that system without changing ARC domain authority or Foundation geometry.
+- Representative Dashboard, Fast Roster/student surfaces, Class Forecast cards, Projects/checkpoints, Project Bank, Material Inventory, Booth Manager, Teaching Tips, Settings/update controls, and Simulation state inherit one charcoal/silver/electric-blue visual language. Success, warning, danger, and information retain separate functional meaning.
+- The Dashboard receives a visual identity hero while continuing to distinguish schedule-derived Current Class from instructor-selected Selected Class. It uses the existing class-context and Forecast authorities; no dashboard data or calculation was added.
+- The persistent fictional-data/privacy notice is now a compact expandable pilot notice. All prior facts remain present. Simulation remains explicitly labeled in the sticky header and also sets a presentation-only body state; live and scenario persistence remain isolated.
+- The visual layer loads after the legacy inline presentation and is included in the offline shell and Pages asset-verification list. Focus visibility, tablet touch targets, narrow portrait layout, increased contrast, and reduced-motion preferences remain explicit contracts.
+- No authorized local hero image was available in the handoff/workspace. The milestone uses CSS-only industrial depth and introduces no remote or substitute imagery. Future authorized pathway photography remains an asset task.
+- Build `titanium-visual-system-1`; schema remains v7. This milestone is packaged only and must not be described as published, deployed, or physically verified until its focused Samsung pass succeeds.

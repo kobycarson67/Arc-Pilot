@@ -79,7 +79,7 @@ test('Teaching Tips uses distinct lesson-connected shop guidance',()=>{
 
 test('schema remains v7 and build is truthful',()=>{
   assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-  assert(fs.readFileSync('app-build.js','utf8').includes("build:'titanium-foundation-repair-1'"));
+  assert(fs.readFileSync('app-build.js','utf8').includes("build:'titanium-visual-system-1'"));
 });
 
 if(!process.exitCode)console.log('\n'+pass+'/'+total+' Pre-Titanium UX Stabilization tests passed.');

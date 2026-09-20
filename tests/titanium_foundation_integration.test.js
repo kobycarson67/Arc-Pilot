@@ -38,6 +38,6 @@ assert(css.includes('env(safe-area-inset-top)'));
 assert(css.includes('.arc-titanium-shell .modal{left:var(--arc-sidebar-width);z-index:120}'));
 assert(css.includes('.arc-sidebar{')&&css.includes('z-index:180'));
 assert(sw.includes("'./src/arc_titanium_shell.js'"));
-assert(build.includes("build:'titanium-foundation-repair-1'"));
+assert(build.includes("build:'titanium-visual-system-1'"));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
 console.log('Titanium Foundation integration tests passed.');

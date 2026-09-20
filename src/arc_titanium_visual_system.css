@@ -1,0 +1,78 @@
+/* ARC Titanium Visual System 1
+   Presentation only: semantic tokens and shared components. Domain authority remains in ARC Core. */
+[data-arc-theme="titanium-welding"]{
+  color-scheme:dark;
+  --t-bg-canvas:#080c12;--t-bg-workspace:#0b1119;--t-surface-1:#111924;--t-surface-2:#172230;--t-surface-3:#202d3d;
+  --t-interactive:#26364a;--t-border:#34465b;--t-border-strong:#52657c;
+  --t-text:#f5f8fc;--t-text-secondary:#c6d0dd;--t-text-muted:#96a5b8;--t-silver:#dce3ec;
+  --t-blue:#3387ff;--t-blue-hover:#5ba0ff;--t-blue-strong:#1965d4;--t-blue-soft:#122b4c;
+  --t-success:#39c889;--t-success-bg:#0d3527;--t-warning:#f5b942;--t-warning-bg:#3d2d0c;--t-danger:#ff6b72;--t-danger-bg:#40171d;--t-info:#6eb5ff;--t-info-bg:#102d4d;
+  --t-radius-sm:8px;--t-radius-md:12px;--t-radius-lg:18px;--t-shadow-panel:0 16px 40px #0007;--t-shadow-focus:0 0 0 3px #3387ff59;
+  --bg:var(--t-bg-workspace);--card:var(--t-surface-1);--ink:var(--t-text);--muted:var(--t-text-muted);--line:var(--t-border);--accent:var(--t-blue);
+  --light:var(--t-blue-soft);--good:var(--t-success-bg);--warn:var(--t-warning-bg);--bad:var(--t-danger-bg);
+  --arc-bg:var(--t-bg-workspace);--arc-surface:var(--t-surface-1);--arc-surface-soft:var(--t-surface-2);--arc-line:var(--t-border);--arc-ink:var(--t-text);--arc-muted:var(--t-text-muted);--arc-blue:var(--t-blue);--arc-navy:#070b11;
+}
+
+[data-arc-theme="titanium-welding"] body,
+body[data-arc-theme="titanium-welding"]{background:var(--t-bg-canvas);color:var(--t-text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.005em}
+body.arc-titanium-shell{background:radial-gradient(circle at 82% -10%,#17365f55 0,transparent 32rem),linear-gradient(145deg,#080c12 0,#0b1119 58%,#0a1018 100%);color:var(--t-text)}
+.arc-workspace{background:linear-gradient(180deg,#0d141e 0,#0a1018 44rem,#080d14 100%)}
+.arc-workspace main{max-width:1440px;padding:22px 24px 42px}
+#app>h2,#app>.row h2{font-size:clamp(1.65rem,2.3vw,2.35rem);letter-spacing:-.035em}
+h1,h2,h3,h4{color:var(--t-text);line-height:1.15}p{line-height:1.55}.small{color:var(--t-text-muted);line-height:1.45}.big{color:var(--t-text);font-variant-numeric:tabular-nums}
+a{color:var(--t-blue-hover)}::selection{background:#3387ff55;color:#fff}
+
+/* Titanium pathway identity over the ARC Core shell. */
+.arc-sidebar{background:linear-gradient(180deg,#0a0f16 0,#0d151f 56%,#080c12 100%);border-right-color:#40536a;box-shadow:14px 0 36px #0008}
+.arc-brand-lockup{border-bottom-color:#29394c}.arc-mark{background:linear-gradient(150deg,#f7f9fc 0,#a9b5c4 44%,#66758a 100%);color:#07101b;box-shadow:inset 0 0 0 1px #fff8,0 0 0 1px #53667c,0 8px 22px #0008}
+.arc-mark i{background:linear-gradient(90deg,var(--t-blue),#82bcff);box-shadow:0 0 13px #3387ffaa}.arc-brand-copy strong{color:#f7f9fd;letter-spacing:.01em}.arc-brand-copy span,.arc-master-tagline{color:#8f9db0}
+.arc-program-identity{background:linear-gradient(135deg,#12243b,#101923);border-color:#31557e;box-shadow:inset 3px 0 0 var(--t-blue)}.arc-program-identity span{color:#77b4ff}.arc-program-identity strong{color:#e3e9f1}
+.arc-nav-group-label{color:#73849a}.arc-nav-item{color:#c6d0dd;border-color:transparent}.arc-nav-item:hover{background:#162436;border-color:#2c4561;color:#fff}.arc-nav-item.is-active{background:linear-gradient(90deg,#143864,#13263e);border-color:#367fd0;color:#fff;box-shadow:inset 3px 0 0 #64a7ff,0 6px 18px #0004}.arc-nav-icon{color:#8ebfff}.arc-quick-add{background:linear-gradient(135deg,#1c6fe2,#2b8eff);border-color:#67acff;color:#fff;box-shadow:0 10px 24px #0b4d9b55}
+.arc-rail-toggle{background:#121c28;border-color:#33465b;color:#dce3ec}.arc-rail-toggle:hover{border-color:#5796df;background:#172638}
+.arc-context-header{background:#0b1119f2;border-bottom:1px solid #34465b;box-shadow:0 10px 30px #0007;backdrop-filter:blur(14px)}.breadcrumb{color:#aebaca}.class-menu{background:#101925;border-color:#42556c;box-shadow:var(--t-shadow-panel)}
+
+/* Work surfaces and hierarchy. */
+.card,.student,details,.photo-card{background:linear-gradient(155deg,var(--t-surface-2),var(--t-surface-1));border-color:var(--t-border);box-shadow:0 9px 24px #0003}
+.card{border-radius:var(--t-radius-md);padding:16px}.card:hover{border-color:#40566f}.student{border-radius:var(--t-radius-md);box-shadow:0 7px 18px #0003}.detail{background:#0e1621;border-top-color:var(--t-border)}
+details[open]{box-shadow:0 13px 32px #0005}summary{color:var(--t-text)}
+.entryrow{border-bottom-color:#2a394c}.priority{background:#111b27;border:1px solid var(--t-border);border-left-width:5px}.priority.p1,.p1{background:#2b171d}.priority.p2,.p2{background:#2d240f}.priority.p3,.p3{background:#102641}
+.arc-dashboard-hero{position:relative;display:flex;justify-content:space-between;gap:28px;align-items:flex-end;overflow:hidden;margin:0 0 18px;padding:28px;border:1px solid #3d526a;border-radius:var(--t-radius-lg);background:linear-gradient(120deg,#101a27 0,#152b47 62%,#103767 100%);box-shadow:var(--t-shadow-panel)}
+.arc-dashboard-hero:after{content:"ARC";position:absolute;right:2%;top:-25%;font-size:10rem;font-weight:950;letter-spacing:-.1em;color:#fff08;pointer-events:none}.arc-dashboard-hero>*{position:relative;z-index:1}.arc-dashboard-kicker{color:#70b0ff;letter-spacing:.15em;font-size:.72rem;text-transform:uppercase;font-weight:850}.arc-dashboard-title{margin:.25rem 0 .3rem;font-size:clamp(2rem,4vw,3.6rem);letter-spacing:-.055em}.arc-dashboard-tagline{margin-bottom:12px;color:#d5dfeb;font-size:1.04rem;font-weight:720}.arc-dashboard-hero-actions{display:grid;justify-items:end;gap:10px}.arc-dashboard-view-label{color:#b6c4d5;font-size:.75rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.arc-dashboard-actions{margin:14px 0 22px}.arc-dashboard-actions>.card{border-top:3px solid #3f8df0}.arc-dashboard-stats .arc-dashboard-stat{background:linear-gradient(145deg,#162638,#101823);border-color:#38506a}.arc-dashboard-stat .big{color:#72b3ff}
+
+/* Controls and interaction states. */
+button,.btn,.navbtn,.tab,.workbtn,.codebtn,.booth-choice{touch-action:manipulation}.btn,.navbtn,.tab,.workbtn,.codebtn,.booth-choice{border:1px solid var(--t-border-strong);background:linear-gradient(180deg,#26364a,#1b2939);color:var(--t-text);border-radius:var(--t-radius-sm);box-shadow:0 3px 8px #0003;transition:border-color .14s ease,background .14s ease,transform .14s ease,box-shadow .14s ease}.btn:hover,.navbtn:hover,.tab:hover,.workbtn:hover,.codebtn:hover,.booth-choice:hover{background:#30445c;border-color:#72aeef}.btn:active,.navbtn:active,.tab:active{transform:translateY(1px)}
+.btn.primary,.tab.on,.project-stage-button.is-current,.project-need-button.is-current{background:linear-gradient(135deg,var(--t-blue-strong),var(--t-blue));border-color:#75b2ff;color:#fff;box-shadow:0 8px 20px #1264c755}.btn.danger{background:var(--t-danger-bg);border-color:#a5434b;color:#ffb1b5}.btn:disabled,.navbtn:disabled{opacity:.46;box-shadow:none}
+:where(button,input,select,textarea,summary,a):focus-visible{outline:2px solid #8ec2ff;outline-offset:2px;box-shadow:var(--t-shadow-focus)}
+input,select,textarea{background:#0c141e;color:var(--t-text);border-color:var(--t-border-strong)!important;border-radius:var(--t-radius-sm)!important;accent-color:var(--t-blue)}input::placeholder,textarea::placeholder{color:#8594a7}option{background:#101925;color:#f5f8fc}
+.project-bank-form input,.project-bank-form select,.project-bank-form textarea,.toolbar select,.photo-toolbar select,.photo-toolbar input{background:#0c141e;color:var(--t-text)}
+
+/* Tabs, status, data and media components. */
+.tabs{border-bottom:1px solid #2c3b4e;padding-bottom:7px}.tab{background:#121d29;color:#bfcbd9}.tab.on{position:relative}.tab.on:after{content:"";position:absolute;left:16%;right:16%;bottom:-8px;height:2px;background:#79b7ff}
+.pill{background:#213249;color:#cfe3ff;border:1px solid #345474}.pill.good{background:var(--t-success-bg);border-color:#237857;color:#8ee8bd}.pill.warn{background:var(--t-warning-bg);border-color:#8b671e;color:#ffd67d}.pill.bad{background:var(--t-danger-bg);border-color:#994149;color:#ffabb0}
+.statusdot.good{background:var(--t-success)}.statusdot.warn{background:var(--t-warning)}.statusdot.bad{background:var(--t-danger)}
+table{background:var(--t-surface-1);color:var(--t-text);box-shadow:0 8px 22px #0003}th,td{border-color:var(--t-border)}th{background:#1b2b3e;color:#dce9f8;letter-spacing:.02em}tbody tr:nth-child(even){background:#101a26}tbody tr:hover{background:#17283b}
+.photo-card{overflow:hidden}.photo-thumb,.photo-placeholder{background:#0b121b}.photo-meta{border-top:1px solid var(--t-border)}
+.rate,.workbtn,.codebtn{background:#111b27;border-color:var(--t-border)}.rate.sel,.workbtn.sel,.codebtn.sel{background:#15345a;border-color:var(--t-blue);color:#fff}.studentfriendly{background:#103326;border-color:#2f7c5b;color:#a4e7c5}
+
+/* Dialogs remain inside the physically verified Titanium workspace geometry. */
+.modal{background:#03070cbd;backdrop-filter:blur(5px)}.modalbox{background:linear-gradient(155deg,#172230,#0e161f);border:1px solid #53677f;border-radius:var(--t-radius-lg);color:var(--t-text);box-shadow:0 30px 80px #000c}.student-profile-nav{background:#121c28f5;border-bottom-color:#3a4c61;box-shadow:0 10px 24px #0007;backdrop-filter:blur(12px)}
+.inventory-modal-content,.material-transaction-content,.material-history-content{background:linear-gradient(155deg,#172230,#0e161f)!important;color:var(--t-text);border-color:#53677f!important}.inventory-modal-header,.material-transaction-header,.material-history-header{border-bottom-color:#34465b!important}
+
+/* Representative operational surfaces. */
+.roster-project-button,.roster-need-button{background:#101a26;color:var(--t-text)}.roster-stage{color:var(--t-text-muted)}.roster-need-button.need-attention{border-color:#ad7722;background:#38280d;color:#ffd47a}
+.booth-badge{border-color:#418ee5;background:#102c4c;color:#a8d3ff}.booth-badge.unassigned{background:#111a25;color:#9fc9f6}.booth-badge.review{border-color:#b7832c;background:#36280e;color:#ffd785}.booth-badge.unavailable{border-color:#b84e55;background:#3c181e;color:#ffafb4}.booth-choice.is-active{border-color:#38b57c;background:#113726;color:#b0edcf}.issue-card{border-left-color:#d89c32}.issue-card.unavailable{border-left-color:#ee636b}
+.competency-feedback{border-color:#2d9669;background:#103326;color:#a4e7c5}.workplace-deduction.is-active{border-color:#35b87d!important;background:#103326!important;color:#a4e7c5!important;box-shadow:inset 0 0 0 2px #35b87d}.attendance-choice.is-selected{border-color:#68aaff;background:#1b64c5;color:#fff;box-shadow:inset 0 0 0 2px #d6e9ff,0 5px 14px #071b38}
+.inventory-item,.material-family-card,.material-inventory-card{background:linear-gradient(145deg,#172432,#101821)!important;border-color:#3c5067!important}.inventory-summary .card{border-top:3px solid #438fef}.inventory-toolbar{background:#111b27}.material-family-card{box-shadow:inset 3px 0 0 #398bf0,0 8px 20px #0003!important}
+.arc-project-card,.arc-teaching-tips{background:linear-gradient(145deg,#172432,#101821)!important;border-color:#3d526a!important;color:var(--t-text)!important}.arc-project-card-header,.arc-teaching-tips summary{color:var(--t-text)!important}.arc-checkpoint-row{border-color:#34465b!important;background:#101a26!important}
+.install-card,.app-update-card{border-left-color:var(--t-blue)}.app-update-result{background:#172331}.app-update-result.good{background:var(--t-success-bg)}.app-update-result.warn{background:var(--t-warning-bg)}.app-update-result.bad{background:var(--t-danger-bg)}
+
+/* Safety and test-state communication: prominent, compact, and subordinate to work. */
+.arc-environment-notice{margin:0 0 18px;background:#111b27;border:1px solid #41536a;border-radius:10px;box-shadow:none}.arc-environment-notice summary{min-height:44px;padding:9px 13px;color:#d7e0ea;font-size:.78rem;letter-spacing:.035em}.arc-environment-notice summary b{color:#77b5ff;font-size:.7rem;letter-spacing:.12em}.arc-environment-summary{color:#91a1b5;font-size:.72rem}.arc-environment-detail{padding:11px 13px;border-top:1px solid #35465b;color:#b8c4d3;font-size:.82rem;line-height:1.5}
+.simulation-banner{background:linear-gradient(100deg,#251b09,#142235);border-color:#d7982d;color:#fff;box-shadow:inset 4px 0 0 #ffbd4c,0 8px 22px #0005}.simulation-banner .small{color:#ffd782!important}.simulation-banner .navbtn{background:#f7edd6;color:#5c3909;border-color:#ffc45a}.arc-simulation-active .arc-environment-notice{border-color:#7d6228;background:#1e1a11}.banner{background:#30250e;border-color:#8a6823;color:#ffe0a0}
+/* Normalize older inline semantic swatches without erasing their state meaning. */
+.arc-titanium-shell [style*="background:#fff1f2"],.arc-titanium-shell [style*="background:#fee2e2"]{background:#3b171d!important;color:#ffc0c4}.arc-titanium-shell [style*="background:#fff7ed"],.arc-titanium-shell [style*="background:#ffedd5"]{background:#3b270d!important;color:#ffdaa0}.arc-titanium-shell [style*="background:#fef9c3"],.arc-titanium-shell [style*="background:#fff3cd"]{background:#39300d!important;color:#ffe88d}.arc-titanium-shell [style*="background:#eff6ff"],.arc-titanium-shell [style*="background:#dbeafe"]{background:#102d4d!important;color:#b9dcff}.arc-titanium-shell [style*="background:#f0fdf4"],.arc-titanium-shell [style*="background:#dcfce7"]{background:#103326!important;color:#a7e9c7}
+
+@media (max-width:900px){.arc-workspace main{padding:18px}.arc-dashboard-hero{padding:22px}.arc-dashboard-hero:after{font-size:8rem}.arc-dashboard-hero-actions{min-width:max-content}}
+@media (max-width:620px){.arc-workspace main{padding:14px 12px 32px}.arc-dashboard-hero{align-items:flex-start;flex-direction:column;padding:20px}.arc-dashboard-hero-actions{width:100%;justify-items:start}.arc-dashboard-hero:after{right:-8%;font-size:7rem}.arc-environment-summary{display:none}.card{padding:13px}.btn,.navbtn,.tab{min-height:44px}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+@media (prefers-contrast:more){.card,.student,.modalbox,.btn,.tab,input,select,textarea{border-width:2px}.small{color:#b8c4d2}}

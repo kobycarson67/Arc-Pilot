@@ -38,7 +38,21 @@
     return value==='welding'||value==='wt'||value==='awt'||value.indexOf('weld')>=0?'welding':'welding';
   }
   function identityFor(section){return PATHWAYS[pathwayId(section)];}
+  function selectedClass(state){
+    state=state||{};
+    return (state.sections||[]).find(function(section){return section&&section.id===state.activeSectionId;})||null;
+  }
+  function currentClass(state,scheduleContext){
+    state=state||{};
+    if(!scheduleContext||scheduleContext.kind!=='class')return null;
+    return (state.sections||[]).find(function(section){return section&&Number(section.period)===Number(scheduleContext.period);})||null;
+  }
+  function navigationContextKey(base,activeSimulation){return String(base||'arc_navigation')+(activeSimulation&&activeSimulation.scenarioId?':simulation:'+activeSimulation.scenarioId:':live');}
+  function simulationStart(definition){
+    var start=definition&&definition.start;
+    return start&&start.view?{view:start.view,sectionId:start.sectionId||''}:{view:'main',sectionId:''};
+  }
   function navigation(){return GROUPS.map(function(group){return {id:group.id,label:group.label,items:group.items.map(function(item){return Object.assign({},item);})};});}
   function actionMap(){var result={};GROUPS.forEach(function(group){group.items.forEach(function(item){if(item.action)result[item.id]=item.action;});});return result;}
-  return {CORE_NAME:CORE_NAME,MASTER_TAGLINE:MASTER_TAGLINE,PATHWAYS:PATHWAYS,navigation:navigation,actionMap:actionMap,identityFor:identityFor};
+  return {CORE_NAME:CORE_NAME,MASTER_TAGLINE:MASTER_TAGLINE,PATHWAYS:PATHWAYS,navigation:navigation,actionMap:actionMap,identityFor:identityFor,selectedClass:selectedClass,currentClass:currentClass,navigationContextKey:navigationContextKey,simulationStart:simulationStart};
 });

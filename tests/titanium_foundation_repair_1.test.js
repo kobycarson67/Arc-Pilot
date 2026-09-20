@@ -1,0 +1,52 @@
+const fs=require('fs');
+const assert=require('assert');
+const Shell=require('../src/arc_titanium_shell');
+const Simulation=require('../src/simulation_foundation');
+const Deployment=require('../src/deployment_readiness');
+
+let state={activeSectionId:'sec4',sections:[{id:'sec1',period:1,course:'awt'},{id:'sec4',period:4,course:'wt'}]};
+assert.strictEqual(Shell.selectedClass(state).id,'sec4');
+assert.strictEqual(Shell.currentClass(state,{kind:'off',period:4}),null,'no-school selected class must not become current');
+assert.strictEqual(Shell.currentClass(state,{kind:'between'}),null);
+assert.strictEqual(Shell.currentClass(state,{kind:'class',period:1}).id,'sec1');
+assert.strictEqual(Shell.selectedClass(state).id,'sec4','schedule context must not mutate selected class');
+assert.strictEqual(Shell.navigationContextKey('arc-nav',null),'arc-nav:live');
+assert.strictEqual(Shell.navigationContextKey('arc-nav',{scenarioId:'test-3'}),'arc-nav:simulation:test-3');
+assert.notStrictEqual(Shell.navigationContextKey('arc-nav',null),Shell.navigationContextKey('arc-nav',{scenarioId:'test-3'}));
+assert.deepStrictEqual(Shell.simulationStart(Simulation.scenario('test-3')),{view:'main',sectionId:''});
+
+function storage(){const data={};return {data,getItem:k=>Object.prototype.hasOwnProperty.call(data,k)?data[k]:null,setItem:(k,v)=>(data[k]=String(v),true),removeItem:k=>(delete data[k],true)};}
+let store=storage(),manager=Simulation.create({storage:store,integrity:Deployment.stateIntegrity,verifyIntegrity:Deployment.verifyStateIntegrity,validateState:x=>assert.equal(x.schemaVersion,7),canonicalState:()=>({schemaVersion:7,activeSectionId:'sim1',course:'awt',sections:[{id:'sim1',period:1,course:'awt'}],classes:{wt:[],awt:[]}}),now:()=> '2026-09-20T12:00:00Z'});
+let live={schemaVersion:7,activeSectionId:'live4',course:'wt',sections:[{id:'live4',period:4,course:'wt'}],classes:{wt:[],awt:[]}},entered=manager.enter('test-3',live,{view:'roster',sectionId:'live4'});
+entered.state.activeSectionId='sim1';manager.saveActive(entered.state);let restored=manager.leave(entered.state);
+assert.strictEqual(restored.state.activeSectionId,'live4');
+assert.strictEqual(restored.navigation.sectionId,'live4');
+
+const html=fs.readFileSync('index.html','utf8'),css=fs.readFileSync('src/arc_visual_foundation.css','utf8');
+const dashboard=html.slice(html.indexOf('function renderMainMenu()'),html.indexOf('const MASTER_LESSON_BANKS'));
+const entry=html.slice(html.indexOf('function enterSimulation'),html.indexOf('function leaveSimulation'));
+assert(dashboard.includes('ArcTitaniumShell.currentClass(state, ctx)'));
+assert(dashboard.includes('ArcTitaniumShell.selectedClass(state)'));
+assert(dashboard.includes('No Current Class'));
+assert(dashboard.includes('Selected Class Snapshot'));
+assert(!dashboard.includes('Open the authoritative roster'));
+assert(!dashboard.includes('<h3>Current Classes</h3>'));
+assert(!dashboard.includes('<h3>Curriculum & Planning</h3>'));
+assert(!dashboard.includes('Open Inventory'));
+assert(dashboard.includes('renderAllStudentProfiles()'));
+assert(dashboard.includes('renderPhotoLibrary()'));
+assert(dashboard.includes('renderChallengeHub()'));
+assert(entry.includes('renderSimulationStart(result.definition)'));
+assert(!entry.includes('let first = state.sections'));
+assert(!entry.includes('renderRoster()'));
+assert(html.includes('function navigationContextStorageKey()'));
+assert(html.includes('ArcTitaniumShell.navigationContextKey(NAV_CONTEXT_KEY, simulationActive())'));
+assert(html.includes('if (!state.activeSectionId && !simulationActive())'));
+assert(css.includes('.arc-titanium-shell .modal{left:var(--arc-sidebar-width);z-index:120}'));
+assert(css.includes('.arc-titanium-shell .inventory-modal{left:var(--arc-sidebar-width);z-index:120}'));
+assert(css.includes('#simulationEntryOverlay{left:0;z-index:220}'));
+assert(css.includes('--arc-sidebar-width:64px;padding-left:var(--arc-sidebar-width)'));
+assert(html.includes('pushArcTransientHistory("shell-navigation")'));
+assert(html.includes('pushArcTransientHistory("scenario-entry")'));
+assert(html.includes('document.body.classList.contains("arc-sidebar-open")'));
+console.log('Titanium Foundation Repair 1 tests passed.');

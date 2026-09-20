@@ -11,11 +11,11 @@
   var SNAPSHOT_KEY='arc_simulation_v1_live_safety_snapshots';
   var STATE_PREFIX='arc_simulation_v1_state:';
   var SCENARIOS=[
-    {id:'presentation',displayName:'Presentation Mode',type:'presentation',scenarioVersion:1,seedVersion:1},
-    {id:'test-1',displayName:'Test Scenario 1',subtitle:'Normal Shop Day',type:'test',scenarioVersion:1,seedVersion:1},
-    {id:'test-2',displayName:'Test Scenario 2',subtitle:'Busy Instructor',type:'test',scenarioVersion:1,seedVersion:1},
-    {id:'test-3',displayName:'Test Scenario 3',subtitle:'Projects & Materials',type:'test',scenarioVersion:1,seedVersion:1},
-    {id:'test-4',displayName:'Test Scenario 4',subtitle:'Edge Cases',type:'test',scenarioVersion:1,seedVersion:1}
+    {id:'presentation',displayName:'Presentation Mode',type:'presentation',scenarioVersion:1,seedVersion:1,start:{view:'main'}},
+    {id:'test-1',displayName:'Test Scenario 1',subtitle:'Normal Shop Day',type:'test',scenarioVersion:1,seedVersion:1,start:{view:'main'}},
+    {id:'test-2',displayName:'Test Scenario 2',subtitle:'Busy Instructor',type:'test',scenarioVersion:1,seedVersion:1,start:{view:'main'}},
+    {id:'test-3',displayName:'Test Scenario 3',subtitle:'Projects & Materials',type:'test',scenarioVersion:1,seedVersion:1,start:{view:'main'}},
+    {id:'test-4',displayName:'Test Scenario 4',subtitle:'Edge Cases',type:'test',scenarioVersion:1,seedVersion:1,start:{view:'main'}}
   ];
   function clone(value){return JSON.parse(JSON.stringify(value));}
   function parse(raw,fallback){try{return raw?JSON.parse(raw):fallback;}catch(e){return fallback;}}

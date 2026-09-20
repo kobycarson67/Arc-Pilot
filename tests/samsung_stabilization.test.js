@@ -10,7 +10,8 @@ assert(has('installOverscrollGuard()'),'installed PWA must install touch overscr
 assert(has('{ passive: false }'),'overscroll guard must be able to prevent the refresh gesture');
 
 assert(has('const NAV_CONTEXT_KEY = "arc_v018_navigation_context"'),'navigation context must use isolated session metadata');
-assert(has('sessionStorage.setItem(NAV_CONTEXT_KEY'),'navigation context must not be written into classroom state');
+assert(has('sessionStorage.setItem(navigationContextStorageKey()'),'navigation context must remain isolated session metadata and not classroom state');
+assert(has('ArcTitaniumShell.navigationContextKey(NAV_CONTEXT_KEY, simulationActive())'),'Live and Simulation navigation contexts must be isolated');
 assert(has('if (!restoreNavigationContext()) renderMainMenu()'),'startup must restore safe context before falling back to Main Menu');
 
 assert(has('id="navClassButton"'),'class chooser must use a controllable touch menu');

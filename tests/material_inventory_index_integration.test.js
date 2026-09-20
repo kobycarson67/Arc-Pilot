@@ -4,5 +4,5 @@ assert(html.includes('src/material_inventory.js'));assert(sw.includes('./src/mat
 assert(html.includes('Current Stock')&&html.includes('History / Usage')&&html.includes('Definitions'));
 assert(html.includes('+ Record Material Use/Waste'));assert(html.includes('commitMaterialInventory'));
 assert(html.includes('Project assignment never consumes material automatically.'));
-assert(build.includes("build:'material-inventory-samsung-repair-1'"));assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
+assert(build.includes("build:'pre-titanium-ux-stabilization-1'"));assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
 console.log('PASS Material Inventory v1 host, project context, build, schema, and offline integration');

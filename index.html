@@ -549,7 +549,7 @@ function ensureProjectBank() {
     return state.projectBank;
 }
 function ensureInventoryModel() { state.inventory = ArcInventory.normalize(state.inventory); return state.inventory; }
-function ensureMaterialInventory() { state.materialInventory = ArcMaterialInventory.normalize(state.materialInventory); return state.materialInventory; }
+function ensureMaterialInventory() { let normalized = ArcMaterialInventory.normalize(state.materialInventory), needsLiveSeed = !simulationActive() && normalized.definitionSeedVersion < 1; state.materialInventory = needsLiveSeed ? ArcMaterialInventory.seedStarterDefinitions(normalized) : normalized; if (needsLiveSeed) save(); return state.materialInventory; }
 function commitMaterialInventory(next) { let before = state.materialInventory; state.materialInventory = next; try { if (save() === false) throw new Error("Persistent storage rejected the inventory change."); } catch (err) { state.materialInventory = before; throw err; } return state.materialInventory; }
 function projectLibrary(includeArchived = false) { ensureProjectBank(); return state.projectBank.filter(p => (p.applicability && p.applicability[state.course]) && (includeArchived || !p.archived)); }
 function projectDefinition(id) { ensureProjectBank(); return state.projectBank.find(p => p.id === id) || null; }
@@ -769,7 +769,7 @@ function gradeSnapshot(s) { let sv = currentScopedCompetencyValues(s), skill = s
 function switchCourse(v) { state.course = v; save(); renderRoster(); }
 let navCurrentView = null, navHistory = [], navSuppressHistory = false;
 function courseLabel(course) { return course === "wt" ? "Welding Technology" : "Advanced Welding Technology"; }
-function navMark(view, label) { if (typeof materialModalLifecycle !== "undefined") materialModalLifecycle.beforeNavigate(); if (navCurrentView !== view) {
+function navMark(view, label) { clearTransientUi({ preserveNavigation: true }); if (navCurrentView !== view) {
     if (navCurrentView && !navSuppressHistory)
         navHistory.push(navCurrentView);
     navCurrentView = view;
@@ -886,16 +886,16 @@ function navRender(view) { navSuppressHistory = true; if (view === "main")
     return renderOpenShopAll(); if (view === "behavior")
     return renderClassBehavior(); if (view === "settings")
     return renderAppSettings(); return renderRoster(); }
-function navBack() { if (document.getElementById("inventoryOverlay")) { closeInventoryOverlay(); return; } if (document.getElementById("modal").classList.contains("show")) {
-    closeStudent();
-    return;
-} let overlays = ["navOverlay", "projectManageOverlay", "techCreateOverlay", "technicalManageOverlay", "workOverlay", "rosterOverlay", "dropConfirm", "confirmOverlay", "behaviorOverlay", "severeIncidentOverlay", "boothSelector", "boothWarning", "boothRemoveOverlay"]; for (let id of overlays) {
+function navBack() { if (document.getElementById("inventoryOverlay")) { closeInventoryOverlay(); return; } let overlays = ["navOverlay", "assignedProjectInfoOverlay", "projectCheckpointDetailsOverlay", "projectManageOverlay", "projectAssignmentWarning", "techCreateOverlay", "technicalManageOverlay", "workOverlay", "rosterOverlay", "dropConfirm", "confirmOverlay", "behaviorOverlay", "severeIncidentOverlay", "boothSelector", "boothWarning", "boothManageOverlay", "boothRemoveOverlay"]; for (let id of overlays) {
     let o = document.getElementById(id);
     if (o) {
         o.remove();
         updateNavigationBar();
         return;
     }
+} if (document.getElementById("modal").classList.contains("show")) {
+    closeStudent();
+    return;
 } let prev = navHistory.pop(); if (prev)
     navRender(prev); }
 function navSwitchClass(id) { closeClassMenu(); if (!id)
@@ -908,9 +908,11 @@ function updateSimulationIndicator() {
     if (marker && label) { let definition = ArcSimulationFoundation.scenario(marker.scenarioId); label.textContent = `${definition ? definition.displayName.toUpperCase() : "SIMULATION"} — FICTIONAL DATA`; }
 }
 function captureSimulationNavigation() { return { view: RESTORABLE_VIEWS.includes(navCurrentView) ? navCurrentView : "main", sectionId: state.activeSectionId || "", studentId: current ? current.id : "", studentTab: RESTORABLE_STUDENT_TABS.includes(tab) ? tab : "summary", studentOpen: !!(current && document.getElementById("modal").classList.contains("show")) }; }
-function clearTransientUi() {
+function clearTransientUi(options = {}) {
+    if (typeof materialModalLifecycle !== "undefined") materialModalLifecycle.beforeNavigate();
     document.querySelectorAll("body > .modal").forEach(element => { if (element.id !== "modal") element.remove(); });
-    document.getElementById("modal").classList.remove("show"); current = null; tab = "summary"; navHistory = []; navCurrentView = null; navSuppressHistory = false;
+    document.getElementById("modal").classList.remove("show"); current = null; tab = "summary"; window.openCompetencyCode = ""; window.lastCompetencyChange = null; closeClassMenu();
+    if (!options.preserveNavigation) { navHistory = []; navCurrentView = null; navSuppressHistory = false; }
 }
 function renderRestoredNavigation(context) {
     context = context || {}; let sec = state.sections.find(item => item.id === context.sectionId);
@@ -2221,10 +2223,17 @@ function confirmRemoveBooth(boothId) {
     booth.removedAt = new Date().toISOString(); booth.removalSource = "instructor"; save(); closeBoothRemoveOverlay(); showBoothManager();
 }
 function editBooth(boothId) {
-    let b = boothById(boothId); if (!b) return; let boothName = prompt("Booth name/number:", b.name); if (boothName && boothName.trim()) b.name = boothName.trim(); let equipment = prompt("Equipment/resource name to add (leave blank to skip):", ""); if (equipment && equipment.trim()) b.resources.push({ id: "res_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6), name: equipment.trim(), type: "equipment" });
-    let status = prompt("Status: ready, review_needed, or unavailable", b.status); if (status && BOOTH_STATUSES[status.trim()]) b.status = status.trim();
-    let description = prompt("Unresolved issue description (leave blank if none):", ""); if (description && description.trim()) { let resourceName = prompt("Affected equipment/resource name (leave blank for whole booth):", ""); let resource = resourceName ? b.resources.find(r => r.name.toLowerCase() === resourceName.trim().toLowerCase()) : null; state.boothIssues.push({ id: "bi_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), boothId: b.id, scope: resource ? "resource" : "booth", resourceId: resource ? resource.id : null, description: description.trim(), reportedAt: new Date().toISOString(), resolvedAt: null, resolutionNote: "" }); }
-    save(); showBoothManager();
+    let b = boothById(boothId); if (!b) return; let assignments = state.boothAssignments.filter(a => a.boothId === boothId), sec = activeSection(), occupants = sec ? boothOccupants(boothId, sec.id, "") : [], resources = b.resources || [], o = document.createElement("div");
+    o.id = "boothManageOverlay"; o.className = "modal show";
+    o.innerHTML = `<div class="modalbox" style="width:min(720px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeBoothManageOverlay()">Close</button><h2>Manage Station</h2><p class="small">Custom names are supported because a station may be a booth, welding table, cutting area, or another instructor-defined location.</p><div class="grid"><label><b>Station name</b><input id="boothManageName" value="${escapePhotoText(b.name)}"></label><label><b>Status / availability</b><select id="boothManageStatus">${Object.keys(BOOTH_STATUSES).map(key => `<option value="${key}" ${b.status === key ? "selected" : ""}>${escapePhotoText(BOOTH_STATUSES[key])}</option>`).join("")}</select></label></div><div class="card"><h3>Equipment / Resources</h3>${resources.length ? resources.map(r => `<span class="pill">${escapePhotoText(r.name)}</span>`).join(" ") : `<p class="small">No equipment/resources listed.</p>`}<label><b>Add equipment/resource (optional)</b><input id="boothManageResource" placeholder="Example: SMAW machine"></label></div><div class="card"><h3>Report Issue (optional)</h3><label><b>Description</b><textarea id="boothManageIssue" rows="2" placeholder="Leave blank when no new issue is being reported"></textarea></label><label><b>Affected resource</b><select id="boothManageIssueResource"><option value="">Whole station</option>${resources.map(r => `<option value="${escapePhotoText(r.id)}">${escapePhotoText(r.name)}</option>`).join("")}</select></label></div><div class="card"><b>Current occupants:</b> ${occupants.length ? occupants.map(s => escapePhotoText(s.name)).join(", ") : "None"}<br><span class="small">${assignments.length} assignment-history record${assignments.length === 1 ? "" : "s"} remain authoritative and unchanged by station edits.</span></div><div class="booth-manager-actions"><button class="btn" onclick="closeBoothManageOverlay()">Cancel</button><button class="btn primary" onclick="saveBoothManagement('${b.id}')">Save Station</button></div></div>`;
+    o.onclick = e => { if (e.target === o) closeBoothManageOverlay(); }; document.body.appendChild(o);
+}
+function closeBoothManageOverlay() { let o = document.getElementById("boothManageOverlay"); if (o) o.remove(); updateNavigationBar(); }
+function saveBoothManagement(boothId) {
+    let b = boothById(boothId), name = ((document.getElementById("boothManageName") || {}).value || "").trim(), status = ((document.getElementById("boothManageStatus") || {}).value || "").trim(); if (!b) return; if (!name) return alert("Enter a station name."); if (!BOOTH_STATUSES[status]) return alert("Choose a valid station status.");
+    b.name = name; b.status = status; b.resources = b.resources || []; let resourceName = ((document.getElementById("boothManageResource") || {}).value || "").trim(); if (resourceName) b.resources.push({ id: "res_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6), name: resourceName, type: "equipment" });
+    let description = ((document.getElementById("boothManageIssue") || {}).value || "").trim(), resourceId = ((document.getElementById("boothManageIssueResource") || {}).value || "").trim(); if (description) state.boothIssues.push({ id: "bi_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), boothId: b.id, scope: resourceId ? "resource" : "booth", resourceId: resourceId || null, description, reportedAt: new Date().toISOString(), resolvedAt: null, resolutionNote: "" });
+    save(); closeBoothManageOverlay(); showBoothManager();
 }
 function resolveBoothIssue(issueId) { let i = state.boothIssues.find(x => x.id === issueId); if (!i || i.resolvedAt) return; i.resolvedAt = new Date().toISOString(); i.resolutionNote = prompt("Resolution note (optional):", "") || ""; save(); showBoothManager(); }
 
@@ -2737,7 +2746,7 @@ function renderModalObsolete() {
     if (tab === "summary") {
         let gs = gaps(s).slice(0, 3);
         html += `<div class="grid"><div class="card"><div class="small">Competency Average</div><div class="big">${avgRating(s).toFixed(1)}</div></div><div class="card"><div class="small">Proficient+</div><div class="big">${prof(s)}</div></div><div class="card"><div class="small">Current Grade Snapshot</div><div class="big">${g.total == null ? "—" : g.total.toFixed(1) + "%"}</div></div></div>
-   <div class="card" style="margin-top:10px"><h3>Current Open Shop Choices</h3>${gs.length ? gs.map((x, i) => `<div class="priority p${i + 1}"><b>#${i + 1} ${x.c.name}</b> (${x.c.code}) — ${x.r} ${ratingNames[x.r]}</div>`).join("") : "<p class='small'>No assessed competency below Proficient.</p>"}</div>`;
+   <div class="card" style="margin-top:10px"><h3>Current Open Shop Choices</h3>${gs.length ? gs.map((x, i) => `<button class="priority p${i + 1} open-shop-recommendation" onclick="viewStudentCompetency('${s.id}','${x.c.code}')"><b>#${i + 1} ${x.c.name}</b> (${x.c.code}) — ${x.r} ${ratingNames[x.r]}<br><span class="small">View full competency</span></button>`).join("") : "<p class='small'>No assessed competency below Proficient.</p>"}</div>`;
     }
     if (tab === "competencies") {
         let groups = {};
@@ -2788,7 +2797,7 @@ function renderModalObsolete() {
     }
     if (tab === "openshop") {
         let gs = gaps(s).slice(0, 3);
-        html += `<div class="card"><h3>Ranked Open Shop Choices</h3><p class="small">#1 is the strongest recommendation. #2 and #3 are reasonable alternatives when equipment, materials, timing, or instructional goals make another option more practical.</p>${gs.length ? gs.map((x, i) => `<div class="priority p${i + 1}"><b>#${i + 1} ${x.c.name}</b> <span class="code">${x.c.code}</span><br>${x.r} ${ratingNames[x.r]}<br><span class="small">${x.c.levels[String(x.r)]}</span></div>`).join("") : "<p>No assessed competencies below Proficient.</p>"}</div>`;
+        html += `<div class="card"><h3>Ranked Open Shop Choices</h3><p class="small">#1 is the strongest recommendation. #2 and #3 are reasonable alternatives when equipment, materials, timing, or instructional goals make another option more practical.</p>${gs.length ? gs.map((x, i) => `<div class="priority p${i + 1}"><b>#${i + 1} ${x.c.name}</b> <span class="code">${x.c.code}</span><br>${x.r} ${ratingNames[x.r]}<br><span class="small">${x.c.levels[String(x.r)]}</span><br><button class="btn" onclick="viewStudentCompetency('${s.id}','${x.c.code}')">View Full Competency</button></div>`).join("") : "<p>No assessed competencies below Proficient.</p>"}</div>`;
     }
     if (tab === "history") {
         let selected = window.historyCategory || "all";
@@ -2882,7 +2891,7 @@ function renderModal() {
 }
 function rememberOpenCompetency(code, open) { if (open) window.openCompetencyCode = code; else if (window.openCompetencyCode === code) window.openCompetencyCode = ""; }
 function competencyFeedbackHtml(code) { let x = window.lastCompetencyChange; if (!x || x.code !== code) return ""; return `<div class="competency-feedback" role="status"><b>Saved: ${ratingDisplay(x.old)} → ${ratingDisplay(x.next)}</b><button class="btn" onclick="undoCompetencyChange('${code}')">Undo</button></div>`; }
-function compCard(c, s) { let r = s.ratings[c.code], sc = ([1, 2].includes(r) || r === "NE") ? "warn" : ([3, 4].includes(r) ? "good" : ""), open = window.openCompetencyCode === c.code; return `<details ${open ? "open" : ""} ontoggle="rememberOpenCompetency('${c.code}',this.open)"><summary><span><span class="code">${c.code}</span> — ${c.name}<br><span class="small">${c.standard || ""}</span></span><span class="pill ${sc}">${ratingDisplay(r)}</span></summary><div class="detail">${competencyFeedbackHtml(c.code)}<p><b>What this competency means at Proficient:</b><br>${c.levels["3"]}</p><div class="rates">${[1, 2, 3, 4].map(n => `<div class="rate ${r === n ? "sel" : ""}"><button aria-pressed="${r === n ? "true" : "false"}" onclick="setRating('${c.code}',${n})">${n} — ${ratingNames[n]}</button><small>${c.levels[String(n)]}</small></div>`).join("")}</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><button class="btn ${r === "NE" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','NE')">NE — No Evidence / No Attempt (0%)</button><button class="btn ${r === "ABS" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','ABS')">Absent / Excused</button><button class="btn" onclick="clearRating('${c.code}')">Not Assessed / Clear</button></div><div class="studentfriendly"><b>Student-friendly statement:</b><br>${c.student}</div></div></details>`; }
+function compCard(c, s) { let r = s.ratings[c.code], sc = ([1, 2].includes(r) || r === "NE") ? "warn" : ([3, 4].includes(r) ? "good" : ""), open = window.openCompetencyCode === c.code; return `<details data-competency-code="${c.code}" ${open ? "open" : ""} ontoggle="rememberOpenCompetency('${c.code}',this.open)"><summary><span><span class="code">${c.code}</span> — ${c.name}<br><span class="small">${c.standard || ""}</span></span><span class="pill ${sc}">${ratingDisplay(r)}</span></summary><div class="detail">${competencyFeedbackHtml(c.code)}<p><b>What this competency means at Proficient:</b><br>${c.levels["3"]}</p><div class="rates">${[1, 2, 3, 4].map(n => `<div class="rate ${r === n ? "sel" : ""}"><button aria-pressed="${r === n ? "true" : "false"}" onclick="setRating('${c.code}',${n})">${n} — ${ratingNames[n]}</button><small>${c.levels[String(n)]}</small></div>`).join("")}</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:9px"><button class="btn ${r === "NE" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','NE')">NE — No Evidence / No Attempt (0%)</button><button class="btn ${r === "ABS" ? "primary" : ""}" onclick="setCompetencyState('${c.code}','ABS')">Absent / Excused</button><button class="btn" onclick="clearRating('${c.code}')">Not Assessed / Clear</button></div><div class="studentfriendly"><b>Student-friendly statement:</b><br>${c.student}</div></div></details>`; }
 function logEvent(category, eventType, title, oldValue = "", newValue = "", details = "") {
     if (!current.history)
         current.history = [];
@@ -2958,7 +2967,7 @@ function renderProjectCheckpointCards(student) {
         return student.projects.map((p, i) => projectRow(p, i)).join("");
     try {
         let cards = window.ArcProjectTabAdapter.cards(student);
-        return cards.map((card, i) => { let project = student.projects[i]; return `${window.ArcProjectCheckpointCard.render(card)}<div class="card"><div class="row"><div><b>Current stage:</b> ${escapePhotoText(project.currentStageName || "Assigned")}<br><b>Current need:</b> ${escapePhotoText(project.currentNeed || "Ready to Work")}</div><div>${project.isPrimary ? `<span class="pill good">Primary / Current</span>` : `<button class="btn" onclick="setStudentPrimaryProject('${student.id}','${project.id}')">Make Primary</button>`} <button class="btn primary" onclick="showProjectOperations('${student.id}','${project.id}')">Update Stage / Need</button></div></div><p class="small">Operational state only—not an automatic grade, proficiency rating, or negative judgment.</p></div><div class="arc-project-grading"><div class="small"><b>Rubric & project grade</b> — checkpoint progress does not change the grade automatically.</div>${projectRow(student.projects[i], i)}</div>`; }).join("");
+        return cards.map((card, i) => { let project = student.projects[i]; return `${window.ArcProjectCheckpointCard.render(card)}<div class="card"><div class="row"><div><b>Current stage:</b> ${escapePhotoText(project.currentStageName || "Assigned")}<br><b>Current need:</b> ${escapePhotoText(project.currentNeed || "Ready to Work")}</div><div><button class="btn" onclick="showAssignedProjectInfo('${student.id}','${project.id}')">Project Info</button> ${project.isPrimary ? `<span class="pill good">Primary / Current</span>` : `<button class="btn" onclick="setStudentPrimaryProject('${student.id}','${project.id}')">Make Primary</button>`} <button class="btn primary" onclick="showProjectOperations('${student.id}','${project.id}')">Update Stage / Need</button></div></div><p class="small">Operational state only—not an automatic grade, proficiency rating, or negative judgment.</p></div><div class="arc-project-grading"><div class="small"><b>Rubric & project grade</b> — checkpoint progress does not change the grade automatically.</div>${projectRow(student.projects[i], i)}</div>`; }).join("");
     }
     catch (err) {
         console.warn("ARC checkpoint card fallback", err);
@@ -3060,6 +3069,19 @@ function showProjectCheckpointDetails(projectId) {
     document.body.appendChild(overlay);
 }
 function closeProjectCheckpointDetails() { let overlay = document.getElementById("projectCheckpointDetailsOverlay"); if (overlay) overlay.remove(); }
+function showAssignedProjectInfo(studentId, assignmentId) {
+    let student = allStudents().find(s => s.id === studentId), assignment = student && (student.projects || []).find(p => p.id === assignmentId || p.assignmentId === assignmentId); if (!student || !assignment) return;
+    let definition = assignment.templateId ? projectDefinition(assignment.templateId) : null, title = assignment.name || assignment.projectTitleSnapshot || (definition && definition.title) || "Assigned Project", rows = [];
+    if (definition) {
+        if (definition.studentDescription) rows.push(`<div class="card"><h3>Project Description</h3><p>${escapePhotoText(definition.studentDescription)}</p></div>`);
+        if (definition.studentInstructions) rows.push(`<div class="card"><h3>Instructions</h3><p>${escapePhotoText(definition.studentInstructions)}</p></div>`);
+        if (definition.materials.length) rows.push(`<div class="card"><h3>Materials</h3><ul>${definition.materials.map(x => `<li>${escapePhotoText(x.name)}${x.quantity ? " — " + escapePhotoText(x.quantity) : ""}${x.notes ? " — " + escapePhotoText(x.notes) : ""}</li>`).join("")}</ul></div>`);
+        if (definition.equipmentRequirements.length || definition.processRequirements.length) rows.push(`<div class="card"><h3>Equipment & Processes</h3>${definition.equipmentRequirements.length ? `<p><b>Equipment:</b> ${definition.equipmentRequirements.map(escapePhotoText).join(", ")}</p>` : ""}${definition.processRequirements.length ? `<p><b>Processes:</b> ${definition.processRequirements.map(escapePhotoText).join(", ")}</p>` : ""}</div>`);
+        if (definition.linkedStandards.length || definition.linkedCompetencies.length) rows.push(`<div class="card"><h3>Authoritative Links</h3>${definition.linkedStandards.length ? `<p><b>Standards:</b> ${definition.linkedStandards.map(escapePhotoText).join(", ")}</p>` : ""}${definition.linkedCompetencies.length ? `<p><b>Competencies:</b> ${definition.linkedCompetencies.map(escapePhotoText).join(", ")}</p>` : ""}</div>`);
+    } else rows.push(`<div class="card"><h3>Independent / Historical Assignment</h3><p>This assignment has no current Project Bank definition. ARC is showing the authoritative information stored with the student assignment and has not fabricated a Bank record.</p></div>`);
+    let stages = (assignment.stages || []).map(x => escapePhotoText(x.name)).join(" → "), overlay = document.createElement("div"); overlay.id = "assignedProjectInfoOverlay"; overlay.className = "modal show"; overlay.innerHTML = `<div class="modalbox" style="width:min(820px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeAssignedProjectInfo()">Close</button><h2>${escapePhotoText(title)}</h2><p><span class="pill">${definition ? "Project Bank definition" : "Assignment record"}</span> <span class="pill">${escapePhotoText(assignment.type || (definition && definition.type) || "Project")}</span></p><div class="card"><b>Student:</b> ${escapePhotoText(student.name)}<br><b>Current stage:</b> ${escapePhotoText(assignment.currentStageName || "Assigned")}<br><b>Current need:</b> ${escapePhotoText(assignment.currentNeed || "Ready to Work")}${stages ? `<br><b>Workflow:</b> ${stages}` : ""}</div>${rows.join("")}</div>`; overlay.onclick = e => { if (e.target === overlay) closeAssignedProjectInfo(); }; document.body.appendChild(overlay);
+}
+function closeAssignedProjectInfo() { let overlay = document.getElementById("assignedProjectInfoOverlay"); if (overlay) overlay.remove(); updateNavigationBar(); }
 function copyProjectForCurrentStudent(i) { let p = current.projects[i]; if (!p)
     return; ensureProjectLibrary(); let tpl = p.templateId ? projectLibrary().find(x => x.id === p.templateId) : null; let base = tpl ? tpl.title : p.name, o = document.createElement('div'); o.id = 'projectManageOverlay'; o.className = 'modal show'; o.innerHTML = `<div class="modalbox" style="width:min(620px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeProjectManage()">Close</button><h2>Copy Project for ${current.name}</h2><p class="small">This creates a new reusable project but assigns the copy only to this student.</p><label><b>Project Title</b></label><input id="studentCopyProjectTitle" value="${base} - Copy" style="width:100%;padding:11px;border:1px solid #d6dde6;border-radius:8px;margin:6px 0 14px"><button class="btn primary" onclick="saveStudentProjectCopy(${i})">Create Copy for ${current.name}</button></div>`; o.onclick = e => { if (e.target === o)
     closeProjectManage(); }; document.body.appendChild(o); }
@@ -3933,7 +3955,7 @@ function renderOpenShopAll() {
         html += `<div class="card"><b>${s.name}</b> <span class="pill">${s.pathway}</span>`;
         if (gs.length) {
             gs.forEach((g, i) => {
-                html += `<div class="priority p${i + 1}"><b>#${i + 1} ${g.c.name}</b> (${g.c.code}) — ${g.r} ${ratingNames[g.r]}</div>`;
+                html += `<button class="priority p${i + 1} open-shop-recommendation" onclick="viewStudentCompetency('${s.id}','${g.c.code}')"><b>#${i + 1} ${g.c.name}</b> (${g.c.code}) — ${g.r} ${ratingNames[g.r]}<br><span class="small">Open authoritative competency detail</span></button>`;
             });
         }
         else {
@@ -3943,6 +3965,7 @@ function renderOpenShopAll() {
     }
     document.getElementById("app").innerHTML = html;
 }
+function viewStudentCompetency(studentId, code) { let student = allStudents().find(s => s.id === studentId); if (!student || !byCode(code)) return; current = student; tab = "competencies"; window.openCompetencyCode = code; document.getElementById("modal").classList.add("show"); renderModal(); updateNavigationBar(`${navViewLabel(navCurrentView)} › ${student.name} › ${code}`); let target = document.querySelector(`[data-competency-code="${code}"]`); if (target && target.scrollIntoView) target.scrollIntoView({ block: "start" }); }
 document.getElementById("modal").addEventListener("click", function (e) {
     if (e.target === this)
         closeStudent();

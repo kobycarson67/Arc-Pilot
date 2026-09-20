@@ -24,7 +24,7 @@ assert(has('function boothOccupants'),'shared booth lookup missing');
 assert(has('Shared booth:'),'shared assignment confirmation missing');
 assert(has('Assign Anyway'),'override missing');
 assert(lifecycle.includes('a.studentId!==exceptStudentId'),'student assignment independence missing');
-assert(has('scope: resource ? "resource" : "booth"'),'issue scope distinction missing');
+assert(has('scope: resourceId ? "resource" : "booth"'),'issue scope distinction missing');
 assert(has('An equipment issue does not automatically make the whole booth unusable'),'equipment issue usability guidance missing');
 assert(has('booth.status === "unavailable"'),'Unavailable warning missing');
 assert(has('booth.status === "review_needed"'),'Review Needed warning missing');

@@ -1,0 +1,15 @@
+const assert=require('assert'),fs=require('fs');
+const html=fs.readFileSync('index.html','utf8'),css=fs.readFileSync('src/arc_visual_foundation.css','utf8'),sw=fs.readFileSync('sw.js','utf8'),lifecycle=fs.readFileSync('src/material_inventory_modal_lifecycle.js','utf8');
+assert(html.includes('src/material_inventory_presenter.js')&&sw.includes('./src/material_inventory_presenter.js')&&html.includes('src/material_inventory_modal_lifecycle.js')&&sw.includes('./src/material_inventory_modal_lifecycle.js'));
+assert(css.includes('.inventory-modal{z-index:120')&&css.includes('.inventory-modal-header{position:sticky'));
+assert(html.includes('function closeInventoryOverlay(')&&lifecycle.includes('arcInventoryModal'));
+assert(html.includes('window.addEventListener("popstate"')&&html.includes('materialModalLifecycle.onPopState()')&&html.includes('if (document.getElementById("inventoryOverlay")) { closeInventoryOverlay(); return; }'));
+assert(html.includes('function navMark(view, label) { if (typeof materialModalLifecycle !== "undefined") materialModalLifecycle.beforeNavigate()'));
+assert(html.includes('Family')&&html.includes('Exact material / size')&&html.includes('Usable stock group'));
+assert(!html.includes('Source ${escapePhotoText(piece.id)}')&&!html.includes('Piece ${escapePhotoText(piece.id)}'),'ordinary source labels must not expose internal piece IDs');
+assert(html.includes('materialLengthFields("useLength"')&&html.includes('materialLengthFields("receiveLength"')&&html.includes('materialLengthFields("adjustLength"'));
+assert(html.includes('["materials", "Materials"]')&&html.includes('ArcMaterialInventory.studentHistory'));
+assert(html.includes('checkpointName:checkpoint?checkpoint.name')&&html.includes('sectionName:sec?sec.name'));
+assert(html.includes('Leave the simulation before exporting a Live Classroom backup.'));
+assert(html.includes('Leave the simulation before importing a Live Classroom backup.'));
+console.log('PASS Material Inventory Samsung modal, navigation, hierarchy, history, context, backup, and offline contracts');

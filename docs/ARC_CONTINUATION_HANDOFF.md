@@ -25,10 +25,11 @@
 - ARC Simulation Foundation v1: Live Classroom remains in its established persistence record while Presentation Mode and four deterministic test scenarios use independent, versioned stores. Verified Live Safety Snapshots gate entry, scenario changes persist independently, restart resumes the active simulation, and reset restores only the selected canonical fictional fixture.
 - Backup export confirmation now visibly reports a completed export action and generated filename.
 - Material Inventory v1: authoritative fabrication stock separates reusable material definitions from stable physical piece records. Linear availability is evaluated piece-by-piece, plate/sheet cuts preserve deterministic rectangular remnants, and receipts/use/waste/adjustments append audit rows. Project assignment never consumes stock automatically.
+- Material Inventory Samsung repair: the nested project-context modal now owns a complete navigation/backdrop/Android-Back lifecycle above fixed chrome; linear teacher entry uses feet plus inches; Current Stock and History organize by authoritative material family; source selection uses exact material and grouped usable dimensions without displaying internal piece IDs; new ledger rows preserve transaction-time before/after, disposition, class, project, and checkpoint context; Student History derives Materials from that same ledger.
 
 ## Active milestone
 
-Publish and physically test build `material-inventory-v1`. The current Engineering brief records Simulation Foundation v1 as deployed and physically verified; Material Inventory v1 remains unverified on Samsung until the stock-piece, remainder, history, project-context, simulation-isolation, backup, restart, and offline sequence passes.
+Hold build `material-inventory-samsung-repair-1` for publication and focused Samsung retest. Material Inventory v1 domain behavior, Simulation isolation, restart, offline reopen, exact timestamps, and exact-material aggregation are physically proven and must remain regression requirements. The consolidated Samsung repair itself is not yet deployed or physically verified.
 
 ## Immediate settled decisions
 
@@ -46,6 +47,7 @@ Publish and physically test build `material-inventory-v1`. The current Engineeri
 - Normal ARC is Live Classroom. Simulations are separate datasets, never a temporary replacement of the live persistence record. Entering requires a successfully written, read-back, integrity-verified Live Safety Snapshot. Leaving persists the scenario and restores the captured live state/navigation; reset never changes Live Classroom, other simulations, or safety snapshots.
 - Material stock is authoritative at the physical-piece level. Total length is a summary only and never proves that a continuous required length exists. Definitions, current stock, and append-oriented history remain separate; corrections add audit rows instead of rewriting history.
 - Student Project material use may carry student/project context, but assignment and checkpoint operations never deduct inventory. Skill Practice, Shop/School Project, Other Department, Waste/Scrap, and Adjustment remain valid without fake student records.
+- Recovery backups are Live Classroom artifacts. Simulation states remain isolated, persistent, and resettable through Simulation Foundation; active simulations may neither export nor import a file labeled as a Live Classroom backup. Material Inventory backup round-trip testing therefore uses fictional records in Live Classroom after leaving Scenario 3.
 
 ## Intentionally deferred
 
@@ -60,4 +62,4 @@ ARC Student, automatic level promotion, Growth Milestones UI, Advanced Welding C
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow compares public critical assets and build markers to that exact pushed commit. Automated verification can make build `material-inventory-v1` publication-ready; only the physical Samsung pass closes this milestone.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. The `ARC Pages Live Verification` workflow now includes all Material Inventory runtime/presenter/modal assets. Build `material-inventory-samsung-repair-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung pass closes this repair.

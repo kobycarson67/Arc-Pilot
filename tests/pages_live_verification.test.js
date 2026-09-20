@@ -4,7 +4,7 @@ const workflow=fs.readFileSync('.github/workflows/pages-live-verification.yml','
 assert(workflow.includes('branches: [ main ]'),'live verification must follow the configured Pages source branch');
 assert(workflow.includes('https://kobycarson67.github.io/Arc-Pilot'),'guardrail must verify the real public pilot URL');
 assert(workflow.includes('app-build.js?verify=$GITHUB_SHA'),'guardrail must use the immutable build marker with cache busting');
-['index.html','sw.js','app-build.js','src/project_bank.js','src/booth_assignment_lifecycle.js','src/class_forecast.js','src/simulation_foundation.js','src/simulation_fixtures.js','src/app_update_controller.js'].forEach(asset=>assert(workflow.includes(asset),'guardrail must compare '+asset));
+['index.html','sw.js','app-build.js','src/project_bank.js','src/booth_assignment_lifecycle.js','src/class_forecast.js','src/simulation_foundation.js','src/simulation_fixtures.js','src/material_inventory.js','src/material_inventory_presenter.js','src/material_inventory_modal_lifecycle.js','src/app_update_controller.js'].forEach(asset=>assert(workflow.includes(asset),'guardrail must compare '+asset));
 assert(workflow.includes("grep --fixed-strings 'App & Updates'"),'guardrail must verify current Settings UI');
 assert(workflow.includes("grep --fixed-strings 'CURRENT_SCHEMA_VERSION = 7'"),'guardrail must verify current schema shell');
 assert(workflow.includes("grep --fixed-strings 'ensureBoothModel'"),'guardrail must verify Booth Manager shell');

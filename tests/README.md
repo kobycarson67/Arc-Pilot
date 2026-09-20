@@ -14,6 +14,9 @@ node tests/simulation_index_integration.test.js
 node tests/material_inventory_v1.test.js
 node tests/material_inventory_index_integration.test.js
 node tests/simulation_fixtures.test.js
+node tests/material_inventory_samsung_repair.test.js
+node tests/material_inventory_samsung_repair_integration.test.js
+node tests/material_inventory_modal_lifecycle.test.js
 ```
 
 The gate protects contracts that should never disappear silently: the `weld_v013` storage key, schema/migration/recovery paths, grade and attendance engines, pacing, projects, Technical scoring, behavior, photo adapters, PWA installability/offline shell, older-Safari syntax compatibility, and a basic client-secret guardrail.

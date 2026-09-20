@@ -40,7 +40,7 @@ jobs:
             echo 'Public Pages build marker did not reach the pushed main commit.' >&2
             exit 1
           fi
-          for asset in index.html sw.js app-build.js src/project_bank.js src/booth_assignment_lifecycle.js src/class_forecast.js src/simulation_foundation.js src/simulation_fixtures.js src/app_update_controller.js; do
+          for asset in index.html sw.js app-build.js src/project_bank.js src/booth_assignment_lifecycle.js src/class_forecast.js src/simulation_foundation.js src/simulation_fixtures.js src/material_inventory.js src/material_inventory_presenter.js src/material_inventory_modal_lifecycle.js src/app_update_controller.js; do
             mkdir -p "$verify_dir/$(dirname "$asset")"
             curl --fail --silent --show-error --location \
               --header 'Cache-Control: no-cache' \

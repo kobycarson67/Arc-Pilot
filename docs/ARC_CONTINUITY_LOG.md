@@ -170,3 +170,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - One recognizable SVG icon family replaces the ambiguous emoji rail presentation. Open Shop priorities, Project/checkpoint surfaces, and modal headers receive bounded Titanium treatments without changing their domain meaning.
 - Add Station and station-issue resolution now use ARC-native dialogs. Remaining legacy prompts, exact production app-icon artwork, other pathway themes, and future systems are docked.
 - Build `titanium-visual-refinement-1`; schema remains v7. This milestone is local, tested, and packaged only—not published, deployed, or physically verified.
+
+## Titanium Visual Refinement 1 Repair 1
+
+- The exact deployed starting point is commit `c11e5373a6ff9e9cd6290b0a280a52900439bb1d`, tree `522932164bf08aeb511d23035a68a8a05a5693df`, build `titanium-visual-refinement-1`, schema v7. Rollback ref `rollback/titanium-visual-refinement-1-repair-1` targets that commit.
+- Samsung portrait testing proved a Dashboard-local width inconsistency. A single explicit Dashboard boundary now owns Hero, Class Pulse, Current/Selected Class, Today’s Focus/Upcoming Week, Quick Access, and footer, while lower-grid children no longer impose a separate min-content width. Global workspace and Material geometry are unchanged.
+- The collapsed rail now uses an ARC-only crop from the immutable approved primary logo. The crop keeps the exact A/R/C and welding flare/streak pixels and excludes all subtitle, signature, and mastery copy.
+- General, maskable, Apple touch, and favicon assets are deterministic composites of that same ARC-only derivative and the approved industrial source. Manifest, offline cache, Pages verification, and regression hashes cover every production output.
+- Build `titanium-visual-refinement-1-repair-1`; schema remains v7. Do not describe the Samsung findings as physically resolved until this build is published separately and passes the focused tablet retest.

@@ -7,7 +7,12 @@
 }
 
 .arc-brand-mark{display:block;width:76px;height:48px;object-fit:contain;object-position:center;filter:drop-shadow(0 6px 10px #0009)}
-.arc-sidebar-collapsed .arc-brand-mark{width:48px;height:38px}.arc-nav-icon{display:grid;place-items:center}.arc-icon{display:block;width:24px;height:24px}.arc-nav-icon .arc-icon{width:23px;height:23px;stroke-width:1.9}.arc-nav-item.is-active .arc-icon{filter:drop-shadow(0 0 5px #56a5ff99)}
+.arc-sidebar-collapsed .arc-brand-mark{width:58px;height:38px}.arc-nav-icon{display:grid;place-items:center}.arc-icon{display:block;width:24px;height:24px}.arc-nav-icon .arc-icon{width:23px;height:23px;stroke-width:1.9}.arc-nav-item.is-active .arc-icon{filter:drop-shadow(0 0 5px #56a5ff99)}
+
+/* Dashboard owns one explicit content boundary; internal grids may shrink but not widen it. */
+.arc-dashboard{inline-size:100%;max-inline-size:none;min-inline-size:0}
+.arc-dashboard>.arc-dashboard-hero,.arc-dashboard>.arc-dashboard-pulse,.arc-dashboard>.arc-dashboard-actions,.arc-dashboard>.arc-dashboard-lower,.arc-dashboard>.arc-dashboard-quick,.arc-dashboard>.arc-dashboard-footer{inline-size:100%;max-inline-size:none;min-inline-size:0;box-sizing:border-box}
+.arc-dashboard-lower>*{min-width:0;max-width:100%}
 
 .arc-dashboard-hero{min-height:380px;align-items:stretch;padding:0;background-image:url("../assets/brand/runtime/arc-welding-dashboard-hero-1440.webp");background-size:cover;background-position:center 48%;border-color:#53677f;isolation:isolate}
 .arc-dashboard-hero:after{display:none}.arc-dashboard-hero-shade{position:absolute;z-index:0;inset:0;background:linear-gradient(90deg,#05080deb 0,#07101bd1 31%,#07111b45 58%,#05080dd9 100%),linear-gradient(0deg,#05080de3 0,transparent 48%)}

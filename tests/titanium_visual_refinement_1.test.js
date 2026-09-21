@@ -19,7 +19,7 @@ for(const [file,expected] of Object.entries(assets)){
   assert(fs.existsSync(file),'missing approved source asset '+file);
   assert.strictEqual(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),expected,'approved asset bytes changed: '+file);
 }
-const runtime=['arc-welding-dashboard-hero-1440.webp','arc-titanium-industrial-background-1440.webp','arc-welding-primary-logo-960.png','arc-welding-compact-mark-720.png'];
+const runtime=['arc-welding-dashboard-hero-1440.webp','arc-titanium-industrial-background-1440.webp','arc-welding-primary-logo-960.png','arc-welding-lettermark-720.png'];
 for(const file of runtime){
   const path='assets/brand/runtime/'+file;
   assert(fs.existsSync(path),'missing optimized runtime asset '+path);
@@ -30,7 +30,7 @@ for(const file of runtime){
 assert(html.indexOf('src/arc_icons.js')<html.indexOf('src/arc_titanium_shell.js'),'icons must load before the shell');
 assert(html.indexOf('src/arc_titanium_visual_refinement_1.css')>html.indexOf('src/arc_titanium_visual_system.css'),'refinement layer must follow the visual system');
 assert(sw.includes("'./src/arc_icons.js'")&&sw.includes("'./src/arc_titanium_visual_refinement_1.css'"));
-assert(build.includes("build:'titanium-visual-refinement-1'"));
+assert(build.includes("build:'titanium-visual-refinement-1-repair-1'"));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'),'schema must remain v7');
 
 ['dashboard','students','forecast','attendance','projects','openshop','lessonbank','projectbank','standards','inventory','booths','notifications','search','help','settings','add'].forEach(name=>{
@@ -40,7 +40,7 @@ assert(!/[🏠👥📈✅🛠🔥📖📦📋]/u.test(shell),'shell must not use
 assert(html.includes('ArcIcons.svg(item.icon)'));
 assert(html.includes('aria-label="${item.label}"'));
 
-['arc-welding-primary-logo-960.png','arc-welding-dashboard-hero-1440.webp','arc-titanium-industrial-background-1440.webp','arc-welding-compact-mark-720.png'].forEach(file=>assert((html+css).includes(file),'approved asset not integrated: '+file));
+['arc-welding-primary-logo-960.png','arc-welding-dashboard-hero-1440.webp','arc-titanium-industrial-background-1440.webp','arc-welding-lettermark-720.png'].forEach(file=>assert((html+css).includes(file),'approved asset not integrated: '+file));
 assert(html.includes('function renderMainMenu()'));
 assert(html.includes('Class Pulse'));
 assert(html.includes('ArcClassForecast.build({ state, section: selectedClass, students: classList'),'Dashboard pulse must use authoritative Forecast derivation');

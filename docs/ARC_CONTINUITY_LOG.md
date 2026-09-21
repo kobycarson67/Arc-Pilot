@@ -161,3 +161,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The visual layer loads after the legacy inline presentation and is included in the offline shell and Pages asset-verification list. Focus visibility, tablet touch targets, narrow portrait layout, increased contrast, and reduced-motion preferences remain explicit contracts.
 - No authorized local hero image was available in the handoff/workspace. The milestone uses CSS-only industrial depth and introduces no remote or substitute imagery. Future authorized pathway photography remains an asset task.
 - Build `titanium-visual-system-1`; schema remains v7. This milestone is packaged only and must not be described as published, deployed, or physically verified until its focused Samsung pass succeeds.
+
+## Titanium Visual Refinement 1
+
+- The exact deployed and physically verified starting point is commit `0c258c42d89087fac6f5d1d5118f1eaa503aecc5`, tree `9058307c2407dded7bc4366ee02b2bc76c7b4b99`, build `titanium-visual-system-1`, schema v7. Rollback ref `rollback/titanium-visual-refinement-1` targets that commit.
+- Exact supplied ARC source artwork is retained with checksums; optimized local hero, industrial background, full logo, and compact approved-art crop are cached offline. No brand letters were redrawn, interlocked, or allowed to share edges.
+- Dashboard now uses the approved visual composition with authoritative schedule, class, and Forecast facts. Today's Focus remains explicitly unconfigured. Challenge Hub and the established unique work destinations remain available.
+- One recognizable SVG icon family replaces the ambiguous emoji rail presentation. Open Shop priorities, Project/checkpoint surfaces, and modal headers receive bounded Titanium treatments without changing their domain meaning.
+- Add Station and station-issue resolution now use ARC-native dialogs. Remaining legacy prompts, exact production app-icon artwork, other pathway themes, and future systems are docked.
+- Build `titanium-visual-refinement-1`; schema remains v7. This milestone is local, tested, and packaged only—not published, deployed, or physically verified.

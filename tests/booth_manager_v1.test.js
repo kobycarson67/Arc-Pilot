@@ -41,7 +41,8 @@ const boothManagerBody=html.slice(html.indexOf('function showBoothManager()'),ht
 assert(!boothManagerBody.includes('className = "modal show"'),'Booth Manager must not be a viewport-blocking modal');
 assert(has('class="booth-manager-page"'),'Booth Manager page layout missing');
 assert(has('function activeBooths()'),'active booth configuration filter missing');
-assert(has('function addBooth()'),'Add Booth control missing');
+assert(has('function showAddStationDialog()'),'Add Station control missing');
+assert(has('function saveNewStation()'),'Add Station save action missing');
 assert(has('state.booths.push'),'added booths must use persisted state');
 assert(has('function requestRemoveBooth'),'Remove Booth confirmation missing');
 assert(has('function confirmRemoveBooth'),'confirmed booth removal missing');

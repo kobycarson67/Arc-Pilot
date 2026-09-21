@@ -30,10 +30,11 @@
 - Titanium Foundation: ARC now has a persistent, collapsible tablet sidebar/icon rail, compact contextual header, selected-route state, class switching, and a factual class dashboard. ARC Core navigation is separate from the class/program-derived Welding/Titanium identity. All former header capabilities retain their established function owners, while normal global navigation remains reachable above transient work surfaces.
 - Titanium Foundation Repair 1: Current Class is now schedule/calendar/time-derived and distinct from Selected Class; scenarios enter/reset at Dashboard/Home without a selected class; Live and scenario session-navigation contexts are isolated; normal transients begin at the rail-reserved workspace boundary; portrait drawer and Android Back behavior are coherent; redundant legacy Main Menu cards are retired while unique resources remain.
 - Titanium Visual System 1: pathway-scoped semantic tokens and shared components replace the remaining prototype-light presentation with a coherent charcoal/silver/electric-blue Welding/Titanium system across the shell and representative ARC workflows. Functional state colors, tablet geometry, class context, Simulation isolation, domain calculations, and schema remain unchanged.
+- Titanium Visual Refinement 1: exact approved ARC artwork now anchors Dashboard and Welding/Titanium identity; authoritative schedule and Forecast facts form the first-view hierarchy; a coherent icon family replaces emoji; Open Shop priorities, Projects, and modal headers receive bounded repairs; Add Station and issue resolution use native ARC dialogs.
 
 ## Active milestone
 
-Hold build `titanium-visual-system-1` for focused Samsung visual/functional retest. Titanium Foundation and Foundation Repair 1 are physically verified baselines. This Visual System milestone is not published, deployed, or physically verified.
+Hold build `titanium-visual-refinement-1` for focused Samsung visual/functional retest. Titanium Foundation, Foundation Repair 1, and Titanium Visual System 1 are physically verified baselines. This refinement milestone is not published, deployed, or physically verified.
 
 ## Immediate settled decisions
 
@@ -68,4 +69,4 @@ The code contains pacing forecasts and actual instructional dates but no authori
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `titanium-visual-system-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung visual/functional pass closes this milestone.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `titanium-visual-refinement-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung visual/functional pass closes this milestone.

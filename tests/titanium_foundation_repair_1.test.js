@@ -28,7 +28,8 @@ const entry=html.slice(html.indexOf('function enterSimulation'),html.indexOf('fu
 assert(dashboard.includes('ArcTitaniumShell.currentClass(state, ctx)'));
 assert(dashboard.includes('ArcTitaniumShell.selectedClass(state)'));
 assert(dashboard.includes('No Current Class'));
-assert(dashboard.includes('Selected Class Snapshot'));
+assert(dashboard.includes('Class Pulse'));
+assert(dashboard.includes('Selected Class'));
 assert(!dashboard.includes('Open the authoritative roster'));
 assert(!dashboard.includes('<h3>Current Classes</h3>'));
 assert(!dashboard.includes('<h3>Curriculum & Planning</h3>'));

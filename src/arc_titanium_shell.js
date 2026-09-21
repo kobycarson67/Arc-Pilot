@@ -9,28 +9,28 @@
   var PATHWAYS={welding:{id:'welding',name:'Advanced Welding Classroom',statement:'More Than Welding. A Brighter Future.',theme:'titanium-welding'}};
   var GROUPS=[
     {id:'classroom',label:'Classroom',items:[
-      {id:'main',label:'Dashboard',icon:'⌂',action:'renderMainMenu'},
-      {id:'roster',label:'Students / Roster',icon:'◎',action:'renderRoster',classScoped:true},
-      {id:'forecast',label:'Class Forecast',icon:'◇',action:'renderClassForecast',classScoped:true},
-      {id:'attendance',label:'Attendance & Passes',icon:'✓',action:'renderAttendance',classScoped:true},
-      {id:'projects',label:'Projects',icon:'▤',action:'showClassProjects',classScoped:true},
-      {id:'openshop',label:'Open Shop',icon:'↗',action:'renderOpenShopAll',classScoped:true}
+      {id:'main',label:'Dashboard',icon:'dashboard',action:'renderMainMenu'},
+      {id:'roster',label:'Students / Roster',icon:'students',action:'renderRoster',classScoped:true},
+      {id:'forecast',label:'Class Forecast',icon:'forecast',action:'renderClassForecast',classScoped:true},
+      {id:'attendance',label:'Attendance & Passes',icon:'attendance',action:'renderAttendance',classScoped:true},
+      {id:'projects',label:'Projects',icon:'projects',action:'showClassProjects',classScoped:true},
+      {id:'openshop',label:'Open Shop',icon:'openshop',action:'renderOpenShopAll',classScoped:true}
     ]},
     {id:'instruction',label:'Instruction',items:[
-      {id:'today-focus',label:"Today's Focus",icon:'◉',future:true},
-      {id:'lessonbank',label:'Lesson Plan Bank',icon:'▥',action:'renderLessonBank'},
-      {id:'projectbank',label:'Project Bank',icon:'▧',action:'renderProjectBank'},
-      {id:'standards',label:'Curriculum & Standards',icon:'≡',action:'renderActiveCurriculum'}
+      {id:'today-focus',label:"Today's Focus",icon:'focus',future:true},
+      {id:'lessonbank',label:'Lesson Plan Bank',icon:'lessonbank',action:'renderLessonBank'},
+      {id:'projectbank',label:'Project Bank',icon:'projectbank',action:'renderProjectBank'},
+      {id:'standards',label:'Curriculum & Standards',icon:'standards',action:'renderActiveCurriculum'}
     ]},
     {id:'shop',label:'Shop',items:[
-      {id:'inventory',label:'Material Inventory',icon:'▦',action:'renderInventory'},
-      {id:'booths',label:'Booth Manager',icon:'⌗',action:'showBoothManager',classScoped:true}
+      {id:'inventory',label:'Material Inventory',icon:'inventory',action:'renderInventory'},
+      {id:'booths',label:'Booth Manager',icon:'booths',action:'showBoothManager',classScoped:true}
     ]},
     {id:'arc',label:'ARC',items:[
-      {id:'notifications',label:'Notifications',icon:'●',action:'showNotifications'},
-      {id:'search',label:'Search',icon:'⌕',action:'showGlobalSearch'},
-      {id:'help',label:'Help',icon:'?',future:true},
-      {id:'settings',label:'Settings',icon:'⚙',action:'renderAppSettings'}
+      {id:'notifications',label:'Notifications',icon:'notifications',action:'showNotifications'},
+      {id:'search',label:'Search',icon:'search',action:'showGlobalSearch'},
+      {id:'help',label:'Help',icon:'help',future:true},
+      {id:'settings',label:'Settings',icon:'settings',action:'renderAppSettings'}
     ]}
   ];
   function pathwayId(section){

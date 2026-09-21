@@ -32,7 +32,7 @@ test('inventory dialog outranks the later generic modal rule and owns body scrol
 });
 
 test('station management is native and preserves custom names and history authority',()=>{
-  const edit=html.slice(html.indexOf('function editBooth('),html.indexOf('function resolveBoothIssue('));
+  const edit=html.slice(html.indexOf('function editBooth('),html.indexOf('function showResolveBoothIssue('));
   assert(edit.includes('Manage Station'));
   assert(edit.includes('Station name'));
   assert(edit.includes('Equipment / Resources'));
@@ -79,7 +79,7 @@ test('Teaching Tips uses distinct lesson-connected shop guidance',()=>{
 
 test('schema remains v7 and build is truthful',()=>{
   assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-  assert(fs.readFileSync('app-build.js','utf8').includes("build:'titanium-visual-system-1'"));
+  assert(fs.readFileSync('app-build.js','utf8').includes("build:'titanium-visual-refinement-1'"));
 });
 
 if(!process.exitCode)console.log('\n'+pass+'/'+total+' Pre-Titanium UX Stabilization tests passed.');

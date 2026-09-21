@@ -20,11 +20,11 @@ The Foundation Repair suite caught an omitted Challenge Hub Dashboard entry duri
 
 ## Asset handling
 
-All four supplied files were inspected. Exact source bytes and hashes are retained under `assets/brand/source`; optimized local variants are under `assets/brand/runtime` and are cached for offline use. The logo remains PNG where transparency matters. The compact rail treatment is a crop/resize of the supplied artwork, never a reconstruction. Exact source hashes and derivation notes are recorded in `assets/brand/README.md` and enforced by regression.
+All four supplied files were inspected. Exact source bytes and hashes are retained under `assets/brand/source`; optimized local variants are under `assets/brand/runtime` and are cached for offline use. The logo remains PNG where transparency matters. Exact source hashes and derivation notes are recorded in `assets/brand/README.md` and enforced by regression. The original compact crop and docked icon decision were superseded by Titanium Visual Refinement 1 Repair 1 after physical Samsung review.
 
 ## Deliberate boundaries
 
-- The app/install icon is unchanged. No approved square logo conversion or mask-safe artwork was supplied.
+- Production app/install icon conversion was originally docked here and is resolved deterministically in Titanium Visual Refinement 1 Repair 1 using only the approved primary logo and industrial background.
 - The repository contains many legacy browser prompts. Only the two findings named by this milestone—Add Station and station-issue resolution—were replaced; broad prompt conversion is a later surface-by-surface task.
 - Today's Focus remains an honest disabled future connection because ARC still has no authoritative class/date lesson assignment.
 - No purchasing/readiness, Presentation guidance, Help system, other pathway theme, or new Dashboard metric was fabricated.

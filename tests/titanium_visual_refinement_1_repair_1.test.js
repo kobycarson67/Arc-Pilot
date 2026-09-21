@@ -25,12 +25,12 @@ for(const [file,hash] of Object.entries(approved)) assert.strictEqual(sha(file),
 
 const derivatives={
   'assets/brand/runtime/arc-welding-lettermark-720.png':[[720,144],'8f704c138ac8e32a4ef8ac76e3561677e3b5b500f232d36d8d7c0fbc142c4be1'],
-  'icons/favicon-32.png':[[32,32],'eba86ceff3722534e313eb660a20f60d90315407da25b788839c1123759d8970'],
-  'icons/apple-touch-icon-180.png':[[180,180],'930010ce9c10195d6bc00c56d3da79405c090563a5ac93efe102cbbe91adba6c'],
-  'icons/icon-192.png':[[192,192],'aea9731650741cee6c986c51ba3f3caa0976cfc6c145bdca7329a09fd927480b'],
-  'icons/icon-512.png':[[512,512],'e8a6cc7461df996e439351ab976f4cdcbee811153433715434547330734570a2'],
-  'icons/icon-maskable-192.png':[[192,192],'7aa98bcd3062bda79b0a15b111a15c4b088c213c242d718ebbdba17e82e535d7'],
-  'icons/icon-maskable-512.png':[[512,512],'fc3e82250828505165fec5c6e0a77e0f332990fcb9d8c31fef17bd5a2e159f2d']
+  'icons/favicon-32.png':[[32,32],'51fe45cf52c8ad9a574dd76cf122829db632025fffdf869b0c3667898e3f91a2'],
+  'icons/apple-touch-icon-180.png':[[180,180],'4347bc5075b4d57e770a251aabc8885b6c7724647467152c11f9d4a0585eb436'],
+  'icons/icon-192.png':[[192,192],'cab1cdb8c7abe60a43317766e3224ca8e6e692329c205294b1bd20740b156c10'],
+  'icons/icon-512.png':[[512,512],'eed330ffcdc049ef7d9c5b86cc59e2d3ab07265732a3de91669d7f4be7d59366'],
+  'icons/icon-maskable-192.png':[[192,192],'41689f8ce153ada79be5959b35f46e9d9886356ab1ab26cc6716200cd0883a67'],
+  'icons/icon-maskable-512.png':[[512,512],'cdcd6e9fe733c8160a823e6dcf259a4bdf45213d497f955dba38e7e4b99cebcb']
 };
 for(const [file,[size,hash]] of Object.entries(derivatives)){
   assert.deepStrictEqual(pngSize(file),size,'wrong derivative dimensions: '+file);
@@ -41,7 +41,11 @@ for(const [file,[size,hash]] of Object.entries(derivatives)){
 
 assert(builder.includes('LETTERMARK_CROP = (0, 0, 2048, 410)'));
 assert(builder.includes('lettermark = source.crop(LETTERMARK_CROP)'));
-assert(builder.includes('background.alpha_composite(mark'));
+assert(builder.includes('source.alpha_composite(mark'));
+assert(builder.includes('(0, 0, size - 1, size - 1)'),'gold perimeter must begin at the canvas boundary');
+assert(builder.includes('0.78 if maskable else 0.925'),'ARC fit must distinguish safe-zone and general masters');
+assert(builder.includes('general.resize((192, 192), LANCZOS)'),'small general icons must derive from the 512 master');
+assert(builder.includes('maskable.resize((192, 192), LANCZOS)'),'small maskable icons must derive from the 512 master');
 assert(!builder.match(/ImageFont|text\(/),'builder must not redraw ARC letters');
 assert(html.includes('src="assets/brand/runtime/arc-welding-lettermark-720.png" alt="ARC"'));
 assert(!html.includes('src="assets/brand/runtime/arc-welding-compact-mark-720.png"'));

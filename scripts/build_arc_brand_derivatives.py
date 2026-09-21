@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build ARC-only rail and install artwork from approved repository sources.
+"""Build approved ARC branding and install artwork from repository sources.
 
 No letterform is drawn or reconstructed here. The immutable ARC pixels are
 cropped from the approved primary logo, resized proportionally, and composited.
@@ -19,6 +19,11 @@ ICONS = ROOT / "icons"
 # Pixel boundary between the approved ARC lettermark and the subtitle stack.
 # The crop keeps the complete flare/streak and preserves all source x positions.
 LETTERMARK_CROP = (0, 0, 2048, 410)
+# Measured from the approved source using opaque, low-saturation metallic
+# pixels. The welding flare remains part of the immutable lettermark but does
+# not influence optical centering.
+ARC_BODY_BOUNDS = (244, 10, 1745, 409)
+SUBTITLE_CROP = (250, 415, 1750, 480)
 LANCZOS = Image.Resampling.LANCZOS
 
 
@@ -61,6 +66,18 @@ def _metal_field(size):
     return field
 
 
+def _compose_compact_rail(source):
+    """Stack approved ARC and subtitle pixels without font reconstruction."""
+    lettermark = source.crop(LETTERMARK_CROP)
+    subtitle = source.crop(SUBTITLE_CROP)
+    lettermark = fit(lettermark, 720, 148)
+    subtitle = fit(subtitle, 680, 38)
+    compact = Image.new("RGBA", (720, 194), (0, 0, 0, 0))
+    compact.alpha_composite(lettermark, ((720 - lettermark.width) // 2, 0))
+    compact.alpha_composite(subtitle, ((720 - subtitle.width) // 2, 154))
+    return compact
+
+
 def _icon_master(lettermark, maskable=False):
     """Render the approved artwork at 2x, then resolve the 512px master."""
     size = 1024
@@ -83,47 +100,46 @@ def _icon_master(lettermark, maskable=False):
             light_px[x, y] = (24, 105, 170, alpha)
     source = Image.alpha_composite(source, light)
 
-    # The polished perimeter begins at the actual canvas boundary. There is no
-    # ordinary-background band outside it. Multiple masks create reflective
-    # metal depth rather than a flat yellow outline.
     outer = Image.new("L", (size, size), 0)
     ImageDraw.Draw(outer).rounded_rectangle((0, 0, size - 1, size - 1), radius=150, fill=255)
-    inner_inset = 27
-    inner = Image.new("L", (size, size), 0)
-    ImageDraw.Draw(inner).rounded_rectangle(
-        (inner_inset, inner_inset, size - inner_inset - 1, size - inner_inset - 1),
-        radius=126,
-        fill=255,
-    )
-    ring = ImageChops.subtract(outer, inner)
-    glow = ring.filter(ImageFilter.GaussianBlur(18))
-    glow_layer = Image.new("RGBA", (size, size), (236, 178, 66, 0))
-    glow_layer.putalpha(glow.point(lambda value: round(value * 0.42)))
-    source = Image.alpha_composite(source, glow_layer)
-    metal = _metal_field(size)
-    metal.putalpha(ring)
-    source = Image.alpha_composite(source, metal)
+    if not maskable:
+        # A 12px supersampled ring resolves to a fine 6px / 1.172% rim at the
+        # 512px production size. Its physical object begins at the canvas edge.
+        inner_inset = 12
+        inner = Image.new("L", (size, size), 0)
+        ImageDraw.Draw(inner).rounded_rectangle(
+            (inner_inset, inner_inset, size - inner_inset - 1, size - inner_inset - 1),
+            radius=138,
+            fill=255,
+        )
+        ring = ImageChops.subtract(outer, inner)
+        glow = ring.filter(ImageFilter.GaussianBlur(10))
+        glow_layer = Image.new("RGBA", (size, size), (230, 164, 50, 0))
+        glow_layer.putalpha(glow.point(lambda value: round(value * 0.24)))
+        source = Image.alpha_composite(source, glow_layer)
+        metal = _metal_field(size)
+        metal.putalpha(ring)
+        source = Image.alpha_composite(source, metal)
 
-    # Fine inner/outer highlights provide a polished edge at normal icon size.
-    edge = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    edge_draw = ImageDraw.Draw(edge)
-    edge_draw.rounded_rectangle((2, 2, size - 3, size - 3), radius=148, outline=(255, 231, 158, 230), width=4)
-    edge_draw.rounded_rectangle((inner_inset, inner_inset, size - inner_inset - 1, size - inner_inset - 1), radius=126, outline=(99, 59, 17, 210), width=5)
-    edge_draw.rounded_rectangle((inner_inset + 5, inner_inset + 5, size - inner_inset - 6, size - inner_inset - 6), radius=121, outline=(255, 215, 119, 145), width=3)
-    source = Image.alpha_composite(source, edge)
+        edge = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+        edge_draw = ImageDraw.Draw(edge)
+        edge_draw.rounded_rectangle((1, 1, size - 2, size - 2), radius=149, outline=(255, 247, 210, 245), width=2)
+        edge_draw.rounded_rectangle((4, 4, size - 5, size - 5), radius=146, outline=(221, 166, 72, 210), width=3)
+        edge_draw.rounded_rectangle((inner_inset - 2, inner_inset - 2, size - inner_inset + 1, size - inner_inset + 1), radius=140, outline=(91, 51, 12, 235), width=3)
+        edge_draw.rounded_rectangle((inner_inset, inner_inset, size - inner_inset - 1, size - inner_inset - 1), radius=138, outline=(255, 222, 132, 205), width=2)
+        source = Image.alpha_composite(source, edge)
+        source.putalpha(outer)
 
-    # Remove only sub-visible alpha fringe from the locked derivative so its
-    # actual artwork—not transparent canvas—controls fit. Pixel geometry and
-    # relative A/R/C spacing remain untouched.
-    visible_alpha = lettermark.getchannel("A").point(lambda value: 255 if value >= 8 else 0)
-    visible_box = visible_alpha.getbbox()
-    if visible_box != (34, 3, 617, 144):
-        raise RuntimeError(f"Unexpected locked-lettermark visible bounds: {visible_box}")
-    icon_mark = lettermark.crop(visible_box)
-    mark_width = round(size * (0.78 if maskable else 0.925))
-    mark = fit(icon_mark, mark_width, round(size * 0.29))
-    x = (size - mark.width) // 2
-    y = round(size * 0.475 - mark.height / 2)
+    # Optical centering uses the metallic A/R/C body, not the asymmetric flare
+    # or its glow. The complete immutable lettermark remains composited.
+    body_left, body_top, body_right, body_bottom = ARC_BODY_BOUNDS
+    body_width = body_right - body_left
+    scale = 0.395 if maskable else 0.485
+    mark = lettermark.resize((round(lettermark.width * scale), round(lettermark.height * scale)), LANCZOS)
+    body_center_x = (body_left + body_right) / 2 * scale
+    body_center_y = (body_top + body_bottom) / 2 * scale
+    x = round(size / 2 - body_center_x)
+    y = round(size / 2 - body_center_y)
     shadow = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     shadow.alpha_composite(mark, (x, y + 10))
     shadow_alpha = shadow.getchannel("A").filter(ImageFilter.GaussianBlur(12))
@@ -137,11 +153,13 @@ def _icon_master(lettermark, maskable=False):
 def _favicon(lettermark, master):
     """Simplify at tiny scale while retaining the exact approved ARC pixels."""
     canvas = master.resize((256, 256), LANCZOS)
-    alpha = lettermark.getchannel("A").point(lambda value: 255 if value >= 8 else 0)
-    mark = fit(lettermark.crop(alpha.getbbox()), 244, 78)
+    scale = 0.116
+    mark = lettermark.resize((round(lettermark.width * scale), round(lettermark.height * scale)), LANCZOS)
+    body_center_x = (ARC_BODY_BOUNDS[0] + ARC_BODY_BOUNDS[2]) / 2 * scale
+    body_center_y = (ARC_BODY_BOUNDS[1] + ARC_BODY_BOUNDS[3]) / 2 * scale
     shade = Image.new("RGBA", canvas.size, (1, 10, 20, 205))
     canvas = Image.alpha_composite(canvas, shade)
-    canvas.alpha_composite(mark, ((256 - mark.width) // 2, (256 - mark.height) // 2))
+    canvas.alpha_composite(mark, (round(128 - body_center_x), round(128 - body_center_y)))
     return canvas.resize((32, 32), LANCZOS)
 
 
@@ -159,9 +177,10 @@ def main():
     lettermark = lettermark.crop(alpha_box)
     rail = contain(lettermark, 720, 720)
     rail.save(RUNTIME / "arc-welding-lettermark-720.png", optimize=True)
+    _compose_compact_rail(source).save(RUNTIME / "arc-welding-compact-lockup-720.png", optimize=True)
 
-    general = _icon_master(rail, False)
-    maskable = _icon_master(rail, True)
+    general = _icon_master(lettermark, False)
+    maskable = _icon_master(lettermark, True)
     general.save(ICONS / "icon-512.png", optimize=True)
     maskable.save(ICONS / "icon-maskable-512.png", optimize=True)
     general.resize((192, 192), LANCZOS).save(ICONS / "icon-192.png", optimize=True)

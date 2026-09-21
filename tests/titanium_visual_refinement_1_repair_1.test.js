@@ -25,12 +25,13 @@ for(const [file,hash] of Object.entries(approved)) assert.strictEqual(sha(file),
 
 const derivatives={
   'assets/brand/runtime/arc-welding-lettermark-720.png':[[720,144],'8f704c138ac8e32a4ef8ac76e3561677e3b5b500f232d36d8d7c0fbc142c4be1'],
-  'icons/favicon-32.png':[[32,32],'51fe45cf52c8ad9a574dd76cf122829db632025fffdf869b0c3667898e3f91a2'],
-  'icons/apple-touch-icon-180.png':[[180,180],'4347bc5075b4d57e770a251aabc8885b6c7724647467152c11f9d4a0585eb436'],
-  'icons/icon-192.png':[[192,192],'cab1cdb8c7abe60a43317766e3224ca8e6e692329c205294b1bd20740b156c10'],
-  'icons/icon-512.png':[[512,512],'eed330ffcdc049ef7d9c5b86cc59e2d3ab07265732a3de91669d7f4be7d59366'],
-  'icons/icon-maskable-192.png':[[192,192],'41689f8ce153ada79be5959b35f46e9d9886356ab1ab26cc6716200cd0883a67'],
-  'icons/icon-maskable-512.png':[[512,512],'cdcd6e9fe733c8160a823e6dcf259a4bdf45213d497f955dba38e7e4b99cebcb']
+  'assets/brand/runtime/arc-welding-compact-lockup-720.png':[[720,194],'64a81ea22bc57220238616374db60905e4fb1198faa491150c859f32adb429df'],
+  'icons/favicon-32.png':[[32,32],'1325ac54e6c511b9794eb8495b32964a7cb62fc65bcc3bcdc17d7a4cd4348a6b'],
+  'icons/apple-touch-icon-180.png':[[180,180],'62ae6c91a8a99816dd13731bff90d8849943e81ba21517f8673827ed090d09f2'],
+  'icons/icon-192.png':[[192,192],'42d0e7ec26f2079167af7db8342fe05374c6c4463b8705245126306fd851ebc2'],
+  'icons/icon-512.png':[[512,512],'ee7817ccc9f032497bcd43e44eecc43be873351ffa29f1cf76d46634d982cf28'],
+  'icons/icon-maskable-192.png':[[192,192],'93177d77e079381b2cd2edda90a324eec399f2ad8887987d8ef10793b8833634'],
+  'icons/icon-maskable-512.png':[[512,512],'d22754b4c5e1bd9705380692ee391fa28d979e3cb57dac5daceecdb9134f13fb']
 };
 for(const [file,[size,hash]] of Object.entries(derivatives)){
   assert.deepStrictEqual(pngSize(file),size,'wrong derivative dimensions: '+file);
@@ -43,12 +44,17 @@ assert(builder.includes('LETTERMARK_CROP = (0, 0, 2048, 410)'));
 assert(builder.includes('lettermark = source.crop(LETTERMARK_CROP)'));
 assert(builder.includes('source.alpha_composite(mark'));
 assert(builder.includes('(0, 0, size - 1, size - 1)'),'gold perimeter must begin at the canvas boundary');
-assert(builder.includes('0.78 if maskable else 0.925'),'ARC fit must distinguish safe-zone and general masters');
+assert(builder.includes('ARC_BODY_BOUNDS = (244, 10, 1745, 409)'),'optical centering must use measured metallic-body bounds');
+assert(builder.includes('scale = 0.395 if maskable else 0.485'),'ARC fit must distinguish safe-zone and general masters');
+assert(builder.includes('if not maskable:'),'maskable artwork must not bake in a false rounded-square perimeter');
+assert(builder.includes('inner_inset = 12'),'general master must use the fine six-pixel production rim');
+assert(builder.includes('SUBTITLE_CROP = (250, 415, 1750, 480)'),'compact subtitle must derive from approved source pixels');
 assert(builder.includes('general.resize((192, 192), LANCZOS)'),'small general icons must derive from the 512 master');
 assert(builder.includes('maskable.resize((192, 192), LANCZOS)'),'small maskable icons must derive from the 512 master');
 assert(!builder.match(/ImageFont|text\(/),'builder must not redraw ARC letters');
 assert(html.includes('src="assets/brand/runtime/arc-welding-lettermark-720.png" alt="ARC"'));
-assert(!html.includes('src="assets/brand/runtime/arc-welding-compact-mark-720.png"'));
+assert(html.includes('src="assets/brand/runtime/arc-welding-compact-lockup-720.png" alt="ARC — Advanced Welding Classroom"'));
+assert(refinement.includes('.arc-sidebar-collapsed .arc-brand-mark-compact{display:block;width:68px;height:32px}'));
 
 assert(html.includes('<div class="arc-dashboard"><section class="arc-dashboard-hero"'));
 assert(refinement.includes('.arc-dashboard{inline-size:100%;max-inline-size:none;min-inline-size:0}'));

@@ -32,10 +32,11 @@
 - Titanium Visual System 1: pathway-scoped semantic tokens and shared components replace the remaining prototype-light presentation with a coherent charcoal/silver/electric-blue Welding/Titanium system across the shell and representative ARC workflows. Functional state colors, tablet geometry, class context, Simulation isolation, domain calculations, and schema remain unchanged.
 - Titanium Visual Refinement 1: exact approved ARC artwork now anchors Dashboard and Welding/Titanium identity; authoritative schedule and Forecast facts form the first-view hierarchy; a coherent icon family replaces emoji; Open Shop priorities, Projects, and modal headers receive bounded repairs; Add Station and issue resolution use native ARC dialogs.
 - Titanium Visual Refinement 1 Repair 1: one explicit Dashboard boundary removes the Samsung portrait width stepping; the rail uses the approved ARC-only source crop; production general, maskable, Apple touch, and favicon artwork uses the same immutable lettermark over approved industrial atmosphere.
+- Classes Dropdown Overlay Repair: the global Classes menu remains an overlay and is now right-anchored and bounded to the rail-reduced workspace. Opening it no longer extends document width or changes destination geometry; class selection and all classroom authority remain unchanged.
 
 ## Active milestone
 
-Hold build `titanium-visual-refinement-1-repair-1` for focused Samsung visual/functional retest. The deployed Visual Refinement 1 tree remains the rollback baseline. This repair is not published, deployed, or physically verified.
+Hold build `classes-dropdown-overlay-repair-1` for the focused Samsung overlay/geometry retest. The deployed Titanium Visual Refinement 1 Repair 1 publication commit remains the rollback baseline. This repair is not published, deployed, or physically verified.
 
 ## Immediate settled decisions
 
@@ -70,4 +71,4 @@ The code contains pacing forecasts and actual instructional dates but no authori
 
 ## Testing and next action
 
-The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `titanium-visual-refinement-1-repair-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung visual/functional pass closes this milestone.
+The repository's complete static and JavaScript regression suite is the code gate. Pages publishes `main` from the repository root, so a tested development commit must be deliberately promoted to `main`. Build `classes-dropdown-overlay-repair-1` must remain unpublished until the requested publication process is separately engaged; only the focused physical Samsung overlay/geometry pass closes this milestone.

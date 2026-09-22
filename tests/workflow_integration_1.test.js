@@ -52,22 +52,22 @@ test('deep links reuse exact student, assignment, checkpoint and competency IDs'
   assert.match(html,/Ranked Open Shop Choices[\s\S]*?viewStudentCompetency\('\$\{s\.id\}','\$\{x\.c\.code\}'\)/);
   assert.match(html,/function viewStudentCompetency\(studentId, code\)/);
   assert.match(html,/function openKnownStudentProject\(studentId, assignmentId, checkpointId/);
-  assert.match(html,/showProjectCheckpointDetails\(assignmentId, checkpointId\)/);
+  assert.doesNotMatch(html.slice(html.indexOf('function openKnownStudentProject('),html.indexOf('function showProjectOperations(')),/showProjectCheckpointDetails|showProjectOperations|showAssignedProjectInfo|openProject/);
   assert.match(html,/classForecastOpenStudent\('\$\{item\.studentId\}','\$\{assignmentId \|\| ""\}','\$\{checkpointId\}','\$\{stageId\}'\)/);
   assert.match(html,/function fastRosterNeedHtml[\s\S]*?openStudentProjectAssigner/);
   assert.match(html,/function openStudentProjectAssigner\(studentId\) \{ openStudent\(studentId\); tab = "projects"; renderModal\(\); showProjectAssigner\(\); \}/);
 });
 
-test('known project navigation resolves exact assignment and checkpoint without assignment writes', () => {
+test('known project navigation stops at the exact assignment card without opening actions', () => {
   const source = html.slice(html.indexOf('function openKnownStudentProject('),html.indexOf('function showProjectOperations('));
   const project = {id:'pa_2',name:'Exact Build',checkpoints:[{id:'cp_3',status:'ready_for_review'}]}, student = {id:'stu_1',projects:[project]};
-  const calls = [], target = {getAttribute:() => 'pa_2',scrollIntoView:() => calls.push('scroll')};
-  const context = {allStudents:() => [student],openStudent:id => calls.push('student:'+id),renderModal:() => calls.push('projects'),document:{querySelectorAll:() => [target]},showProjectCheckpointDetails:(id,checkpoint) => calls.push(id+':'+checkpoint),showProjectOperations:(id,assignment,stage) => calls.push(id+':'+assignment+':'+stage),ArcProjectCheckpoints:{hasCheckpointData:() => true,viewForProject:() => ({checkpoints:project.checkpoints})},tab:''};
+  const calls = [], classes = new Set(), target = {getAttribute:() => 'pa_2',scrollIntoView:() => calls.push('scroll'),classList:{add:x=>classes.add(x),remove:x=>classes.delete(x)}};
+  const context = {allStudents:() => [student],openStudent:id => calls.push('student:'+id),renderModal:() => calls.push('projects'),document:{querySelectorAll:() => [target]},setTimeout:fn=>fn(),tab:''};
   vm.createContext(context); vm.runInContext(source,context);
-  context.openKnownStudentProject('stu_1','pa_2','cp_3');
-  assert.deepEqual(calls,['student:stu_1','projects','scroll','pa_2:cp_3']);
+  context.openKnownStudentProject('stu_1','pa_2','cp_3','fit_up');
+  assert.deepEqual(calls,['student:stu_1','projects','scroll']);
   assert.equal(context.tab,'projects'); assert.equal(student.projects.length,1);
-  calls.length=0; context.openKnownStudentProject('stu_1','pa_2','','fit_up'); assert(calls.includes('stu_1:pa_2:fit_up'));
+  assert.equal(classes.size,0);
   calls.length=0; context.openKnownStudentProject('stu_1','unknown','cp_3'); assert.deepEqual(calls,[]);
 });
 test('Forecast carries the known next stage identifier', () => {
@@ -110,8 +110,8 @@ test('time controller ticks once per minute, wakes, and cleans up', () => {
   now = new Date('2026-09-22T10:23:00.000'); [...timers.values()][0].fn(); assert.deepEqual(calls,[22,23]); assert.equal(timers.size,1);
   controller.wake(); assert.deepEqual(calls,[22,23,23]); assert.equal(timers.size,1);
   controller.stop(); assert.equal(timers.size,0); controller.wake(); assert.equal(calls.length,3);
-  assert.match(html,/dayPlan\(now\), ctx = currentScheduleContext\(now\), currentClass = ArcTitaniumShell\.currentClass\(state, ctx\)/);
-  assert.match(html,/if \(navCurrentView !== "main"\) return/);
+  assert.match(html,/dayPlan\(now\), ctx = currentScheduleContext\(now\), period = ArcTimeLifecycle\.periodStatus/);
+  assert.match(html,/if \(navCurrentView !== "main"\) return period && period\.nextDelay/);
   assert.match(html,/document\.addEventListener\("visibilitychange"/);
   assert.match(html,/window\.addEventListener\("pageshow"/);
   assert.match(html,/window\.addEventListener\("focus"/);
@@ -140,8 +140,8 @@ test('authoritative schedule handles bell transition, Planning and no-school wit
 
 test('Dashboard and clock refresh on wake and date rollover without changing selected class', () => {
   const source = html.slice(html.indexOf('function refreshArcTime(now)'),html.indexOf('const arcTimeController'));
-  const elements = {arcHeaderClock:{textContent:'',dateTime:''},dashboardCurrentClass:{dataset:{},innerHTML:''},dashboardToday:{innerHTML:''}};
-  const context = {document:{getElementById:id => elements[id]},navCurrentView:'main',state:{activeSectionId:'selected',sections:[{id:'first',period:1},{id:'third',period:3}]},ArcTimeLifecycle:Time,ArcTitaniumShell:Shell,dateKey:date => date.toISOString().slice(0,10),dayPlan:date => ({dayType:date.getUTCDate()===23?'no_school':'school',scheduleId:'regular',instructionMode:'regular'}),currentScheduleContext:date => date.getUTCDate()===23?{kind:'off',label:'No School'}:{kind:'class',period:date.getUTCHours()===10?1:3},dashboardCurrentCardHtml:(section,ctx) => section?section.id:ctx.kind,dashboardTodayHtml:(date,plan) => date.getUTCDate()+' '+plan.dayType};
+  const elements = {arcHeaderClock:{textContent:'',dateTime:''},arcCleanupBanner:{hidden:true},dashboardCurrentClass:{dataset:{},innerHTML:''},dashboardToday:{innerHTML:''}};
+  const context = {document:{getElementById:id => elements[id]},navCurrentView:'main',state:{activeSectionId:'selected',sections:[{id:'first',period:1},{id:'third',period:3}]},ArcTimeLifecycle:Time,ArcTitaniumShell:Shell,dateKey:date => date.toISOString().slice(0,10),dayPlan:date => ({dayType:date.getUTCDate()===23?'no_school':'school',scheduleId:'regular',instructionMode:'regular'}),currentScheduleContext:date => date.getUTCDate()===23?{kind:'off',label:'No School'}:{kind:'class',period:date.getUTCHours()===10?1:3},bellSchedule:() => ({times:{1:{end:'11:00'},3:{end:'12:00'}}}),dashboardCurrentCardHtml:(section,ctx) => section?section.id:ctx.kind,dashboardTodayHtml:(date,plan) => date.getUTCDate()+' '+plan.dayType};
   vm.createContext(context); vm.runInContext(source,context);
   context.refreshArcTime(new Date('2026-09-22T10:59:00Z'));
   assert.equal(elements.dashboardCurrentClass.innerHTML,'first');
@@ -151,7 +151,7 @@ test('Dashboard and clock refresh on wake and date rollover without changing sel
   assert.equal(elements.dashboardCurrentClass.innerHTML,'off');
   assert.equal(elements.dashboardToday.innerHTML,'23 no_school');
   assert.equal(context.state.activeSectionId,'selected');
-  assert.match(elements.arcHeaderClock.textContent,/^\d{1,2}:\d{2}\s?(AM|PM)$/);
+  assert.match(elements.arcHeaderClock.textContent,/^\d{1,2}:\d{2}\s?(AM|PM)( · .+)?$/);
   context.navCurrentView='roster';
   context.refreshArcTime(new Date('2026-09-24T10:00:00Z'));
   assert.equal(elements.dashboardCurrentClass.innerHTML,'off');

@@ -74,7 +74,7 @@ assert.strictEqual(purposes['icons/icon-maskable-192.png'],'maskable');
 assert.strictEqual(purposes['icons/icon-maskable-512.png'],'maskable');
 assert(html.includes('href="icons/favicon-32.png"'));
 assert(html.includes('href="icons/apple-touch-icon-180.png"'));
-assert(build.includes("build:'arc-workflow-integration-1'"));
+assert(build.includes("build:'arc-workflow-integration-1-repair-1'"));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
 
 console.log('PASS Titanium Visual Refinement 1 Repair 1 Dashboard-boundary, approved-lettermark, PWA-icon, offline, geometry, Simulation, build, and schema contracts');

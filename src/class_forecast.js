@@ -39,7 +39,7 @@
     var stages=arr(project.stages),index=stages.findIndex(function(stage){return stage.id===project.currentStageId;}),next=index>=0?stages[index+1]:null;
     if(!next)return {kind:'project_completion',label:'Project Completion',detail:'Complete the current project workflow.'};
     var checks=arr(definition&&definition.instructorCheckpoints),check=checks.find(function(item){return item.stageId===next.id;});
-    if(next.requiresInstructorCheck||check)return {kind:'instructor_check',label:'Instructor Check',detail:(check&&check.name)||next.name};
+    if(next.requiresInstructorCheck||check)return {kind:'instructor_check',label:'Instructor Check',detail:(check&&check.name)||next.name,stageId:next.id};
     return null;
   }
   function upNextFor(student,definitions){

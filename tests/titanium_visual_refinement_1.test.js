@@ -30,7 +30,7 @@ for(const file of runtime){
 assert(html.indexOf('src/arc_icons.js')<html.indexOf('src/arc_titanium_shell.js'),'icons must load before the shell');
 assert(html.indexOf('src/arc_titanium_visual_refinement_1.css')>html.indexOf('src/arc_titanium_visual_system.css'),'refinement layer must follow the visual system');
 assert(sw.includes("'./src/arc_icons.js'")&&sw.includes("'./src/arc_titanium_visual_refinement_1.css'"));
-assert(build.includes("build:'classes-dropdown-overlay-repair-1'"));
+assert(build.includes("build:'arc-workflow-integration-1'"));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'),'schema must remain v7');
 
 ['dashboard','students','forecast','attendance','projects','openshop','lessonbank','projectbank','standards','inventory','booths','notifications','search','help','settings','add'].forEach(name=>{
@@ -46,8 +46,8 @@ assert(html.includes('Class Pulse'));
 assert(html.includes('ArcClassForecast.build({ state, section: selectedClass, students: classList'),'Dashboard pulse must use authoritative Forecast derivation');
 assert(html.includes('Reserved until authoritative class-and-date lesson scheduling is established.'),'future lesson connection must be honest');
 assert(!html.includes('Selected Class Snapshot'),'legacy prototype wording remains');
-assert(html.includes('{ main: "Dashboard", schedule: "Today\'s Schedule"'));
-const offDay=html.slice(html.indexOf(': `<div class="card arc-dashboard-class-card"><div class="arc-dashboard-kicker">Current Class</div><h3>No Current Class'),html.indexOf('let selectedCard ='));
+assert(html.includes('{ main: "Dashboard", "students-directory": "Students / Roster", schedule: "Today\'s Schedule"'));
+const offDay=html.slice(html.indexOf('<h3>No Current Class</h3>'),html.indexOf('function dashboardTodayHtml'));
 assert(offDay.includes('ctx.label')&&!offDay.includes('ctx.time'),'off-day state must not present schedule time as a regular day');
 
 ['--t-priority-1','--t-priority-2','--t-priority-3','.open-shop-recommendation.p1','.open-shop-recommendation.p2','.open-shop-recommendation.p3'].forEach(token=>assert(css.includes(token),'missing Open Shop priority treatment '+token));

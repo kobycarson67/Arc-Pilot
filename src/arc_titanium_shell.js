@@ -10,7 +10,7 @@
   var GROUPS=[
     {id:'classroom',label:'Classroom',items:[
       {id:'main',label:'Dashboard',icon:'dashboard',action:'renderMainMenu'},
-      {id:'roster',label:'Students / Roster',icon:'students',action:'renderRoster',classScoped:true},
+      {id:'roster',label:'Students / Roster',icon:'students',action:'renderCurrentStudentDirectory'},
       {id:'forecast',label:'Class Forecast',icon:'forecast',action:'renderClassForecast',classScoped:true},
       {id:'attendance',label:'Attendance & Passes',icon:'attendance',action:'renderAttendance',classScoped:true},
       {id:'projects',label:'Projects',icon:'projects',action:'showClassProjects',classScoped:true},

@@ -34,7 +34,7 @@ assert(has('Assignments are evidence of booth use, not automatic blame'),'eviden
 assert(has('Assignment history ('),'booth history UI missing');
 assert(has('<b>Current:</b>'),'Booth Manager must show current occupants directly');
 assert(has('navMark("booths", navViewLabel("booths"))'),'Booth Manager must participate in normal navigation');
-assert(has('if (view === "booths")\n    return showBoothManager()'),'Back/restored navigation must be able to render Booth Manager');
+assert(/if \(view === "booths"\)\r?\n    return showBoothManager\(\)/.test(html),'Back/restored navigation must be able to render Booth Manager');
 assert(has('["roster", "booths", "projects"'),'class selector must remain active in Booth Manager');
 assert(has('function closeBoothManager() { let previous = navHistory.pop()'),'Booth Manager return must use navigation history');
 const boothManagerBody=html.slice(html.indexOf('function showBoothManager()'),html.indexOf('function closeBoothManager()'));

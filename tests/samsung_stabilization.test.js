@@ -16,7 +16,7 @@ assert(has('if (!restoreNavigationContext()) renderMainMenu()'),'startup must re
 
 assert(has('id="navClassButton"'),'class chooser must use a controllable touch menu');
 assert(has('function toggleClassMenu(event)'),'same class control must toggle its menu');
-assert(has('if (!classWrap)\n        closeClassMenu();'),'outside-tap class menu dismissal must remain');
+assert(/if \(!classWrap\)\r?\n        closeClassMenu\(\);/.test(html),'outside-tap class menu dismissal must remain');
 assert(!has('id="navClassSelect"'),'startup must not display a preselected native class selector outside class context');
 
 assert(has('class="student-profile-nav"'),'student identity and tabs must have a sticky wrapper');

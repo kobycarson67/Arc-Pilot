@@ -29,7 +29,7 @@ assert(!html.includes('.class-menu{position:absolute;top:calc(100% + 6px);left:0
 assert(html.includes('@media(max-width:620px){.class-menu{left:0;right:0;width:auto}}'),
   'narrow portrait overlay must use the full class-control row without viewport overflow');
 
-const toggleBody=html.match(/function toggleClassMenu\(event\) \{([^}]|}(?!\nfunction))*\}/)[0];
+const toggleBody=html.slice(html.indexOf('function toggleClassMenu(event)'),html.indexOf('function ',html.indexOf('function toggleClassMenu(event)')+9));
 assert(toggleBody.includes('menu.hidden = !opening'));
 assert(!/classList\.(add|remove|toggle)\(/.test(toggleBody),
   'opening Classes must not mutate body, shell, rail, workspace, destination, or scroll-lock classes');
@@ -46,7 +46,7 @@ assert(html.includes('state.activeSectionId = id;'));
 assert(html.includes('function captureSimulationNavigation()'));
 assert(html.includes('ArcTitaniumShell.navigationContextKey(NAV_CONTEXT_KEY, simulationActive())'));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-assert(build.includes("build:'classes-dropdown-overlay-repair-1'"));
+assert(build.includes("build:'arc-workflow-integration-1'"));
 
 for(const [file,hash] of Object.entries(expectedBranding))
   assert.strictEqual(sha(file),hash,'frozen branding changed: '+file);

@@ -27,7 +27,8 @@ const dashboard=html.slice(html.indexOf('function renderMainMenu()'),html.indexO
 const entry=html.slice(html.indexOf('function enterSimulation'),html.indexOf('function leaveSimulation'));
 assert(dashboard.includes('ArcTitaniumShell.currentClass(state, ctx)'));
 assert(dashboard.includes('ArcTitaniumShell.selectedClass(state)'));
-assert(dashboard.includes('No Current Class'));
+assert(dashboard.includes('dashboardCurrentCardHtml(currentClass, ctx)'));
+assert(html.includes('No Current Class'));
 assert(dashboard.includes('Class Pulse'));
 assert(dashboard.includes('Selected Class'));
 assert(!dashboard.includes('Open the authoritative roster'));

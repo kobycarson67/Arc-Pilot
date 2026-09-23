@@ -385,6 +385,140 @@ Dedicated Welding Performance criteria are stronger detailed welding evidence th
 
 Corrections to an assessment must update all projections while preserving audit history. ARC must prevent duplicate evidence when one grading event feeds several views.
 
+### Frozen WT Drawing/Planning criterion-to-competency mapping
+
+This WT mapping is approved and frozen. It is the authorized exception to the otherwise unresolved criterion-to-competency mappings. `R/Q` means required qualifying evidence, `S` means supporting evidence, and `—` means no relationship.
+
+| Competency | Views | Dimensions | Symbols/Technical Info | Organization/Readability | Completeness |
+|---|---|---|---|---|---|
+| WT-D1 Drawing Interpretation | S | S | S | S | S |
+| WT-D2 Drawing Lines | R/Q | — | S | R/Q | — |
+| WT-D3 Sketching | R/Q | R/Q | S | R/Q | R/Q |
+| WT-M1 Measurement | — | S | — | — | — |
+| WT-M2 Layout | — | S | — | S | S |
+
+The following qualification rules are part of the frozen mapping:
+
+- WT-D1 requires separate interpretation evidence. Drawing-creation criterion results are supporting evidence only.
+- WT-D2 may qualify through appropriate student-created drawing work.
+- WT-D3 may qualify only when the task is explicitly intended to assess Sketching. CAD or other drawing work does not automatically qualify WT-D3.
+- WT-M1 and WT-M2 drawing evidence is supporting only. Physical measurement and layout require appropriate shop evidence.
+- One assessment provides at most one qualifying demonstration per competency.
+- Every required gate for a competency must meet the target before that assessment becomes a qualifying demonstration for that competency.
+
+## ARC Activity Library
+
+The approved future **ARC Activity Library** is the reusable authority for work that can be assigned, performed, assessed, repeated, and tracked. Project Bank becomes the Projects portion of this broader library rather than the sole reusable work-bank concept.
+
+The Activity Library has four user-facing activity types.
+
+### Projects
+
+Projects are substantial finished fabrications. They normally belong to the Fabrication / Projects / Skill Challenges grade category, use the Project/Fabrication rubric, and produce evidence only through explicit linked assessments and criterion relationships. They are usually material- and resource-intensive.
+
+### Technical Assignments
+
+Technical Assignments cover knowledge, interpretation, planning, calculations, terminology, drawing, and similar technical work. They normally belong to Technical Knowledge. They may use points or the approved Drawing/Planning rubric and may produce mapped competency evidence when the work legitimately demonstrates the competency.
+
+### Skill Challenges
+
+**Skill Challenges** is the approved user-facing name for deliberate technical or physical assessment opportunities. When graded, they normally belong to Fabrication / Projects / Skill Challenges. They are the primary home for **Qualifying Evidence Opportunities** used by competency progression and Open Shop.
+
+Completion does not itself create qualifying evidence or advancement. The assessed performance, required gates, evidence role, and target determine whether the result qualifies.
+
+### Practice
+
+Practice supports skill development before qualification. It is normally ungraded and nonqualifying, but may create practice or supporting history and may use an optional technical rubric for quick feedback. Practice can be assigned, started, completed, repeated, and tracked.
+
+ARC should direct a struggling student to targeted Practice when that is more instructionally appropriate than repeatedly sending the student into formal qualification. A Practice activity may use a technical rubric for feedback without creating a grade or qualifying demonstration.
+
+### Shared and specialized activity metadata
+
+The future architecture should avoid four incompatible activity databases. Activity types share stable metadata where appropriate, potentially including:
+
+- stable ID, title, type, instructions, and active/archive state;
+- WT/AWT applicability and estimated duration;
+- standards, competency relationships, prerequisites, and evidence role;
+- materials and quantities;
+- equipment, booths, and other resources;
+- process, joint, position, material, thickness, task, and other assessment context;
+- repeat and duplicate rules;
+- attachments.
+
+Specialized metadata remains type-specific:
+
+- Projects add plans, drawings, cut lists, checkpoints, and rubric relationships.
+- Technical Assignments add points, questions, files, and an optional rubric.
+- Skill Challenges add qualifying targets, gates, and assessment context.
+- Practice adds practice targets, repeatability, optional feedback, and a default nonqualifying role.
+
+The exact activity schema is not frozen by this authority.
+
+### Practice and material demand
+
+Assigned Practice creates expected material demand even when it creates no grade. For example, four coupons assigned to ten students creates expected demand for forty coupons.
+
+Expected demand does not consume or reserve inventory automatically. Material Inventory remains actual-stock authority. Future demand planning may combine assigned Projects, Skill Challenges, and Practice, and may later include scheduled activities through Today's Focus. Purchasing and preparation recommendations remain advisory; ARC must not automatically purchase, prepare, reserve, or consume material.
+
+## ARC Resource Bank
+
+The approved future **ARC Resource Bank** is trusted contextual instructional and reference authority. It is not merely a folder of links and PDFs.
+
+The distinction is:
+
+- **Activity Library: What can I do?**
+- **Resource Bank: What can help me understand, diagnose, or improve this?**
+
+Approved resource types are:
+
+- **Troubleshooting Guides:** symptom → possible causes → checks → possible corrections. Expected coverage includes undercut, porosity, overlap, lack of fusion, spatter, inconsistent bead, burn-through or edge wash, arc instability, dross, and poor cut face.
+- **Parameter/Setup References:** instructor-approved amperage, voltage/WFS, electrode, polarity, shielding gas, thickness/material, cutting, and setup references. Settings must remain context-specific rather than being presented as universal.
+- **Visual Reference Library:** good and poor welds, discontinuities, bead profiles, fit-up, cuts, drawings, symbols, electrodes, equipment, and components.
+- **Terminology & Concepts.**
+- **Technique/How-To Guides.**
+- **Videos/Media:** instructor-created media and approved external media.
+- **Charts & Quick References.**
+- **Inspection Guides.**
+- **Drawing/Blueprint References.**
+- **Materials Reference.**
+- **Equipment Guides.**
+- **Safety References:** safety information may live here while safety grading remains Workplace authority.
+- **Instructor Tips:** instructor-authored practical teaching and diagnostic knowledge.
+
+### Resource metadata and approval authority
+
+Future resources may carry a stable ID; title and type; WT/AWT applicability; process; related competencies, symptoms/problems, joints, positions, materials/thicknesses, equipment, and activities; instructional level; media/file/link type; source and provenance; approval status; and active/archive state. The exact resource schema is not frozen.
+
+Resources used for grading-linked recommendations or student instruction must come from instructor-approved authority rather than arbitrary AI advice. The conceptual lifecycle is:
+
+> **Draft → Instructor Approved → Active → Archived**
+
+AI and search may discover, tag, or summarize candidate or approved content. They must not silently make candidate content instructional authority.
+
+### Contextual troubleshooting safeguards
+
+ARC may support instructor-facing troubleshooting using assessment and task context. For example, GMAW on a lap joint in 3/8-inch steel with the upper edge burning or washing away may surface possible causes, things to check, and possible corrections involving arc placement or technique, travel speed, heat or setting context, work/gun angle, and approved related resources.
+
+Troubleshooting must never present an incomplete-context suggestion as a definitive diagnosis. It should clearly distinguish possible causes, checks, and possible corrections. The instructor retains diagnosis and intervention authority.
+
+### Resource and competency pathway
+
+Resources participate in competency explainability through this student pathway:
+
+> **Why am I here? → What do I need? → Learn/Review → Practice → Qualifying Challenge**
+
+The target evidence loop is:
+
+> **Problem identified → approved Resource → Practice → Qualifying Skill Challenge → Assessment → criterion-level Evidence → Competency update**
+
+Criterion-level results may drive contextual recommendations. For example, a Developing result for Fusion & Tie-In may lead to approved tie-in resources, targeted Practice, and a later qualifying Skill Challenge. Resource recommendations never change grades or competency levels.
+
+### Shared Activity Library and Resource Bank principle
+
+> **Define an instructional activity once. Assign it wherever appropriate. Let every relevant ARC system understand what that activity means.**
+
+> **Resource Bank provides trusted help; Activity Library provides actionable work.**
+
 ## Future Open Shop evidence pathway
 
 Open Shop should evolve from gap navigation into an evidence-producing instructional pathway centered on three student and instructor questions:
@@ -426,6 +560,8 @@ Recommendations may consider:
 - equipment availability/status where represented;
 - current class;
 - future Today's Focus/planned instruction after lesson → class → date authority exists.
+- approved Resource Bank materials connected to the identified weakness;
+- available Practice and Skill Challenges and their practice-versus-qualifying roles.
 
 Current authoritative inputs include competency ratings/gaps, WT/AWT context, the live class/countdown and cleanup state, assigned projects, Material Inventory, booth state, and selected/current class context. Evidence-derived next-level progress, formal practice/qualifying metadata, complete resource readiness, and Today's Focus authority are future inputs.
 
@@ -441,6 +577,8 @@ Teacher and student experiences must project the same competency, evidence, path
 
 A future **My Open Shop** view may show current level, explanation, next-level requirement, progress, today's assigned task, specific focus, and assessment result/evidence.
 
+The Activity Library and Resource Bank are also shared authorities for future ARC Student rather than duplicated student-side catalogs. Teacher views may expose deeper diagnostics, settings, evidence, approval, and authoring context. Student views may present **What's going wrong?**, **What should I check?**, Learn/Review, Practice, Assigned Challenge, and a clear explanation of what counts toward moving up. Both views must use the same instructor-approved resources and activity definitions with role-appropriate visibility.
+
 ### Core instructional feedback loop
 
 The target long-term capability is:
@@ -449,7 +587,7 @@ The target long-term capability is:
 
 ## Project plan and student drawing authority
 
-Every future Project Bank definition should be able to contain an authoritative instructor project plan, including:
+Every future Project activity definition should be able to contain an authoritative instructor project plan, including:
 
 - drawings or blueprints;
 - dimensions and material specifications;
@@ -545,6 +683,10 @@ These are design gaps, not authorization to modify runtime behavior:
 10. Attendance and passes have separate operational authorities, but no program-wide master destination.
 11. Notifications are general records and do not yet derive Gradebook reconciliation summaries.
 12. Today's Focus remains docked because lesson-to-class-to-date authority is absent.
+13. Project Bank is the implemented reusable project authority, but the broader approved Activity Library types and shared metadata do not exist.
+14. No Resource Bank, approval lifecycle, contextual troubleshooting authority, or resource-to-practice-to-qualification pathway is implemented.
+15. Current material planning does not derive expected demand from assigned Practice or Skill Challenges.
+16. ARC Student does not yet reuse Activity Library or Resource Bank authorities because those authorities and the future student experience are unimplemented.
 
 Any implementation must define migration, rollback, historical rendering, and explainability before changing stored records or current calculations.
 
@@ -564,6 +706,13 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Project-plan student-release defaults and student drawing submission/revision workflow.
 - Material readiness thresholds, forecasting horizon, and notification timing.
 - Open Shop task taxonomy, qualifying-opportunity approval workflow, ranking/tie-break rules, duplicate/repeat rules, and the minimum authoritative resource data required for availability claims.
+- Exact Activity Library schemas, shared-versus-specialized fields, migration from Project Bank, and activity authoring workflow.
+- Exact Resource Bank schema, authoring and approval workflow, provenance rules, detailed lifecycle behavior, and archival behavior.
+- Resource recommendation and ranking algorithm, including how contextual uncertainty is presented.
+- Practice material-demand timing, reservation semantics, preparation horizon, and relationship to actual inventory transactions.
+- Criterion-to-competency mappings beyond the frozen WT Drawing/Planning mapping.
+- Student privacy and resource/activity visibility rules.
+- Media storage and hosting, external-link validation, and offline resource/media caching.
 - Student ARC roles, visibility, assignment acknowledgement, evidence access, and privacy boundaries.
 - Showcase curation defaults, student/family visibility, consent, export format, and privacy rules.
 - Master Attendance reporting definitions and the intentional global/contextual navigation exceptions.
@@ -578,3 +727,6 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Today's Focus remains planned instruction.
 - The school gradebook remains externally authoritative until an approved electronic integration exists; manual confirmation is reconciliation, not synchronization.
 - Instructor judgment remains authoritative through explicit override, rubric approval, evidence correction, Showcase curation, project assignment, and purchasing decisions.
+- Activity completion, Practice completion, and resource use never automatically change grades or competencies.
+- Activity assignment may create expected material demand but never automatically consumes inventory.
+- Resources used for student instruction or grading-linked recommendations require instructor-approved authority.

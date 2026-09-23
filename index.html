@@ -18,6 +18,7 @@
 <script src="src/arc_titanium_shell.js"></script>
 <script src="src/current_student_directory.js"></script>
 <script src="src/arc_time_lifecycle.js"></script>
+<script src="src/arc_sidebar_gesture.js"></script>
 <script src="src/app_update_controller.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
@@ -91,7 +92,7 @@ table{width:100%;border-collapse:collapse;background:white}th,td{border:1px soli
 <div class="arc-workspace">
 <header class="arc-context-header">
 <div class="headerline"><button id="navBackBtn" class="navbtn" onclick="navBack()">← Back</button><div id="navBreadcrumb" class="breadcrumb">Dashboard</div><time id="arcHeaderClock" class="arc-header-clock" aria-label="Current time"></time><div class="class-menu-wrap"><button id="navClassButton" class="navbtn navselect" type="button" aria-haspopup="true" aria-expanded="false" onclick="toggleClassMenu(event)">Classes ▾</button><div id="navClassMenu" class="class-menu" hidden></div></div><button id="arcMobileMenu" class="navbtn arc-mobile-menu" type="button" onclick="toggleArcSidebar()" aria-expanded="false" aria-label="Open navigation">☰</button><span id="navNotificationBadge" class="navbadge" style="display:none">0</span></div>
-<div id="simulationBanner" class="simulation-banner" hidden><div><strong id="simulationBannerLabel">SIMULATION — FICTIONAL DATA</strong><div class="small" style="color:#fde68a">Live Classroom is isolated and protected.</div></div><button class="navbtn" type="button" onclick="leaveSimulation()">Leave Simulation</button></div></header>
+<div id="arcCleanupBanner" class="arc-cleanup-banner" role="status" hidden>10 Minutes Remaining — Begin Cleanup</div><div id="simulationBanner" class="simulation-banner" hidden><div><strong id="simulationBannerLabel">SIMULATION — FICTIONAL DATA</strong><div class="small" style="color:#fde68a">Live Classroom is isolated and protected.</div></div><button class="navbtn" type="button" onclick="leaveSimulation()">Leave Simulation</button></div></header>
 <main><details id="arcEnvironmentNotice" class="arc-environment-notice"><summary><span><b>CONTROLLED PILOT</b> · FICTIONAL STUDENT DATA ONLY</span><span class="arc-environment-summary">Device-local · Privacy controls pending</span></summary><div class="arc-environment-detail">ARC Pilot v0.18 is prepared for hosted, full-screen Home Screen use. OneDrive sync is architected but not connected; device-local data and photos are not cross-device protection. Encryption and login are not yet available.</div></details>
 <div id="app"></div>
 </main></div>
@@ -799,8 +800,9 @@ function setArcSidebarState(collapsed) {
     syncArcSidebarControls();
     try { localStorage.setItem(ARC_SIDEBAR_PREF_KEY, collapsed ? "1" : "0"); } catch (e) { }
 }
-function toggleArcSidebar() { if (arcSidebarIsMobile()) { if (document.body.classList.contains("arc-sidebar-open")) { document.body.classList.remove("arc-sidebar-open"); clearArcTransientHistoryMarker("shell-navigation"); syncArcSidebarControls(); } else openArcSidebar(); return; } setArcSidebarState(!document.body.classList.contains("arc-sidebar-collapsed")); }
-function openArcSidebar() { document.body.classList.add("arc-sidebar-open"); pushArcTransientHistory("shell-navigation"); syncArcSidebarControls(); }
+function setArcMobileSidebarOpen(open) { if (open === document.body.classList.contains("arc-sidebar-open")) { syncArcSidebarControls(); return; } document.body.classList.toggle("arc-sidebar-open", open); if (open) pushArcTransientHistory("shell-navigation"); else clearArcTransientHistoryMarker("shell-navigation"); syncArcSidebarControls(); }
+function toggleArcSidebar() { if (arcSidebarIsMobile()) { setArcMobileSidebarOpen(!document.body.classList.contains("arc-sidebar-open")); return; } setArcSidebarState(!document.body.classList.contains("arc-sidebar-collapsed")); }
+function openArcSidebar() { setArcMobileSidebarOpen(true); }
 function pushArcTransientHistory(kind) { let marker = history.state && history.state.arcTransient; if (!marker) history.pushState(Object.assign({}, history.state || {}, { arcTransient: kind }), ""); }
 function clearArcTransientHistoryMarker(kind) { if (!history.state || history.state.arcTransient !== kind) return; let next = Object.assign({}, history.state); delete next.arcTransient; history.replaceState(next, ""); }
 function handleArcPopState() {
@@ -996,12 +998,13 @@ function renderSimulationStart(definition) {
     if (start.sectionId) { let section = state.sections.find(item => item.id === start.sectionId); if (section) { state.activeSectionId = section.id; state.course = section.course; } }
     if (start.view !== "main" && state.activeSectionId) navRender(start.view); else renderMainMenu();
 }
+function showArcFeedback(title, detail) { let old = document.getElementById("arcNativeFeedback"); if (old) old.remove(); let feedback = document.createElement("div"); feedback.id = "arcNativeFeedback"; feedback.className = "arc-native-feedback"; feedback.setAttribute("role", "status"); feedback.innerHTML = `<b>${escapePhotoText(title)}</b><span>${escapePhotoText(detail || "")}</span>`; document.body.appendChild(feedback); setTimeout(() => { if (feedback.parentNode) feedback.remove(); }, 5000); }
 function enterSimulation(scenarioId) {
     let liveBefore = cloneStateData(state), navigation = captureSimulationNavigation();
     try {
         let result = simulationManager.enter(scenarioId, liveBefore, navigation);
         state = migrateStateData(result.state, CURRENT_SCHEMA_VERSION); closeSimulationEntry(); clearTransientUi();
-        alert("✓ Live Classroom backed up\nSafety snapshot verified"); renderSimulationStart(result.definition); updateSimulationIndicator();
+        renderSimulationStart(result.definition); updateSimulationIndicator(); showArcFeedback("Live Classroom backed up", "Safety snapshot verified");
     } catch (err) { state = liveBefore; alert("Simulation entry stopped. Live Classroom remains active.\n\n" + err.message); updateSimulationIndicator(); }
 }
 function leaveSimulation() {
@@ -2318,10 +2321,7 @@ function openKnownStudentProject(studentId, assignmentId, checkpointId = "", sta
     if (!project) return;
     openStudent(studentId); tab = "projects"; renderModal();
     let target = Array.from(document.querySelectorAll("[data-student-project-id]")).find(element => element.getAttribute("data-student-project-id") === assignmentId);
-    if (target && target.scrollIntoView) target.scrollIntoView({ block: "start" });
-    if (checkpointId) showProjectCheckpointDetails(assignmentId, checkpointId);
-    else if (stageId) showProjectOperations(studentId, assignmentId, stageId);
-    else { let ready = ArcProjectCheckpoints.hasCheckpointData(project) ? ArcProjectCheckpoints.viewForProject(project).checkpoints.find(row => row.status === "ready_for_review") : null; if (ready) showProjectCheckpointDetails(assignmentId, ready.id); else showProjectOperations(studentId, assignmentId); }
+    if (target) { if (target.scrollIntoView) target.scrollIntoView({ block: "start" }); target.classList.add("arc-project-link-target"); setTimeout(() => target.classList.remove("arc-project-link-target"), 1800); }
 }
 function showProjectOperations(studentId, assignmentId, targetStageId = "") { let student = allStudents().find(s => s.id === studentId), project = student && (student.projects || []).find(p => p.id === assignmentId); if (!project)
     return; closeProjectOperations(); let o = document.createElement("div"); o.id = "projectOperationsOverlay"; o.className = "modal show"; let stages = (project.stages || []).map(stage => `<button class="btn project-stage-button ${project.currentStageId === stage.id ? "is-current" : ""}" ${targetStageId === stage.id ? `data-target-stage="true" style="outline:3px solid #3b82f6"` : ""} onclick="setStudentProjectStage('${student.id}','${project.id}','${stage.id}')">${project.currentStageId === stage.id ? "✓ " : ""}${escapePhotoText(stage.name)}${stage.requiresInstructorCheck ? " • Check" : ""}</button>`).join(""); let needs = ArcProjectBank.NEEDS.map(need => `<button class="btn project-need-button ${project.currentNeed === need ? "is-current" : ""}" onclick="setStudentProjectNeed('${student.id}','${project.id}','${need}')">${project.currentNeed === need ? "✓ " : ""}${need}</button>`).join(""); o.innerHTML = `<div class="modalbox" style="width:min(820px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeProjectOperations()">Close</button><h2>${escapePhotoText(student.name)} — ${escapePhotoText(project.name)}</h2><p class="small">Stage and current need are operational shop context. They do not automatically change a grade or competency rating.</p><div class="card"><div class="row"><div><h3>Current Stage</h3><span class="pill">${escapePhotoText(project.currentStageName || "Assigned")}</span></div>${project.isPrimary ? `<span class="pill good">Primary / Current</span>` : `<button class="btn" onclick="setStudentPrimaryProject('${student.id}','${project.id}')">Make Primary</button>`}</div><div class="project-stage-grid">${stages}</div></div><div class="card"><h3>What does ${escapePhotoText(student.name)} need?</h3><div class="project-need-grid">${needs}</div></div></div>`; o.onclick = e => { if (e.target === o) closeProjectOperations(); }; document.body.appendChild(o); let target = o.querySelector('[data-target-stage="true"]'); if (target && target.scrollIntoView) target.scrollIntoView({ block: "nearest" }); }
@@ -2931,7 +2931,7 @@ function renderModal() {
     if (tab === "summary") {
         let gs = gaps(s).slice(0, 3);
         html += `<div class="grid"><div class="card"><div class="small">Competency Average</div><div class="big">${avgRating(s).toFixed(1)}</div></div><div class="card"><div class="small">Proficient+</div><div class="big">${prof(s)}</div></div><div class="card"><div class="small">Current Grade Snapshot</div><div class="big">${g.total == null ? "—" : g.total.toFixed(1) + "%"}</div></div></div>
-   <div class="card" style="margin-top:10px"><h3>Current Open Shop Choices</h3>${gs.length ? gs.map((x, i) => `<div class="priority p${i + 1}"><b>#${i + 1} ${x.c.name}</b> (${x.c.code}) — ${x.r} ${ratingNames[x.r]}</div>`).join("") : "<p class='small'>No assessed competency below Proficient.</p>"}</div>`;
+   <div class="card" style="margin-top:10px"><h3>Current Open Shop Choices</h3>${gs.length ? gs.map((x, i) => `<button class="priority p${i + 1} open-shop-recommendation" type="button" onclick="viewStudentCompetency('${s.id}','${x.c.code}')"><b>#${i + 1} ${x.c.name}</b> (${x.c.code}) — ${x.r} ${ratingNames[x.r]}</button>`).join("") : "<p class='small'>No assessed competency below Proficient.</p>"}</div>`;
     }
     if (tab === "competencies") {
         let groups = {};
@@ -3167,7 +3167,7 @@ function showProjectCheckpointDetails(projectId, targetCheckpointId = "") {
     let card = window.ArcProjectTabAdapter.cards(current).find(x => x.id === projectId);
     if (!card)
         return;
-    let rows = card.legacy ? `<p class="small">Start checkpoint tracking to see the fabrication sequence.</p>` : card.checkpointRows.map(row => `<div class="entryrow" ${row.id === targetCheckpointId ? `data-target-checkpoint="true" style="outline:3px solid #3b82f6"` : ""}><div><b>${window.ArcProjectCheckpointCard.escape(row.name)}</b>${row.current ? ` <span class="pill">Current</span>` : ""}<br><span class="small">${window.ArcProjectCheckpointCard.escape(row.note || "No notes")}${row.measurement ? " • " + window.ArcProjectCheckpointCard.escape(row.measurement) : ""}</span></div><span class="arc-status ${row.status === "verified" ? "arc-status-verified" : row.status === "ready_for_review" ? "arc-status-review" : ""}">${window.ArcProjectCheckpointCard.escape(row.statusLabel)}</span></div>`).join("");
+    let rows = card.legacy ? `<p class="small">Start checkpoint tracking to see the fabrication sequence.</p>` : card.checkpointRows.map(row => `<div class="entryrow" ${row.id === targetCheckpointId ? `data-target-checkpoint="true" style="outline:3px solid #3b82f6"` : ""}><div><b>${window.ArcProjectCheckpointCard.escape(row.name)}</b>${row.current ? ` <span class="pill">Current</span>` : ""}<br><span class="small">${window.ArcProjectCheckpointCard.escape(row.note || "No notes")}${row.measurement ? " • " + window.ArcProjectCheckpointCard.escape(row.measurement) : ""}</span></div><span class="arc-status arc-status-${row.status.replace(/_/g, "-")}">${window.ArcProjectCheckpointCard.escape(row.statusLabel)}</span></div>`).join("");
     let overlay = document.createElement("div");
     overlay.id = "projectCheckpointDetailsOverlay";
     overlay.className = "modal show";
@@ -4104,17 +4104,31 @@ document.addEventListener("click", function (event) {
 });
 function updateStickyHeaderOffset() { let header = document.querySelector("header"); if (header) document.documentElement.style.setProperty("--arc-header-height", Math.ceil(header.getBoundingClientRect().height) + "px"); }
 function refreshArcTime(now) {
-    let clock = document.getElementById("arcHeaderClock"); if (clock) { clock.textContent = ArcTimeLifecycle.clock(now); clock.dateTime = now.toISOString(); }
-    if (navCurrentView !== "main") return;
-    let card = document.getElementById("dashboardCurrentClass"), todayPanel = document.getElementById("dashboardToday"); if (!card || !todayPanel) return;
-    let plan = dayPlan(now), ctx = currentScheduleContext(now), currentClass = ArcTitaniumShell.currentClass(state, ctx);
+    let plan = dayPlan(now), ctx = currentScheduleContext(now), period = ArcTimeLifecycle.periodStatus(now, ctx, bellSchedule(plan.scheduleId).times, 10), clock = document.getElementById("arcHeaderClock"), cleanup = document.getElementById("arcCleanupBanner");
+    if (clock) { clock.textContent = ArcTimeLifecycle.clock(now) + (period ? " · " + period.label : ""); clock.dateTime = now.toISOString(); }
+    if (cleanup) cleanup.hidden = !period || period.kind !== "cleanup";
+    if (navCurrentView !== "main") return period && period.nextDelay;
+    let card = document.getElementById("dashboardCurrentClass"), todayPanel = document.getElementById("dashboardToday"); if (!card || !todayPanel) return period && period.nextDelay;
+    let currentClass = ArcTitaniumShell.currentClass(state, ctx);
     let signature = [dateKey(now), plan.dayType, plan.scheduleId, plan.instructionMode, ctx.kind, ctx.period || "", currentClass ? currentClass.id : ""].join("|");
-    if (card.dataset.timeSignature === signature) return;
+    if (card.dataset.timeSignature === signature) return period && period.nextDelay;
     card.innerHTML = dashboardCurrentCardHtml(currentClass, ctx); todayPanel.innerHTML = dashboardTodayHtml(now, plan, currentClass); card.dataset.timeSignature = signature;
+    return period && period.nextDelay;
 }
 const arcTimeController = ArcTimeLifecycle.create({ now: () => new Date(), setTimeout: (fn, ms) => setTimeout(fn, ms), clearTimeout: id => clearTimeout(id), onTick: refreshArcTime });
 function reconcileArcResponsiveState() { if (!arcSidebarIsMobile()) { document.body.classList.remove("arc-sidebar-open"); clearArcTransientHistoryMarker("shell-navigation"); } syncArcSidebarControls(); updateStickyHeaderOffset(); arcTimeController.wake(); }
 function installOverscrollGuard() { let startY = 0; document.addEventListener("touchstart", function(event) { if (event.touches.length === 1) startY = event.touches[0].clientY; }, { passive: true }); document.addEventListener("touchmove", function(event) { if (!isStandaloneMode() || event.touches.length !== 1 || event.touches[0].clientY - startY < 8) return; let node = event.target; while (node && node !== document.body) { if (node.scrollHeight > node.clientHeight + 1) { if (node.scrollTop > 0) return; break; } node = node.parentElement; } if (window.scrollY <= 0) event.preventDefault(); }, { passive: false }); }
+function installArcSidebarGesture() {
+    if (!window.PointerEvent || !window.ArcSidebarGesture) return;
+    let gesture = ArcSidebarGesture.create({ edgeWidth: 24, intentDistance: 8, drawerTravel: 222, settleProgress: .5, flickVelocity: .55 });
+    function blocked(target) { if (!target || !target.closest) return false; if (target.closest('input[type="range"],canvas,[role="slider"],[data-arc-drag],[data-arc-horizontal-scroll],.tabs,.rates')) return true; let node = target; while (node && node !== document.body) { let style = getComputedStyle(node); if ((style.overflowX === "auto" || style.overflowX === "scroll") && node.scrollWidth > node.clientWidth + 1) return true; node = node.parentElement; } return false; }
+    function dimensions() { let sidebar = document.querySelector(".arc-sidebar"), rail = innerWidth <= 620 ? 64 : 78, drawer = Math.min(286, innerWidth - (innerWidth <= 620 ? 48 : 58)); return { sidebar, rail, drawer, travel: Math.max(1, drawer - rail) }; }
+    function clearDrag() { document.body.classList.remove("arc-sidebar-dragging", "arc-sidebar-drag-reveal"); document.body.style.removeProperty("--arc-sidebar-drag-width"); document.body.style.removeProperty("--arc-sidebar-backdrop-opacity"); }
+    document.addEventListener("pointerdown", event => { if (!arcSidebarIsMobile() || event.pointerType === "mouse" && event.button !== 0) return; let open = document.body.classList.contains("arc-sidebar-open"), sidebar = document.querySelector(".arc-sidebar"); if (open && sidebar && !sidebar.contains(event.target)) return; let d = dimensions(); gesture = ArcSidebarGesture.create({ edgeWidth: 24, intentDistance: 8, drawerTravel: d.travel, settleProgress: .5, flickVelocity: .55 }); gesture.begin({ pointerId:event.pointerId, x:event.clientX, y:event.clientY, time:event.timeStamp, open, blocked:blocked(event.target) }); }, { passive:true });
+    document.addEventListener("pointermove", event => { let result = gesture.move({ pointerId:event.pointerId, x:event.clientX, y:event.clientY, time:event.timeStamp }); if (!result) return; if (result.cancelled) { clearDrag(); return; } if (!result.dragging) return; event.preventDefault(); let d=dimensions(); document.body.classList.add("arc-sidebar-dragging"); document.body.classList.toggle("arc-sidebar-drag-reveal", result.progress > .2); document.body.style.setProperty("--arc-sidebar-drag-width", (d.rail + d.travel * result.progress) + "px"); document.body.style.setProperty("--arc-sidebar-backdrop-opacity", String(result.progress * .6)); }, { passive:false });
+    function finish(event) { let result=gesture.end({ pointerId:event.pointerId, x:event.clientX, y:event.clientY, time:event.timeStamp }); clearDrag(); if (result && result.settled) setArcMobileSidebarOpen(result.open); }
+    document.addEventListener("pointerup", finish, { passive:true }); document.addEventListener("pointercancel", event => { gesture.cancel(); clearDrag(); }, { passive:true });
+}
 window.addEventListener("resize", reconcileArcResponsiveState);
 window.addEventListener("orientationchange", function() { setTimeout(reconcileArcResponsiveState, 100); });
 document.addEventListener("visibilitychange", function() { if (!document.hidden) arcTimeController.wake(); });
@@ -4129,6 +4143,7 @@ ensureTechnicalData();
 initializeArcShell();
 registerAppShell();
 installOverscrollGuard();
+installArcSidebarGesture();
 updateStickyHeaderOffset();
 if (simulationStartupError) { document.getElementById("app").innerHTML = `<div class="card"><h2>Simulation recovery required</h2><p>ARC could not verify the saved active simulation. Live Classroom has not been activated or modified.</p><p class="small">${escapePhotoText(simulationStartupError.message)}</p><p>Use a verified recovery backup before continuing.</p></div>`; updateSimulationIndicator(); }
 else { if (!restoreNavigationContext()) renderMainMenu(); save(); }

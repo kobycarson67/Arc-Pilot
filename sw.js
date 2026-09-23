@@ -5,6 +5,7 @@ const CORE=['./','./index.html','./app.webmanifest','./app-build.js','./icons/fa
 CORE.push('./assets/brand/runtime/arc-welding-compact-lockup-720.png');
 CORE.push('./src/current_student_directory.js');
 CORE.push('./src/arc_time_lifecycle.js');
+CORE.push('./src/arc_sidebar_gesture.js');
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('arc-pilot-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();});

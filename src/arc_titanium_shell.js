@@ -10,25 +10,33 @@
   var GROUPS=[
     {id:'classroom',label:'Classroom',items:[
       {id:'main',label:'Dashboard',icon:'dashboard',action:'renderMainMenu'},
-      {id:'roster',label:'Students / Roster',icon:'students',action:'renderCurrentStudentDirectory'},
+      {id:'roster',label:'Students',icon:'students',action:'renderCurrentStudentDirectory'},
       {id:'forecast',label:'Class Forecast',icon:'forecast',action:'renderClassForecast',classScoped:true},
       {id:'attendance',label:'Attendance & Passes',icon:'attendance',action:'renderAttendance',classScoped:true},
       {id:'projects',label:'Projects',icon:'projects',action:'showClassProjects',classScoped:true},
-      {id:'openshop',label:'Open Shop',icon:'openshop',action:'renderOpenShopAll',classScoped:true}
+      {id:'openshop',label:'Open Shop',icon:'openshop',action:'renderOpenShopAll',classScoped:true},
+      {id:'gradebook-future',label:'Gradebook',icon:'standards',future:true}
     ]},
     {id:'instruction',label:'Instruction',items:[
       {id:'today-focus',label:"Today's Focus",icon:'focus',future:true},
-      {id:'lessonbank',label:'Lesson Plan Bank',icon:'lessonbank',action:'renderLessonBank'},
-      {id:'projectbank',label:'Project Bank',icon:'projectbank',action:'renderProjectBank'},
+      {id:'lessonbank',label:'Lesson Plans',icon:'lessonbank',action:'renderLessonBank'},
       {id:'standards',label:'Curriculum & Standards',icon:'standards',action:'renderActiveCurriculum'}
+    ]},
+    {id:'activity-library',label:'Activity Library',items:[
+      {id:'projectbank',label:'Project Library',icon:'projectbank',action:'renderProjectBank'},
+      {id:'technical-assignments',label:'Technical Assignments',icon:'lessonbank',future:true},
+      {id:'skill-challenges',label:'Skill Challenges',icon:'openshop',future:true},
+      {id:'practice',label:'Practice',icon:'focus',future:true}
     ]},
     {id:'shop',label:'Shop',items:[
       {id:'inventory',label:'Material Inventory',icon:'inventory',action:'renderInventory'},
       {id:'booths',label:'Booth Manager',icon:'booths',action:'showBoothManager',classScoped:true}
     ]},
-    {id:'arc',label:'ARC',items:[
+    {id:'arc',label:'ARC / Global',items:[
       {id:'notifications',label:'Notifications',icon:'notifications',action:'showNotifications'},
       {id:'search',label:'Search',icon:'search',action:'showGlobalSearch'},
+      {id:'resources',label:'Resources',icon:'help',future:true},
+      {id:'administration',label:'Administration',icon:'settings',future:true},
       {id:'help',label:'Help',icon:'help',future:true},
       {id:'settings',label:'Settings',icon:'settings',action:'renderAppSettings'}
     ]}

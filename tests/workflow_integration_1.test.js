@@ -81,7 +81,7 @@ test('sidebar controls share effective responsive state and next-action glyph', 
   assert.match(html,/glyph\.textContent = expanded \? "‹" : "›"/);
   assert.match(html,/rail\.setAttribute\("aria-expanded", String\(expanded\)\)/);
   assert.match(html,/menu\.setAttribute\("aria-expanded", String\(expanded\)\)/);
-  assert.match(html,/function runArcNavigation\(action\)[^\n]*syncArcSidebarControls\(\)/);
+  assert.match(html,/function runArcNavigation\(action\)[^\n]*setArcMobileSidebarOpen\(false\)/);
   assert.match(html,/function reconcileArcResponsiveState\(\)/);
   assert.doesNotMatch(css,/arc-rail-toggle span\{transform:rotate\(180deg\)/);
 });
@@ -159,7 +159,7 @@ test('Dashboard and clock refresh on wake and date rollover without changing sel
 
 test('registry and offline shell include milestone capabilities', () => {
   const registry = fs.readFileSync(path.join(root,'docs/ARC_CAPABILITY_REGISTRY.md'),'utf8');
-  for (const value of ['Implemented','Partial','Foundation','Docked / Future','Missing','Global Students / Roster','Global Project Bank','Header live clock','Purchasing/readiness forecasting']) assert(registry.includes(value),value);
+  for (const value of ['Implemented','Partial','Foundation','Docked / Future','Missing','Students','Project Library','Header live clock','Purchasing/readiness forecasting']) assert(registry.includes(value),value);
   assert(sw.includes('./src/current_student_directory.js'));
   assert(sw.includes('./src/arc_time_lifecycle.js'));
   assert.match(html,/const CURRENT_SCHEMA_VERSION = 7;/);

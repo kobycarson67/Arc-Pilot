@@ -788,7 +788,8 @@ let navCurrentView = null, navHistory = [], navSuppressHistory = false;
 function courseLabel(course) { return course === "wt" ? "Welding Technology" : "Advanced Welding Technology"; }
 const ARC_SIDEBAR_PREF_KEY = "arc_ui_titanium_sidebar_collapsed";
 function arcShellCollapsedPreference() { try { return localStorage.getItem(ARC_SIDEBAR_PREF_KEY) === "1"; } catch (e) { return false; } }
-function arcSidebarIsMobile() { return !!(window.matchMedia && window.matchMedia("(max-width:900px)").matches); }
+const ARC_COLLAPSIBLE_SIDEBAR_QUERY = "(max-width:900px), (pointer:coarse) and (max-width:1366px)";
+function arcSidebarIsMobile() { return !!(window.matchMedia && window.matchMedia(ARC_COLLAPSIBLE_SIDEBAR_QUERY).matches); }
 function syncArcSidebarControls() {
     let mobile = arcSidebarIsMobile(), mobileOpen = mobile && document.body.classList.contains("arc-sidebar-open"), expanded = mobile ? mobileOpen : !document.body.classList.contains("arc-sidebar-collapsed");
     let rail = document.getElementById("arcSidebarToggle"), menu = document.getElementById("arcMobileMenu"), backdrop = document.getElementById("arcSidebarBackdrop");
@@ -4130,9 +4131,21 @@ function installArcSidebarGesture() {
     function clearDrag() { document.body.classList.remove("arc-sidebar-dragging"); document.body.style.removeProperty("--arc-sidebar-drawer-width"); document.body.style.removeProperty("--arc-sidebar-drag-offset"); document.body.style.removeProperty("--arc-sidebar-backdrop-opacity"); }
     document.addEventListener("pointerdown", event => { if (!arcSidebarIsMobile() || event.pointerType === "mouse" && event.button !== 0) return; let open = document.body.classList.contains("arc-sidebar-open"), sidebar = document.querySelector(".arc-sidebar"), onSidebar = !!(sidebar && sidebar.contains(event.target)); if (open && !onSidebar) return; let d = dimensions(); gesture = ArcSidebarGesture.create({ edgeWidth: 24, intentDistance: 8, drawerTravel: d.travel, settleProgress: .5, flickVelocity: .55 }); gesture.begin({ pointerId:event.pointerId, x:event.clientX, y:event.clientY, time:event.timeStamp, open, startSurface:onSidebar, blocked:blocked(event.target) }); }, { passive:true });
     document.addEventListener("pointermove", event => { let result = gesture.move({ pointerId:event.pointerId, x:event.clientX, y:event.clientY, time:event.timeStamp }); if (!result) return; if (result.cancelled) { clearDrag(); return; } if (!result.dragging) return; event.preventDefault(); suppressSidebarClickUntil = Date.now() + 600; let d=dimensions(); document.body.classList.add("arc-sidebar-dragging"); document.body.style.setProperty("--arc-sidebar-drawer-width", d.drawer + "px"); document.body.style.setProperty("--arc-sidebar-drag-offset", ((result.progress - 1) * d.travel) + "px"); document.body.style.setProperty("--arc-sidebar-backdrop-opacity", String(result.progress * .6)); }, { passive:false });
-    function finish(event) { let result=gesture.end({ pointerId:event.pointerId, x:event.clientX, y:event.clientY, time:event.timeStamp }); if (result && result.settled) setArcMobileSidebarOpen(result.open); clearDrag(); }
+    function settleArcSidebarGesture(result) {
+        if (!result || !result.settled) { clearDrag(); return; }
+        if (result.open) { setArcMobileSidebarOpen(true); clearDrag(); return; }
+        let sidebar = document.querySelector(".arc-sidebar");
+        document.body.classList.add("arc-sidebar-handoff-closed");
+        setArcMobileSidebarOpen(false);
+        clearDrag();
+        if (sidebar) void sidebar.offsetWidth;
+        document.body.classList.remove("arc-sidebar-handoff-closed");
+    }
+    function finish(event) { let result=gesture.end({ pointerId:event.pointerId, x:event.clientX, y:event.clientY, time:event.timeStamp }); settleArcSidebarGesture(result); }
+    function resetGesture() { gesture.cancel(); clearDrag(); suppressSidebarClickUntil = 0; }
     document.addEventListener("pointerup", finish, { passive:true }); document.addEventListener("pointercancel", event => { gesture.cancel(); clearDrag(); }, { passive:true });
     document.addEventListener("click", event => { if (Date.now() > suppressSidebarClickUntil || !event.target.closest || !event.target.closest(".arc-sidebar")) return; suppressSidebarClickUntil = 0; event.preventDefault(); event.stopImmediatePropagation(); }, true);
+    window.addEventListener("resize", resetGesture, { passive:true }); window.addEventListener("orientationchange", resetGesture, { passive:true });
 }
 window.addEventListener("resize", reconcileArcResponsiveState);
 window.addEventListener("orientationchange", function() { setTimeout(reconcileArcResponsiveState, 100); });

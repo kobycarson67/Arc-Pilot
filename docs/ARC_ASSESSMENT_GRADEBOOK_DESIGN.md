@@ -562,7 +562,7 @@ Qualifying evidence demonstrates all four elements:
 3. Select an appropriate correction.
 4. Demonstrate or evaluate improvement.
 
-Proficient requires **two qualifying demonstrations involving different troubleshooting problems or contexts**. Advanced requires stronger, diverse troubleshooting evidence. Resource Bank content may support learning and Practice but does not automatically prove the qualifying answer.
+Proficient requires **two qualifying demonstrations involving different troubleshooting problems or contexts**. Advanced requires stronger, diverse troubleshooting evidence. Resources may support learning and Practice but do not automatically prove the qualifying answer.
 
 ### WT-F1 Fabrication Sequence
 
@@ -638,14 +638,14 @@ Assigned Practice creates expected material demand even when it creates no grade
 
 Expected demand does not consume or reserve inventory automatically. Material Inventory remains actual-stock authority. Future demand planning may combine assigned Projects, Skill Challenges, and Practice, and may later include scheduled activities through Today's Focus. Purchasing and preparation recommendations remain advisory; ARC must not automatically purchase, prepare, reserve, or consume material.
 
-## ARC Resource Bank
+## Resources
 
-The approved future **ARC Resource Bank** is trusted contextual instructional and reference authority. It is not merely a folder of links and PDFs.
+The approved user-facing name is **Resources**. Resources is ARC's trusted contextual instructional and reference authority. It is not merely a folder of links and PDFs, and the sidebar must not add a redundant Resources heading around the destination.
 
 The distinction is:
 
 - **Activity Library: What can I do?**
-- **Resource Bank: What can help me understand, diagnose, or improve this?**
+- **Resources: What can help me understand, diagnose, or improve this?**
 
 Approved resource types are:
 
@@ -691,11 +691,11 @@ The target evidence loop is:
 
 Criterion-level results may drive contextual recommendations. For example, a Developing result for Fusion & Tie-In may lead to approved tie-in resources, targeted Practice, and a later qualifying Skill Challenge. Resource recommendations never change grades or competency levels.
 
-### Shared Activity Library and Resource Bank principle
+### Shared Activity Library and Resources principle
 
 > **Define an instructional activity once. Assign it wherever appropriate. Let every relevant ARC system understand what that activity means.**
 
-> **Resource Bank provides trusted help; Activity Library provides actionable work.**
+> **Resources provides trusted help; Activity Library provides actionable work.**
 
 ## Future Open Shop evidence pathway
 
@@ -722,7 +722,7 @@ Reusable task/challenge metadata may eventually include course applicability, co
 
 ### Shop-aware recommendations
 
-Future Open Shop should answer: **What is the best qualifying task this student can realistically do right now?**
+Within a qualification pathway, future Open Shop should answer: **What is the best qualifying task this student can realistically do right now?** Friday Open Shop uses the broader frozen question documented below—**What is the highest-value appropriate activity for this student right now?**—and may recommend Practice or other legitimate priorities instead of a qualifying task.
 
 Recommendations may consider:
 
@@ -738,7 +738,7 @@ Recommendations may consider:
 - equipment availability/status where represented;
 - current class;
 - future Today's Focus/planned instruction after lesson → class → date authority exists.
-- approved Resource Bank materials connected to the identified weakness;
+- approved Resources connected to the identified weakness;
 - available Practice and Skill Challenges and their practice-versus-qualifying roles.
 
 Current authoritative inputs include competency ratings/gaps, WT/AWT context, the live class/countdown and cleanup state, assigned projects, Material Inventory, booth state, and selected/current class context. Evidence-derived next-level progress, formal practice/qualifying metadata, complete resource readiness, and Today's Focus authority are future inputs.
@@ -755,7 +755,7 @@ Teacher and student experiences must project the same competency, evidence, path
 
 A future **My Open Shop** view may show current level, explanation, next-level requirement, progress, today's assigned task, specific focus, and assessment result/evidence.
 
-The Activity Library and Resource Bank are also shared authorities for future ARC Student rather than duplicated student-side catalogs. Teacher views may expose deeper diagnostics, settings, evidence, approval, and authoring context. Student views may present **What's going wrong?**, **What should I check?**, Learn/Review, Practice, Assigned Challenge, and a clear explanation of what counts toward moving up. Both views must use the same instructor-approved resources and activity definitions with role-appropriate visibility.
+The Activity Library and Resources are also shared authorities for future ARC Student rather than duplicated student-side catalogs. Teacher views may expose deeper diagnostics, settings, evidence, approval, and authoring context. Student views may present **What's going wrong?**, **What should I check?**, Learn/Review, Practice, Assigned Challenge, and a clear explanation of what counts toward moving up. Both views must use the same instructor-approved resources and activity definitions with role-appropriate visibility.
 
 ### Core instructional feedback loop
 
@@ -837,6 +837,194 @@ Material Inventory remains stock authority. Assigning a project must not consume
 
 ARC must not place orders. Future notifications may advise `Consider ordering X by Y date` based on planned instruction or projects, quantities, requirements, and current inventory. Purchasing authority remains with the instructor.
 
+## Navigation naming and information architecture
+
+The following user-facing names are approved:
+
+- Global **Students / Roster** becomes **Students**. Roster and enrollment functions live inside Students.
+- Student Showcase lives at **Students → Student → Showcase**. Other surfaces may provide shortcuts to that same authority, but no duplicate Showcase authority or global Showcase destination is created.
+- The user-facing instructional/reference destination is **Resources**.
+- Reusable project definitions use **Project Library** rather than Project Bank.
+- Instructional planning uses **Lesson Plans** rather than Lesson Plan Bank.
+
+The approved sidebar direction is:
+
+### Classroom
+
+- Dashboard
+- Students
+- Class Forecast
+- Attendance & Passes
+- Projects, for current and assigned project operations
+- Open Shop
+- Gradebook — future
+
+### Instruction
+
+- Today's Focus — future
+- Lesson Plans
+- Curriculum & Standards
+
+### Activity Library
+
+- Project Library, for reusable project definitions
+- Technical Assignments — future
+- Skill Challenges — future
+- Practice — future
+
+### Shop
+
+- Material Inventory
+- Booth Manager
+
+### ARC/global
+
+- Notifications
+- Search
+- Resources — future
+- Administration — future
+- Help — future
+- Settings
+
+This information architecture does not authorize implementation of future destinations. Showcase does not become a global destination. Current Attendance routing must not be changed to the future Master Attendance destination without separate authorization.
+
+## Administration
+
+The approved future global **Administration** workspace turns authoritative ARC classroom information into required external documentation and reporting. Administration is a projection and workflow over existing authorities; it must not become a second manually maintained classroom-data authority.
+
+Approved future areas are:
+
+- **Weekly Lesson Plans:** create, review, approve, view, print, and download upcoming and historical plans.
+- **SLO Documentation:** create, generate, view, update, print, and download documents from authoritative ARC evidence and history.
+- **Reports:** appropriate student, class, course, competency, grading-period, attendance, and Workplace reports.
+- **Generated Documents / Exports:** organized generated files, printables, exports, and version/history where appropriate.
+
+### Instruction and Administration boundary
+
+**Instruction → Lesson Plans** is the operational instructional-planning authority. It may contain curriculum pacing, standards, competencies, demonstrations, Projects, Practice, Skill Challenges, Technical Assignments, Resources, Open Shop, materials, differentiated pathways, and assessments.
+
+**Administration → Weekly Lesson Plans** is the administrator-facing printable representation derived from those instructional and classroom authorities. The instructor must not re-enter the same plan manually in a second system inside ARC.
+
+ARC may allow the instructor to print or submit ARC plans directly instead of using Planbook. ARC does not need to imitate Planbook's workflow.
+
+## Weekly Lesson Plan authority
+
+### Administrative timing
+
+The weekly administrative timing is frozen:
+
+- During Friday planning, the instructor prepares, reviews, approves, and prints plans for the **following week**.
+- Plans are turned in Monday morning.
+- The plan is a prospective snapshot of reasonably expected instruction.
+- Classroom reality may change during the week in response to evidence and readiness.
+- Once approved or submitted, the historical snapshot is preserved. Later live evidence must not rewrite it.
+
+### Default grouping
+
+The default grouping is frozen:
+
+- One WT weekly plan covers WT periods following a shared pathway.
+- One AWT weekly plan covers AWT periods following a shared pathway.
+- ARC must not duplicate near-identical plans merely because periods differ.
+- If a period diverges enough that a shared plan would be inaccurate, the instructor may use a separate plan.
+- Future ARC may identify meaningful divergence and suggest separation; the instructor decides.
+
+### Weekly plan content
+
+Weekly administrative plans preserve:
+
+- **Title / Weekly Focus**
+- **Standards**
+- **Learning Targets** beginning **“I am learning to …”**
+- **Criteria for Success** beginning **“I can …”**
+- **Engaging Instructional Strategies**
+- **Assessment / Evidence**
+- a clear **Differentiation / Student Pathways** explanation
+- optional **Materials / Resources** when useful
+
+Administrative plans must explain differentiation truthfully rather than imply that every student performs identical work.
+
+## Weekly Instructional Focus and differentiation
+
+**Weekly Instructional Focus** is the primary planned course instruction or emphasis. It provides coherence but does not force identical student work. It does not override safety prerequisites, blocking prerequisites, legitimate active Project or workflow progression, individual evidence, or instructor judgment.
+
+A new week does not require a new focus. One focus may span several weeks or phases, including:
+
+- Introduction / Demonstration
+- Practice / Application
+- Qualification
+- Project Application / Extension
+
+### Readiness states
+
+The following states are frozen:
+
+- **Ready for Focus:** the student has sufficient prerequisites for productive focus work.
+- **Ready with Support:** a prerequisite weakness exists, but the student can participate productively with targeted support.
+- **Prerequisite Blocked:** a missing prerequisite materially prevents safe or productive participation. The student may receive common instruction or exposure and then returns to prerequisite work until ready.
+- **Extension Ready:** the student is already proficient and receives higher-complexity application, a Project, or an advanced challenge instead of unnecessary repetition.
+
+A student does not need Proficient in every earlier competency. A prior competency blocks participation only when its absence materially prevents safe or productive participation.
+
+### Common instruction and differentiated application
+
+ARC must not hard-code Monday as direct-instruction day. When common instruction or demonstration is useful, the instructor teaches it efficiently to the relevant class or group and then differentiates application. Some weeks may have no meaningful whole-class direct instruction.
+
+Tuesday through Thursday may include different Projects, Practice, Skill Challenges, Technical Assignments, remediation, reassessment, extension, coaching, or assessment. An activity need not directly match Weekly Focus when another legitimate priority is stronger.
+
+The conceptual planning and recommendation priority is:
+
+1. Safety prerequisite.
+2. Blocking prerequisite.
+3. Appropriate active instructional commitment, Project, or workflow.
+4. Weekly Focus.
+5. Other competency needs.
+6. Extension.
+
+This hierarchy guides planning and recommendations. The instructor remains final authority.
+
+### Friday Open Shop
+
+Friday Open Shop loosens Weekly Focus and asks: **What is the highest-value appropriate activity for this student right now?**
+
+It may recommend prerequisite work, current-focus work, another competency gap, Practice, a Skill Challenge, reassessment, an active Project, missing legitimate work, a Technical Assignment, or extension. Future ranking may consider safety, prerequisites, available time, materials, booths and equipment, current work, and duplicate or repeat rules. Instructor assignment authority remains unchanged.
+
+## Pacing authority
+
+The frozen pacing principle is:
+
+> **Calendar time does not determine mastery, and a new instructional week does not require a new instructional focus.**
+
+The authorities remain distinct:
+
+- **Curriculum map:** planned sequence and generalized or approximate pacing.
+- **Student evidence:** current readiness, prerequisites, progression, and activity position.
+- **ARC:** planning intelligence, readiness summaries, and historical pacing.
+- **Instructor:** the decision to continue, deepen, or advance.
+
+ARC must not hard-code a readiness ratio such as `8/10` as automatic pacing authority.
+
+Long-term pacing distinguishes:
+
+- **Planned Pacing:** the curriculum-map expectation.
+- **Actual Pacing:** what occurred for a course, period, or cohort.
+- **Future Planning Estimate:** evidence-informed guidance derived from accumulated history.
+
+Potential planning signals include days spent on a focus, competency progression, Practice frequency, Skill Challenge readiness, Project duration, prerequisite bottlenecks, and cohort or period variation. Future estimates are guidance and never automatic authority.
+
+## Pending Sidebar Gesture Repair 2
+
+Sidebar Gesture Repair 2 is documented pending implementation. The deployed Workflow Integration 1 Repair 1 previously passed Samsung physical testing, including countdown and Cleanup behavior. This design authority does not authorize runtime changes.
+
+The later bounded repair requirements are:
+
+1. **Larger swipe-open target:** nearly the entire collapsed rail can initiate horizontal drag; behavior remains case-friendly, preserves normal taps, and requires horizontal-intent detection.
+2. **Rigid contents:** the drawer moves as one surface; icons, labels, headings, and Quick Add do not shift or reflow during drag or release.
+3. **Persistent backdrop dim:** dimming follows opening progress, remains while fully open, follows closing progress, and clears only when fully closed.
+4. **Backdrop tap closes:** the dimmed application area closes the drawer and intercepts the tap without click-through.
+5. **Single state authority:** swipe/flick, hamburger, Collapse/Expand, and backdrop tap all resolve to either open and dimmed or closed and undimmed.
+6. Preserve accepted finger-follow behavior, flick behavior, vertical cancellation, horizontal-control protection, drawer width and layout, Titanium styling, countdown and Cleanup, and all domain behavior.
+
 ## Today's Focus and Class Forecast
 
 **Today's Focus** is the future authoritative daily instructional plan across all classes. It answers: **What am I intending to teach or accomplish today?** It depends on future lesson → class → calendar-date authority.
@@ -862,10 +1050,13 @@ These are design gaps, not authorization to modify runtime behavior:
 11. Notifications are general records and do not yet derive Gradebook reconciliation summaries.
 12. Today's Focus remains docked because lesson-to-class-to-date authority is absent.
 13. Project Bank is the implemented reusable project authority, but the broader approved Activity Library types and shared metadata do not exist.
-14. No Resource Bank, approval lifecycle, contextual troubleshooting authority, or resource-to-practice-to-qualification pathway is implemented.
+14. No Resources authority, approval lifecycle, contextual troubleshooting authority, or resource-to-practice-to-qualification pathway is implemented.
 15. Current material planning does not derive expected demand from assigned Practice or Skill Challenges.
-16. ARC Student does not yet reuse Activity Library or Resource Bank authorities because those authorities and the future student experience are unimplemented.
+16. ARC Student does not yet reuse Activity Library or Resources authorities because those authorities and the future student experience are unimplemented.
 17. The complete WT evidence pathways and deterministic Safety Evidence Model are approved, but no runtime evidence records, derivation, observation workflow, Safety Status, gate enforcement, or migration exists.
+18. Administration, derived Weekly Lesson Plans, differentiated Weekly Focus/readiness, and planned-versus-actual pacing projections are approved but unimplemented.
+19. Current navigation labels and grouping do not yet implement the approved Students, Resources, Project Library, Lesson Plans, Administration, or complete Activity Library information architecture.
+20. Sidebar Gesture Repair 2 remains pending; its larger rail target, rigid contents, persistent backdrop, tap interception, and unified state authority are not implemented by this documentation milestone.
 
 Any implementation must define migration, rollback, historical rendering, and explainability before changing stored records or current calculations.
 
@@ -886,7 +1077,7 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Material readiness thresholds, forecasting horizon, and notification timing.
 - Open Shop task taxonomy, qualifying-opportunity approval workflow, ranking/tie-break rules, duplicate/repeat rules, and the minimum authoritative resource data required for availability claims.
 - Exact Activity Library schemas, shared-versus-specialized fields, migration from Project Bank, and activity authoring workflow.
-- Exact Resource Bank schema, authoring and approval workflow, provenance rules, detailed lifecycle behavior, and archival behavior.
+- Exact Resources schema, authoring and approval workflow, provenance rules, detailed lifecycle behavior, and archival behavior.
 - Resource recommendation and ranking algorithm, including how contextual uncertainty is presented.
 - Practice material-demand timing, reservation semantics, preparation horizon, and relationship to actual inventory transactions.
 - Criterion-to-competency mappings beyond the frozen WT evidence architecture.
@@ -895,6 +1086,12 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Detailed Minor, Major, and Critical safety-event taxonomy and default severities.
 - Safety remediation, review, and clearance workflow.
 - Student-facing implementation of WT evidence explanations and the Safety model.
+- Administration document schemas, approval/version history, print/download/export formats, and reporting workflows.
+- Exact Weekly Lesson Plan generation, review, approval, snapshot, historical retrieval, and period-divergence suggestion workflows.
+- Readiness derivation and explanation rules beyond the frozen state meanings and priority hierarchy.
+- Planned Pacing, Actual Pacing, and Future Planning Estimate data models, aggregation, comparison, and guidance algorithms.
+- Final navigation transition plan from current labels and destinations to the approved sidebar information architecture.
+- Sidebar Gesture Repair 2 implementation and physical Samsung acceptance testing.
 - Student privacy and resource/activity visibility rules.
 - Media storage and hosting, external-link validation, and offline resource/media caching.
 - Student ARC roles, visibility, assignment acknowledgement, evidence access, and privacy boundaries.

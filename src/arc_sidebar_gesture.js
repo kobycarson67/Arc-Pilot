@@ -7,7 +7,7 @@
   function create(options){
     var active=null;
     function begin(input){
-      if(input.blocked||(!input.open&&input.x>options.edgeWidth))return false;
+      if(input.blocked||(!input.open&&!input.startSurface&&input.x>options.edgeWidth))return false;
       active={pointerId:input.pointerId,startX:input.x,startY:input.y,lastX:input.x,lastTime:input.time,open:!!input.open,intent:'pending'};
       return true;
     }

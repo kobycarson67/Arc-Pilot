@@ -907,6 +907,48 @@ Approved future areas are:
 
 ARC may allow the instructor to print or submit ARC plans directly instead of using Planbook. ARC does not need to imitate Planbook's workflow.
 
+## Curriculum Map and Lesson Plans
+
+### Curriculum Map role
+
+The Curriculum Map role is frozen. Existing WT and AWT maps are not rewritten by this authority.
+
+The Curriculum Map provides stable course direction, state standards and priority or essential standards, competencies, general sequence, and approximate pacing. It is not a rigid weekly calendar. Student or period variation does not automatically rewrite it. The instructor decides whether future revisions are warranted.
+
+The instructional authority chain is:
+
+> **State Standards → Curriculum Map → Competencies → Lesson Plans → Weekly Focus → Differentiated Activities → Assessment/Evidence → Competency Progression → Pacing Intelligence**
+
+### Lesson Plans as reusable instructional frameworks
+
+A **Lesson Plan** is a reusable, standards-aligned instructional framework. It is not necessarily one day or one week, and it does not require every student to perform identical work.
+
+Lesson Plans connect curriculum, competencies, prerequisite readiness, common instruction, approved Resources, differentiated Activities, Checks for Understanding, and assessment or evidence. A framework may span these phases:
+
+- Introduction / Demonstration
+- Development / Practice
+- Qualification
+- Application / Extension
+
+Weekly Focus is the instructor-approved weekly application or phase of a primary Lesson Plan framework, informed by readiness and pacing. The Administrative Weekly Plan is the printable prospective translation of that authority.
+
+Future Lesson Plan relationships may include:
+
+- title, WT/AWT applicability, and Curriculum Map location;
+- actual applicable state standards and identified priority or essential standards;
+- target competencies;
+- **Required prerequisites**, whose absence materially blocks safe or productive participation;
+- **Supporting prerequisites**, whose weakness permits participation with support;
+- common instruction and demonstration;
+- differentiated pathways for Prerequisite Blocked, Ready with Support, Ready for Focus, and Extension Ready;
+- Activity Library references to Projects, Technical Assignments, Skill Challenges, and Practice;
+- approved Resources;
+- Checks for Understanding;
+- formative or interim evidence and qualifying or summative evidence;
+- materials and equipment.
+
+Whole-class Monday instruction must not be hard-coded.
+
 ## Weekly Lesson Plan authority
 
 ### Administrative timing
@@ -937,12 +979,205 @@ Weekly administrative plans preserve:
 - **Standards**
 - **Learning Targets** beginning **“I am learning to …”**
 - **Criteria for Success** beginning **“I can …”**
-- **Engaging Instructional Strategies**
+- **Engagement Strategies**
 - **Assessment / Evidence**
 - a clear **Differentiation / Student Pathways** explanation
 - optional **Materials / Resources** when useful
 
 Administrative plans must explain differentiation truthfully rather than imply that every student performs identical work.
+
+### Direct administrator feedback
+
+The administrator accepted the overall one-page ARC plan concept and established two required corrections:
+
+1. Production plans must show **actual applicable state standards**, not generic descriptions or placeholders.
+2. The school terminology is **Engagement Strategies**, not Instructional Strategies.
+
+Only standards genuinely addressed by the planned instruction should print. The administrator also emphasized student-friendly language.
+
+### Learning Targets
+
+The Learning Target stem is frozen as **“I am learning to …”**
+
+Targets must be student- or kid-friendly, clear, concise, measurable, aligned to identified essential standards, and appropriate to the planned learning. They should avoid standards-document jargon. Learning Targets are future classroom and student-facing instructional content, not paperwork-only fields.
+
+### Success Criteria
+
+The Success Criteria stem is frozen as **“I can …”**
+
+Criteria must be student-friendly, clearly defined, measurable or observable, directly aligned to Learning Targets, and explicit about what successful learning or performance looks like. Students should eventually be able to use the criteria to monitor their own progress.
+
+### Lesson Plan Review Rubric alignment
+
+The administrator-provided Lesson Plan Review Rubric is an administrative design input. It evaluates six components with Advanced (4), Proficient (3), Basic (2), and Below Basic (1):
+
+1. Essential Standards
+2. Learning Targets
+3. Success Criteria
+4. Engagement Strategies
+5. Assessment
+6. Lesson Plan Submission
+
+ARC must preserve the rubric's intent but must not self-award administrator scores.
+
+The Advanced-level design intent is:
+
+- **Essential Standards:** priority or essential standards are clearly identified, represent critical learning, are appropriately sequenced, and align to targets.
+- **Learning Targets:** daily or weekly targets are student-friendly, clear, concise, measurable, and aligned to essential standards.
+- **Success Criteria:** criteria are clearly defined, measurable, and aligned to targets so students know exactly what is expected.
+- **Engagement Strategies:** multiple purposeful strategies actively involve students and align to targets, promoting ownership, movement, choice, higher-level thinking, and project-based learning where appropriate.
+- **Assessment:** multiple planned checks for understanding occur throughout learning and align to targets and criteria, with interim and vocabulary-assessment analysis where applicable.
+- **Lesson Plan Submission:** plans are submitted on time by the morning of the first weekday through PlanBook or another agreed format. ARC's Friday preparation, approval, and printing workflow supports Monday submission.
+
+### Engagement Strategies
+
+**Engagement Strategies** is the frozen user-facing and administrative terminology. Instructional Strategies is not used as the production label.
+
+Purposeful strategies may include, when appropriate:
+
+- demonstration and modeling;
+- hands-on Practice;
+- Projects and project-based learning;
+- Skill Challenges;
+- appropriate student choice;
+- movement and shop application;
+- troubleshooting and problem solving;
+- self-inspection;
+- higher-order questioning;
+- individual or small-group coaching;
+- collaboration and student discourse;
+- approved visual or media Resources;
+- remediation and scaffolding;
+- reassessment;
+- extension.
+
+ARC must not force every strategy into every lesson or reduce Engagement Strategies to a list of assignments.
+
+### Checks for Understanding
+
+**Checks for Understanding** is a frozen first-class internal Lesson Plan component. Authentic and hands-on checks are preferred where appropriate.
+
+Examples include:
+
+- identifying the correct work angle;
+- explaining arc direction;
+- comparing a weld to Success Criteria;
+- identifying a visible improvement need;
+- explaining the next adjustment;
+- demonstrating a setup or checkpoint;
+- purposeful questioning;
+- student self-inspection.
+
+Checks align to Learning Targets and Success Criteria and may drive immediate instructional adjustment.
+
+### Lesson Plan assessment architecture
+
+Lesson Plans distinguish:
+
+- **Checks for Understanding:** frequent in-process monitoring.
+- **Formative / Interim Evidence:** Practice feedback, observations, checkpoints, and technical, interim, or vocabulary checks where applicable.
+- **Qualifying / Summative Evidence:** Skill Challenges, approved technical assessments, Project/Fabrication, Welding Performance, Technical Assignments, and other legitimate qualifying work.
+
+Assessment must not be presented as synonymous with paper tests. A printed weekly table may remain compact but should visibly communicate ongoing checks. `Checks for Understanding / Assessment` is a candidate column label; the final template label remains a print-design decision.
+
+### Instructional Walk-through Rubric alignment
+
+The administrator-provided Oelrichs School Instructional Walk-through Rubric is design-validation input. It covers:
+
+- Domain 3 #1 Learning Targets
+- Domain 3 #2 Success Criteria / Student Clarity
+- Domain 3 #3 Teacher Actions / Instructional Practices
+- Domain 3 #4 Student Engagement and Ownership
+- Domain 3 #5 Formative and Summative Assessment Strategies
+- Domain 2 #1 Classroom Culture and Learning Environment
+- Domain 2 #2 Classroom Management
+
+Its observable checklist includes:
+
+- the target is posted and verbally identified;
+- Success Criteria are aligned and explained;
+- students can articulate their learning;
+- active student responses;
+- student-to-student discourse;
+- higher-order questioning and thinking;
+- continual checks for understanding;
+- clear, purposeful, effective feedback;
+- instruction adjusted based on student response;
+- differentiation and scaffolding;
+- positive culture;
+- effective routines and transitions;
+- positive response to redirection.
+
+ARC uses this rubric to validate that its design supports strong instruction. It must not turn the rubric into a walkthrough-gaming checklist.
+
+### Student-facing clarity
+
+Future ARC must support the current classroom and student-facing statements:
+
+- **I am learning to …**
+- **I can …**
+
+Targets and criteria should be posted, communicated, referred to during instruction, and usable by students. A primary class focus may coexist with pathway-specific individual targets. Students should be able to answer:
+
+1. What am I learning?
+2. What does success look like?
+3. What am I doing today?
+4. What do I need to improve?
+
+Differentiated Activities remain aligned to each student's actual target and Success Criteria even when students perform different work.
+
+The Activity architecture supports ownership naturally: Projects provide project-based learning, Practice provides active development, Skill Challenges support ownership and demonstration, troubleshooting provides higher-order problem solving, Open Shop provides appropriate choice, and Resources support independent learning.
+
+### Teacher action and classroom culture boundary
+
+ARC supports teaching but does not replace it. Future tools may help identify needs, monitor students, surface useful questions, provide feedback context, adjust pathways, scaffold, and reassess.
+
+ARC may support routines and independence through Activities, Booth Manager, material readiness, the Cleanup countdown, Ready to Work, Open Shop, Resources, and student-facing instructions. ARC does not automatically score culture, belonging, respect, redirection, or relationships.
+
+### Friday Plan Preflight
+
+Friday Plan Preflight is approved future architecture. Before next week's plan is approved or printed, ARC should check for:
+
+- actual Essential Standards that are present and aligned;
+- student-friendly, measurable Learning Targets;
+- aligned, measurable Success Criteria;
+- multiple purposeful Engagement Strategies;
+- active participation and ownership where appropriate;
+- Checks for Understanding;
+- formative or interim evidence;
+- qualifying or summative evidence where appropriate;
+- vocabulary evidence where applicable;
+- Monday submission readiness.
+
+Plan Preflight does not assign Advanced, Proficient, Basic, or Below Basic scores. The instructor reviews and approves the plan.
+
+### Administrative print design
+
+The approved target is:
+
+> **One course · one week · one professional page whenever content reasonably fits.**
+
+ARC must not force one page by using unreadable typography. Administrator feedback established that line spacing `1.0` allowed the sample to fit properly and that a cleaner document layout is preferable to excessive boxes and tables.
+
+Tables should primarily remain for Learning Targets, Criteria for Success, and Weekly Instruction. Other sections normally use clean headings and body text.
+
+An ARC letters-only logo may be used as restrained letterhead only when a clean, transparent production asset improves professionalism. Administrative documents do not use a dark Titanium background or oversized application branding.
+
+> **If a branding or design element does not make the document look more professional, it does not belong.**
+
+### Administrative Document Engine
+
+The future Administration workspace should share one professional document-generation capability across Weekly Plans, SLOs, reports, conference summaries, Showcase exports, competency reports, and program reports.
+
+Shared responsibilities may include templates, headers and footers, typography, tables, page breaks, margins, pagination, historical snapshot metadata, print-ready PDF, and editable Word output where appropriate.
+
+The approved Weekly Plan workflow is:
+
+> **Generate Draft → Preview → Edit/Review → Preflight → Approve → Save Snapshot → Print / Download**
+
+### Reflection and historical learning
+
+An operational Lesson Plan or Weekly Focus may allow optional instructor reflection after instruction without rewriting the approved or submitted administrative snapshot. Reflections may inform pacing and planning for a later year.
 
 ## Weekly Instructional Focus and differentiation
 
@@ -1057,6 +1292,7 @@ These are design gaps, not authorization to modify runtime behavior:
 18. Administration, derived Weekly Lesson Plans, differentiated Weekly Focus/readiness, and planned-versus-actual pacing projections are approved but unimplemented.
 19. Current navigation labels and grouping do not yet implement the approved Students, Resources, Project Library, Lesson Plans, Administration, or complete Activity Library information architecture.
 20. Sidebar Gesture Repair 2 remains pending; its larger rail target, rigid contents, persistent backdrop, tap interception, and unified state authority are not implemented by this documentation milestone.
+21. The current Lesson Plan Bank does not implement the approved reusable Lesson Plan framework, administrator rubric alignment, Checks for Understanding, Plan Preflight, student-facing targets and criteria, reflection workflow, or Administrative Document Engine.
 
 Any implementation must define migration, rollback, historical rendering, and explainability before changing stored records or current calculations.
 
@@ -1092,6 +1328,15 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Planned Pacing, Actual Pacing, and Future Planning Estimate data models, aggregation, comparison, and guidance algorithms.
 - Final navigation transition plan from current labels and destinations to the approved sidebar information architecture.
 - Sidebar Gesture Repair 2 implementation and physical Samsung acceptance testing.
+- Exact Lesson Plan runtime schema and migration from the current Lesson Plan Bank.
+- Required-versus-supporting prerequisite data model and authoring workflow.
+- Final administrative print template after administrator approval.
+- Whether and how a clean transparent ARC letters-only logo asset is used.
+- Exact Plan Preflight interface, validation rules, exceptions, and approval interaction.
+- Vocabulary-assessment and vocabulary-evidence workflow.
+- Student-facing Learning Target and Success Criteria display, scope, and update behavior.
+- Word and PDF generation implementation and supported editing round trips.
+- Instructor reflection capture, visibility, history, and next-year planning workflow.
 - Student privacy and resource/activity visibility rules.
 - Media storage and hosting, external-link validation, and offline resource/media caching.
 - Student ARC roles, visibility, assignment acknowledgement, evidence access, and privacy boundaries.

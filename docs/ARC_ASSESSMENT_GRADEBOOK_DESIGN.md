@@ -368,7 +368,7 @@ The same core rubric applies to hand drawing and CAD; method is context rather t
 
 ## Evidence relationships and safeguards
 
-The technical rubric family is approved, but criterion-to-competency mappings are the next design task and are not authorized here. No runtime evidence engine is authorized.
+The technical rubric family is approved. The complete WT mappings and evidence pathways are frozen below; AWT mappings remain future design work. No runtime evidence engine is authorized.
 
 Criterion-level evidence may legitimately support related competencies:
 
@@ -385,9 +385,67 @@ Dedicated Welding Performance criteria are stronger detailed welding evidence th
 
 Corrections to an assessment must update all projections while preserving audit history. ARC must prevent duplicate evidence when one grading event feeds several views.
 
-### Frozen WT Drawing/Planning criterion-to-competency mapping
+## Frozen WT evidence architecture
 
-This WT mapping is approved and frozen. It is the authorized exception to the otherwise unresolved criterion-to-competency mappings. `R/Q` means required qualifying evidence, `S` means supporting evidence, and `—` means no relationship.
+Every current WT competency now has an approved legitimate evidence pathway. This authority completes WT evidence design without renaming or redesigning the WT competency catalog. Runtime evidence derivation remains unimplemented.
+
+### Universal evidence rules
+
+The following rules are frozen across WT evidence relationships. In the mapping tables, `R/Q` means required qualifying evidence, `Q` means qualifying evidence, `S` means supporting evidence, and `—` means no relationship.
+
+- One assessment gives at most one qualifying demonstration per competency.
+- Every required gate must meet the target.
+- Assignment grade and competency qualification are separate results.
+- A legitimate task-defined N/A criterion is excluded rather than scored as zero.
+- Evidence preserves task, process, technical context, and academic scope.
+- Not-yet-assessed is not failure.
+
+### WT Welding Performance mapping
+
+This mapping is approved and frozen.
+
+| Competency | Size/Placement | Profile | Fusion/Tie-In | Starts/Stops | Overall |
+|---|---|---|---|---|---|
+| WT-W1 Equipment & Setup | — | — | — | — | — |
+| WT-W2 Arc Control | S | R/Q | S | R/Q | S |
+| WT-W3 Stringer Beads | R/Q | R/Q | N/A where legitimately inapplicable | R/Q | R/Q |
+| WT-W4 Fillet Weld | R/Q | R/Q | R/Q | S | R/Q |
+| WT-W5 Basic Joints | R/Q | R/Q | R/Q | S | R/Q |
+| WT-W6 Welding Improvement | — | S | S | S | S |
+
+WT-W1 requires separate setup evidence. WT-W5 Proficient additionally requires at least two different qualifying joint configurations. WT-W6 qualification uses the Diagnose & Correct model below. Broad Project Welding Quality is supporting evidence unless an explicit Welding Performance assessment is performed.
+
+### WT Thermal Cutting mapping
+
+This mapping is approved and frozen.
+
+| Competency | Layout/Accuracy | Cut Face/Kerf | Travel/Control | Piercing/Starts | Edge/Overall |
+|---|---|---|---|---|---|
+| WT-T1 Cutting Equipment | — | — | — | — | — |
+| WT-T2 Cutting Setup | — | S | S | S | — |
+| WT-T3 Straight Cutting | R/Q | R/Q | R/Q | S | R/Q |
+| WT-T4 Cutting Accuracy | R/Q | R/Q | S | — | R/Q |
+
+WT-T1 requires equipment evidence. WT-T2 requires setup evidence. Evidence preserves OFC, PAC, or other process context, but WT Proficient does not require both OFC and PAC unless later curriculum authority requires both.
+
+### WT Project/Fabrication mapping
+
+This mapping is approved and frozen.
+
+| Competency | Measurement/Accuracy | Fit-Up/Fabrication | Welding Quality | Workmanship |
+|---|---|---|---|---|
+| WT-M1 Measurement | R/Q* | S | — | — |
+| WT-M2 Layout | R/Q* | S | — | — |
+| WT-M3 Squareness & Accuracy | R/Q | S | — | S |
+| WT-F1 Fabrication Sequence | S | S | S | S |
+| WT-F2 Fit-Up | S | R/Q | — | S |
+| WT-F3 Project Application | R/Q | R/Q | R/Q | R/Q |
+
+`*` WT-M1 and WT-M2 results are qualifying only when the student actually performs the measurement or layout operation. Future Activity definitions preserve which operations the student performed. WT-F1 requires authoritative workflow evidence. WT-F3 requires all four gates; Advanced requires appropriate diversity and complexity.
+
+### WT Drawing/Planning mapping
+
+This mapping is approved and frozen.
 
 | Competency | Views | Dimensions | Symbols/Technical Info | Organization/Readability | Completeness |
 |---|---|---|---|---|---|
@@ -405,6 +463,126 @@ The following qualification rules are part of the frozen mapping:
 - WT-M1 and WT-M2 drawing evidence is supporting only. Physical measurement and layout require appropriate shop evidence.
 - One assessment provides at most one qualifying demonstration per competency.
 - Every required gate for a competency must meet the target before that assessment becomes a qualifying demonstration for that competency.
+
+### WT non-rubric evidence sources
+
+These evidence pathways are approved and frozen:
+
+| Competency | Approved primary evidence pathway |
+|---|---|
+| WT-S1 PPE | Workplace observation/history under the deterministic Safety Evidence Model. |
+| WT-S2 Shop Safety | Workplace behavior plus safety demonstration or knowledge. |
+| WT-S3 Equipment Safety | Equipment-operation observation or challenge with equipment context. |
+| WT-S4 Shop Responsibility | Longitudinal Workplace evidence. |
+| WT-K1 Welding Terminology | Technical Qualifying Assignment. |
+| WT-K2 Weld Joints | Technical Assignment or identification challenge. |
+| WT-K3 Weld Symbols | Technical Assignment or interpretation challenge. |
+| WT-D1 Drawing Interpretation | Drawing-reading Technical Assignment or challenge. |
+| WT-T1 Cutting Equipment | Identification or operation challenge. |
+| WT-T2 Cutting Setup | Observed setup challenge. |
+| WT-W1 SMAW Equipment & Setup | Observed setup challenge. |
+| WT-W6 Welding Improvement | Diagnose & Correct or troubleshooting challenge. |
+| WT-F1 Fabrication Sequence | Authoritative project workflow and checkpoint history. |
+
+Authentic knowledge use, drawing/cutting/welding results, Workplace and equipment evidence, and finished Project rubric results remain supporting evidence where the approved relationship applies.
+
+### Four evidence modes
+
+The following modes are frozen:
+
+1. **Rubric Evidence:** criterion-level technical assessments.
+2. **Challenge / Assignment Evidence:** Technical Assignments and Skill Challenges.
+3. **Workflow Evidence:** project, checkpoint, and activity progression.
+4. **Habit / Continuous Evidence:** repeated Workplace and shop behavior.
+
+**Instructor Observation** is first-class evidence across these modes. A future observation record preserves the student, competency, observed level, task and context, timestamp and academic scope, optional note or photo, and Supporting or Qualifying designation. A qualifying observation requires defensible context and must not become an arbitrary manual-rating shortcut.
+
+### Knowledge competency rule
+
+One sufficiently comprehensive instructor-approved Qualifying Assessment may establish a knowledge competency when it contains enough independent opportunities. The Activity definition declares whether that condition is met; ARC does not infer it from question count. Physical performance normally retains its repeated-demonstration requirements.
+
+## Foundational Safety authority
+
+**Safety is a prerequisite for participation, not merely another competency students gradually develop.**
+
+- WT and AWT use the same required safety standard.
+- Technical expectations may differ by course; safety expectations do not.
+- Required safe behavior begins immediately.
+- Under current instructor policy, safety glasses are required in the welding classroom even on paperwork days.
+- Safety may gate Ready to Work, Projects, Practice, Skill Challenges, and Open Shop.
+- A Workplace consequence and safety-competency evidence are separate legitimate purposes rather than duplicate grading.
+- ARC must not claim external regulatory compliance. The rationale is preparation for serious safety expectations in future industrial and workplace environments.
+- The student-facing principle is: **Safety comes before skill. You are allowed to be learning how to weld. You are not allowed to work unsafely.**
+
+### Deterministic Safety Evidence Model
+
+This model is approved and frozen.
+
+- Derivation uses the **10 most recent applicable sessions**.
+- PPE applies essentially every attended welding-class session under current policy.
+- Equipment safety applies when the equipment or process is relevant.
+- Shop Responsibility applies when shop, workspace, tool, or cleanup expectations apply.
+- New students begin **Not Yet Assessed**.
+- Initial Proficient requires **five applicable sessions of independent compliance**, no unresolved Major or Critical event, and no repeated Minor pattern.
+- Every Minor receives immediate intervention and the appropriate Workplace consequence.
+
+Within the rolling ten-session window:
+
+- One Minor: Proficient may remain; operational status becomes `Concern / Watch`.
+- Two Minors: Proficient may remain; operational status remains a stronger `Concern / Watch`.
+- **Three Minors: a repeated pattern exists and the derived competency becomes Developing.**
+
+The three-Minor threshold controls competency derivation, not the immediate Workplace consequences.
+
+A **Major** event creates immediate `Instructor Review Required`. ARC does not blindly select a final competency level of 1, 2, or 3.
+
+A **Critical** event creates immediate `Not Ready to Work — Safety Review Required`. Instructor intervention, remediation, and clearance are required before normal applicable work resumes.
+
+Recovery after a three-Minor Developing result requires **five consecutive applicable compliant sessions without prompting**. Recovery from Major or Critical events may additionally require instructor-defined remediation and clearance.
+
+Advanced safety requires near-perfect recent compliance plus **two explicit independent hazard-recognition or prevention demonstrations**, preferably in different contexts. Advanced cannot be inferred solely from having no violations. When Advanced evidence ages or is lost, the competency may return to Proficient without implying unsafe behavior.
+
+The system keeps two concepts distinct:
+
+- **Competency level:** 1 Introduced, 2 Developing, 3 Proficient, or 4 Advanced.
+- **Operational Safety Status:** Ready, Concern / Watch, Instructor Review Required, or Not Ready to Work — Safety Review Required.
+
+### Safety gate for technical assessment
+
+When required safety prerequisites are unmet during technical work, the instructor intervenes immediately and ARC records the appropriate Workplace consequence and Safety evidence. The technical challenge may become **not qualifying/incomplete due to unmet safety prerequisite**. ARC must not represent the safety event merely by subtracting arbitrary technical-rubric points.
+
+## Frozen competency-specific derivation rules
+
+### WT-W6 Diagnose & Correct
+
+Qualifying evidence demonstrates all four elements:
+
+1. Identify an observable weld problem.
+2. Identify a reasonable likely cause.
+3. Select an appropriate correction.
+4. Demonstrate or evaluate improvement.
+
+Proficient requires **two qualifying demonstrations involving different troubleshooting problems or contexts**. Advanced requires stronger, diverse troubleshooting evidence. Resource Bank content may support learning and Practice but does not automatically prove the qualifying answer.
+
+### WT-F1 Fabrication Sequence
+
+The Project or Activity definition owns its authoritative workflow. Evaluation determines whether the student follows that project's required workflow. Legitimate N/A stages do not count against the student.
+
+Starting progression is frozen:
+
+- One substantially correct qualifying workflow may establish Developing.
+- Two qualifying workflows establish Proficient.
+- Three stronger and appropriately diverse workflows may support Advanced.
+
+## Unassessed, ABS, and NE authority
+
+These meanings are frozen:
+
+- **Unassessed:** no legitimate required opportunity occurred; excluded from calculation.
+- **ABS / Excused:** an opportunity occurred, but the student was legitimately excused or unavailable; excluded from calculation.
+- **NE — No Evidence / No Attempt:** a legitimate required opportunity occurred, the student was expected and able to participate, and no assessable evidence exists because of no attempt, refusal, or failure to engage.
+
+ARC must not create NE merely because a competency was covered. An actual required student opportunity must exist. Refusal may legitimately create both a Workplace refusal event or consequence and NE for the missed competency opportunity because those records represent different facts.
 
 ## ARC Activity Library
 
@@ -687,6 +865,7 @@ These are design gaps, not authorization to modify runtime behavior:
 14. No Resource Bank, approval lifecycle, contextual troubleshooting authority, or resource-to-practice-to-qualification pathway is implemented.
 15. Current material planning does not derive expected demand from assigned Practice or Skill Challenges.
 16. ARC Student does not yet reuse Activity Library or Resource Bank authorities because those authorities and the future student experience are unimplemented.
+17. The complete WT evidence pathways and deterministic Safety Evidence Model are approved, but no runtime evidence records, derivation, observation workflow, Safety Status, gate enforcement, or migration exists.
 
 Any implementation must define migration, rollback, historical rendering, and explainability before changing stored records or current calculations.
 
@@ -696,7 +875,7 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Final conservative-demotion thresholds and instructor-review behavior beyond the approved two-contradiction starting concept.
 - When an override should prompt review and how long review suppression lasts.
 - Grading-period snapshot timing and rules for quarter/semester boundaries.
-- Exact criterion-to-competency mappings by process, joint, position, task, WT/AWT course, and evidence type.
+- AWT criterion-to-competency mappings by process, joint, position, task, and evidence type. The WT mappings in this document are frozen.
 - Evidence-strength mechanics not already frozen by this authority.
 - Assessment UI and workflow design for the approved rubric family.
 - Reassessment workflow details beyond the approved progression principles.
@@ -710,7 +889,12 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Exact Resource Bank schema, authoring and approval workflow, provenance rules, detailed lifecycle behavior, and archival behavior.
 - Resource recommendation and ranking algorithm, including how contextual uncertainty is presented.
 - Practice material-demand timing, reservation semantics, preparation horizon, and relationship to actual inventory transactions.
-- Criterion-to-competency mappings beyond the frozen WT Drawing/Planning mapping.
+- Criterion-to-competency mappings beyond the frozen WT evidence architecture.
+- Runtime evidence schema and migration from existing manual ratings and history.
+- Exact evidence, observation, safety-status, and instructor-review UI and workflows.
+- Detailed Minor, Major, and Critical safety-event taxonomy and default severities.
+- Safety remediation, review, and clearance workflow.
+- Student-facing implementation of WT evidence explanations and the Safety model.
 - Student privacy and resource/activity visibility rules.
 - Media storage and hosting, external-link validation, and offline resource/media caching.
 - Student ARC roles, visibility, assignment acknowledgement, evidence access, and privacy boundaries.

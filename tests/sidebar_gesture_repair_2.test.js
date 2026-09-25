@@ -53,7 +53,9 @@ test('toggle, navigation, popstate and drag settle share mobile state authority'
   assert.match(html,/function toggleArcSidebar\(\).*setArcMobileSidebarOpen/);
   assert.match(html,/function runArcNavigation\(action\) \{ setArcMobileSidebarOpen\(false\)/);
   assert.match(html,/if \(document\.body\.classList\.contains\("arc-sidebar-open"\)\) \{ setArcMobileSidebarOpen\(false\)/);
-  assert.match(html,/if \(result && result\.settled\) setArcMobileSidebarOpen\(result\.open\)/);
+  assert.match(html,/function settleArcSidebarGesture\(result\)/);
+  assert.match(html,/if \(result\.open\) \{ setArcMobileSidebarOpen\(true\); clearDrag\(\); return; \}/);
+  assert.match(html,/setArcMobileSidebarOpen\(false\);\s*clearDrag\(\)/);
 });
 
 test('drawer-left drag and flick still close',()=>{
@@ -84,7 +86,7 @@ test('future homes are inert and renamed current destinations preserve routes',(
 
 test('schema domain and build boundaries remain fixed',()=>{
   assert.match(html,/const CURRENT_SCHEMA_VERSION = 7;/);
-  assert.match(build,/build:'sidebar-gesture-repair-2'/);
+  assert.match(build,/build:'sidebar-gesture-repair-2-repair-1'/);
   assert.doesNotMatch(html,/CURRENT_SCHEMA_VERSION = 8/);
 });
 

@@ -103,7 +103,13 @@ Official derivation must be deterministic: the same evidence and rules produce t
 
 ### Approved progression starting rules
 
-These rules are the deterministic starting model. Remaining evidence-strength, recency-window, context-diversity, and edge-case details still require instructor-reviewed design.
+The following reconciled evidence principle is frozen:
+
+> **Quality determines demonstrated level. Recent repeated evidence confirms consistency. Required context diversity confirms breadth where the competency itself claims transfer, variation, multiple contexts, or broader application.**
+
+The official 1–4 levels are quality descriptors, not attempt counts. Developing-quality evidence may establish Developing. The first Proficient-quality demonstration is recorded as Proficient-quality evidence and is never mislabeled Introduced merely because it is first. Recent repetition supplies the consistency required for an established level. Diversity is required because a competency claims breadth, not merely to make Advanced harder.
+
+These rules are the deterministic starting model. Remaining evidence-strength, recency-window, context-diversity, and edge-case details still require instructor-reviewed design. Specialized Safety, continuous-habit, comprehensive-knowledge, versioned-product, troubleshooting, and integrated-fabrication models retain their specialized rules.
 
 #### 1 → 2
 
@@ -368,7 +374,7 @@ The same core rubric applies to hand drawing and CAD; method is context rather t
 
 ## Evidence relationships and safeguards
 
-The technical rubric family is approved. The complete WT mappings and evidence pathways are frozen below; AWT mappings remain future design work. No runtime evidence engine is authorized.
+The technical rubric family is approved. The complete WT and AWT mappings and evidence pathways are frozen below. No runtime evidence engine is authorized.
 
 Criterion-level evidence may legitimately support related competencies:
 
@@ -406,7 +412,7 @@ This mapping is approved and frozen.
 
 | Competency | Size/Placement | Profile | Fusion/Tie-In | Starts/Stops | Overall |
 |---|---|---|---|---|---|
-| WT-W1 Equipment & Setup | — | — | — | — | — |
+| WT-W1 SMAW Equipment & Setup | — | — | — | — | — |
 | WT-W2 Arc Control | S | R/Q | S | R/Q | S |
 | WT-W3 Stringer Beads | R/Q | R/Q | N/A where legitimately inapplicable | R/Q | R/Q |
 | WT-W4 Fillet Weld | R/Q | R/Q | R/Q | S | R/Q |
@@ -573,6 +579,93 @@ Starting progression is frozen:
 - One substantially correct qualifying workflow may establish Developing.
 - Two qualifying workflows establish Proficient.
 - Three stronger and appropriately diverse workflows may support Advanced.
+
+## Frozen AWT evidence architecture
+
+This authority uses the verified current 34-competency AWT catalog without renaming or redesigning it. Unless a specialized rule below states otherwise, Proficient normally requires two recent Proficient-or-better qualifying demonstrations. Advanced normally requires three recent Advanced-quality demonstrations plus the breadth claimed by the competency descriptor.
+
+One weak result does not automatically erase established proficiency; repeated recent contradiction may trigger conservative review. Reassessment is strong recent evidence. ARC does not calculate competency level through a lifetime arithmetic evidence average.
+
+### AWT GMAW
+
+- **AWT-G1 GMAW Equipment & Safety:** observed equipment/safety challenge; two recent Proficient-or-better demonstrations; no artificial diversity requirement. Continuous Safety remains separate.
+- **AWT-G2 Base-Metal Preparation:** observed preparation or assessed preparation stage; two recent Proficient-or-better demonstrations. Advanced uses varied material or joint preparation demands.
+- **AWT-G3 Machine Setup:** setup challenge or explicit setup assessment; two recent Proficient-or-better demonstrations. Advanced varies material, joint, position, or weld-response context.
+- **AWT-G4 Bead Control:** Welding Performance evidence; two recent Proficient-or-better demonstrations. Advanced requires changing-condition breadth.
+- **AWT-G5 Fillet Welds:** Welding Performance evidence. Required qualifying criteria are Size & Placement, Profile & Consistency, Fusion & Tie-In where legitimately assessable, and Overall Weld Quality. Starts/Stops is Supporting. Proficient requires two recent Proficient-or-better demonstrations with no separate Proficient diversity gate.
+- **AWT-G6 Joint Application:** Welding Performance plus joint context. Proficient requires two recent Proficient-or-better demonstrations in different instructor-approved joint configurations. Advanced requires multiple meaningful joint or application contexts.
+- **AWT-G7 Troubleshooting:** Diagnose & Correct evidence captures the problem, cause or causes, correction, action, and result or evaluation as appropriate. Proficient requires two recent Proficient-or-better demonstrations involving different problems. Advanced requires three diverse Advanced-quality diagnosis, test, and verification demonstrations.
+
+### AWT Inspection
+
+- **AWT-I1 Visual Weld Inspection:** Visual Inspection Challenge or Technical Assignment using a physical weld, student weld, approved sample, or legitimate visual record. ARC never claims unseen internal penetration or fusion. Proficient requires two recent Proficient-or-better demonstrations. Varied samples apply especially to Advanced. Preserve a sample or photo reference when practical.
+- **AWT-I2 Discontinuity Identification:** Identification Challenge. Proficient requires two recent Proficient-or-better demonstrations involving different discontinuities or meaningfully different samples. Advanced requires varied contexts plus the Level-4 significance and differentiation described by the catalog.
+- **AWT-I3 Corrective Action:** Corrective Action or Diagnose & Correct evidence captures problem → cause or causes → correction → rationale. Stronger evidence also applies and evaluates the correction. Proficient requires two recent Proficient-or-better demonstrations in different contexts. Advanced requires three diverse Advanced-quality contexts.
+
+One authentic Activity may create distinct criterion-level AWT-I1, AWT-I2, AWT-I3, and AWT-G7 evidence when each competency is genuinely demonstrated. ARC never copies one overall score to those competencies.
+
+### AWT Advanced Cutting
+
+- **AWT-C1 Cutting Equipment:** Equipment/Operation Challenge plus observation; two recent Proficient-or-better demonstrations. Equipment or process breadth applies only when legitimate curriculum opportunity exists. Untaught or unavailable processes must not make proficiency impossible.
+- **AWT-C2 Cutting Layout:** Layout Challenge, assessed Activity, or assessed Project stage; two recent Proficient-or-better demonstrations. Advanced varies layout, reference, sequence, or material-conservation demands.
+- **AWT-C3 Cutting Performance:** Thermal Cutting Performance rubric. Required qualifying criteria are Layout & Cut Accuracy; Cut Face & Kerf Quality; Travel & Process Control; Piercing/Starts/Stops where applicable; and Dross/Edge/Overall Quality. Evidence preserves process, cut type, material, thickness, dimensions or length, setup, and task context. Proficient requires two recent Proficient-or-better demonstrations. Advanced uses more complex or varied tasks.
+- **AWT-C4 Cut Quality:** Cut Quality Inspection or Diagnose & Correct evidence. A cutting-quality rubric may support but does not replace diagnosis. Proficient requires two recent Proficient-or-better demonstrations involving different conditions or samples. Advanced requires three diverse Advanced-quality contexts.
+
+One cutting Activity may yield distinct AWT-C2, AWT-C3, and AWT-C4 evidence. It may yield AWT-C1 evidence only when equipment operation is explicitly assessed.
+
+### AWT Fabrication Drawings
+
+- **AWT-D1 Drawing Interpretation:** Interpretation Technical Assignment or Challenge; two recent Proficient-or-better demonstrations. Advanced requires varied or complex drawings.
+- **AWT-D2 Fabrication Planning:** Fabrication Plan or Project planning stage; two recent Proficient-or-better demonstrations. Advanced uses varied planning problems involving fit-up, distortion, access, quality, or rework.
+- **AWT-D3 Layout:** physical layout from a drawing; two recent Proficient-or-better demonstrations. Advanced varies layout or material-use demands. AWT-D3 and AWT-C2 may both receive distinct evidence when both are actually assessed.
+- **AWT-D4 Fabrication from Drawing:** Project/Fabrication evidence. Required qualifying criteria are Measurement & Dimensional Accuracy, Fit-Up & Fabrication, and Workmanship & Finished Quality. Welding Quality is Supporting. Proficient requires two recent Proficient-or-better demonstrations. Advanced requires different fabrication or drawing contexts. Instructor-supplied drawings can generate AWT-D1 and AWT-D4 evidence but not drawing-creation grades.
+
+### AWT Applied Academics
+
+- **AWT-M1 Applied Measurement:** authentic fabrication measurement or calculation, a Project/Fabrication dimensional criterion, or a Skill Challenge; two recent Proficient-or-better demonstrations. Advanced uses more complex measurement or calculation contexts.
+- **AWT-M2 Welding Communication:** authentic technical communication through Observation, approved assignments, or workflows. Evidence may be spoken, written, an annotated drawing, an inspection report, a troubleshooting explanation, or another legitimate technical form. ARC does not grade personality, charisma, volume, or sociability. Proficient requires two recent Proficient-or-better demonstrations in meaningfully different authentic contexts. Advanced requires three diverse Advanced-quality contexts.
+
+ARC captures authentic shop evidence instead of manufacturing separate assignments solely for grading.
+
+### AWT Fabrication
+
+- **AWT-F1 Fit-Up:** Project Fit-Up checkpoint or Skill Challenge, assessed before welding hides the evidence. Fit-Up & Fabrication is required qualifying evidence; dimensional evidence may support. Proficient requires two recent Proficient-or-better demonstrations. Advanced varies distortion, tack, access, or dimensional demands.
+- **AWT-F2 Fabrication Sequence:** Project Workflow Evidence plus planning support. AWT-D2 creates the plan; AWT-F2 follows and adapts an effective sequence. Proficient requires two recent Proficient-or-better demonstrations. Advanced requires tasks where optimization genuinely matters.
+- **AWT-F3 Dimensional Accuracy:** Project/Fabrication Measurement & Dimensional Accuracy required qualifying evidence plus final verification. Evidence preserves requirement or tolerance, observed dimension, compliance or deviation, and correction or evaluation. Proficient requires two recent Proficient-or-better demonstrations. Advanced uses increasing tolerance or correction demands.
+- **AWT-F4 Integrated Fabrication:** an explicitly AWT-F4-eligible integrated Project. A Proficient project must genuinely evidence drawing use, layout, cutting, preparation, welding, and inspection. Completion alone is not AWT-F4 evidence. Proficient requires two recent Proficient-or-better integrated projects. Advanced requires three different or complex Advanced-quality integrated projects demonstrating independence, planning, execution, inspection, troubleshooting, evaluation, and high-standard work.
+
+### Activity evidence-declaration safeguard
+
+Every Activity or Project capable of producing qualifying evidence explicitly declares its competency relationship; evidence-producing criterion, stage, checkpoint, workflow, or assessment; required gates; and context. Completion alone never automatically generates competency evidence. ARC never copies an overall Activity or Project percentage across competencies.
+
+### AWT Advanced Process
+
+The actual selected advanced process is required context for AWT-P1 through AWT-P4. Multiple advanced processes are not required unless curriculum explicitly requires and provides them.
+
+- **AWT-P1 Process Safety & Equipment:** Process Equipment/Safety Challenge plus observation; two recent Proficient-or-better demonstrations. Advanced varies setup or hazard decisions. Continuous Safety remains separate.
+- **AWT-P2 Material Preparation:** actual preparation or an assessed Activity stage. Evidence preserves process, material, joint, task, and preparation context. Proficient requires two recent Proficient-or-better demonstrations. Advanced uses different preparation demands.
+- **AWT-P3 Process Demonstration:** Welding Performance evidence contextualized to the selected process, using criteria only where legitimate. Proficient requires two recent Proficient-or-better demonstrations. Advanced requires more challenging applications or conditions.
+- **AWT-P4 Advanced Application:** advanced-process application Project or Challenge. An Advanced-eligible Activity genuinely requires selection, application, troubleshooting, evaluation, and independent complex fabrication. Proficient requires two recent Proficient-or-better demonstrations. Advanced requires three diverse or complex Advanced-quality applications.
+
+### AWT Safety
+
+- **AWT-S1 Independent Shop Safety:** Habit/Continuous Safety Evidence uses the universal deterministic model: the 10 most recent applicable sessions; five independently compliant sessions for initial Proficient; one or two Minors may retain Proficient with Concern / Watch; three Minors produce Developing; Major produces Instructor Review Required; Critical produces Not Ready to Work — Safety Review Required; recovery after three Minors requires five consecutive compliant applicable sessions without prompting; and Advanced requires near-perfect compliance plus two explicit hazard-recognition or prevention demonstrations. Competency level and operational Safety Status remain separate.
+- **AWT-S2 Equipment Safety:** Equipment Workflow/Observation plus Safety Evidence across legitimately taught or assigned equipment. ARC never requires untaught equipment. Advanced adds independent condition, settings, and shutdown verification plus recognition and handling of basic concerns.
+
+#### Single Safety Event safeguard
+
+A Safety event is recorded once. Multiple legitimate consequences may derive from that event, but ARC does not duplicate the event or arbitrarily punish unrelated grades. AWT-S1 covers broad behavior; AWT-S2 covers transferable equipment safety; AWT-G1, AWT-C1, and AWT-P1 cover process-specific evidence. A Safety violation may make a technical opportunity nonqualifying, but it does not arbitrarily reduce technical product-quality rubric scores.
+
+### AWT Career & Workplace
+
+- **AWT-R1 Welding Career Knowledge:** comprehensive Technical Assignment or authentic exploration. The comprehensive-assessment rule may establish the competency when the Activity explicitly supplies sufficient independent opportunities. Advanced requires the depth in the current Level-4 descriptor.
+- **AWT-R2 Personal Career Plan:** versioned Personal Career Plan product. Progression comes from product quality plus meaningful revision and growth, rather than repeated artificial plans. Versions are preserved.
+- **AWT-R3 Industry Awareness:** comprehensive Technical Assignment, research, discussion, speaker or visit reflection, or another legitimate form. The comprehensive-assessment rule applies. Advanced requires the breadth and connections in the current Level-4 descriptor.
+- **AWT-R4 Workplace Readiness:** authoritative Workplace Habit/Continuous Evidence, not a second manually maintained behavior grade. The Workplace category grade and AWT-R4 derivation are related outputs from shared evidence. Future Workplace evidence must capture affirmative observations such as initiative, collaboration or helping the team, professional communication, problem solving, and responsibility or ownership. Absence of negative events alone is not Advanced evidence. Advanced requires affirmative positive Level-4 evidence. The exact deterministic AWT-R4 window remains unresolved for Workplace implementation. Safety and AWT-R4 remain separate.
+
+### Shared AWT safeguards
+
+The existing shared safeguards remain frozen: stable evidence identity and provenance; course, section, grading-period, date, assessment, criterion, and technical context; Supporting versus Qualifying evidence; instructor override, history, and explainability; no lifetime arithmetic evidence average; criterion-level evidence; one assessment supplying at most one qualifying demonstration per competency; assignment grade remaining separate from competency qualification; legitimate N/A; Not Yet Assessed remaining distinct from failure; the four evidence modes; Instructor Observation as first-class evidence; the comprehensive knowledge rule; the Safety model; the visual-inspection limitation; Practice normally remaining nonqualifying unless explicitly approved; and reassessment as strong recent evidence.
 
 ## Unassessed, ABS, and NE authority
 
@@ -1288,7 +1381,7 @@ These are design gaps, not authorization to modify runtime behavior:
 14. No Resources authority, approval lifecycle, contextual troubleshooting authority, or resource-to-practice-to-qualification pathway is implemented.
 15. Current material planning does not derive expected demand from assigned Practice or Skill Challenges.
 16. ARC Student does not yet reuse Activity Library or Resources authorities because those authorities and the future student experience are unimplemented.
-17. The complete WT evidence pathways and deterministic Safety Evidence Model are approved, but no runtime evidence records, derivation, observation workflow, Safety Status, gate enforcement, or migration exists.
+17. The complete WT and AWT evidence pathways and deterministic Safety Evidence Model are approved, but no runtime evidence records, derivation, observation workflow, Safety Status, gate enforcement, or migration exists.
 18. Administration, derived Weekly Lesson Plans, differentiated Weekly Focus/readiness, and planned-versus-actual pacing projections are approved but unimplemented.
 19. Current navigation labels and grouping do not yet implement the approved Students, Resources, Project Library, Lesson Plans, Administration, or complete Activity Library information architecture.
 20. Sidebar Gesture Repair 2 remains pending; its larger rail target, rigid contents, persistent backdrop, tap interception, and unified state authority are not implemented by this documentation milestone.
@@ -1302,7 +1395,6 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Final conservative-demotion thresholds and instructor-review behavior beyond the approved two-contradiction starting concept.
 - When an override should prompt review and how long review suppression lasts.
 - Grading-period snapshot timing and rules for quarter/semester boundaries.
-- AWT criterion-to-competency mappings by process, joint, position, task, and evidence type. The WT mappings in this document are frozen.
 - Evidence-strength mechanics not already frozen by this authority.
 - Assessment UI and workflow design for the approved rubric family.
 - Reassessment workflow details beyond the approved progression principles.
@@ -1316,12 +1408,19 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Exact Resources schema, authoring and approval workflow, provenance rules, detailed lifecycle behavior, and archival behavior.
 - Resource recommendation and ranking algorithm, including how contextual uncertainty is presented.
 - Practice material-demand timing, reservation semantics, preparation horizon, and relationship to actual inventory transactions.
-- Criterion-to-competency mappings beyond the frozen WT evidence architecture.
+- Criterion-to-competency mappings beyond the frozen WT and AWT evidence architecture.
 - Runtime evidence schema and migration from existing manual ratings and history.
+- Final Activity evidence-declaration schema and authoring validation.
+- Recency windows outside the deterministic Safety model.
+- Contradictory-evidence thresholds outside the deterministic Safety model.
+- Exact deterministic AWT-R4 Workplace Readiness derivation and evidence window.
+- Instructor- or Activity-defined Advanced diversity details where this authority intentionally requires meaningful breadth without prescribing a universal context list.
+- Catalog regression tests that lock all 26 WT and 34 AWT runtime records.
+- Reconciliation or replacement of the current generic competency student statements.
 - Exact evidence, observation, safety-status, and instructor-review UI and workflows.
 - Detailed Minor, Major, and Critical safety-event taxonomy and default severities.
 - Safety remediation, review, and clearance workflow.
-- Student-facing implementation of WT evidence explanations and the Safety model.
+- Student-facing implementation of WT and AWT evidence explanations and the Safety model.
 - Administration document schemas, approval/version history, print/download/export formats, and reporting workflows.
 - Exact Weekly Lesson Plan generation, review, approval, snapshot, historical retrieval, and period-divergence suggestion workflows.
 - Readiness derivation and explanation rules beyond the frozen state meanings and priority hierarchy.

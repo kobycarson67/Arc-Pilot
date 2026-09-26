@@ -1361,6 +1361,242 @@ The later bounded repair requirements are:
 
 Today's Focus is not a global Class Forecast. Long term, planned instruction and classroom reality complement one another without sharing or duplicating authority.
 
+## Evidence Engine and Gradebook handoff authority
+
+The following architecture is frozen design authority. It is not implemented by this documentation milestone.
+
+> **ARC stores what the student demonstrated as evidence. Official competency state is a deterministic conclusion derived from that evidence.**
+
+The authoritative pipeline is:
+
+> **Activity Definition → Evidence Declaration → Student Performance → Evidence Source → Evidence Record(s) → Derivation Strategy → Derivation Result → Instructor Override → Resolved Competency Authority → Gradebook Policy/downstream consumers**
+
+AI may phrase explanations and recommendations. It never determines official competency levels.
+
+### Evidence Source v1
+
+An Evidence Source records **what happened**. It owns:
+
+- an immutable identity;
+- exactly one student;
+- occurred and recorded timestamps;
+- historical course, period, grading-period, and school-year context;
+- a controlled source type;
+- applicable Activity, instance, Project, assessment, rubric, checkpoint, workflow, and version references;
+- instructor or recorder identity;
+- shared attachments and optional notes;
+- reassessment relationship and provenance;
+- an `Active`, `Superseded`, or `Voided` lifecycle, with `Draft` only when genuinely needed.
+
+One Source belongs to one student. Schedule changes never rewrite historical context. Practice may create a Source. Reassessment creates new evidence. Corrections are append-first. Shared artifacts live primarily on the Source. Historical evidence remains tied to the actual versions used. A Source never stores an official competency level or source-wide qualification.
+
+### Evidence Record v1
+
+An Evidence Record records **what one Source demonstrated about exactly one competency**. It owns:
+
+- an immutable identity and Source identity;
+- exactly one competency identity;
+- a demonstrated 1–4 level when legitimately level-based, nullable for Safety or continuous evidence;
+- qualification status and reason;
+- evidence mode and criterion references;
+- a small common core plus extensible typed context;
+- explicit diversity dimension and value;
+- reassessment relationship, provenance, and `Active`, `Superseded`, or `Voided` lifecycle.
+
+Qualification statuses are `Qualifying`, `Supporting`, `Nonqualifying`, and `Excluded`. `NE / No Evidence` remains distinct.
+
+Evidence modes remain:
+
+1. Rubric
+2. Challenge / Assignment
+3. Workflow
+4. Habit / Continuous
+
+Context stores only meaningful interpretation, qualification, or diversity facts. Diversity is explicit and deterministic; AI never infers it from notes. Mutable roles such as confirming or contradicting belong in Derivation Result rather than permanently on Records. Normal Practice may preserve demonstrated quality but remains Nonqualifying unless prospectively authorized. Safety records may have a null demonstrated level.
+
+### Activity Evidence Declaration v1
+
+An Activity Evidence Declaration is prospective authority defining what an Activity version is capable of proving **before student results are known**. One declaration represents one Activity/version-to-competency relationship and owns:
+
+- competency and Activity/version identities;
+- exact source point;
+- evidence mode and default `Qualifying`, `Supporting`, or `Nonqualifying` status;
+- rubric or assessment authority and version;
+- criterion mappings, qualification gates, required context, and diversity mapping;
+- Safety prerequisite and instructor qualification authority;
+- lifecycle and version.
+
+A source point may be a stage, checkpoint, criterion, workflow, product, observation, assessment, or completion only when completion legitimately demonstrates the competency. Failed gates preserve the work and determine the resulting Evidence Record qualification and reason. Conditional criteria may be N/A and are never silently scored zero.
+
+Practice defaults to Nonqualifying. When Practice can become a qualifying opportunity, the instructor normally designates it before assessment. Exceptional overrides remain traceable. Declaration lifecycle direction is:
+
+> **Draft → Instructor Approved → Active → Archived**
+
+Completion alone never automatically generates competency evidence.
+
+### Activity Builder direction
+
+> **Evidence complexity belongs in ARC architecture, not normal instructor Activity creation.**
+
+ARC should infer or preconfigure declarations from Activity type, competency authority, rubric mappings, and context. Normal instructor language focuses on what students do and learn, how work is assessed, whether it can count, and required materials or equipment.
+
+The future direction includes a guided builder, templates, copy/duplicate, Quick Practice, guided Project stages, suggested evidence relationships, Activity Preflight, and advanced rule editing only when needed.
+
+### Full instructional readiness
+
+ARC is not classroom-ready merely because its software works. Before full adoption, WT and AWT require sufficient prepopulated Lesson Plans, Projects, Practices, Skill Challenges, Technical Assignments, Resources, and Qualifying Evidence Opportunities for curriculum coverage, remediation, reassessment, extension, differentiation, and student choice.
+
+The initial library intentionally contains **more approved Activities than expected to be used**. The future coverage audit is:
+
+> **Standards → Curriculum Map → Competencies → Lesson Plans → Activities → Evidence Opportunities → Resources**
+
+Year One must be usable and intentionally overprepared. Later years refine the library using actual classroom data.
+
+### Derivation Result v1
+
+Evidence is historical truth. A Derivation Result is the rebuildable current deterministic interpretation for a student, competency, and scope. It supports:
+
+- current evidence-derived level and separate confirmation state;
+- highest recent demonstrated level;
+- immutable strategy and configuration versions;
+- contributing, contradicting, and excluded Evidence Record identities;
+- satisfied and remaining requirements;
+- diversity state and recency capability;
+- next level and requirements;
+- optional operational status;
+- structured reasons and calculated timestamp.
+
+Level and confirmation remain separate, with no invented `2.5`. A first Level-3 result may be **Proficient Demonstrated / confirmation needed**; appropriate confirmation yields **Proficient Confirmed**. Incomplete breadth is represented separately.
+
+No evidence produces null / Not Yet Assessed, never 0, F, or Introduced. Operational state remains separate, especially for Safety. Explanations derive from structured facts; AI may phrase them only. A live Result is not immutable history; administrative boundaries snapshot it.
+
+### Derivation Strategy architecture
+
+The universal strategy contract is:
+
+> **Read authoritative evidence → apply approved immutable strategy/configuration → return explainable Result → never mutate evidence.**
+
+Initial strategy families are:
+
+1. Performance Confirmation
+2. Continuous Safety
+3. Comprehensive Knowledge
+4. Versioned Product
+5. Diagnose & Correct
+6. Integrated Project
+7. Continuous Workplace
+
+Composable modules include Diversity, Context Coverage, Recency, Contradictory Evidence, and Reassessment Preference. Competency authority owns configuration; the engine does not hard-code competency IDs. Strategy and configuration versions are immutable. Instructor Override sits above derivation.
+
+### Technical recency and contradiction
+
+> **Mastery is durable, but current comparable evidence matters. Time alone does not erase skill.**
+
+Recency primarily follows subsequent relevant and comparable evidence opportunities rather than arbitrary calendar expiration. The exact normal numeric window remains unresolved. Inactivity, breaks, absence, other instructional units, schedule movement, or time alone never create automatic decay.
+
+Authority distinguishes comparable/core contexts from extension, challenge, or specialized contexts so harder work does not unfairly demote established competency.
+
+For normal confirmed technical competencies:
+
+- one comparable Qualifying result one level below retains the current level with `Concern / Watch`;
+- one comparable Qualifying result two or more levels below retains the current level with `Instructor Review Required`;
+- two consecutive comparable Qualifying results below the current level produce `Instructor Review Required`;
+- three consecutive comparable Qualifying results below the current level derive the highest level consistently supported by current comparable evidence.
+
+For Advanced:
+
+- the first comparable result at Level 3 or below retains Advanced with `Concern / Watch`;
+- the second consecutive comparable result at Level 3 or below derives the appropriate lower supported level, normally Proficient when its requirements remain satisfied.
+
+A successful intentional reassessment at the confirmed level or above can clear an active contradiction pattern. Nonqualifying Practice never increments a formal demotion count. Supporting evidence may surface concern but cannot independently demote. Safety-related nonqualification never becomes fake low technical evidence. Absence or missing evidence never fabricates a lower competency level.
+
+### Instructor Override authority
+
+An Instructor Override changes authoritative outcome without changing, deleting, or fabricating evidence or the Derivation Result. It is a separate append-first object containing scope, referenced Result, override level, structured reason, optional explanation, instructor and timestamp, review policy, lifecycle, and supersession.
+
+An override may move authority up or down. Incorrect evidence is corrected through evidence correction; accurate evidence plus professional disagreement is handled by override. New evidence may trigger review but never silently deletes an override. Suggested states are `Active`, `Review Required`, `Resolved — Evidence Aligned`, `Superseded`, and `Revoked`.
+
+An override never fabricates confirmations, diversity, or qualifying evidence. A generic override cannot clear Major or Critical operational Safety restrictions. An AWT-R4 override does not rewrite Workplace grade or history.
+
+### Academic scope and grading periods
+
+> **Competency history persists; grading authority is explicitly scoped.**
+
+Evidence permanently retains its original academic context. Derivation supports Grading Period, Semester, Course Enrollment, and Longitudinal scopes. The conceptual hierarchy is:
+
+> **Student → Course Enrollment → School Year → Semester → Grading Period**
+
+Quarter or semester boundaries do not reset learning. Prior-period confirmed competency supplies instructional starting state and readiness but does not automatically become current-period grading evidence. Lack of a legitimate current-period opportunity never produces a fabricated zero.
+
+Period close creates an immutable competency snapshot containing Result, override, resolved authority, strategy and configuration versions, evidence references, scope, and time. Semester competency derives from semester evidence and never from arithmetic averaging of quarter competency percentages. School course-grade combination policy remains separate.
+
+Period movement within a continuing enrollment preserves continuity. WT and AWT never automatically translate evidence without future explicit authority. A new school year creates a new grading and enrollment scope while preserving history. Prior-year evidence supports readiness without automatically becoming current-year grading evidence. Midyear entrants receive no fabricated earlier failures. Dropping a course closes enrollment without deleting evidence.
+
+### Resolved Competency Authority and Gradebook handoff
+
+The downstream chain is:
+
+> **Evidence → Result → Override → Resolved Competency Authority → Gradebook Policy → Gradebook Entry/Course Grade → Submitted Period Snapshot**
+
+The resolver exposes evidence-derived level, confirmation state, override, official level, authority source, prior established level and scope, current-period evidence state, optional operational status, and provenance. Downstream systems consume the resolver and never reinterpret raw evidence.
+
+The frozen conversion remains:
+
+- 1 Introduced = 60%
+- 2 Developing = 75%
+- 3 Proficient = 90%
+- 4 Advanced = 100%
+
+Gradebook uses the confirmed or resolved authoritative level rather than merely the highest demonstrated performance. A first Level-3 performance may be celebrated instructionally while grading remains at the established confirmed level. Confirmed Level 3 produces 90%. A first Level-4 performance does not immediately produce confirmed 100%. An override may establish the official grading level without fabricating evidence. Developing may establish according to the approved strategy.
+
+Not Yet Assessed and exclusions never become zero. Prior established state and current-period grading evidence remain distinct. Semester authority comes from semester derivation rather than averaged quarter competency percentages.
+
+Generating competency evidence does not automatically create a Gradebook entry. One Activity may create many Evidence Records but only the Gradebook entries authorized by policy. Future competency entries reference resolved authority or a snapshot rather than duplicate free-floating percentages. Submitted period snapshots are immutable; later correction requires an explicit workflow.
+
+### Weekly grade frequency
+
+Administrator guidance is frozen as:
+
+> **Two grade entries per student per normal instructional week is an acceptable minimum, not a maximum.**
+
+- Two meaningful entries are a minimum coverage expectation when legitimate opportunities exist.
+- ARC never suppresses a legitimate grade because a student already has two.
+- Every legitimately graded Activity completed by a student produces its appropriate entry regardless of weekly count.
+- Grading status is prospective Activity or assessment authority, not a consequence of weekly count.
+- Grade categories do not each require weekly representation.
+- ARC never manufactures Activities or grades to satisfy category or weekly counts.
+- Ungraded Practice remains ungraded even below the minimum.
+- Differentiated students may legitimately have different grade types and counts.
+- Unusual weeks may legitimately contain fewer entries.
+
+> **Gradebook completeness means sufficient meaningful assessment, not artificial category coverage.**
+
+Weekly coverage monitors grading; it never limits grading.
+
+### Workplace weekly grade direction
+
+Workplace & Shop Practices naturally supplies one weekly grade for most students with applicable attendance and participation. Daily authoritative Workplace evidence accumulates into a weekly Workplace result. ARC does not create a fake Friday assignment.
+
+The exact calculation remains unresolved, including attendance, excused status, No Class, short weeks, refusal, point loss, and corrections. A normal week often contains one Workplace weekly grade plus one or more legitimate instructional grades. There is no two-grade ceiling.
+
+### Grade Ready and Posted
+
+Posting lifecycle is separate from Activity assessment and evidence:
+
+> **In Progress → Awaiting Instructor Review → Grade Ready → Posted**
+
+A future traceable correction or update follows posting. Finalized graded work becomes Grade Ready immediately and enters a queue. Competency evidence flows separately: Evidence Ready is not Grade Ready. One Activity may create many Evidence Records and one Gradebook item; ungraded Practice may create evidence or history and no Grade Ready item.
+
+Without an approved SIS integration ARC does not claim automatic posting. The instructor enters the school gradebook and then marks the ARC item Posted. Future workflow supports individual and batch `Mark Posted` while preserving posted value, time, poster, and history. A weekly Workplace grade becomes Grade Ready when appropriately finalized; unresolved issues may require review.
+
+### Planning-period notification and workspace direction
+
+> **Notification timing is not Grade Ready timing.**
+
+Grades become ready immediately, while ARC avoids disruptive per-grade shop popups and quietly accumulates a queue or badge. Around or during Planning period, or another instructor-configured administrative window, ARC surfaces administrative work such as Grades Ready, Instructor Reviews, unresolved grade reviews, Lesson Plan tasks, material concerns, and other nonurgent work.
+
+Urgent operational issues, including Safety or students actively waiting for instructor action, remain separate. The future Planning Period Workspace combines Grades Ready, reviews, weekly coverage, Friday Lesson Plan preparation and preflight, material planning, and other administrative work. Friday primarily reconciles remaining work and prepares the next week rather than becoming a large data-entry batch.
+
 ## Current conflicts and migration concerns
 
 These are design gaps, not authorization to modify runtime behavior:
@@ -1381,7 +1617,7 @@ These are design gaps, not authorization to modify runtime behavior:
 14. No Resources authority, approval lifecycle, contextual troubleshooting authority, or resource-to-practice-to-qualification pathway is implemented.
 15. Current material planning does not derive expected demand from assigned Practice or Skill Challenges.
 16. ARC Student does not yet reuse Activity Library or Resources authorities because those authorities and the future student experience are unimplemented.
-17. The complete WT and AWT evidence pathways and deterministic Safety Evidence Model are approved, but no runtime evidence records, derivation, observation workflow, Safety Status, gate enforcement, or migration exists.
+17. The complete WT/AWT evidence pathways, Evidence Source and Record model, Activity declarations, derivation strategies and Results, overrides, scoped resolver, Gradebook handoff, and deterministic Safety model are approved, but no corresponding runtime schema, engine, workflow, snapshot, or migration exists.
 18. Administration, derived Weekly Lesson Plans, differentiated Weekly Focus/readiness, and planned-versus-actual pacing projections are approved but unimplemented.
 19. Current navigation labels and grouping do not yet implement the approved Students, Resources, Project Library, Lesson Plans, Administration, or complete Activity Library information architecture.
 20. Sidebar Gesture Repair 2 remains pending; its larger rail target, rigid contents, persistent backdrop, tap interception, and unified state authority are not implemented by this documentation milestone.
@@ -1391,11 +1627,11 @@ Any implementation must define migration, rollback, historical rendering, and ex
 
 ## Decisions requiring instructor approval before implementation
 
-- Exact evidence qualification/strength rules, recency windows, context-diversity requirements, weighting where applicable, and unresolved progression edge cases within the approved deterministic starting model.
-- Final conservative-demotion thresholds and instructor-review behavior beyond the approved two-contradiction starting concept.
+- Evidence qualification or strength mechanics not already frozen by this authority.
+- The exact normal technical recency numeric window; time alone and absence remain prohibited as decay signals.
+- Edge cases beyond the frozen comparable-evidence contradiction sequence and Advanced contradiction rule.
 - When an override should prompt review and how long review suppression lasts.
 - Grading-period snapshot timing and rules for quarter/semester boundaries.
-- Evidence-strength mechanics not already frozen by this authority.
 - Assessment UI and workflow design for the approved rubric family.
 - Reassessment workflow details beyond the approved progression principles.
 - Missing, exempt, absence, reassessment, late-work, and review-required policies in the future Gradebook.
@@ -1410,9 +1646,8 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Practice material-demand timing, reservation semantics, preparation horizon, and relationship to actual inventory transactions.
 - Criterion-to-competency mappings beyond the frozen WT and AWT evidence architecture.
 - Runtime evidence schema and migration from existing manual ratings and history.
-- Final Activity evidence-declaration schema and authoring validation.
-- Recency windows outside the deterministic Safety model.
-- Contradictory-evidence thresholds outside the deterministic Safety model.
+- Exact Evidence Source, Evidence Record, Derivation Result, Override, resolver, and immutable period-snapshot storage schemas.
+- Final Activity Evidence Declaration storage schema, Activity Builder, Preflight, and authoring validation.
 - Exact deterministic AWT-R4 Workplace Readiness derivation and evidence window.
 - Instructor- or Activity-defined Advanced diversity details where this authority intentionally requires meaningful breadth without prescribing a universal context list.
 - Catalog regression tests that lock all 26 WT and 34 AWT runtime records.
@@ -1421,6 +1656,14 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Detailed Minor, Major, and Critical safety-event taxonomy and default severities.
 - Safety remediation, review, and clearance workflow.
 - Student-facing implementation of WT and AWT evidence explanations and the Safety model.
+- Exact Gradebook categories, weights, and entry policies beyond the frozen competency conversion and handoff boundaries.
+- Exact Weekly Workplace Grade calculation, including attendance, excused status, No Class, short weeks, refusal, point loss, and corrections.
+- Grade Ready correction and update workflow after Posted, plus individual and batch posting interaction.
+- Weekly grade-coverage interface and exception presentation.
+- Quarter-close Gradebook and submission snapshot workflow, including post-submission correction.
+- SIS integration, only if later approved and available.
+- Planning Period Workspace and administrative notification implementation.
+- Year-One instructional population and coverage audit after Activity schemas stabilize.
 - Administration document schemas, approval/version history, print/download/export formats, and reporting workflows.
 - Exact Weekly Lesson Plan generation, review, approval, snapshot, historical retrieval, and period-divergence suggestion workflows.
 - Readiness derivation and explanation rules beyond the frozen state meanings and priority hierarchy.

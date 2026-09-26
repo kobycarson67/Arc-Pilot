@@ -661,7 +661,7 @@ A Safety event is recorded once. Multiple legitimate consequences may derive fro
 - **AWT-R1 Welding Career Knowledge:** comprehensive Technical Assignment or authentic exploration. The comprehensive-assessment rule may establish the competency when the Activity explicitly supplies sufficient independent opportunities. Advanced requires the depth in the current Level-4 descriptor.
 - **AWT-R2 Personal Career Plan:** versioned Personal Career Plan product. Progression comes from product quality plus meaningful revision and growth, rather than repeated artificial plans. Versions are preserved.
 - **AWT-R3 Industry Awareness:** comprehensive Technical Assignment, research, discussion, speaker or visit reflection, or another legitimate form. The comprehensive-assessment rule applies. Advanced requires the breadth and connections in the current Level-4 descriptor.
-- **AWT-R4 Workplace Readiness:** authoritative Workplace Habit/Continuous Evidence, not a second manually maintained behavior grade. The Workplace category grade and AWT-R4 derivation are related outputs from shared evidence. Future Workplace evidence must capture affirmative observations such as initiative, collaboration or helping the team, professional communication, problem solving, and responsibility or ownership. Absence of negative events alone is not Advanced evidence. Advanced requires affirmative positive Level-4 evidence. The exact deterministic AWT-R4 window remains unresolved for Workplace implementation. Safety and AWT-R4 remain separate.
+- **AWT-R4 Workplace Readiness:** authoritative Workplace Habit/Continuous Evidence, not a second manually maintained behavior grade. The Workplace category grade and AWT-R4 derivation are related outputs from shared evidence. Future Workplace evidence must capture affirmative observations such as initiative, collaboration or helping the team, professional communication, problem solving, and responsibility or ownership. Absence of negative events alone is not Advanced evidence. Advanced requires affirmative positive Level-4 evidence. The frozen ten-applicable-day window and progression model are defined in **Workplace, supplemental shop sessions, and semantic state authority** below. Safety and AWT-R4 remain separate.
 
 ### Shared AWT safeguards
 
@@ -1577,7 +1577,13 @@ Weekly coverage monitors grading; it never limits grading.
 
 Workplace & Shop Practices naturally supplies one weekly grade for most students with applicable attendance and participation. Daily authoritative Workplace evidence accumulates into a weekly Workplace result. ARC does not create a fake Friday assignment.
 
-The exact calculation remains unresolved, including attendance, excused status, No Class, short weeks, refusal, point loss, and corrections. A normal week often contains one Workplace weekly grade plus one or more legitimate instructional grades. There is no two-grade ceiling.
+The frozen calculation is:
+
+> **Weekly Workplace % = total applicable Workplace points earned ÷ total applicable Workplace points possible.**
+
+Each applicable school day contributes one denominator of 10 points per student, regardless of the number of scheduled or supplemental shop sessions that day. Excused, Unexcused, School Activity, No Class, and instructor-authoritative No Meaningful Workplace Opportunity days are excluded. Tardy and Left Early do not create automatic deductions. Short weeks use only their applicable days and have no special cap or adjustment. A normal week often contains one Workplace weekly grade plus one or more legitimate instructional grades. There is no two-grade ceiling.
+
+A settled weekly result becomes Grade Ready. A material unresolved issue produces Review Required. Corrections recalculate the result. Before Posted, the Grade Ready value updates. After Posted, ARC must flag `Posted Grade Changed`, preserve the old posted value and corrected ARC value, require an update, and retain history.
 
 ### Grade Ready and Posted
 
@@ -1596,6 +1602,115 @@ Without an approved SIS integration ARC does not claim automatic posting. The in
 Grades become ready immediately, while ARC avoids disruptive per-grade shop popups and quietly accumulates a queue or badge. Around or during Planning period, or another instructor-configured administrative window, ARC surfaces administrative work such as Grades Ready, Instructor Reviews, unresolved grade reviews, Lesson Plan tasks, material concerns, and other nonurgent work.
 
 Urgent operational issues, including Safety or students actively waiting for instructor action, remain separate. The future Planning Period Workspace combines Grades Ready, reviews, weekly coverage, Friday Lesson Plan preparation and preflight, material planning, and other administrative work. Friday primarily reconciles remaining work and prepares the next week rather than becoming a large data-entry batch.
+
+## Workplace, supplemental shop sessions, and semantic state authority
+
+The following architecture is frozen design authority. It is documentation only and does not change the current Workplace runtime, schema, Gradebook, Class Forecast, Open Shop, CSS, or other application behavior.
+
+### Daily Workplace authority
+
+One applicable school day begins at `10 / 10`. Discrete Workplace events deduct from that daily value, with a floor of zero. ARC maintains one Workplace denominator and one daily Workplace record per student per school day, including days when the student works during scheduled and supplemental shop sessions.
+
+Minor-event escalation is keyed by student, event type, and school day. The first eligible occurrence is `-1`; each eligible same-day repeat of that event is normally `-2`. Escalation resets on the next school day, not the next period. A continuing condition is not deducted again merely because time passed or the period changed. A repeat requires a separate occurrence after correction or the condition ended, or after a new reasonable opportunity to comply.
+
+The approved Minor taxonomy is:
+
+1. Missing Required PPE.
+2. Improper Attire / Footwear.
+3. Unprepared for Work.
+4. Off Task / Not Working.
+5. Failed Cleanup / Organization.
+6. Poor Tool / Equipment Care.
+7. Failed Equipment Shutdown / Storage.
+8. Left Work Area Unsafe.
+9. Did Not Follow Normal Shop Procedure.
+
+The event boundaries are specific. Cleanup / Organization covers the work area, tools, materials, scrap, and assigned cleanup; it does not cover shutdown/storage or an unsafe-area condition. Poor Tool / Equipment Care means careless routine handling and is distinct from knowing or severe misuse. Failed Equipment Shutdown / Storage covers equipment left on or leads, hoses, torches, and similar items not properly secured. Left Work Area Unsafe is a distinct safety-condition failure, not cleanup. Did Not Follow Normal Shop Procedure is a fallback only when no specific event fits. Off Task is temporary disengagement, not sustained refusal. An attire continuing condition is not tapped repeatedly without a new legitimate occurrence or opportunity.
+
+The future Workplace control surface contains exactly nine Minor buttons. Missing Required PPE spans two button widths at the top; the remaining eight controls appear in four two-column rows. ARC does not use a repeated-instance dropdown. A button label changes in context from `-1 …` to `-2 … · 2nd`, then `-2 … · 3rd`; the deduction does not increase indefinitely.
+
+Approved Significant events deduct `-2` per discrete occurrence:
+
+- Horseplay / Unnecessary Hazard.
+- Knowingly Misused Equipment.
+- Refused Reasonable Instruction / Work.
+- Significant Disruption.
+
+A repeated discrete Significant event remains `-2`. Refusal requires a clear reasonable instruction or work expectation and a meaningful opportunity to comply; it is distinct from ordinary unpreparedness or temporary off-task behavior.
+
+Approved Serious events deduct `-3` per discrete occurrence:
+
+- Serious Safety Violation.
+- Intentional Endangerment.
+- Severe Equipment Misuse.
+
+Where a Workplace event and Safety consequence arise from the same incident, both outcomes link to one underlying Safety event rather than duplicating the incident.
+
+**Full-Period Refusal / No Meaningful Participation** is a special daily-state action. It sets that applicable day to `0 / 10`; prior events remain visible in history. It is not presented as a normal `-10` event button.
+
+ARC records the most specific applicable event for an incident. One incident does not stack overlapping Workplace labels. Independent failures remain distinct events.
+
+### Attendance and opportunity applicability
+
+Attendance records presence; Workplace evaluates legitimate Workplace opportunities.
+
+- Present normally creates a `10`-point applicable day.
+- Excused, Unexcused, School Activity, and No Class are excluded from earned and possible points.
+- Tardy and Left Early do not create automatic deductions.
+- No Meaningful Workplace Opportunity excludes the day. This is instructor-authoritative and does not depend on a rigid minute threshold.
+- Supplemental participation never creates another denominator.
+
+### Supplemental shop-session authority
+
+ARC is enrollment-aware without treating physical period presence as enrollment authority. Every student has a **Home Academic Context** and may participate in a different **Current Physical Shop Session**.
+
+The scheduled enrollment retains authority for home course, competency catalog, Gradebook, scheduled attendance, and grading scope. Approved presence in another period does not change enrollment. Supplemental students must ultimately be available in Fast Roster, Class Forecast, Booth Manager, Projects, Practice, Skill Challenges, assessment and reassessment, Evidence, Workplace, Safety, photos, reviews, and Grade Ready workflows.
+
+Operational views distinguish scheduled from supplemental students and show the supplemental student's home period. Supplemental presence does not rewrite Attendance. Work, evidence, and grades remain scoped to the home enrollment. Booth state may be active for the physical session and is released when that session ends. Supplemental sessions support make-up work, reassessment, extra Project time, Open Shop, and other approved work. Workplace uses the same school-day record, and AWT-R4 uses the same applicable day; neither gains extra points or an extra day.
+
+### Positive Workplace evidence
+
+Positive Workplace evidence is evidence, not bonus points. It does not raise a day above `10`, cancel deductions, or become spendable currency. Approved types are:
+
+- Initiative.
+- Responsibility / Ownership.
+- Professional Communication.
+- Teamwork / Supports Others.
+- Problem Solving.
+
+The future workflow is one tap with an optional note or context. Evidence may be recorded during scheduled or supplemental participation, follows the student rather than the physical period, and applies in WT or AWT even when no WT competency is implicated. Expected normal behavior does not automatically create positive evidence; the observation must be meaningful and specific. A positive observation and a deduction may legitimately coexist on the same day.
+
+### AWT-R4 Workplace Readiness derivation
+
+AWT-R4 uses the ten most recent applicable Workplace days. Supplemental work contributes to the existing school day and never adds another day. The ten-day window establishes consistency; positive observations establish Advanced breadth; event patterns protect the meaning of the descriptor.
+
+- **Level 1 — Introduced:** frequent dependence, redirection, refusal, disruption, or substantial difficulty meeting Workplace expectations.
+- **Level 2 — Developing:** generally appropriate participation with recurring correction or support.
+- **Level 3 — Proficient:** normally requires a ten-day Workplace average of at least `90%`, sustained reliability, and no unresolved contradictory pattern. One isolated poor day or full-period refusal may retain Proficient with Concern / Watch when surrounding evidence strongly supports established proficiency rather than automatically forcing Developing.
+- **Level 4 — Advanced:** satisfies Proficient and includes meaningful Advanced-positive evidence across at least three distinct approved positive dimensions, with no active Significant or Serious pattern incompatible with Advanced. No rigid `95%` threshold or arbitrary total positive count applies. Zero deductions alone never establishes Advanced.
+
+Patterns may block, require review, or lower a rating. Recovery occurs naturally as the rolling window changes. Exact event-pattern blocker and review thresholds beyond this frozen direction remain unresolved. The weekly Workplace grade and AWT-R4 remain related but distinct outputs from the same authoritative evidence.
+
+### ARC semantic color and state principles
+
+Neutral Titanium presentation dominates ARC; color is earned by meaning. The approved semantic vocabulary is **Neutral**, **Selected / Active**, **Primary Action**, **Positive / Ready**, **Attention**, **Significant Concern**, **Critical / Blocking**, **Disabled / Unavailable**, and **Future**.
+
+- Blue means selected or active. An inactive Class Forecast control is neutral; the active state is blue.
+- A Primary Action uses enhanced neutral Titanium treatment rather than blue.
+- Positive / Ready is green.
+- Attention is amber and remains visually distinct from gold.
+- Significant Concern is orange.
+- Critical / Blocking is red and is used sparingly.
+- Disabled / Unavailable is neutral.
+- Future is muted and visibly labeled `FUTURE`.
+
+Color never acts as the only signal. ARC does not use danger color to represent proficiency level or recommendation rank. Open Shop rank and ordering use restrained presentation rather than red, orange, or blue importance coding.
+
+Workplace severity follows the same language: a first Minor `-1` is Attention; a repeated Minor or Significant `-2` is Significant Concern; a Serious `-3` is Critical / Blocking. Full-Period Refusal uses appropriately severe existing semantics without inventing another color. Workplace severity is expressed through the control and its accessible label, not decorative badges or stickers.
+
+The accepted sidebar treatment remains frozen: selected is blue, normal is neutral, and future is muted with `FUTURE`. This authority does not reopen sidebar design. Statuses may be clearer than ordinary controls, but buttons remain Titanium-first, cards remain restrained, and ARC avoids full-screen color intensity.
+
+Semantic design tokens and component implementation, the Class Forecast selected-state repair, Open Shop color cleanup, Workplace controls and history UI, Safety-event link mechanics, Positive evidence UI and reporting, supplemental-session start/end mechanics and integrations, runtime schema and migration, and remaining Gradebook workflow are future implementation decisions.
 
 ## Current conflicts and migration concerns
 
@@ -1622,6 +1737,9 @@ These are design gaps, not authorization to modify runtime behavior:
 19. Current navigation labels and grouping do not yet implement the approved Students, Resources, Project Library, Lesson Plans, Administration, or complete Activity Library information architecture.
 20. Sidebar Gesture Repair 2 remains pending; its larger rail target, rigid contents, persistent backdrop, tap interception, and unified state authority are not implemented by this documentation milestone.
 21. The current Lesson Plan Bank does not implement the approved reusable Lesson Plan framework, administrator rubric alignment, Checks for Understanding, Plan Preflight, student-facing targets and criteria, reflection workflow, or Administrative Document Engine.
+22. Current Workplace event controls, calculations, storage, and history do not implement the frozen daily scoring, applicability, correction, positive-evidence, or AWT-R4 architecture.
+23. Supplemental shop-session participation is approved, but no cross-period operational session authority or integration exists.
+24. ARC does not yet implement the approved semantic state vocabulary consistently across Workplace, Class Forecast, Open Shop, and shared components.
 
 Any implementation must define migration, rollback, historical rendering, and explainability before changing stored records or current calculations.
 
@@ -1648,7 +1766,7 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Runtime evidence schema and migration from existing manual ratings and history.
 - Exact Evidence Source, Evidence Record, Derivation Result, Override, resolver, and immutable period-snapshot storage schemas.
 - Final Activity Evidence Declaration storage schema, Activity Builder, Preflight, and authoring validation.
-- Exact deterministic AWT-R4 Workplace Readiness derivation and evidence window.
+- Exact AWT-R4 event-pattern blocker, review, and lowering thresholds beyond the frozen ten-applicable-day direction.
 - Instructor- or Activity-defined Advanced diversity details where this authority intentionally requires meaningful breadth without prescribing a universal context list.
 - Catalog regression tests that lock all 26 WT and 34 AWT runtime records.
 - Reconciliation or replacement of the current generic competency student statements.
@@ -1657,12 +1775,15 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Safety remediation, review, and clearance workflow.
 - Student-facing implementation of WT and AWT evidence explanations and the Safety model.
 - Exact Gradebook categories, weights, and entry policies beyond the frozen competency conversion and handoff boundaries.
-- Exact Weekly Workplace Grade calculation, including attendance, excused status, No Class, short weeks, refusal, point loss, and corrections.
-- Grade Ready correction and update workflow after Posted, plus individual and batch posting interaction.
+- Workplace event/history interaction details, same-event recurrence capture, and Safety-event link mechanics.
+- Grade Ready correction and update interface after Posted, plus individual and batch posting interaction.
 - Weekly grade-coverage interface and exception presentation.
 - Quarter-close Gradebook and submission snapshot workflow, including post-submission correction.
 - SIS integration, only if later approved and available.
 - Planning Period Workspace and administrative notification implementation.
+- Semantic tokens and component implementation, Class Forecast selected-state repair, and Open Shop color cleanup.
+- Positive Workplace evidence UI, context/history, reporting, and exact AWT-R4 pattern review presentation.
+- Supplemental shop-session start/end workflow, physical-session visibility, Booth release, and cross-feature integration.
 - Year-One instructional population and coverage audit after Activity schemas stabilize.
 - Administration document schemas, approval/version history, print/download/export formats, and reporting workflows.
 - Exact Weekly Lesson Plan generation, review, approval, snapshot, historical retrieval, and period-divergence suggestion workflows.

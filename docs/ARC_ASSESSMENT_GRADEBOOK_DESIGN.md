@@ -2171,3 +2171,11 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Activity completion, Practice completion, and resource use never automatically change grades or competencies.
 - Activity assignment may create expected material demand but never automatically consumes inventory.
 - Resources used for student instruction or grading-linked recommendations require instructor-approved authority.
+
+## Stage 13 classroom integration and cutover authority
+
+Stage 12 Samsung Physical Verification is accepted as **PASSED** after `fixture-init-repair-1`. The verified Schema v8 foundation remains isolated from the normal Schema 7 classroom runtime.
+
+[`ARC_SCHEMA_V8_STAGE_13_CLASSROOM_CUTOVER_DESIGN.md`](ARC_SCHEMA_V8_STAGE_13_CLASSROOM_CUTOVER_DESIGN.md) is the controlling implementation-ready design for a future classroom cutover. It establishes the complete v7 family classification, reusable-authority reconciliation rules, v7-to-v8 authority map, single-write-authority transition states, protected production-database initialization design, recovery gates, cross-view convergence requirements, privacy/security blockers, Year-One instructional-readiness gate, unresolved-policy list, and bounded future implementation sequence.
+
+Stage 13 is documentation only. It does not initialize production `arc_classroom_v8`, transfer any classroom domain, migrate or reset v7, change runtime/schema/build identifiers, or authorize real student data. The normal classroom remains Schema 7. Production Readiness and Classroom Readiness are **NOT ACHIEVED**; real student production data is **NOT AUTHORIZED**.

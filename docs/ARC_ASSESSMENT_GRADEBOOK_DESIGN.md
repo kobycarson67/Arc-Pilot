@@ -1841,6 +1841,158 @@ The accepted sidebar treatment remains frozen: selected is blue, normal is neutr
 
 Semantic design tokens and component implementation, the Class Forecast selected-state repair, Open Shop color cleanup, Workplace controls and history UI, Safety-event link mechanics, Positive evidence UI and reporting, supplemental-session start/end mechanics and integrations, runtime schema and migration, and remaining Gradebook workflow are future implementation decisions.
 
+## Schema v8 conceptual authority — Parts 1–7
+
+This section defines the approved conceptual Schema v8 authority. It is documentation only. Schema v7 remains the runtime, storage, backup, and migration authority until a separately approved implementation milestone satisfies the migration gate below.
+
+### Governing persistence principle
+
+> **Persist facts, decisions, historical authority, and meaningful workflow state. Derive conclusions that can be deterministically rebuilt. Snapshot conclusions only when history must remain frozen. Do not persist UI convenience state as domain truth.**
+
+> **A screen is not a data model. A recommendation is not authority. A calculation is not evidence. A snapshot is not live state.**
+
+Schema v8 uses opaque immutable identities. It preserves distinct occurred, recorded, finalized, posted, and approved timestamps wherever those moments carry different meaning. Referenced historical authority is not casually hard-deleted; lifecycle, supersession, void, and archive authority preserve history.
+
+### Part 1 — Identity, academic, attendance, and physical context
+
+The persisted authorities are:
+
+- **Student:** longitudinal identity only. Current period, course, booth, Project, and competency truth are not embedded in the Student record.
+- **CourseEnrollment:** academic ownership.
+- **SchoolYear → Semester → GradingPeriod:** durable identities and hierarchy.
+- **EnrollmentScheduleAssignment:** effective-dated schedule history.
+- **AttendanceRecord:** scheduled-session facts with append-first corrections. Supported statuses include Present, Unexcused Absence, Excused Absence, Tardy, School Activity, Left Early, and No Class. Attendance stores no grade, competency, or Workplace consequence.
+- **PassEvent:** bathroom, nurse, counselor, office, locker, and similar events, kept separate from Attendance. A Pass Event never automatically changes Attendance, grades, or Workplace.
+- **SupplementalShopSession:** student, home enrollment, date, physical period or session, start and end, authorization, and context.
+
+> **Enrollment determines academic ownership; Supplemental Shop Session records physical work location.**
+
+Supplemental presence never rewrites scheduled Attendance, course, competency catalog, or Gradebook destination. Meaningful approved supplemental participation may independently make a school day Workplace-applicable even when scheduled welding was missed. The day still has only one ten-point Workplace denominator.
+
+### Part 2 — Activity and student work
+
+The conceptual chain is:
+
+> **ActivityDefinition → ActivityVersion → ActivityAssignment → StudentActivity → ActivityAttempt(s)**
+
+- **ActivityDefinition** is reusable identity. Types include Practice, Skill Challenge, Technical Assignment, Test, and Project. Resources are related content and do not automatically become Activities.
+- **ActivityVersion** becomes immutable and versioned once approved or used. It owns content and configuration, purpose, grading and reassessment policy, rubric and assessment relationships, materials and equipment, and approval authority.
+- **ActivityEvidenceDeclaration** is prospective evidence authority bound to an ActivityVersion.
+- **ActivityAssignment** records the instructional act of assigning work to a class, selected students, an individual, or through an accepted recommendation. The assignment period does not force the eventual final-grade period.
+- **StudentActivity** is the durable student-and-enrollment work relationship and may span grading periods.
+- **ActivityAttempt** records an actual attempt. Pre-finalization revision remains within the same attempt. Post-finalization reassessment creates a linked new attempt. Pending Make-Up before the first real attempt does not fabricate an attempt. Practice may have an Attempt and Evidence without any Gradebook result.
+
+### Part 3 — Project authority
+
+The conceptual chain is:
+
+> **StudentActivity → ProjectInstance → ProjectBuildAttempt(s) + append-first ProjectCheckpointEvents**
+
+- **ProjectInstance** is one logical Project across checkpoint correction, booth changes, grading periods, physical restarts, and supplemental sessions.
+- **ProjectBuildAttempt** is a physical fabrication attempt; rebuilding a physical object is not academic reassessment. Build Attempts support active, completed, scrapped, and authorized-restart states plus future material and photo relationships.
+- **ProjectCheckpointEvent** is append-first and records entered, Ready to Work, Ready for Review, review, Needs More Work, verified, and related events. Current checkpoint and Project state are derived or cacheable.
+
+ARC preserves an underlying manual operational need separately from derived Instructor Review and does not persist Forecast-specific need truth. **BoothAssignment** is separate operational authority. It may reference a Project or Supplemental Shop Session and also supports Practice, Skill Challenges, and reassessment.
+
+Artifacts are shared authority rather than duplicated blobs. Future material use belongs to Inventory transactions referenced by the Build Attempt.
+
+The detailed final Project rubric assessment persists its rubric version and criterion results; the percentage is deterministically calculated. Finalization creates AssessmentResult and Gradebook authority plus legitimate Evidence. Corrections supersede append-first. The model supports normal finalization, refusal or stopped participation, transfer or drop, insufficient evidence, and legitimate pause with completion opportunity preserved.
+
+### Part 4 — Evidence Engine
+
+The conceptual pipeline is:
+
+> **EvidenceSource → EvidenceRecord(s) → StrategyConfiguration → DerivationResult [derived] → InstructorOverride [persisted] → ResolvedCompetencyAuthority [derived] → CompetencyAuthoritySnapshot [immutable]**
+
+- **EvidenceSource** records one student's actual performance or event with enrollment, time, recorder, source context, applicable Activity, Attempt, Project, checkpoint, and Supplemental Shop Session references, artifacts, notes, reassessment relationship, and lifecycle or correction authority. It stores no official competency level or global-count flag.
+- **EvidenceRecord** makes exactly one competency claim. It supports nullable demonstrated level, qualification and reason, evidence mode, criterion references, typed context, explicit diversity, reassessment, and lifecycle. Qualification values are Qualifying, Supporting, Nonqualifying, and Excluded; NE remains distinct. Evidence modes are Rubric, Challenge / Assignment, Workflow, and Habit / Continuous.
+- **StrategyConfiguration** is immutable, versioned competency-strategy authority. Runtime logic does not hard-code competency IDs.
+- **DerivationResult** is rebuildable and cacheable. It records scope, derived level and confirmation, contributors and contradictions, requirements, diversity and recency, next requirements, operational status, structured reasons, and an evidence/configuration fingerprint.
+- **InstructorOverride** is append-first professional authority. It never rewrites or fabricates Evidence, confirmation, or diversity.
+- **ResolvedCompetencyAuthority** is the derived resolver for downstream consumers.
+- **CompetencyAuthoritySnapshot** is immutable historical authority at a quarter, SLO, or reporting boundary.
+
+Confirming and contradictory roles are derived interpretations rather than permanent Evidence flags.
+
+### Part 5 — Workplace and Safety
+
+The Workplace chain is:
+
+> **WorkplaceDay → WorkplaceEvent(s) + PositiveWorkplaceObservation(s) → Daily / Live Weekly Result [derived] → WorkplaceWeekFinalization [persisted] → AssessmentResult → Gradebook**
+
+The Safety chain is:
+
+> **SafetyEvent → Safety Evidence → Continuous Safety derivation → operational Safety status**
+
+- **WorkplaceDay** is the single student, enrollment, and date container with applicability authority. Its current score is derived.
+- **WorkplaceEvent** persists stable event type, severity and rule version, deduction applied, occurrence sequence, occurred and recorded times, physical and supplemental context, recorder, optional SafetyEvent link, and lifecycle. The next Minor-button state is derived.
+- **Full-Period Refusal / No Meaningful Participation** is a real event with a special daily-zero consequence, never a fake `-10` event.
+- **PositiveWorkplaceObservation** persists one of the five approved dimensions and never adds bonus points.
+- **SafetyEvent** is separate factual authority. One real incident may link Workplace and Safety so the instructor does not enter it twice. Safety status and patterns are derived. A Safety-invalidated technical performance may remain a real performance, while its technical Evidence becomes Nonqualifying for a structured Safety reason.
+- **WorkplaceWeekFinalization** persists applicable days, earned and possible points, percentage, class posting scale, normalized points, policy version, finalizer and time, and supersession. Positive observations never alter weekly points. Corrections supersede and flow through AssessmentResult and Gradebook revisions.
+
+### Part 6 — Gradebook
+
+The academic chain is:
+
+> **AssessmentResult → GradebookEntry → GradebookEntryRevision**
+
+External synchronization uses:
+
+> **GradebookPostingInstance → GradebookPostingMembership → append-first GradebookPostingEvents**
+
+Historical Gradebook authority is the immutable **QuarterGradeSnapshot**.
+
+- **AssessmentResult** is a finalized score from an authoritative source and contains no competency conclusion. Not every AssessmentResult automatically replaces current Gradebook authority.
+- **GradebookEntry** is the student, enrollment, grading-period, and category identity. Treatment supports Scored and Exempt. The four categories remain Skills & Competency, Fabrication & Projects, Technical Knowledge, and Workplace & Shop Practices.
+- **GradebookEntryRevision** is append-first accepted AssessmentResult authority for initial assessment, reassessment, correction, and similar changes. A worse reassessment may produce a legitimate Result and Evidence without replacing the current grade.
+- **GradebookPolicyVersion** persists the `50 / 25 / 15 / 10` weights, grading scale, category rules, NYA renormalization, weekly coverage, and Quarter Close policy.
+- **GradebookPostingInstance** is an external assignment identity within a grading period.
+- **GradebookPostingMembership** is one student's external relationship, current posted revision, and treatment.
+- **GradebookPostingEvent** preserves Add, Post, Update, Exempt, and Correction history append-first.
+
+Category averages, NYA, renormalized or current course grade, Create/Add/Update/Synchronized state, the Grade Ready queue, and Weekly Grade Coverage are derived. Weekly coverage derives from authoritative entries and instructional-week identity.
+
+**QuarterGradeSnapshot** becomes immutable after approval and preserves policy version, category results and treatments, authoritative revision references, competency snapshots and Overrides, final grade, carry-forward, synchronization state, approver and approval time, and supersession. Corrections create superseding snapshots.
+
+### Part 7 — Snapshots, reporting, artifacts, and projections
+
+ARC does not create parallel SLO evidence. SLO and report definitions consume existing Competency Snapshots, Evidence, Gradebook history, academic scope, and population. Finalized report snapshots persist only where administratively required.
+
+**Artifact** is a first-class student-work object with storage reference, metadata, and lifecycle. **ArtifactLink** allows one Artifact to relate to StudentActivity, Project, BuildAttempt, checkpoint, EvidenceSource, library, and other legitimate authorities without duplicating file bytes. Evidence-supporting Artifacts are not casually hard-deleted.
+
+**BehaviorEvent** is serious-incident authority separate from everyday Workplace scoring and may link to Safety or Workplace.
+
+Notification conditions are derived. Only required user interaction state, such as dismiss, snooze, or acknowledge, persists.
+
+Planning Period Workspace, Fast Roster, Class Forecast, Open Shop recommendations, Grade Ready queue, Weekly Grade Coverage, current competency cards, current course grade, Dashboard, and Student Profile composition are projections. Accepting a recommendation creates real ActivityAssignment authority.
+
+Domain-specific append-first histories are preferred. A unified timeline may be derived rather than duplicated.
+
+### Persisted, derived, and snapshot inventory
+
+**Persisted authority:** Student; CourseEnrollment; academic periods; EnrollmentScheduleAssignment history; Attendance and corrections; Pass Events; Supplemental Shop Sessions; Activity Definitions, Versions, Evidence Declarations, Assignments, StudentActivities, and Attempts; Project Instances, Build Attempts, and Checkpoint Events; Booth Assignments; Evidence Sources and Records; Strategy Configurations; Instructor Overrides; Workplace Days, Events, and Positive Observations; Safety Events; Workplace Week Finalizations; detailed assessments; Assessment Results; Gradebook Entries, Revisions, and Policy Versions; Posting Instances, Memberships, and Events; Artifacts and Links; serious Behavior Events; and required reporting definitions.
+
+**Derived or cacheable authority:** current Project state; Fast Roster needs; Class Forecast; Open Shop recommendations; daily and live-weekly Workplace results; Derivation Results; Resolved Competency Authority; category averages; NYA and renormalized current grade; Weekly Grade Coverage; Grade Ready and Create/Add/Update states; Quarter Close preflight; notification conditions; and current course grade.
+
+**Immutable snapshots:** CompetencyAuthoritySnapshot, QuarterGradeSnapshot, and finalized SLO or report snapshots where administratively required.
+
+### Schema v8 migration gate
+
+This conceptual authority does not authorize Schema v8 implementation, migration, or a runtime schema bump. The next phase must inspect the actual Schema v7 runtime and storage before proposing a mapping; documentation alone is insufficient migration evidence.
+
+For every Schema v7 authority, the migration design must identify:
+
+- exact current storage shape and location;
+- direct, transformed, derived, deprecated-but-preserved, or new mapping;
+- stable identity;
+- referential integrity;
+- backup and rollback behavior;
+- regression tests;
+- continuity verification.
+
+No classroom data is discarded merely because the conceptual Schema v8 model is cleaner.
+
 ## Current conflicts and migration concerns
 
 These are design gaps, not authorization to modify runtime behavior:
@@ -1870,6 +2022,7 @@ These are design gaps, not authorization to modify runtime behavior:
 23. Supplemental shop-session participation is approved, but no cross-period operational session authority or integration exists.
 24. ARC does not yet implement the approved semantic state vocabulary consistently across Workplace, Class Forecast, Open Shop, and shared components.
 25. Current runtime grading does not implement the approved category weights, within-category point architecture, state-domain separation, reassessment replacement policy, Posting Instances, NYA renormalization, selected-student posting workflow, weekly coverage monitor, or Quarter Close snapshots.
+26. Schema v8 is approved conceptual authority only. Runtime remains Schema v7, and no v8 object, identity, relationship, migration, or snapshot store exists until the migration gate is completed and separately authorized.
 
 Any implementation must define migration, rollback, historical rendering, and explainability before changing stored records or current calculations.
 
@@ -1914,6 +2067,7 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Semantic tokens and component implementation, Class Forecast selected-state repair, and Open Shop color cleanup.
 - Positive Workplace evidence UI, context/history, reporting, and exact AWT-R4 pattern review presentation.
 - Supplemental shop-session start/end workflow, physical-session visibility, Booth release, and cross-feature integration.
+- Schema v7 storage audit and object-by-object Schema v8 migration map, including identity, referential integrity, backup, rollback, regression, and continuity proof.
 - Year-One instructional population and coverage audit after Activity schemas stabilize.
 - Administration document schemas, approval/version history, print/download/export formats, and reporting workflows.
 - Exact Weekly Lesson Plan generation, review, approval, snapshot, historical retrieval, and period-divergence suggestion workflows.

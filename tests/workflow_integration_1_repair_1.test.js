@@ -73,14 +73,16 @@ test('sidebar gesture supports progress, flick, return and vertical cancellation
 });
 
 test('sidebar integration shares existing authority and keeps workspace and horizontal controls stable',()=>{
-  assert.match(html,/setArcMobileSidebarOpen\(result\.open\)/);assert.match(html,/setArcMobileSidebarOpen\(!document\.body\.classList\.contains/);
+  assert.match(html,/function settleArcSidebarGesture\(result\)/);assert.match(html,/setArcMobileSidebarOpen\(false\);\s*clearDrag\(\)/);assert.match(html,/setArcMobileSidebarOpen\(!document\.body\.classList\.contains/);
   assert.match(html,/input\[type="range"\],canvas/);assert.match(html,/overflowX/);assert.match(css,/arc-sidebar-dragging \.arc-workspace\{width:auto;min-width:0\}/);
+  assert.match(css,/arc-sidebar-dragging \.arc-sidebar\{width:var\(--arc-sidebar-drawer-width\)!important;transform:translateX/);
+  assert.doesNotMatch(html+css,/arc-sidebar-drag-width|arc-sidebar-drag-reveal/);
   assert.match(css,/prefers-reduced-motion/);assert.match(html,/clearArcTransientHistoryMarker\("shell-navigation"\)/);assert.match(html,/syncArcSidebarControls\(\)/);
 });
 
 test('schema, offline assets, build and no-domain-mutation contracts remain exact',()=>{
   const sw=fs.readFileSync(path.join(root,'sw.js'),'utf8'),build=fs.readFileSync(path.join(root,'app-build.js'),'utf8');
-  assert.match(html,/const CURRENT_SCHEMA_VERSION = 7;/);assert(build.includes("build:'arc-schema-v8-integration-verification-12'"));assert(sw.includes('./src/arc_sidebar_gesture.js'));
+  assert.match(html,/const CURRENT_SCHEMA_VERSION = 7;/);assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1'"));assert(sw.includes('./src/arc_sidebar_gesture.js'));
   assert(html.includes('assets/brand/runtime/arc-welding-primary-logo-960.png'));assert(html.includes('src/arc_icons.js'));
 });
 console.log('PASS '+count+' ARC Workflow Integration 1 Repair 1 tests');

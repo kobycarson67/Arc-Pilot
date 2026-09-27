@@ -2045,6 +2045,8 @@ ARC retains the requirement to begin real classroom use with a sufficiently popu
 
 **Implementation status:** Stage 2, Academic Identity, Scope, Enrollment, and Schedule Foundation, is implemented in build `arc-schema-v8-academic-foundation-2`. IndexedDB structural version 2 adds Student, Course, School Year, Semester, Grading Period, Section, Course Enrollment, and effective-dated Enrollment Schedule Assignment authority plus derived roster and academic-period queries. The repository enforces references, academic-scope agreement, date ranges, assignment overlap, immutable IDs, revisions, and transactional moves. It seeds only stable WT/AWT Course definitions. No classroom screen reads v8, no Student is seeded, and Production/Classroom Readiness remains unachieved.
 
+**Implementation status:** Stage 3, Activity Foundation, is implemented in build `arc-schema-v8-activity-foundation-3`. Structural version 3 adds Definition, Version, prospective Declaration, Assignment, StudentActivity, and Attempt authority with exact-version locking, persisted grading/reassessment configuration, roster-snapshot targeting, atomic recipients, generic workflow, and Attempt policy. Project, Evidence, Gradebook, and other later runtime domains remain unimplemented; classroom UI remains v7 and Production/Classroom Readiness remains unachieved.
+
 When migration of preserved reusable authority or future real production data is required, the migration design must identify:
 
 - exact current storage shape and location;

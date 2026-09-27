@@ -8,10 +8,10 @@
 }(this,function(){
   'use strict';
   var DATABASE_NAME='arc_classroom_v8';
-  var IDB_VERSION=2;
+  var IDB_VERSION=3;
   var SCHEMA_FAMILY='arc-classroom';
   var SCHEMA_VERSION=8;
-  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records',students:'students',courses:'courses',schoolYears:'school_years',semesters:'semesters',gradingPeriods:'grading_periods',sections:'sections',enrollments:'course_enrollments',scheduleAssignments:'enrollment_schedule_assignments'});
+  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records',students:'students',courses:'courses',schoolYears:'school_years',semesters:'semesters',gradingPeriods:'grading_periods',sections:'sections',enrollments:'course_enrollments',scheduleAssignments:'enrollment_schedule_assignments',activityDefinitions:'activity_definitions',activityVersions:'activity_versions',activityDeclarations:'activity_evidence_declarations',activityAssignments:'activity_assignments',studentActivities:'student_activities',activityAttempts:'activity_attempts'});
   var STORE_NAMES=Object.freeze(Object.keys(STORES).map(function(key){return STORES[key];}));
 
   function StorageError(code,message,context,cause){
@@ -72,7 +72,7 @@
         var metadata=db.createObjectStore(STORES.metadata,{keyPath:'key'});
         var migrations=db.createObjectStore(STORES.migrations,{keyPath:'id'});
         db.createObjectStore(STORES.infrastructure,{keyPath:'id'});
-        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:1,toIndexedDbVersion:2,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
+        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:2,toIndexedDbVersion:3,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
         migrations.add({id:'indexeddb-0-to-1',fromIndexedDbVersion:0,toIndexedDbVersion:1,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
       }
       if(oldVersion<2){
@@ -86,9 +86,20 @@
         var enrollments=store(STORES.enrollments,'enrollmentId');enrollments.createIndex('by_student','studentId',{unique:false});enrollments.createIndex('by_course_year',['courseId','schoolYearId'],{unique:false});enrollments.createIndex('by_student_course_year',['studentId','courseId','schoolYearId'],{unique:false});
         var assignments=store(STORES.scheduleAssignments,'scheduleAssignmentId');assignments.createIndex('by_enrollment','enrollmentId',{unique:false});assignments.createIndex('by_section','sectionId',{unique:false});
         (oldVersion<1?migrations:tx.objectStore(STORES.migrations)).add({id:'indexeddb-1-to-2',fromIndexedDbVersion:1,toIndexedDbVersion:2,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
-        if(oldVersion===1){var metaStore=tx.objectStore(STORES.metadata),getMeta=metaStore.get('database');getMeta.onsuccess=function(){var value=getMeta.result;if(!value)return;value.indexedDbVersion=2;value.lastSuccessfulUpgrade={fromIndexedDbVersion:1,toIndexedDbVersion:2,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};metaStore.put(value);};}
+        if(oldVersion===1&&newVersion===2){var metaStore=tx.objectStore(STORES.metadata),getMeta=metaStore.get('database');getMeta.onsuccess=function(){var value=getMeta.result;if(!value)return;value.indexedDbVersion=2;value.lastSuccessfulUpgrade={fromIndexedDbVersion:1,toIndexedDbVersion:2,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};metaStore.put(value);};}
       }
-      if(oldVersion>1)throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
+      if(oldVersion<3){
+        function activityStore(name,key){return db.createObjectStore(name,{keyPath:key});}
+        var definitions=activityStore(STORES.activityDefinitions,'definitionId');definitions.createIndex('by_type','type',{unique:false});definitions.createIndex('by_lifecycle','lifecycle',{unique:false});definitions.createIndex('by_course','courseIds',{unique:false,multiEntry:true});
+        var versions=activityStore(STORES.activityVersions,'versionId');versions.createIndex('by_definition','definitionId',{unique:false});versions.createIndex('by_definition_number',['definitionId','versionNumber'],{unique:true});versions.createIndex('by_publication','publicationState',{unique:false});
+        var declarations=activityStore(STORES.activityDeclarations,'declarationId');declarations.createIndex('by_version','versionId',{unique:false});
+        var assignments=activityStore(STORES.activityAssignments,'assignmentId');assignments.createIndex('by_version','versionId',{unique:false});assignments.createIndex('by_section','sectionId',{unique:false});assignments.createIndex('by_assigned_date','assignedDate',{unique:false});
+        var studentActivities=activityStore(STORES.studentActivities,'studentActivityId');studentActivities.createIndex('by_student','studentId',{unique:false});studentActivities.createIndex('by_enrollment','enrollmentId',{unique:false});studentActivities.createIndex('by_assignment','assignmentId',{unique:false});studentActivities.createIndex('by_version','versionId',{unique:false});studentActivities.createIndex('by_workflow','workflowState',{unique:false});studentActivities.createIndex('by_assignment_student',['assignmentId','studentId'],{unique:true});
+        var attempts=activityStore(STORES.activityAttempts,'attemptId');attempts.createIndex('by_student_activity','studentActivityId',{unique:false});attempts.createIndex('by_activity_sequence',['studentActivityId','sequence'],{unique:true});attempts.createIndex('by_workflow','workflowState',{unique:false});
+        (oldVersion<1?migrations:tx.objectStore(STORES.migrations)).add({id:'indexeddb-2-to-3',fromIndexedDbVersion:2,toIndexedDbVersion:3,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
+        if(oldVersion>0){var stage3Meta=tx.objectStore(STORES.metadata),stage3Get=stage3Meta.get('database');stage3Get.onsuccess=function(){var value=stage3Get.result;if(!value)return;value.indexedDbVersion=3;value.lastSuccessfulUpgrade={fromIndexedDbVersion:2,toIndexedDbVersion:3,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};stage3Meta.put(value);};}
+      }
+      if(oldVersion>2)throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
       if(tx)tx.arcUpgrade={from:oldVersion,to:newVersion,status:'in_progress'};
     }
     function transact(db,stores,mode,operation){

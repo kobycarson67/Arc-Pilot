@@ -10,7 +10,7 @@ const inlineEnd=html.indexOf('</style>');
 const visualLink=html.indexOf('src/arc_titanium_visual_system.css');
 assert(visualLink>inlineEnd,'Titanium design system must load after legacy inline presentation');
 assert(sw.includes("'./src/arc_titanium_visual_system.css'"),'offline shell must cache the visual system');
-assert(build.includes("build:'arc-schema-v8-academic-foundation-2'"));
+assert(build.includes("build:'arc-schema-v8-activity-foundation-3'"));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
 
 ['--t-bg-canvas','--t-surface-1','--t-text','--t-blue','--t-success','--t-warning','--t-danger','--t-shadow-focus'].forEach(token=>assert(css.includes(token),'missing semantic token '+token));

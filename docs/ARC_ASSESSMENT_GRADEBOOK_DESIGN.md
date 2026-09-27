@@ -2043,6 +2043,8 @@ ARC retains the requirement to begin real classroom use with a sufficiently popu
 
 **Implementation status:** Stage 1, Storage Foundation and Immutable Identity, is implemented in build `arc-schema-v8-storage-foundation-1`. It provides an isolated browser-native IndexedDB database named `arc_classroom_v8`, infrastructure metadata/migration/record stores, UUID authority, explicit completed transactions, ordered upgrade handling, version-change coordination, structured failures, optimistic revision checks, and an explicit v8-only development reset. It creates no classroom-domain v8 stores, does not open automatically, does not migrate or reset v7, and does not change the v7 classroom runtime. Production/Classroom Readiness remains unachieved.
 
+**Implementation status:** Stage 2, Academic Identity, Scope, Enrollment, and Schedule Foundation, is implemented in build `arc-schema-v8-academic-foundation-2`. IndexedDB structural version 2 adds Student, Course, School Year, Semester, Grading Period, Section, Course Enrollment, and effective-dated Enrollment Schedule Assignment authority plus derived roster and academic-period queries. The repository enforces references, academic-scope agreement, date ranges, assignment overlap, immutable IDs, revisions, and transactional moves. It seeds only stable WT/AWT Course definitions. No classroom screen reads v8, no Student is seeded, and Production/Classroom Readiness remains unachieved.
+
 When migration of preserved reusable authority or future real production data is required, the migration design must identify:
 
 - exact current storage shape and location;

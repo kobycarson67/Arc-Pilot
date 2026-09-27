@@ -8,7 +8,7 @@ Implementation Stage 1 establishes storage infrastructure only. All classroom do
 - Database: `arc_classroom_v8`
 - ARC schema family: `arc-classroom`
 - ARC domain schema version: `8`
-- IndexedDB structural version: `1`
+- Stage-1 IndexedDB structural version: `1`; Stage 2 advances the same database in place to structural version `2`
 
 The ARC domain schema version describes ARC's conceptual persisted authority. The IndexedDB version is only the ordered browser database-structure transition number. They are recorded separately and must not be treated as interchangeable.
 
@@ -18,7 +18,7 @@ The ARC domain schema version describes ARC's conceptual persisted authority. Th
 - `migration_log`: successful ordered IndexedDB structure transitions.
 - `infrastructure_records`: explicitly non-domain infrastructure/development records used to prove transaction behavior. It is not Student, Activity, Project, Evidence, Gradebook, or other classroom authority.
 
-No classroom-domain v8 stores exist in Stage 1.
+Stage 1 created no classroom-domain stores. Stage 2 subsequently adds the bounded academic stores documented in `ARC_SCHEMA_V8_ACADEMIC_FOUNDATION.md`; the infrastructure boundaries in this document remain authoritative.
 
 ## Identity and writes
 

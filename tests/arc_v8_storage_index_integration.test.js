@@ -5,6 +5,8 @@ const sw=fs.readFileSync('sw.js','utf8');
 const source=fs.readFileSync('src/arc_v8_storage.js','utf8');
 assert(html.includes('<script src="src/arc_v8_storage.js"></script>'),'page must load the v8 infrastructure module');
 assert(sw.includes("'./src/arc_v8_storage.js'"),'offline shell must cache the v8 infrastructure module');
+assert(html.includes('<script src="src/arc_v8_academic.js"></script>'),'page must load the academic repository without invoking it');
+assert(sw.includes("'./src/arc_v8_academic.js'"),'offline shell must cache the academic repository');
 assert(html.includes('const STORAGE_KEY = "weld_v013"'),'v7 classroom storage key must remain unchanged');
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7'),'v7 classroom schema must remain unchanged');
 assert(source.includes("DATABASE_NAME='arc_classroom_v8'"),'v8 database must have an isolated identity');

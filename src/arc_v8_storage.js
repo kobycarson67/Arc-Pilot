@@ -8,11 +8,11 @@
 }(this,function(){
   'use strict';
   var DATABASE_NAME='arc_classroom_v8';
-  var IDB_VERSION=1;
+  var IDB_VERSION=2;
   var SCHEMA_FAMILY='arc-classroom';
   var SCHEMA_VERSION=8;
-  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records'});
-  var STORE_NAMES=Object.freeze([STORES.metadata,STORES.migrations,STORES.infrastructure]);
+  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records',students:'students',courses:'courses',schoolYears:'school_years',semesters:'semesters',gradingPeriods:'grading_periods',sections:'sections',enrollments:'course_enrollments',scheduleAssignments:'enrollment_schedule_assignments'});
+  var STORE_NAMES=Object.freeze(Object.keys(STORES).map(function(key){return STORES[key];}));
 
   function StorageError(code,message,context,cause){
     this.name='ArcV8StorageError';this.code=code;this.message=message;
@@ -67,16 +67,28 @@
     function announce(type,detail){if(channel&&typeof channel.postMessage==='function')channel.postMessage({source:'arc-v8-storage',type:type,database:DATABASE_NAME,detail:detail||{},at:iso(now)});}
     function upgrade(db,oldVersion,newVersion,tx){
       if(oldVersion<0||oldVersion>=newVersion)throw error('INVALID_UPGRADE_PATH','Invalid ARC v8 IndexedDB upgrade path.',{oldVersion:oldVersion,newVersion:newVersion});
-      if(oldVersion===0){
+      var at=iso(now);
+      if(oldVersion<1){
         var metadata=db.createObjectStore(STORES.metadata,{keyPath:'key'});
         var migrations=db.createObjectStore(STORES.migrations,{keyPath:'id'});
         db.createObjectStore(STORES.infrastructure,{keyPath:'id'});
-        var at=iso(now);
-        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:0,toIndexedDbVersion:1,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
+        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:1,toIndexedDbVersion:2,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
         migrations.add({id:'indexeddb-0-to-1',fromIndexedDbVersion:0,toIndexedDbVersion:1,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
-      }else{
-        throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
       }
+      if(oldVersion<2){
+        function store(name,key){return db.createObjectStore(name,{keyPath:key});}
+        var students=store(STORES.students,'studentId');students.createIndex('by_lifecycle','lifecycle',{unique:false});
+        var courses=store(STORES.courses,'courseId');courses.createIndex('by_code','code',{unique:true});courses.createIndex('by_lifecycle','lifecycle',{unique:false});
+        var years=store(STORES.schoolYears,'schoolYearId');years.createIndex('by_lifecycle','lifecycle',{unique:false});
+        var semesters=store(STORES.semesters,'semesterId');semesters.createIndex('by_school_year','schoolYearId',{unique:false});
+        var periods=store(STORES.gradingPeriods,'gradingPeriodId');periods.createIndex('by_semester','semesterId',{unique:false});periods.createIndex('by_school_year','schoolYearId',{unique:false});
+        var sections=store(STORES.sections,'sectionId');sections.createIndex('by_school_year','schoolYearId',{unique:false});sections.createIndex('by_course','courseId',{unique:false});sections.createIndex('by_semester','semesterId',{unique:false});sections.createIndex('by_period','period',{unique:false});
+        var enrollments=store(STORES.enrollments,'enrollmentId');enrollments.createIndex('by_student','studentId',{unique:false});enrollments.createIndex('by_course_year',['courseId','schoolYearId'],{unique:false});enrollments.createIndex('by_student_course_year',['studentId','courseId','schoolYearId'],{unique:false});
+        var assignments=store(STORES.scheduleAssignments,'scheduleAssignmentId');assignments.createIndex('by_enrollment','enrollmentId',{unique:false});assignments.createIndex('by_section','sectionId',{unique:false});
+        (oldVersion<1?migrations:tx.objectStore(STORES.migrations)).add({id:'indexeddb-1-to-2',fromIndexedDbVersion:1,toIndexedDbVersion:2,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
+        if(oldVersion===1){var metaStore=tx.objectStore(STORES.metadata),getMeta=metaStore.get('database');getMeta.onsuccess=function(){var value=getMeta.result;if(!value)return;value.indexedDbVersion=2;value.lastSuccessfulUpgrade={fromIndexedDbVersion:1,toIndexedDbVersion:2,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};metaStore.put(value);};}
+      }
+      if(oldVersion>1)throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
       if(tx)tx.arcUpgrade={from:oldVersion,to:newVersion,status:'in_progress'};
     }
     function transact(db,stores,mode,operation){
@@ -89,6 +101,7 @@
         add:function(store,value){assertStore(store);return requestPromise(tx.objectStore(store).add(clone(value)),{store:store,operation:'add'});},
         put:function(store,value){assertStore(store);return requestPromise(tx.objectStore(store).put(clone(value)),{store:store,operation:'put'});},
         delete:function(store,key){assertStore(store);return requestPromise(tx.objectStore(store).delete(key),{store:store,operation:'delete',key:key});},
+        query:function(store,indexName,key){assertStore(store);var source=indexName?tx.objectStore(store).index(indexName):tx.objectStore(store);return requestPromise(key===undefined?source.getAll():source.getAll(key),{store:store,index:indexName||'',operation:'query'});},
         abort:function(reason){try{tx.abort();}catch(ignore){}throw error('TRANSACTION_ABORTED',reason||'ARC v8 transaction was explicitly aborted.',{stores:stores,mode:mode});}
       };
       var result;
@@ -112,6 +125,7 @@
           put:function(store,value){return transact(db,store,'readwrite',function(tx){return tx.put(store,value);});},
           putIfRevision:function(store,value,expectedRevision){return transact(db,store,'readwrite',function(tx){return tx.get(store,value.id).then(function(current){var actual=current&&Number.isInteger(current.revision)?current.revision:0;if(actual!==expectedRevision)throw error('WRITE_CONFLICT','ARC v8 record changed after it was read.',{store:store,id:value.id,expectedRevision:expectedRevision,actualRevision:actual});var next=clone(value);next.revision=actual+1;return tx.put(store,next).then(function(){return next;});});});},
           delete:function(store,key){return transact(db,store,'readwrite',function(tx){return tx.delete(store,key);});},
+          query:function(store,indexName,key){return transact(db,store,'readonly',function(tx){return tx.query(store,indexName,key);});},
           transaction:function(stores,operation){return transact(db,stores,'readwrite',operation);},
           close:function(){db.close();connection=null;announce('connection-closed');}
         };announce('connection-opened');return connection;},function(e){db.close();throw e;});

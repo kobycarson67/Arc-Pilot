@@ -7,6 +7,7 @@ python tests/regression_static.py
 
 # Schema v8 Stage 1 isolated IndexedDB storage, identity, transactions, upgrades, concurrency, and reset contracts
 node tests/arc_v8_storage.test.js
+node tests/arc_v8_academic.test.js
 
 # Simulation Foundation isolation, deterministic fixtures, and host contracts
 node tests/simulation_foundation.test.js

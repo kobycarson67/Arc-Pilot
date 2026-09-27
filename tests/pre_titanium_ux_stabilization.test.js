@@ -79,7 +79,7 @@ test('Teaching Tips uses distinct lesson-connected shop guidance',()=>{
 
 test('schema remains v7 and build is truthful',()=>{
   assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-  assert(fs.readFileSync('app-build.js','utf8').includes("build:'arc-schema-v8-artifact-media-9'"));
+  assert(fs.readFileSync('app-build.js','utf8').includes("build:'arc-schema-v8-booth-operations-10'"));
 });
 
 if(!process.exitCode)console.log('\n'+pass+'/'+total+' Pre-Titanium UX Stabilization tests passed.');

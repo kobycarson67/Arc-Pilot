@@ -8,10 +8,10 @@
 }(this,function(){
   'use strict';
   var DATABASE_NAME='arc_classroom_v8';
-  var IDB_VERSION=3;
+  var IDB_VERSION=4;
   var SCHEMA_FAMILY='arc-classroom';
   var SCHEMA_VERSION=8;
-  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records',students:'students',courses:'courses',schoolYears:'school_years',semesters:'semesters',gradingPeriods:'grading_periods',sections:'sections',enrollments:'course_enrollments',scheduleAssignments:'enrollment_schedule_assignments',activityDefinitions:'activity_definitions',activityVersions:'activity_versions',activityDeclarations:'activity_evidence_declarations',activityAssignments:'activity_assignments',studentActivities:'student_activities',activityAttempts:'activity_attempts'});
+  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records',students:'students',courses:'courses',schoolYears:'school_years',semesters:'semesters',gradingPeriods:'grading_periods',sections:'sections',enrollments:'course_enrollments',scheduleAssignments:'enrollment_schedule_assignments',activityDefinitions:'activity_definitions',activityVersions:'activity_versions',activityDeclarations:'activity_evidence_declarations',activityAssignments:'activity_assignments',studentActivities:'student_activities',activityAttempts:'activity_attempts',projectInstances:'project_instances',projectBuilds:'project_build_attempts',projectCheckpointEvents:'project_checkpoint_events',projectNeedEvents:'project_manual_need_events',projectRubrics:'project_rubric_assessments'});
   var STORE_NAMES=Object.freeze(Object.keys(STORES).map(function(key){return STORES[key];}));
 
   function StorageError(code,message,context,cause){
@@ -72,7 +72,7 @@
         var metadata=db.createObjectStore(STORES.metadata,{keyPath:'key'});
         var migrations=db.createObjectStore(STORES.migrations,{keyPath:'id'});
         db.createObjectStore(STORES.infrastructure,{keyPath:'id'});
-        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:2,toIndexedDbVersion:3,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
+        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:3,toIndexedDbVersion:4,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
         migrations.add({id:'indexeddb-0-to-1',fromIndexedDbVersion:0,toIndexedDbVersion:1,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
       }
       if(oldVersion<2){
@@ -99,7 +99,17 @@
         (oldVersion<1?migrations:tx.objectStore(STORES.migrations)).add({id:'indexeddb-2-to-3',fromIndexedDbVersion:2,toIndexedDbVersion:3,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
         if(oldVersion>0){var stage3Meta=tx.objectStore(STORES.metadata),stage3Get=stage3Meta.get('database');stage3Get.onsuccess=function(){var value=stage3Get.result;if(!value)return;value.indexedDbVersion=3;value.lastSuccessfulUpgrade={fromIndexedDbVersion:2,toIndexedDbVersion:3,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};stage3Meta.put(value);};}
       }
-      if(oldVersion>2)throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
+      if(oldVersion<4){
+        function projectStore(name,key){return db.createObjectStore(name,{keyPath:key});}
+        var projects=projectStore(STORES.projectInstances,'projectId');projects.createIndex('by_student_activity','studentActivityId',{unique:true});projects.createIndex('by_student','studentId',{unique:false});projects.createIndex('by_enrollment','enrollmentId',{unique:false});projects.createIndex('by_workflow','workflowState',{unique:false});
+        var builds=projectStore(STORES.projectBuilds,'buildId');builds.createIndex('by_project','projectId',{unique:false});builds.createIndex('by_project_sequence',['projectId','sequence'],{unique:true});builds.createIndex('by_state','state',{unique:false});
+        var events=projectStore(STORES.projectCheckpointEvents,'eventId');events.createIndex('by_project','projectId',{unique:false});events.createIndex('by_build','buildId',{unique:false});events.createIndex('by_checkpoint','checkpointCode',{unique:false});events.createIndex('by_occurred_at','occurredAt',{unique:false});
+        var needs=projectStore(STORES.projectNeedEvents,'needEventId');needs.createIndex('by_project','projectId',{unique:false});needs.createIndex('by_occurred_at','occurredAt',{unique:false});
+        var rubrics=projectStore(STORES.projectRubrics,'rubricAssessmentId');rubrics.createIndex('by_project','projectId',{unique:false});rubrics.createIndex('by_lifecycle','lifecycle',{unique:false});rubrics.createIndex('by_rubric_version','rubricVersion',{unique:false});
+        (oldVersion<1?migrations:tx.objectStore(STORES.migrations)).add({id:'indexeddb-3-to-4',fromIndexedDbVersion:3,toIndexedDbVersion:4,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
+        if(oldVersion>0){var stage4Meta=tx.objectStore(STORES.metadata),stage4Get=stage4Meta.get('database');stage4Get.onsuccess=function(){var value=stage4Get.result;if(!value)return;value.indexedDbVersion=4;value.lastSuccessfulUpgrade={fromIndexedDbVersion:3,toIndexedDbVersion:4,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};stage4Meta.put(value);};}
+      }
+      if(oldVersion>3)throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
       if(tx)tx.arcUpgrade={from:oldVersion,to:newVersion,status:'in_progress'};
     }
     function transact(db,stores,mode,operation){

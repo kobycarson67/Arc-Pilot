@@ -1,6 +1,6 @@
 # ARC Schema v8 Academic Foundation
 
-Stage 2 added the first v8 domain authorities without connecting classroom UI or reading Schema v7. It advanced `arc_classroom_v8` from IndexedDB structural version 1 to 2; Stage 3 subsequently advances the same database to structural version 3. ARC schema authority remains 8 and classroom runtime schema remains 7.
+Stage 2 added the first v8 domain authorities without connecting classroom UI or reading Schema v7. It advanced `arc_classroom_v8` from IndexedDB structural version 1 to 2; Stage 3 advanced it to 3 and Stage 4 advances it to 4. ARC schema authority remains 8 and classroom runtime schema remains 7.
 
 ## Stores and indexes
 

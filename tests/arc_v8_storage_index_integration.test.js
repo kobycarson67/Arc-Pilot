@@ -9,6 +9,8 @@ assert(html.includes('<script src="src/arc_v8_academic.js"></script>'),'page mus
 assert(sw.includes("'./src/arc_v8_academic.js'"),'offline shell must cache the academic repository');
 assert(html.includes('<script src="src/arc_v8_activity.js"></script>'),'page must load the Activity repository without invoking it');
 assert(sw.includes("'./src/arc_v8_activity.js'"),'offline shell must cache the Activity repository');
+assert(html.includes('<script src="src/arc_v8_project.js"></script>'),'page must load the Project repository without invoking it');
+assert(sw.includes("'./src/arc_v8_project.js'"),'offline shell must cache the Project repository');
 assert(html.includes('const STORAGE_KEY = "weld_v013"'),'v7 classroom storage key must remain unchanged');
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7'),'v7 classroom schema must remain unchanged');
 assert(source.includes("DATABASE_NAME='arc_classroom_v8'"),'v8 database must have an isolated identity');

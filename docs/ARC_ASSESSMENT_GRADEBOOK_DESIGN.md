@@ -374,7 +374,7 @@ The same core rubric applies to hand drawing and CAD; method is context rather t
 
 ## Evidence relationships and safeguards
 
-The technical rubric family is approved. The complete WT and AWT mappings and evidence pathways are frozen below. No runtime evidence engine is authorized.
+The technical rubric family is approved. The complete WT and AWT mappings and evidence pathways are frozen below. Stage 5 now implements the bounded Evidence Engine foundation, without populating these curriculum mappings or unresolved policy parameters.
 
 Criterion-level evidence may legitimately support related competencies:
 
@@ -2045,7 +2045,7 @@ ARC retains the requirement to begin real classroom use with a sufficiently popu
 
 **Implementation status:** Stage 2, Academic Identity, Scope, Enrollment, and Schedule Foundation, is implemented in build `arc-schema-v8-academic-foundation-2`. IndexedDB structural version 2 adds Student, Course, School Year, Semester, Grading Period, Section, Course Enrollment, and effective-dated Enrollment Schedule Assignment authority plus derived roster and academic-period queries. The repository enforces references, academic-scope agreement, date ranges, assignment overlap, immutable IDs, revisions, and transactional moves. It seeds only stable WT/AWT Course definitions. No classroom screen reads v8, no Student is seeded, and Production/Classroom Readiness remains unachieved.
 
-**Implementation status:** Stage 4, Project Runtime Foundation, is implemented in build `arc-schema-v8-project-runtime-4`. Structural version 4 preserves Stages 1–3 and adds ProjectInstance, physical Build Attempt, append-first checkpoint and manual-need events, detailed Project rubric/finalization authority, and deterministic operational projection. Checkpoint definitions are locked to the exact Project ActivityVersion. Booth, Evidence, Gradebook, and other later runtime domains remain unimplemented; classroom UI remains v7 and Production/Classroom Readiness remains unachieved.
+**Implementation status:** Stage 5, Evidence Engine Foundation, is implemented in build `arc-schema-v8-evidence-engine-5`. Structural version 5 preserves Stages 1–4 and adds a version-aware competency catalog, Evidence Source and one-competency Evidence Record authority, versioned strategy configuration, deterministic rebuildable derivation, append-first Instructor Override and resolved competency projection. Exact curriculum strategy parameters and production catalog population remain intentionally unresolved. Gradebook, Workplace/Safety runtime and other later domains remain unimplemented; classroom UI remains v7 and Production/Classroom Readiness remains unachieved.
 
 When migration of preserved reusable authority or future real production data is required, the migration design must identify:
 

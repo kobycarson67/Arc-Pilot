@@ -1,6 +1,6 @@
 # ARC Schema v8 Activity Foundation
 
-Stage 3 advanced `arc_classroom_v8` to IndexedDB structural version 3; Stage 4 subsequently advances it to 4. ARC schema authority remains 8 and classroom runtime remains schema 7. Stage 3 added `activity_definitions`, `activity_versions`, `activity_evidence_declarations`, `activity_assignments`, `student_activities`, and `activity_attempts` with bounded query indexes.
+Stage 3 advanced `arc_classroom_v8` to IndexedDB structural version 3; Stages 4 and 5 subsequently advance it to 4 and 5. ARC schema authority remains 8 and classroom runtime remains schema 7. Stage 3 added `activity_definitions`, `activity_versions`, `activity_evidence_declarations`, `activity_assignments`, `student_activities`, and `activity_attempts` with bounded query indexes.
 
 Definition is reusable identity; Version is exact historically meaningful configuration. Duplicate titles are valid. Draft Versions are revision-editable until used. Once referenced by StudentActivity, Version and Declaration configuration lock; substantive change creates a new Version.
 

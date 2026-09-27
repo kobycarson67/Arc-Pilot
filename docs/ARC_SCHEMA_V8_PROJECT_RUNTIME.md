@@ -1,6 +1,6 @@
 # ARC Schema v8 Stage 4 — Project Runtime Foundation
 
-Stage 4 advances the isolated `arc_classroom_v8` database from IndexedDB structural version 3 to 4. ARC schema authority remains 8, the classroom runtime remains schema 7, and application version remains 0.18. The classroom UI does not read this foundation.
+Stage 4 advanced the isolated `arc_classroom_v8` database from IndexedDB structural version 3 to 4; Stage 5 subsequently advances it to 5. ARC schema authority remains 8, the classroom runtime remains schema 7, and application version remains 0.18. The classroom UI does not read this foundation.
 
 ## Persisted authority
 

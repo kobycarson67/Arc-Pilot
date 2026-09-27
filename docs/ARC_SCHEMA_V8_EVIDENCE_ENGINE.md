@@ -1,6 +1,6 @@
 # ARC Schema v8 Stage 5 — Evidence Engine Foundation
 
-Stage 5 advances the isolated `arc_classroom_v8` database from IndexedDB structural version 4 to 5. ARC schema authority remains 8, classroom runtime remains schema 7, and application version remains 0.18. No classroom interface reads this foundation.
+Stage 5 advanced the isolated `arc_classroom_v8` database from IndexedDB structural version 4 to 5; Stage 6 subsequently advances it to 6. ARC schema authority remains 8, classroom runtime remains schema 7, and application version remains 0.18. No classroom interface reads this foundation.
 
 ## Persisted stores and indexes
 

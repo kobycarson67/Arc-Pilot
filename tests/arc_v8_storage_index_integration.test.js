@@ -13,6 +13,8 @@ assert(html.includes('<script src="src/arc_v8_project.js"></script>'),'page must
 assert(sw.includes("'./src/arc_v8_project.js'"),'offline shell must cache the Project repository');
 assert(html.includes('<script src="src/arc_v8_evidence.js"></script>'),'page must load the Evidence repository without invoking it');
 assert(sw.includes("'./src/arc_v8_evidence.js'"),'offline shell must cache the Evidence repository');
+assert(html.includes('<script src="src/arc_v8_workplace_safety.js"></script>'),'page must load the Workplace/Safety repository without invoking it');
+assert(sw.includes("'./src/arc_v8_workplace_safety.js'"),'offline shell must cache the Workplace/Safety repository');
 assert(html.includes('const STORAGE_KEY = "weld_v013"'),'v7 classroom storage key must remain unchanged');
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7'),'v7 classroom schema must remain unchanged');
 assert(source.includes("DATABASE_NAME='arc_classroom_v8'"),'v8 database must have an isolated identity');

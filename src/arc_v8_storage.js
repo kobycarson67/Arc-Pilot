@@ -8,10 +8,10 @@
 }(this,function(){
   'use strict';
   var DATABASE_NAME='arc_classroom_v8';
-  var IDB_VERSION=5;
+  var IDB_VERSION=6;
   var SCHEMA_FAMILY='arc-classroom';
   var SCHEMA_VERSION=8;
-  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records',students:'students',courses:'courses',schoolYears:'school_years',semesters:'semesters',gradingPeriods:'grading_periods',sections:'sections',enrollments:'course_enrollments',scheduleAssignments:'enrollment_schedule_assignments',activityDefinitions:'activity_definitions',activityVersions:'activity_versions',activityDeclarations:'activity_evidence_declarations',activityAssignments:'activity_assignments',studentActivities:'student_activities',activityAttempts:'activity_attempts',projectInstances:'project_instances',projectBuilds:'project_build_attempts',projectCheckpointEvents:'project_checkpoint_events',projectNeedEvents:'project_manual_need_events',projectRubrics:'project_rubric_assessments',competencyDefinitions:'competency_definitions',competencyVersions:'competency_versions',competencyStrategies:'competency_strategy_configurations',evidenceSources:'evidence_sources',evidenceRecords:'evidence_records',instructorOverrides:'instructor_overrides'});
+  var STORES=Object.freeze({metadata:'metadata',migrations:'migration_log',infrastructure:'infrastructure_records',students:'students',courses:'courses',schoolYears:'school_years',semesters:'semesters',gradingPeriods:'grading_periods',sections:'sections',enrollments:'course_enrollments',scheduleAssignments:'enrollment_schedule_assignments',activityDefinitions:'activity_definitions',activityVersions:'activity_versions',activityDeclarations:'activity_evidence_declarations',activityAssignments:'activity_assignments',studentActivities:'student_activities',activityAttempts:'activity_attempts',projectInstances:'project_instances',projectBuilds:'project_build_attempts',projectCheckpointEvents:'project_checkpoint_events',projectNeedEvents:'project_manual_need_events',projectRubrics:'project_rubric_assessments',competencyDefinitions:'competency_definitions',competencyVersions:'competency_versions',competencyStrategies:'competency_strategy_configurations',evidenceSources:'evidence_sources',evidenceRecords:'evidence_records',instructorOverrides:'instructor_overrides',workplaceDays:'workplace_days',workplaceEvents:'workplace_events',positiveWorkplaceObservations:'positive_workplace_observations',safetyEvents:'safety_events',workplaceWeekFinalizations:'workplace_week_finalizations'});
   var STORE_NAMES=Object.freeze(Object.keys(STORES).map(function(key){return STORES[key];}));
 
   function StorageError(code,message,context,cause){
@@ -72,7 +72,7 @@
         var metadata=db.createObjectStore(STORES.metadata,{keyPath:'key'});
         var migrations=db.createObjectStore(STORES.migrations,{keyPath:'id'});
         db.createObjectStore(STORES.infrastructure,{keyPath:'id'});
-        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:4,toIndexedDbVersion:5,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
+        metadata.add({key:'database',schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,indexedDbVersion:IDB_VERSION,createdAt:at,lastSuccessfulUpgrade:{fromIndexedDbVersion:5,toIndexedDbVersion:6,at:at},build:{version:String(build.version||''),build:String(build.build||'')},initializationState:'ready'});
         migrations.add({id:'indexeddb-0-to-1',fromIndexedDbVersion:0,toIndexedDbVersion:1,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
       }
       if(oldVersion<2){
@@ -120,7 +120,17 @@
         (oldVersion<1?migrations:tx.objectStore(STORES.migrations)).add({id:'indexeddb-4-to-5',fromIndexedDbVersion:4,toIndexedDbVersion:5,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
         if(oldVersion>0){var stage5Meta=tx.objectStore(STORES.metadata),stage5Get=stage5Meta.get('database');stage5Get.onsuccess=function(){var value=stage5Get.result;if(!value)return;value.indexedDbVersion=5;value.lastSuccessfulUpgrade={fromIndexedDbVersion:4,toIndexedDbVersion:5,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};stage5Meta.put(value);};}
       }
-      if(oldVersion>4)throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
+      if(oldVersion<6){
+        function workplaceStore(name,key){return db.createObjectStore(name,{keyPath:key});}
+        var days=workplaceStore(STORES.workplaceDays,'workplaceDayId');days.createIndex('by_student','studentId',{unique:false});days.createIndex('by_enrollment','enrollmentId',{unique:false});days.createIndex('by_student_enrollment_date',['studentId','enrollmentId','schoolDate'],{unique:true});days.createIndex('by_date','schoolDate',{unique:false});days.createIndex('by_applicability','applicabilityState',{unique:false});
+        var workplaceEvents=workplaceStore(STORES.workplaceEvents,'workplaceEventId');workplaceEvents.createIndex('by_day','workplaceDayId',{unique:false});workplaceEvents.createIndex('by_day_type',['workplaceDayId','eventTypeCode'],{unique:false});workplaceEvents.createIndex('by_severity','severityClass',{unique:false});workplaceEvents.createIndex('by_occurred_at','occurredAt',{unique:false});workplaceEvents.createIndex('by_lifecycle','lifecycle',{unique:false});
+        var observations=workplaceStore(STORES.positiveWorkplaceObservations,'observationId');observations.createIndex('by_day','workplaceDayId',{unique:false});observations.createIndex('by_dimension','dimensionCode',{unique:false});observations.createIndex('by_occurred_at','occurredAt',{unique:false});observations.createIndex('by_lifecycle','lifecycle',{unique:false});
+        var safetyEvents=workplaceStore(STORES.safetyEvents,'safetyEventId');safetyEvents.createIndex('by_student','studentId',{unique:false});safetyEvents.createIndex('by_enrollment','enrollmentId',{unique:false});safetyEvents.createIndex('by_date','schoolDate',{unique:false});safetyEvents.createIndex('by_type','eventTypeCode',{unique:false});safetyEvents.createIndex('by_severity','severity',{unique:false});safetyEvents.createIndex('by_lifecycle','lifecycle',{unique:false});
+        var finalizations=workplaceStore(STORES.workplaceWeekFinalizations,'weekFinalizationId');finalizations.createIndex('by_student','studentId',{unique:false});finalizations.createIndex('by_enrollment','enrollmentId',{unique:false});finalizations.createIndex('by_student_week',['studentId','enrollmentId','instructionalWeekId'],{unique:false});finalizations.createIndex('by_lifecycle','lifecycle',{unique:false});
+        (oldVersion<1?migrations:tx.objectStore(STORES.migrations)).add({id:'indexeddb-5-to-6',fromIndexedDbVersion:5,toIndexedDbVersion:6,status:'succeeded',startedAt:at,completedAt:at,schemaVersion:SCHEMA_VERSION});
+        if(oldVersion>0){var stage6Meta=tx.objectStore(STORES.metadata),stage6Get=stage6Meta.get('database');stage6Get.onsuccess=function(){var value=stage6Get.result;if(!value)return;value.indexedDbVersion=6;value.lastSuccessfulUpgrade={fromIndexedDbVersion:5,toIndexedDbVersion:6,at:at};value.build={version:String(build.version||''),build:String(build.build||'')};stage6Meta.put(value);};}
+      }
+      if(oldVersion>5)throw error('MISSING_UPGRADE','No ordered ARC v8 upgrade is registered.',{oldVersion:oldVersion,newVersion:newVersion});
       if(tx)tx.arcUpgrade={from:oldVersion,to:newVersion,status:'in_progress'};
     }
     function transact(db,stores,mode,operation){

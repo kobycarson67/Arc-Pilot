@@ -8,7 +8,7 @@ Implementation Stage 1 establishes storage infrastructure only. All classroom do
 - Database: `arc_classroom_v8`
 - ARC schema family: `arc-classroom`
 - ARC domain schema version: `8`
-- Stage-1 IndexedDB structural version: `1`; Stage 2 advanced the same database to `2`, Stage 3 to `3`, Stage 4 to `4`, and Stage 5 advances it in place to `5`
+- Stage-1 IndexedDB structural version: `1`; Stages 2–6 advance the same database in place through structural versions `2`, `3`, `4`, `5`, and `6`
 
 The ARC domain schema version describes ARC's conceptual persisted authority. The IndexedDB version is only the ordered browser database-structure transition number. They are recorded separately and must not be treated as interchangeable.
 

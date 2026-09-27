@@ -11,6 +11,7 @@ node tests/arc_v8_academic.test.js
 node tests/arc_v8_activity.test.js
 node tests/arc_v8_project.test.js
 node tests/arc_v8_evidence.test.js
+node tests/arc_v8_workplace_safety.test.js
 
 # Simulation Foundation isolation, deterministic fixtures, and host contracts
 node tests/simulation_foundation.test.js

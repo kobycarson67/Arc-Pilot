@@ -6,6 +6,11 @@ CORE.push('./assets/brand/runtime/arc-welding-compact-lockup-720.png');
 CORE.push('./src/current_student_directory.js');
 CORE.push('./src/arc_time_lifecycle.js');
 CORE.push('./src/arc_sidebar_gesture.js');
+CORE.push('./src/arc_v8_production_initialization.js');
+CORE.push('./src/arc_v8_academic_cutover.js');
+CORE.push('./src/arc_v8_stage2_verification.js');
+CORE.push('./engineering/arc_v8_stage2_verification.html');
+CORE.push('./engineering/arc_v8_stage2_verification_page.js');
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('arc-pilot-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();});
@@ -14,7 +19,7 @@ self.addEventListener('fetch',event=>{
   const url=new URL(event.request.url);
   if(url.origin!==self.location.origin)return;
   if(event.request.mode==='navigate'){
-    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':'./index.html';
+    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':'./index.html';
     event.respondWith(fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;}).catch(()=>target==='./index.html'?caches.match('./index.html'):caches.match(target)));
     return;
   }

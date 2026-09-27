@@ -183,6 +183,7 @@
         add:function(store,value){assertStore(store);return requestPromise(tx.objectStore(store).add(clone(value)),{store:store,operation:'add'});},
         put:function(store,value){assertStore(store);return requestPromise(tx.objectStore(store).put(clone(value)),{store:store,operation:'put'});},
         delete:function(store,key){assertStore(store);return requestPromise(tx.objectStore(store).delete(key),{store:store,operation:'delete',key:key});},
+        clear:function(store){assertStore(store);return requestPromise(tx.objectStore(store).clear(),{store:store,operation:'clear'});},
         query:function(store,indexName,key){assertStore(store);var source=indexName?tx.objectStore(store).index(indexName):tx.objectStore(store);return requestPromise(key===undefined?source.getAll():source.getAll(key),{store:store,index:indexName||'',operation:'query'});},
         abort:function(reason){try{tx.abort();}catch(ignore){}throw error('TRANSACTION_ABORTED',reason||'ARC v8 transaction was explicitly aborted.',{stores:stores,mode:mode});}
       };
@@ -202,6 +203,7 @@
         db.onversionchange=function(event){try{db.close();}finally{connection=null;announce('stale-connection-closed',{oldVersion:event.oldVersion,newVersion:event.newVersion});}};
         return validateMetadata(db).then(function(metadata){connection={
           metadata:metadata,
+          storeNames:db.objectStoreNames?Array.from(db.objectStoreNames):STORE_NAMES.slice(),
           read:function(store,key){return transact(db,store,'readonly',function(tx){return tx.get(store,key);});},
           add:function(store,value){return transact(db,store,'readwrite',function(tx){return tx.add(store,value);});},
           put:function(store,value){return transact(db,store,'readwrite',function(tx){return tx.put(store,value);});},
@@ -215,10 +217,11 @@
       return opening;
     }
     function resetDevelopmentDatabase(){
-      if(connection)connection.close();
-      return driver.remove(DATABASE_NAME,function(){onBlocked({database:DATABASE_NAME,operation:'reset'});announce('reset-blocked');}).then(function(){announce('development-reset-complete');});
+      return open().then(function(db){return db.read(STORES.infrastructure,'database-protection');}).then(function(protection){if(protection&&protection.mode==='Production/Classroom Protected')throw error('PROTECTED_DATABASE','Ordinary development reset is disabled for protected classroom data.',{mode:protection.mode,protectedAt:protection.protectedAt});if(connection)connection.close();return driver.remove(DATABASE_NAME,function(){onBlocked({database:DATABASE_NAME,operation:'reset'});announce('reset-blocked');});}).then(function(){announce('development-reset-complete');});
     }
-    return {open:open,resetDevelopmentDatabase:resetDevelopmentDatabase,generateId:function(){return uuid(options.crypto);},validId:validId,constants:{databaseName:DATABASE_NAME,indexedDbVersion:IDB_VERSION,schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,stores:STORES}};
+    function protectionMode(){return open().then(function(db){return db.read(STORES.infrastructure,'database-protection');}).then(function(row){return row||{id:'database-protection',mode:'Development'};});}
+    function enableProtectedMode(authority){if(!authority||!authority.confirmedBy)throw error('AUTHORIZATION_REQUIRED','Protected classroom mode requires explicit authority.');return open().then(function(db){return db.read(STORES.infrastructure,'database-protection').then(function(current){if(current&&current.mode==='Production/Classroom Protected')return current;var row={id:'database-protection',mode:'Production/Classroom Protected',protectedAt:iso(now),protectedBy:authority.confirmedBy,reason:String(authority.reason||'Real classroom data protection enabled'),revision:current&&current.revision?current.revision+1:1};return db.put(STORES.infrastructure,row).then(function(){return row;});});});}
+    return {open:open,resetDevelopmentDatabase:resetDevelopmentDatabase,getProtectionMode:protectionMode,enableProtectedMode:enableProtectedMode,generateId:function(){return uuid(options.crypto);},validId:validId,constants:{databaseName:DATABASE_NAME,indexedDbVersion:IDB_VERSION,schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,stores:STORES}};
   }
   return {create:create,nativeDriver:nativeDriver,generateId:uuid,validId:validId,StorageError:StorageError,DATABASE_NAME:DATABASE_NAME,IDB_VERSION:IDB_VERSION,SCHEMA_FAMILY:SCHEMA_FAMILY,SCHEMA_VERSION:SCHEMA_VERSION,STORES:STORES};
 }));

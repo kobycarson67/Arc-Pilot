@@ -80,7 +80,7 @@ test('sidebar integration shares existing authority and keeps workspace and hori
 
 test('schema, offline assets, build and no-domain-mutation contracts remain exact',()=>{
   const sw=fs.readFileSync(path.join(root,'sw.js'),'utf8'),build=fs.readFileSync(path.join(root,'app-build.js'),'utf8');
-  assert.match(html,/const CURRENT_SCHEMA_VERSION = 7;/);assert(build.includes("build:'arc-schema-v8-booth-operations-10'"));assert(sw.includes('./src/arc_sidebar_gesture.js'));
+  assert.match(html,/const CURRENT_SCHEMA_VERSION = 7;/);assert(build.includes("build:'arc-schema-v8-backup-recovery-11'"));assert(sw.includes('./src/arc_sidebar_gesture.js'));
   assert(html.includes('assets/brand/runtime/arc-welding-primary-logo-960.png'));assert(html.includes('src/arc_icons.js'));
 });
 console.log('PASS '+count+' ARC Workflow Integration 1 Repair 1 tests');

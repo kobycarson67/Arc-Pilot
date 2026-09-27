@@ -23,6 +23,8 @@ assert(html.includes('<script src="src/arc_v8_artifacts.js"></script>'),'page mu
 assert(sw.includes("'./src/arc_v8_artifacts.js'"),'offline shell must cache the Artifact repository');
 assert(html.includes('<script src="src/arc_v8_booth_operations.js"></script>'),'page must load the Booth Operations repository without invoking it');
 assert(sw.includes("'./src/arc_v8_booth_operations.js'"),'offline shell must cache the Booth Operations repository');
+assert(html.includes('<script src="src/arc_v8_backup_recovery.js"></script>'),'page must load the Backup Recovery service without invoking it');
+assert(sw.includes("'./src/arc_v8_backup_recovery.js'"),'offline shell must cache the Backup Recovery service');
 assert(html.includes('const STORAGE_KEY = "weld_v013"'),'v7 classroom storage key must remain unchanged');
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7'),'v7 classroom schema must remain unchanged');
 assert(source.includes("DATABASE_NAME='arc_classroom_v8'"),'v8 database must have an isolated identity');

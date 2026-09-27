@@ -19,6 +19,8 @@ assert(html.includes('<script src="src/arc_v8_gradebook.js"></script>'),'page mu
 assert(sw.includes("'./src/arc_v8_gradebook.js'"),'offline shell must cache the Gradebook repository');
 assert(html.includes('<script src="src/arc_v8_attendance.js"></script>'),'page must load the Attendance repository without invoking it');
 assert(sw.includes("'./src/arc_v8_attendance.js'"),'offline shell must cache the Attendance repository');
+assert(html.includes('<script src="src/arc_v8_artifacts.js"></script>'),'page must load the Artifact repository without invoking it');
+assert(sw.includes("'./src/arc_v8_artifacts.js'"),'offline shell must cache the Artifact repository');
 assert(html.includes('const STORAGE_KEY = "weld_v013"'),'v7 classroom storage key must remain unchanged');
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7'),'v7 classroom schema must remain unchanged');
 assert(source.includes("DATABASE_NAME='arc_classroom_v8'"),'v8 database must have an isolated identity');

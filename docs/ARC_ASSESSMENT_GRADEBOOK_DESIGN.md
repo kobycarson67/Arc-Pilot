@@ -2041,6 +2041,8 @@ Implementation dependencies may refine this order. No individual stage is broade
 
 ARC retains the requirement to begin real classroom use with a sufficiently populated instructional library instead of requiring the instructor to invent Activities during the school year. Large-scale Year-One population follows stabilization of the v8 Activity structure so populated content does not immediately require structural rework. The initial library intentionally contains more approved Activities than expected to be used, supporting differentiation and instructor choice from the beginning.
 
+**Implementation status:** Stage 1, Storage Foundation and Immutable Identity, is implemented in build `arc-schema-v8-storage-foundation-1`. It provides an isolated browser-native IndexedDB database named `arc_classroom_v8`, infrastructure metadata/migration/record stores, UUID authority, explicit completed transactions, ordered upgrade handling, version-change coordination, structured failures, optimistic revision checks, and an explicit v8-only development reset. It creates no classroom-domain v8 stores, does not open automatically, does not migrate or reset v7, and does not change the v7 classroom runtime. Production/Classroom Readiness remains unachieved.
+
 When migration of preserved reusable authority or future real production data is required, the migration design must identify:
 
 - exact current storage shape and location;

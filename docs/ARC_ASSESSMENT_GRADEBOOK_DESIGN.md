@@ -1979,9 +1979,69 @@ Domain-specific append-first histories are preferred. A unified timeline may be 
 
 ### Schema v8 migration gate
 
-This conceptual authority does not authorize Schema v8 implementation, migration, or a runtime schema bump. The next phase must inspect the actual Schema v7 runtime and storage before proposing a mapping; documentation alone is insufficient migration evidence.
+This conceptual authority does not authorize Schema v8 implementation, migration, a runtime schema bump, or a data reset. The Schema v7 runtime-storage audit and migration-reconciliation work remain authoritative documentation of what v7 means, implementation guidance for v8, and precedent for the stricter migration standard required after real classroom data exists.
 
-For every Schema v7 authority, the migration design must identify:
+### Development-data transition authority
+
+The instructor has confirmed that no real student or classroom production data is currently entered in ARC. Existing student transactional data is development, pilot, or test data.
+
+> **Schema v7 is development/pilot data. Schema v8 is intended to become ARC's first production-ready classroom data foundation.**
+
+Schema v8 therefore does not require full transactional migration of existing v7 pilot/test student records. A future, separately authorized Schema v8 implementation may use a controlled development-data reset for disposable test students and rosters; enrollment and schedule relationships; competency ratings and history; Project assignments, progress, and checkpoints; Booth assignments; Workplace, Behavior, and Safety history; Attendance and passes; Technical student assignments and scores; test photos and media; pilot Gradebook-derived state; test-data notifications; and appropriate simulation or operational test records.
+
+This reset authority supersedes the earlier assumption that every v7 transactional student record must be migrated. It does not authorize a reset in this documentation milestone, and it does not authorize indiscriminate deletion of reusable instructional or system authority.
+
+Before v8 implementation, approved reusable content and configuration must be deliberately inventoried, reconciled, and ported into the correct v8 authorities where still valid. Candidates include the WT/AWT competency catalogs, state-standard relationships, Project Bank definitions, approved Lesson and Curriculum content, useful Technical Assignment and Test definitions, material definitions, Booth definitions and configuration, and other approved reusable instructional resources. Legacy duplication is not preserved merely because it exists: `projectBank` and legacy `projectLibrary`, and `materialInventory` and legacy `inventory`, require deliberate reconciliation rather than a whole-state copy of `weld_v013`.
+
+### V8 regression-fixture authority
+
+Known pilot scenarios become deliberate v8 regression fixtures rather than production-migration obligations. The minimum physical-test fixture includes Taylor Reed; `4th Period — Welding Technology`; Welding Coupon Holder; Booth 4; the underlying manual need `Ready to Work`; and the Material Preparation, Fit-Up, and Tack & Pre-Weld Check checkpoints.
+
+The fixture must verify this complete behavior:
+
+1. Fit-Up moves to Ready for Review.
+2. The derived display becomes `Instructor Review — Fit-Up`.
+3. The underlying manual `Ready to Work` remains authoritative and is not overwritten.
+4. Booth 4 remains assigned.
+5. Fit-Up is verified.
+6. Derived Instructor Review disappears.
+7. The underlying `Ready to Work` becomes visible again.
+8. The next-checkpoint and Up Next state recalculate.
+9. Fast Roster, Class Forecast, Student Projects, and Booth Manager agree.
+
+Stale v7 browser records are not preserved merely to satisfy this fixture. The scenario is recreated deliberately under v8 test authority.
+
+### Production/Classroom Readiness gate
+
+> **Real student production data must not be entered into ARC's production v8 foundation until the Production/Classroom Readiness gate has passed.**
+
+Before ARC is declared Production/Classroom Ready, v8 must have verified complete backup/export and restore; media-aware backup covering student-work photos and blobs; integrity/checksum and export-readback verification; rollback and recovery behavior; reference and integrity validation; protection for future schema migrations; deterministic migration manifests and ID mapping when migrations become necessary; post-migration parity and reconciliation reporting; tested recovery from failed upgrade or import; and appropriate physical-device verification.
+
+The v7 JSON-backup omission of IndexedDB photo blobs and the other recovery gaps found by the storage audit may be bypassed only for disposable pilot data during the authorized development reset. They must be solved before real student data is entrusted to v8. After real student production data exists, future schema changes may not use the development-reset shortcut.
+
+### Bounded v8 implementation sequence
+
+The approved planning sequence is:
+
+1. Schema v8 storage foundation and immutable IDs.
+2. Student, Enrollment, Academic Scope, and Schedule foundation.
+3. Activity Definition, Version, Assignment, Student Activity, and Attempt.
+4. Project Instance, Build Attempt, Checkpoint Event model, and regression fixtures.
+5. Evidence Source, Evidence Record, and strategy foundation.
+6. Workplace and Safety authority.
+7. Assessment Result, Gradebook, and posting authority.
+8. Attendance, Pass, and Supplemental Session integration.
+9. Artifact and photo authority.
+10. Complete media-aware backup/export/restore and recovery system.
+11. Full regression testing and Samsung physical testing.
+12. Production/Classroom Readiness checkpoint.
+13. Year-One instructional population and coverage audit.
+
+Implementation dependencies may refine this order. No individual stage is broadened without explicit authority.
+
+ARC retains the requirement to begin real classroom use with a sufficiently populated instructional library instead of requiring the instructor to invent Activities during the school year. Large-scale Year-One population follows stabilization of the v8 Activity structure so populated content does not immediately require structural rework. The initial library intentionally contains more approved Activities than expected to be used, supporting differentiation and instructor choice from the beginning.
+
+When migration of preserved reusable authority or future real production data is required, the migration design must identify:
 
 - exact current storage shape and location;
 - direct, transformed, derived, deprecated-but-preserved, or new mapping;
@@ -1991,7 +2051,7 @@ For every Schema v7 authority, the migration design must identify:
 - regression tests;
 - continuity verification.
 
-No classroom data is discarded merely because the conceptual Schema v8 model is cleaner.
+Reusable authority and all future real classroom data receive deliberate migration, rollback, and reconciliation treatment. Disposable v7 development data may be reset only under the approved transition authority above.
 
 ## Current conflicts and migration concerns
 

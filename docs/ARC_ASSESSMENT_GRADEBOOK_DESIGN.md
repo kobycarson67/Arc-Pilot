@@ -1547,7 +1547,7 @@ The frozen conversion remains:
 - 3 Proficient = 90%
 - 4 Advanced = 100%
 
-Gradebook uses the confirmed or resolved authoritative level rather than merely the highest demonstrated performance. A first Level-3 performance may be celebrated instructionally while grading remains at the established confirmed level. Confirmed Level 3 produces 90%. A first Level-4 performance does not immediately produce confirmed 100%. An override may establish the official grading level without fabricating evidence. Developing may establish according to the approved strategy.
+Competency-state Gradebook entries use the confirmed or resolved authoritative level rather than merely the highest demonstrated performance. A first Level-3 performance may be celebrated instructionally while the competency-state entry remains at the established confirmed level. Confirmed Level 3 produces 90%. A first Level-4 performance does not immediately produce a confirmed competency-state 100%. An override may establish the official grading level without fabricating evidence. Developing may establish according to the approved strategy. A separately graded Skill Challenge or performance assessment records the quality demonstrated on that assessment and is not inflated or suppressed by the accumulated competency state.
 
 Not Yet Assessed and exclusions never become zero. Prior established state and current-period grading evidence remain distinct. Semester authority comes from semester derivation rather than averaged quarter competency percentages.
 
@@ -1555,11 +1555,13 @@ Generating competency evidence does not automatically create a Gradebook entry. 
 
 ### Weekly grade frequency
 
-Administrator guidance is frozen as:
+Weekly monitoring authority is frozen as:
 
-> **Two grade entries per student per normal instructional week is an acceptable minimum, not a maximum.**
+> **ARC normally monitors at least two meaningful finalized Gradebook entries per student per instructional week. Coverage is an instructor workflow signal, not a student grade, quota, or ceiling.**
 
-- Two meaningful entries are a minimum coverage expectation when legitimate opportunities exist.
+- `Sufficient` normally means at least two meaningful finalized entries.
+- `Attention` means fewer than two where legitimate circumstances may explain the result.
+- `Review` means fewer than two with an unresolved or potentially legitimate assessment opportunity.
 - ARC never suppresses a legitimate grade because a student already has two.
 - Every legitimately graded Activity completed by a student produces its appropriate entry regardless of weekly count.
 - Grading status is prospective Activity or assessment authority, not a consequence of weekly count.
@@ -1568,6 +1570,8 @@ Administrator guidance is frozen as:
 - Ungraded Practice remains ungraded even below the minimum.
 - Differentiated students may legitimately have different grade types and counts.
 - Unusual weeks may legitimately contain fewer entries.
+- Grade Ready counts. Reassessment updates, corrections, repeated posting, Practice, evidence-only observations or checkpoints, unfinished work, and Pending Review before finalization do not double-count or count as finalized coverage.
+- Coverage follows the authoritative instructional week represented rather than posting timestamp, is monitored per student, and surfaces existing circumstances and opportunities before suggesting assessment.
 
 > **Gradebook completeness means sufficient meaningful assessment, not artificial category coverage.**
 
@@ -1587,9 +1591,7 @@ A settled weekly result becomes Grade Ready. A material unresolved issue produce
 
 ### Grade Ready and Posted
 
-Posting lifecycle is separate from Activity assessment and evidence:
-
-> **In Progress → Awaiting Instructor Review → Grade Ready → Posted**
+Posting state is separate from Activity workflow and evidence state. `In Progress` and `Awaiting Instructor Review` describe Activity workflow; `Scored`, `Grade Ready`, `Posted`, and `Posted Grade Changed` describe Gradebook state. These states may coexist with distinct evidence and competency states and must not be collapsed into a universal lifecycle.
 
 A future traceable correction or update follows posting. Finalized graded work becomes Grade Ready immediately and enters a queue. Competency evidence flows separately: Evidence Ready is not Grade Ready. One Activity may create many Evidence Records and one Gradebook item; ungraded Practice may create evidence or history and no Grade Ready item.
 
@@ -1602,6 +1604,133 @@ Without an approved SIS integration ARC does not claim automatic posting. The in
 Grades become ready immediately, while ARC avoids disruptive per-grade shop popups and quietly accumulates a queue or badge. Around or during Planning period, or another instructor-configured administrative window, ARC surfaces administrative work such as Grades Ready, Instructor Reviews, unresolved grade reviews, Lesson Plan tasks, material concerns, and other nonurgent work.
 
 Urgent operational issues, including Safety or students actively waiting for instructor action, remain separate. The future Planning Period Workspace combines Grades Ready, reviews, weekly coverage, Friday Lesson Plan preparation and preflight, material planning, and other administrative work. Friday primarily reconciles remaining work and prepares the next week rather than becoming a large data-entry batch.
+
+## Gradebook completion authority
+
+The following architecture completes the approved Gradebook design authority. It is documentation only and does not implement runtime schema, Gradebook, Evidence Engine, Activity interfaces, Planning Period Workspace, CSS, or any other runtime capability.
+
+### Assessment grade and competency state
+
+An individual graded assessment records the quality demonstrated on that assessment. Competency state is a conclusion from accumulated authoritative evidence. For a graded Skill Challenge or performance assessment, the assessment conversion is:
+
+- Level 1 — Introduced: `60%`.
+- Level 2 — Developing: `75%`.
+- Level 3 — Proficient: `90%`.
+- Level 4 — Advanced: `100%`.
+
+An established competency does not inflate a weaker current assessment. Incomplete competency confirmation does not suppress a stronger current assessment.
+
+### Reassessment authority
+
+Reassessment follows assessment purpose:
+
+- Practice supports learning and correction and is normally ungraded.
+- A Skill Challenge is reassessable after additional learning or Practice and instructor authorization.
+- A normal Technical Assignment or assessment is reassessable by default.
+- A Project supports formative correction during construction and becomes final after instructor finalization.
+- A Test is summative and final after assessment.
+- Workplace is longitudinal and is not reassessed.
+
+A successful reassessment may replace the earlier school-Gradebook value rather than averaging attempts. ARC preserves every attempt and its evidence. A worse reassessment does not lower the previously authoritative assignment grade, although the new attempt remains legitimate evidence where applicable. Reassessment normally follows learning, Practice, or feedback and instructor authorization. It updates the same underlying applicable Gradebook Posting Instance rather than unrelated grades.
+
+### Project grading and pacing
+
+> **Projects are formative during construction and summative at instructor finalization.**
+
+Before finalization, checkpoint feedback, Needs More Work, correction, rework, legitimate restart, and evidence are allowed. Corrected checkpoint mistakes do not create hidden permanent final-grade deductions. After the instructor finalizes the final rubric, the Project grade is final except for legitimate instructor or data correction. A student does not receive a normal restart solely to improve a finalized grade; material and time cost are explicit reasons, and later Projects supply new integrated opportunities.
+
+All applicable Project/Fabrication criteria carry equal weight:
+
+- Measurement & Dimensional Accuracy — `25%`.
+- Fit-Up & Fabrication — `25%`.
+- Welding Quality — `25%`.
+- Workmanship & Finished Quality — `25%`.
+
+There are no hidden weights or caps. A legitimately N/A criterion is excluded and the remaining applicable criteria redistribute equally. Competency Evidence Records remain separate from the Project percentage.
+
+Projects are student-paced within reasonable instructional boundaries; a calendar date does not automatically finalize a Project. ARC may flag Pacing Review. One active Project per student is the default unless the instructor approves another. Practice, Challenges, Technical Assignments, Resources, and reassessments do not count against that limit. Open Shop normally prioritizes the active Project and its blockers before another Project.
+
+Before finalization, an instructor may authorize `Repair / Rework`, `Restart Project`, or `End and Assess Current Work`. Accidental fabrication failure or scrap may be `Scrapped / Restart Authorized` without punishment merely for requiring another physical attempt. Intentional damage or misuse is separate and may create Workplace, Safety, or review consequences; the instructor retains material and restart authority.
+
+When a student stops participating or refuses to finish, the instructor may finalize the work actually completed, assess legitimate criteria, record NE on the evidence side for undemonstrated checkpoints or components, and assign zero points to required final grading portions when a legitimate opportunity existed and the student chose not to complete them. ARC does not fabricate a competency level. For a transfer or course drop, ARC finalizes meaningful existing work when possible; otherwise the Project becomes `Closed — Insufficient Project Evidence`. Legitimate circumstances use `Paused — Completion Opportunity Preserved` and may resume later, including during supplemental sessions.
+
+### Technical Assignments, Tests, opportunity, and refusal
+
+Technical Assignments use ordinary earned and possible points. They are reassessable by default. Revision may occur before finalization; reassessment after finalization is a separate attempt. An overall assignment percentage is never copied automatically to every related competency. Evidence requires approved question, criterion, or section mappings, or a valid Evidence Declaration.
+
+Tests are explicitly designated by instructor or Activity authority, use ordinary points, and are summative and final except for legitimate correction. A Test may provide strong or comprehensive competency evidence when explicitly declared, but its overall percentage is not copied across competencies. Results inform later instruction without reopening the Test.
+
+> **Legitimate opportunity plus a choice not to perform means ARC grades what actually happened; there is no artificial 60% floor.**
+
+- Partial Technical Assignment work is scored normally against the required assignment. No work after a legitimate opportunity may earn zero; later legitimate completion or reassessment may replace it under the reassessment policy.
+- A present student who receives a legitimate Test opportunity and chooses not to attempt it receives `0%`, final, without automatic make-up or reassessment. The instructor retains explicit exception authority with a traceable reason.
+- An excused Test absence normally becomes `Pending Make-Up`, not zero or permanent exemption.
+- The same classroom situation may legitimately produce an assignment score, a Workplace event, and competency evidence only for what was actually demonstrated. A zero-percent assignment does not automatically establish Level 1.
+
+### State-domain separation
+
+ARC does not use one universal status enum. Separate domains may coexist:
+
+- **Activity Workflow State:** Assigned, In Progress, Pending Review, Paused, Ready for Final Assessment, Finalized, and related workflow states.
+- **Gradebook State:** Scored, Grade Ready, Posted, Posted Grade Changed, Exempt, Pending Make-Up, and related posting states.
+- **Evidence State:** Level 1–4, NE, Excluded, N/A, Supporting, Qualifying, Nonqualifying, and related evidence states.
+- **Competency / Category State:** NYA, Demonstrated, Confirmed, Breadth Incomplete, Concern / Watch, category NYA, and related conclusion states.
+
+`Blank` is not an authoritative ARC state; ARC records why nothing is externally entered. NE describes evidence, while zero describes assignment points. A Test may be Posted at `0 / 50` while its competency evidence is NE. NE never automatically becomes Level 1, 60%, or zero.
+
+### Category weights and point architecture
+
+WT and AWT use the same course-category weights:
+
+- **Skills & Competency — 50%.**
+- **Fabrication & Projects — 25%.**
+- **Technical Knowledge — 15%.**
+- **Workplace & Shop Practices — 10%.**
+
+Hands-on skill and application therefore represent 75% of the course grade. Weights express importance rather than entry count. The school scale is A at or above 90, B from 80 through 89.99, C from 70 through 79.99, D from 60 through 69.99, and F below 60. ARC applies no hidden floor.
+
+Within categories:
+
+- Normal graded Skills & Competency Challenges and performance assessments are `100` points possible and equal weight by default, using the `60 / 75 / 90 / 100` level conversion.
+- Finalized Fabrication & Projects entries are `100` points possible and equal weight by default regardless of size, material, duration, or difficulty.
+- Technical Knowledge preserves natural earned and possible points. A 20-point assignment remains 20 points; a legitimate 50-point Test remains 50 points.
+- A class-wide weekly Workplace assignment uses 10 points for each scheduled applicable school day: 50 for five days, 40 for four days, and 30 for three days. Student-specific exclusions use the student's actual ARC applicable denominator, then normalize the percentage onto the common class scale. Decimal grades are preserved; for example, `39 / 40 = 97.5%` becomes `48.75 / 50` on a five-day class scale.
+
+Qualifying evidence alone never creates a Gradebook assignment. Prospective Activity or assessment authority determines whether work is graded.
+
+### Verified selected-student school-gradebook capability
+
+The school gradebook supports assignments for one student, selected students, or all students. Additional students may later be added without disturbing existing grades. It supports decimals, and Exempt does not count for or against a student.
+
+ARC therefore does not use generic differentiated posting shells merely as a workaround. It preserves real Activity names when practical. A student who was not assigned a differentiated Activity needs no Exempt entry solely because the Activity did not apply.
+
+### Gradebook Posting Instance
+
+A reusable ARC Activity Definition is distinct from a school-Gradebook Posting Instance for a specific grading period. For the same Activity in the same grading period, later students are normally added to the existing school assignment instead of creating a duplicate. A new grading period creates a new Posting Instance and never reopens a finalized prior-period posting for new-period work. Reassessment updates the student's value in the same applicable Posting Instance.
+
+Future Grade Ready and Planning actions are **Create Assignment**, **Add Student(s)**, and **Update Grade**. Grade Ready items may be grouped by Activity where useful.
+
+### NYA and temporary renormalization
+
+During an active grading period, a category with no legitimate finalized Gradebook entries is **Not Yet Assessed (NYA)**. It contributes neither zero nor points. Only finalized legitimate Gradebook entries activate a category; Practice, evidence-only checkpoints, Assigned, In Progress, and Pending items do not.
+
+Active category weights temporarily renormalize proportionally. ARC displays the current grade as provisional and shows the represented percentage of course weight. When an NYA category receives a legitimate grade, the official `50 / 25 / 15 / 10` weights resume automatically. At grading-period close, a required category that remains NYA produces Quarter Review Required. ARC never silently makes temporary renormalization permanent or fabricates zero. NYA, Exempt, Pending, NE, and zero remain distinct.
+
+### Quarter Close
+
+> **Quarter Close freezes the authoritative grading record; it does not force unfinished learning to become failure because the calendar changed.**
+
+Quarter Close proceeds through review, instructor approval, and an immutable snapshot. It never closes automatically. Preflight checks Grade Ready items not Posted, Posted Grade Changed items, missing Posting Instance or Add Student work, Pending Reviews, Pending Make-Ups, active Projects requiring carry-forward or finalization, NYA categories, unresolved Workplace weeks, unusual weekly coverage, active or review-required Overrides, and ARC-to-school-gradebook synchronization.
+
+An active Project may use `Carry Forward Project`; ARC does not auto-finalize it. Evidence retains its dates, and the final Project grade belongs to the grading period in which finalization occurs. Before Quarter Close, successful reassessment may update that quarter. After an approved or submitted snapshot, later reassessment does not silently rewrite the prior quarter; a post-submission change requires explicit correction.
+
+ARC distinguishes **ARC Grade Complete** from **School Gradebook Synchronized**. Final instructor review shows category averages, weights and treatments, numeric and letter grade, synchronization state, pending and carry-forward items, coverage, Overrides, and corrections. The instructor explicitly selects **Approve Quarter Snapshot**.
+
+The immutable snapshot preserves student, enrollment, grading period, category averages, weights and treatments, Gradebook references, competency snapshot references, Overrides, final numeric and letter grade, authorized carry-forward, calculation and policy version, instructor identity, and approval timestamp. Post-submission corrections are append-first and create a superseding corrected snapshot while preserving the original.
+
+### Remaining Gradebook implementation phase
+
+The major Gradebook architecture is sufficiently complete for schema consolidation. Remaining future decisions and implementation include exact runtime schema and migration; Evidence, Activity, and Gradebook object relationships and identities; the Grade Ready Create/Add/Update interface; school-gradebook manual-posting assistance; exact AWT-R4 blocker and review thresholds; semantic tokens and components; supplemental-session interfaces and integration; remaining Evidence and Activity interfaces; Planning Period Workspace; and Year-One instructional population after Activity schema stabilization.
 
 ## Workplace, supplemental shop sessions, and semantic state authority
 
@@ -1740,6 +1869,7 @@ These are design gaps, not authorization to modify runtime behavior:
 22. Current Workplace event controls, calculations, storage, and history do not implement the frozen daily scoring, applicability, correction, positive-evidence, or AWT-R4 architecture.
 23. Supplemental shop-session participation is approved, but no cross-period operational session authority or integration exists.
 24. ARC does not yet implement the approved semantic state vocabulary consistently across Workplace, Class Forecast, Open Shop, and shared components.
+25. Current runtime grading does not implement the approved category weights, within-category point architecture, state-domain separation, reassessment replacement policy, Posting Instances, NYA renormalization, selected-student posting workflow, weekly coverage monitor, or Quarter Close snapshots.
 
 Any implementation must define migration, rollback, historical rendering, and explainability before changing stored records or current calculations.
 
@@ -1749,10 +1879,10 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - The exact normal technical recency numeric window; time alone and absence remain prohibited as decay signals.
 - Edge cases beyond the frozen comparable-evidence contradiction sequence and Advanced contradiction rule.
 - When an override should prompt review and how long review suppression lasts.
-- Grading-period snapshot timing and rules for quarter/semester boundaries.
+- Grading-period snapshot details beyond the frozen Quarter Close authority and existing semester derivation boundary.
 - Assessment UI and workflow design for the approved rubric family.
-- Reassessment workflow details beyond the approved progression principles.
-- Missing, exempt, absence, reassessment, late-work, and review-required policies in the future Gradebook.
+- Reassessment interface details beyond the frozen purpose, replacement, attempt-preservation, and authorization rules.
+- Missing, late-work, and additional review-required edge policies beyond the frozen Exempt, absence, Pending Make-Up, NE, zero, and reassessment rules.
 - External-entry confirmation version model and who may confirm or reopen an entered item.
 - Global Gradebook information hierarchy, default filters, and relationship to the existing class-scoped view.
 - Project-plan student-release defaults and student drawing submission/revision workflow.
@@ -1774,11 +1904,11 @@ Any implementation must define migration, rollback, historical rendering, and ex
 - Detailed Minor, Major, and Critical safety-event taxonomy and default severities.
 - Safety remediation, review, and clearance workflow.
 - Student-facing implementation of WT and AWT evidence explanations and the Safety model.
-- Exact Gradebook categories, weights, and entry policies beyond the frozen competency conversion and handoff boundaries.
+- Gradebook runtime schema, object identities, migration, and interfaces for the frozen categories, weights, point architecture, and entry policies.
 - Workplace event/history interaction details, same-event recurrence capture, and Safety-event link mechanics.
 - Grade Ready correction and update interface after Posted, plus individual and batch posting interaction.
-- Weekly grade-coverage interface and exception presentation.
-- Quarter-close Gradebook and submission snapshot workflow, including post-submission correction.
+- Weekly grade-coverage interface and exception presentation for the frozen per-student monitoring policy.
+- Quarter Close interface, preflight presentation, synchronization assistance, snapshot storage, and post-submission correction workflow.
 - SIS integration, only if later approved and available.
 - Planning Period Workspace and administrative notification implementation.
 - Semantic tokens and component implementation, Class Forecast selected-state repair, and Open Shop color cleanup.

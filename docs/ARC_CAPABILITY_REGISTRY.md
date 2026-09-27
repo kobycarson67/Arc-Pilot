@@ -1,6 +1,6 @@
 # ARC Capability Registry
 
-Verified against the local `arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1` reconciliation candidate. Classroom runtime remains schema v7; the isolated v8 database has its own schema and structural metadata. The commit and tree for this candidate are recorded in its implementation report. Update this registry whenever a later milestone changes a capability.
+Verified against the local `arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1` reconciliation candidate. Classroom runtime remains schema v7; the isolated v8 database has its own schema and structural metadata. The commit and tree for this candidate are recorded in its implementation report. Update this registry whenever a later milestone changes a capability.
 
 ## Status key
 

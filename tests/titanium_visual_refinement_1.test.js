@@ -30,7 +30,7 @@ for(const file of runtime){
 assert(html.indexOf('src/arc_icons.js')<html.indexOf('src/arc_titanium_shell.js'),'icons must load before the shell');
 assert(html.indexOf('src/arc_titanium_visual_refinement_1.css')>html.indexOf('src/arc_titanium_visual_system.css'),'refinement layer must follow the visual system');
 assert(sw.includes("'./src/arc_icons.js'")&&sw.includes("'./src/arc_titanium_visual_refinement_1.css'"));
-assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1'"));
+assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2'"));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'),'schema must remain v7');
 
 ['dashboard','students','forecast','attendance','projects','openshop','lessonbank','projectbank','standards','inventory','booths','notifications','search','help','settings','add'].forEach(name=>{

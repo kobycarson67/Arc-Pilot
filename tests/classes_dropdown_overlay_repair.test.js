@@ -46,7 +46,7 @@ assert(html.includes('state.activeSectionId = id;'));
 assert(html.includes('function captureSimulationNavigation()'));
 assert(html.includes('ArcTitaniumShell.navigationContextKey(NAV_CONTEXT_KEY, simulationActive())'));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1'"));
+assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2'"));
 
 for(const [file,hash] of Object.entries(expectedBranding))
   assert.strictEqual(sha(file),hash,'frozen branding changed: '+file);

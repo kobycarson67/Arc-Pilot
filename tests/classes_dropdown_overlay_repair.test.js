@@ -46,7 +46,7 @@ assert(html.includes('state.activeSectionId = id;'));
 assert(html.includes('function captureSimulationNavigation()'));
 assert(html.includes('ArcTitaniumShell.navigationContextKey(NAV_CONTEXT_KEY, simulationActive())'));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-assert(build.includes("build:'arc-schema-v8-backup-recovery-11'"));
+assert(build.includes("build:'arc-schema-v8-integration-verification-12'"));
 
 for(const [file,hash] of Object.entries(expectedBranding))
   assert.strictEqual(sha(file),hash,'frozen branding changed: '+file);

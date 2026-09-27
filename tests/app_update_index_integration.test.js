@@ -20,6 +20,6 @@ assert(controller.includes("you're offline"),'offline state must be honest');
 assert(controller.includes('Update check failed — Try Again.'),'failure state must be honest');
 assert(!/(localStorage\.clear|indexedDB\.deleteDatabase)/.test(controller),'update workflow must not clear classroom data');
 assert(html.includes('installOverscrollGuard()'),'Samsung pull-to-refresh protection must remain');
-assert(sw.includes("request.mode==='navigate'")&&sw.includes("caches.match('./index.html')"),'offline navigation fallback must remain');
-assert(build.includes("build:'arc-schema-v8-backup-recovery-11'"),'tested shell must have a truthful stable build label');
+assert(sw.includes("request.mode==='navigate'")&&sw.includes("'./index.html'")&&sw.includes('caches.match(target)'),'offline navigation fallback must remain');
+assert(build.includes("build:'arc-schema-v8-integration-verification-12'"),'tested shell must have a truthful stable build label');
 console.log('PASS App update Settings and safety contracts');

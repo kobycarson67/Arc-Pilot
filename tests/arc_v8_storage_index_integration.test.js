@@ -28,7 +28,7 @@ assert(sw.includes("'./src/arc_v8_backup_recovery.js'"),'offline shell must cach
 assert(html.includes('const STORAGE_KEY = "weld_v013"'),'v7 classroom storage key must remain unchanged');
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7'),'v7 classroom schema must remain unchanged');
 assert(source.includes("DATABASE_NAME='arc_classroom_v8'"),'v8 database must have an isolated identity');
-assert(source.includes("driver.remove(DATABASE_NAME"),'development reset must target only the isolated v8 database');
+assert(source.includes("driver.remove(databaseName"),'development reset must target only the explicitly configured v8 database');
 assert(!source.includes('weld_v013'),'v8 infrastructure must not read, write, migrate, or reset v7 classroom state');
 assert(!source.includes('WeldingClassroomPhotoStore'),'v8 reset must not target the v7 photo database');
 assert(!/\.open\(\)\s*[;.]/.test(source.split('return {create:create')[1]||''),'module export must not automatically open storage');

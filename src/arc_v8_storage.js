@@ -59,12 +59,13 @@
   function create(options){
     options=options||{};
     var driver=options.driver||nativeDriver(options.indexedDB);
+    var databaseName=String(options.databaseName||DATABASE_NAME);
     var now=options.now||function(){return new Date();};
     var build=options.build||{};
     var channelFactory=options.channelFactory||(typeof window!=='undefined'&&typeof BroadcastChannel!=='undefined'?function(name){return new BroadcastChannel(name);}:null);
     var onBlocked=options.onBlocked||function(){};
     var channel=null,connection=null,opening=null;
-    function announce(type,detail){if(channel&&typeof channel.postMessage==='function')channel.postMessage({source:'arc-v8-storage',type:type,database:DATABASE_NAME,detail:detail||{},at:iso(now)});}
+    function announce(type,detail){if(channel&&typeof channel.postMessage==='function')channel.postMessage({source:'arc-v8-storage',type:type,database:databaseName,detail:detail||{},at:iso(now)});}
     function upgrade(db,oldVersion,newVersion,tx){
       if(oldVersion<0||oldVersion>=newVersion)throw error('INVALID_UPGRADE_PATH','Invalid ARC v8 IndexedDB upgrade path.',{oldVersion:oldVersion,newVersion:newVersion});
       var at=iso(now);
@@ -199,7 +200,7 @@
       if(connection)return Promise.resolve(connection);
       if(opening)return opening;
       if(channelFactory&&!channel){try{channel=channelFactory('arc-v8-storage-coordination');}catch(ignore){channel=null;}}
-      opening=driver.open({name:DATABASE_NAME,version:IDB_VERSION,upgrade:upgrade,blocked:function(){onBlocked({database:DATABASE_NAME,operation:'open'});announce('upgrade-blocked');}}).then(function(db){
+      opening=driver.open({name:databaseName,version:IDB_VERSION,upgrade:upgrade,blocked:function(){onBlocked({database:databaseName,operation:'open'});announce('upgrade-blocked');}}).then(function(db){
         db.onversionchange=function(event){try{db.close();}finally{connection=null;announce('stale-connection-closed',{oldVersion:event.oldVersion,newVersion:event.newVersion});}};
         return validateMetadata(db).then(function(metadata){connection={
           metadata:metadata,
@@ -217,11 +218,11 @@
       return opening;
     }
     function resetDevelopmentDatabase(){
-      return open().then(function(db){return db.read(STORES.infrastructure,'database-protection');}).then(function(protection){if(protection&&protection.mode==='Production/Classroom Protected')throw error('PROTECTED_DATABASE','Ordinary development reset is disabled for protected classroom data.',{mode:protection.mode,protectedAt:protection.protectedAt});if(connection)connection.close();return driver.remove(DATABASE_NAME,function(){onBlocked({database:DATABASE_NAME,operation:'reset'});announce('reset-blocked');});}).then(function(){announce('development-reset-complete');});
+      return open().then(function(db){return db.read(STORES.infrastructure,'database-protection');}).then(function(protection){if(protection&&protection.mode==='Production/Classroom Protected')throw error('PROTECTED_DATABASE','Ordinary development reset is disabled for protected classroom data.',{mode:protection.mode,protectedAt:protection.protectedAt});if(connection)connection.close();return driver.remove(databaseName,function(){onBlocked({database:databaseName,operation:'reset'});announce('reset-blocked');});}).then(function(){announce('development-reset-complete');});
     }
     function protectionMode(){return open().then(function(db){return db.read(STORES.infrastructure,'database-protection');}).then(function(row){return row||{id:'database-protection',mode:'Development'};});}
     function enableProtectedMode(authority){if(!authority||!authority.confirmedBy)throw error('AUTHORIZATION_REQUIRED','Protected classroom mode requires explicit authority.');return open().then(function(db){return db.read(STORES.infrastructure,'database-protection').then(function(current){if(current&&current.mode==='Production/Classroom Protected')return current;var row={id:'database-protection',mode:'Production/Classroom Protected',protectedAt:iso(now),protectedBy:authority.confirmedBy,reason:String(authority.reason||'Real classroom data protection enabled'),revision:current&&current.revision?current.revision+1:1};return db.put(STORES.infrastructure,row).then(function(){return row;});});});}
-    return {open:open,resetDevelopmentDatabase:resetDevelopmentDatabase,getProtectionMode:protectionMode,enableProtectedMode:enableProtectedMode,generateId:function(){return uuid(options.crypto);},validId:validId,constants:{databaseName:DATABASE_NAME,indexedDbVersion:IDB_VERSION,schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,stores:STORES}};
+    return {open:open,resetDevelopmentDatabase:resetDevelopmentDatabase,getProtectionMode:protectionMode,enableProtectedMode:enableProtectedMode,generateId:function(){return uuid(options.crypto);},validId:validId,constants:{databaseName:databaseName,indexedDbVersion:IDB_VERSION,schemaFamily:SCHEMA_FAMILY,schemaVersion:SCHEMA_VERSION,stores:STORES}};
   }
   return {create:create,nativeDriver:nativeDriver,generateId:uuid,validId:validId,StorageError:StorageError,DATABASE_NAME:DATABASE_NAME,IDB_VERSION:IDB_VERSION,SCHEMA_FAMILY:SCHEMA_FAMILY,SCHEMA_VERSION:SCHEMA_VERSION,STORES:STORES};
 }));

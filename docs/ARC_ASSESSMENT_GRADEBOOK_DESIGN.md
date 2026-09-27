@@ -2047,6 +2047,8 @@ ARC retains the requirement to begin real classroom use with a sufficiently popu
 
 **Implementation status:** Stage 11, Production Backup, Export, Restore, Integrity, and Recovery Foundation, is implemented in build `arc-schema-v8-backup-recovery-11`. IndexedDB remains structural version 10 because no new domain store is required. The local portable package covers all 53 Stage 10 stores and Artifact media with SHA-256 store, media, and package integrity; completed-package readback; database audit; compatibility inspection; verified pre-restore recovery; atomic all-store activation; parity validation; future-upgrade recovery guard; and persistent protected reset authority. OneDrive/cloud, v7 migration, classroom UI conversion, encryption key management, and Production/Classroom Readiness remain unimplemented pending Stage 12 physical/recovery rehearsal.
 
+**Stage 12 engineering checkpoint:** Build `arc-schema-v8-integration-verification-12` adds no classroom-domain store and retains IndexedDB structural version 10. Its engineering-only harness targets the separate `arc_classroom_v8_engineering_verification` database, composes existing v8 services, verifies cross-projection agreement, complete backup/readback, destructive isolated reset/restore parity, failure safety, and protected-mode persistence. The classroom UI and v7 authority remain unchanged. Production Readiness and Classroom Readiness are not achieved; Samsung Physical Verification is PENDING INSTRUCTOR and must be followed by a later explicit Readiness review.
+
 When migration of preserved reusable authority or future real production data is required, the migration design must identify:
 
 - exact current storage shape and location;

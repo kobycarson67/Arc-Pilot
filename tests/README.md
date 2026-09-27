@@ -17,6 +17,7 @@ node tests/arc_v8_attendance.test.js
 node tests/arc_v8_artifacts.test.js
 node tests/arc_v8_booth_operations.test.js
 node tests/arc_v8_backup_recovery.test.js
+node tests/arc_v8_stage12_integration.test.js
 
 # Simulation Foundation isolation, deterministic fixtures, and host contracts
 node tests/simulation_foundation.test.js

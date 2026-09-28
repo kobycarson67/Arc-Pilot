@@ -33,6 +33,8 @@
 <script src="src/arc_v8_backup_recovery.js"></script>
 <script src="src/arc_v8_academic_administration.js"></script>
 <script src="src/arc_schedule_authority_adapter.js"></script>
+<script src="src/arc_academic_consumer_projection.js"></script>
+<script src="src/arc_academic_authority_adapter.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -410,6 +412,7 @@ try { simulationSession = simulationManager.resume(); }
 catch (err) { simulationStartupError = err; }
 let state = simulationSession ? migrateStateData(simulationSession.state, CURRENT_SCHEMA_VERSION) : loadInitialState();
 const scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 function ensureScheduleModel() {
     if (!state.academicYear)
         state.academicYear = "2026-27";
@@ -547,10 +550,11 @@ function dismissNotification(id) { let n = state.notifications.find(x => x.id ==
     save();
     showNotifications();
 } }
-function allStudents() { return [...(state.classes.wt || []), ...(state.classes.awt || [])]; }
-function activeSection() { ensureScheduleModel(); return state.sections.find(x => x.id === state.activeSectionId); }
-function sectionStudents(id) { let sec = state.sections.find(x => x.id === id); if (!sec)
-    return []; return (state.classes[sec.course] || []).filter(s => (s.enrollments || []).some(e => e.active && e.year === state.academicYear && e.semester === state.semester && e.sectionId === id)); }
+function academicConsumerProjection(day = dateKey(), currentPeriodCode = null) { ensureScheduleModel(); return ArcAcademicConsumerProjection.fromLegacy(state, { day, selectedSectionId: state.activeSectionId, currentPeriodCode }); }
+function academicConsumerContext(name, studentId = "", day = dateKey(), currentPeriodCode = null) { return academicConsumerProjection(day, currentPeriodCode).consumerContext(name, studentId); }
+function allStudents() { return academicConsumerProjection().students.map(x => x.student.legacyRecord); }
+function activeSection() { let selected = academicConsumerProjection().selectedSection; return selected && selected.legacyRecord; }
+function sectionStudents(id) { return academicConsumerProjection().rosterForSection(id).map(x => x.student.legacyRecord); }
 function selectSection(id) { state.activeSectionId = id; let sec = activeSection(); if (sec && sec.course)
     state.course = sec.course; save(); renderRoster(); }
 function ordinal(n) { return n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"; }
@@ -942,7 +946,7 @@ function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.per
 function classContextVisible() { return ["roster", "booths", "projects", "forecast", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"].includes(navCurrentView); }
 function closeClassMenu() { let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (menu) menu.hidden = true; if (button) button.setAttribute("aria-expanded", "false"); }
 function toggleClassMenu(event) { if (event) event.stopPropagation(); let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (!menu || !button) return; let opening = menu.hidden; menu.hidden = !opening; button.setAttribute("aria-expanded", opening ? "true" : "false"); }
-function updateNavigationBar(label) { ensureScheduleModel(); let button = document.getElementById("navClassButton"), menu = document.getElementById("navClassMenu"), sec = activeSection(); if (button) button.textContent = classContextVisible() && sec ? `${sec.period}${ordinal(sec.period)} — ${courseLabel(sec.course)} ▾` : "Classes ▾"; if (menu) menu.innerHTML = state.sections.slice().sort((a, b) => a.period - b.period).map(s => `<button class="navbtn ${classContextVisible() && sec && s.id === sec.id ? "is-active" : ""}" type="button" onclick="navSwitchClass('${s.id}')">${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</button>`).join(""); let bc = document.getElementById("navBreadcrumb"); if (bc)
+function updateNavigationBar(label) { ensureScheduleModel(); let button = document.getElementById("navClassButton"), menu = document.getElementById("navClassMenu"), sec = activeSection(), academicSections = academicConsumerProjection().sections.map(x => x.legacyRecord); if (button) button.textContent = classContextVisible() && sec ? `${sec.period}${ordinal(sec.period)} — ${courseLabel(sec.course)} ▾` : "Classes ▾"; if (menu) menu.innerHTML = academicSections.slice().sort((a, b) => a.period - b.period).map(s => `<button class="navbtn ${classContextVisible() && sec && s.id === sec.id ? "is-active" : ""}" type="button" onclick="navSwitchClass('${s.id}')">${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</button>`).join(""); let bc = document.getElementById("navBreadcrumb"); if (bc)
     bc.textContent = label || navViewLabel(navCurrentView); let back = document.getElementById("navBackBtn"); if (back)
     back.disabled = !navHistory.length && !document.getElementById("modal").classList.contains("show"); let badge = document.getElementById("navNotificationBadge"), cnt = activeNotifications().length; if (badge) {
     badge.textContent = cnt;
@@ -1197,7 +1201,7 @@ function renderMainMenu() {
     navMark("main", "Dashboard");
     ensureScheduleModel();
     syncCalendarEventNotifications();
-    let today = new Date(), plan = dayPlan(today), ctx = currentScheduleContext(today), currentClass = ArcTitaniumShell.currentClass(state, ctx), selectedClass = ArcTitaniumShell.selectedClass(state);
+    let today = new Date(), plan = dayPlan(today), ctx = currentScheduleContext(today), academicContext = academicConsumerProjection(dateKey(today), ctx.kind === "class" ? ctx.period : null), currentClass = academicContext.currentSection && academicContext.currentSection.legacyRecord, selectedClass = academicContext.selectedSection && academicContext.selectedSection.legacyRecord;
     let upcoming = upcomingCalendarItems(7).map(x => `<div class="card" style="min-width:135px;flex:1;${calendarAccent(x)}" onclick="editCalendarDay('${x.key}')"><b>${x.d.toLocaleDateString(undefined, { weekday: "short" })}</b><div class="big" style="font-size:20px">${x.d.getDate()}</div><div class="small">${dayTypeLabel(x.p.dayType)}</div>${x.p.dayType === "school" ? `<div class="small">${bellSchedule(x.p.scheduleId).name}</div>${x.p.instructionMode === "open_shop" ? `<div class="small"><b>Open Shop</b></div>` : ""}` : ""}${x.ev.map(e => `<div class="small"><b>📅 ${e.title}</b></div>`).join("")}</div>`).join("");
     let classList = selectedClass ? sectionStudents(selectedClass.id) : [], dashboardForecast = selectedClass ? ArcClassForecast.build({ state, section: selectedClass, students: classList, day: dateKey(), definitions: state.projectBank }) : { pulse: { present: 0, working: 0, needYouNow: 0, activeBooths: 0 } }, pulse = dashboardForecast.pulse;
     let selectedLabel = selectedClass ? `${selectedClass.period}${ordinal(selectedClass.period)} Period — ${courseLabel(selectedClass.course)}` : "No class selected";
@@ -1691,7 +1695,7 @@ function refreshMaterialUseSource(studentId,projectId){let model=ensureMaterialI
 function showMaterialUse(pieceId="",studentId="",projectId=""){let model=ensureMaterialInventory(),groups=ArcMaterialInventory.groups(model),piece=model.pieces.find(x=>x.id===pieceId&&x.status==="available")||(groups[0]&&groups[0].pieces[0]);if(!piece)return alert("No available physical pieces are recorded.");let d=model.definitions.find(x=>x.id===piece.definitionId),family=d.family,matching=ArcMaterialInventoryPresenter.sources(model,family,d.id),groupIndex=Math.max(0,matching.findIndex(g=>g.pieceIds.includes(piece.id))),student=allStudents().find(x=>x.id===studentId),project=student&&(student.projects||[]).find(x=>x.id===projectId),view=project?ArcProjectCheckpoints.viewForProject(project):null,checkpoint=view&&!view.legacy?view.checkpoints.find(x=>x.id===view.progress.currentCheckpointId):null,sec=student?activeSection():null,materialOptions=model.definitions.filter(x=>!x.archived&&x.family===family&&ArcMaterialInventory.availablePieces(model,x.id).length).map(x=>`<option value="${escapePhotoText(x.id)}" ${x.id===d.id?"selected":""}>${escapePhotoText(x.name)}</option>`).join(""),groupOptions=matching.map((g,i)=>`<option value="${i}" ${i===groupIndex?"selected":""}>${ArcMaterialInventoryPresenter.dimensions(g)} — ${g.count} available</option>`).join(""),length=piece.kind==="linear"?materialLengthFields("useLength",0,"Amount used"):'<label><b>Length used (inches)</b><input id="usePlateLength" type="number" min="0.001" step="0.125"></label><label><b>Width used (inches)</b><input id="useWidth" type="number" min="0.001" step="0.125"></label>';showMaterialModal("Record Material Use / Waste",`<div class="material-source-picker"><label><b>Family</b><select id="useSourceFamily" onchange="refreshMaterialUseSource('${studentId}','${projectId}')">${ArcMaterialInventoryPresenter.families(model).map(x=>`<option ${x===family?"selected":""}>${x}</option>`).join("")}</select></label><label><b>Exact material / size</b><select id="useSourceMaterial" onchange="refreshMaterialUseSource('${studentId}','${projectId}')">${materialOptions}</select></label><label><b>Usable stock group</b><select id="useSourceGroup" onchange="refreshMaterialUseSource('${studentId}','${projectId}')">${groupOptions}</select></label></div><p><b>Selected:</b> ${escapePhotoText(d.name)} • ${ArcMaterialInventoryPresenter.dimensions(piece)}</p><label><b>Purpose</b><select id="usePurpose">${ArcMaterialInventory.PURPOSES.filter(x=>x!=="Adjustment").map(x=>`<option ${(student?x==="Student Project":x==="Shop/School Project")?"selected":""}>${x}</option>`).join("")}</select></label>${length}<label><input id="retainRemainder" type="checkbox"> Retain remainder even if below ${materialLength(d.minimumRetainedInches)}</label><label><b>Other department (when applicable)</b><input id="useDepartment"></label><label><b>Note</b><textarea id="useNote"></textarea></label><p class="small">${student?`Context: ${escapePhotoText(student.name)} • ${escapePhotoText(sec?sec.name:"Current class")} • ${escapePhotoText(project?(project.name||project.projectTitleSnapshot):"Project")}${checkpoint?" • "+escapePhotoText(checkpoint.name):""}`:"Student and project are required only for Student Project use."}</p><p><button class="btn primary" onclick="saveMaterialUse('${piece.id}','${studentId}','${projectId}')">Record Physical Transformation</button></p>`); }
 function saveMaterialUse(pieceId,studentId,projectId){try{let student=allStudents().find(x=>x.id===studentId),project=student&&(student.projects||[]).find(x=>x.id===projectId),view=project?ArcProjectCheckpoints.viewForProject(project):null,checkpoint=view&&!view.legacy?view.checkpoints.find(x=>x.id===view.progress.currentCheckpointId):null,sec=student?activeSection():null,piece=ensureMaterialInventory().pieces.find(x=>x.id===pieceId),width=document.getElementById("useWidth"),input={purpose:document.getElementById("usePurpose").value,usedLengthInches:piece.kind==="linear"?readMaterialLength("useLength"):document.getElementById("usePlateLength").value,usedWidthInches:width?width.value:undefined,retainRemainder:document.getElementById("retainRemainder").checked,department:document.getElementById("useDepartment").value,note:document.getElementById("useNote").value,studentId:studentId,studentName:student?student.name:"",sectionId:sec?sec.id:"",sectionName:sec?sec.name:"",projectId:projectId,projectName:project?(project.name||project.projectTitleSnapshot):"",checkpointId:checkpoint?checkpoint.id:"",checkpointName:checkpoint?checkpoint.name:""},next=piece.kind==="plate"?ArcMaterialInventory.usePlate(ensureMaterialInventory(),pieceId,input,{academicYear:state.academicYear}):ArcMaterialInventory.useLinear(ensureMaterialInventory(),pieceId,input,{academicYear:state.academicYear});commitMaterialInventory(next);closeInventoryOverlay();if(document.getElementById("modal").classList.contains("show"))renderModal();else renderInventory();}catch(err){alert(err.message);}}
 function renderProjectBank() { ensureProjectBank(); navMark("projectbank", "Project Library"); let rows = ["wt", "awt"].map(course => { let all = state.projectBank.filter(p => p.applicability && p.applicability[course]), active = all.filter(p => !p.archived), archived = all.filter(p => p.archived); return `<section class="card"><h3>${courseLabel(course)} (${active.length} active)</h3>${active.map(p => projectBankRow(p, true)).join("") || `<p class="small">No active reusable projects for this course yet.</p>`}${archived.length ? `<details><summary>Archived (${archived.length})</summary>${archived.map(p => projectBankRow(p, true)).join("")}</details>` : ""}</section>`; }).join(""); document.getElementById("app").innerHTML = `<div class="row"><div><h2>Project Library</h2><p class="small">Reusable definitions shared by class workflows. Assignments remain independent student records.</p></div><button class="btn primary" onclick="showCreateClassProject(true)">+ New Definition</button></div>${rows}<p><button class="btn" onclick="showClassProjects()">Selected Class Projects & Assignment</button></p>`; }
-function currentEnrollment(s) { return (s.enrollments || []).find(e => e.active && e.year === state.academicYear && e.semester === state.semester); }
+function currentEnrollment(s) { let context = academicConsumerProjection().contextForStudent(s.id); return context && context.currentEnrollment && context.currentEnrollment.legacyRecord; }
 function renderAllStudentProfiles(filter = "") { navMark("students", "All Student Profiles"); let q = (filter || "").toLowerCase(), list = allStudents().filter(s => !q || s.name.toLowerCase().includes(q)).sort((a, b) => a.name.localeCompare(b.name)); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderMainMenu()">← Main Menu</button><div class="row"><div><h2>All Student Profiles</h2><div class="small">${allStudents().length} permanent profiles • records remain after enrollment ends</div></div></div><input id="allProfileSearch" value="${filter}" placeholder="Search students…" style="width:100%;padding:11px;border:1px solid #d6dde6;border-radius:8px;margin:8px 0" oninput="renderAllStudentProfiles(this.value)"><div>${list.map(s => { let e = currentEnrollment(s), sec = e ? state.sections.find(x => x.id === e.sectionId) : null; return `<div class="entryrow"><div><b>${s.name}</b><br><span class="small">Grade ${s.grade || "—"} • Class of ${s.gradYear || "—"} • ${e ? `Currently enrolled: ${courseLabel(e.course)} — ${sec ? sec.period + ordinal(sec.period) + " Period" : ""}` : "Not currently enrolled"}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn primary" onclick="openPermanentStudent('${s.id}')">View Profile</button>${e ? `<button class="btn danger" onclick="confirmArchiveUnenroll('${s.id}')">Un-enroll</button>` : `<button class="btn" onclick="showArchiveEnroll('${s.id}')">Re-enroll</button>`}</div></div>`; }).join("") || `<div class="card">No matching students.</div>`}</div>`; }
 function openPermanentStudent(id) { let s = allStudents().find(x => x.id === id); if (!s)
     return; let e = currentEnrollment(s); if (e) {
@@ -2153,6 +2157,7 @@ function addExistingStudentToSection(sectionId) {
     manageSectionRoster(sectionId);
 }
 function createStudentInSection(sectionId) {
+    return academicAuthorityAdapter.runLegacy("create-student-placement", { sectionId }, () => {
     let sec = state.sections.find(x => x.id === sectionId), name = document.getElementById("newStudentName").value.trim(), grade = Number(document.getElementById("newStudentGrade").value);
     if (!name)
         return alert("Enter the student's name.");
@@ -2167,8 +2172,10 @@ function createStudentInSection(sectionId) {
     save();
     closeRosterManager();
     manageSectionRoster(sectionId);
+    });
 }
 function moveStudentToSection(studentId, newSectionId) {
+    return academicAuthorityAdapter.runLegacy("move-or-reenroll", { studentId, newSectionId }, () => {
     let s = allStudents().find(x => x.id === studentId);
     let sec = state.sections.find(x => x.id === newSectionId);
     if (!s || !sec)
@@ -2189,6 +2196,7 @@ function moveStudentToSection(studentId, newSectionId) {
     current = prev;
     syncTechnicalAssignmentsForStudent(s, sec.id);
     save();
+    });
 }
 function confirmDropStudent(sectionId, studentId) {
     let sec = state.sections.find(x => x.id === sectionId), s = allStudents().find(x => x.id === studentId);
@@ -2205,6 +2213,7 @@ function confirmDropStudent(sectionId, studentId) {
 function closeDropConfirm() { let o = document.getElementById("dropConfirm"); if (o)
     o.remove(); }
 function dropStudentConfirmed(sectionId, studentId) {
+    return academicAuthorityAdapter.runLegacy("drop", { sectionId, studentId }, () => {
     let sec = state.sections.find(x => x.id === sectionId), s = allStudents().find(x => x.id === studentId);
     if (!sec || !s)
         return;
@@ -2217,6 +2226,7 @@ function dropStudentConfirmed(sectionId, studentId) {
     closeDropConfirm();
     closeRosterManager();
     manageSectionRoster(sectionId);
+    });
 }
 
 const BOOTH_STATUSES = { ready: "Ready", review_needed: "Review Needed", unavailable: "Unavailable" };

@@ -32,6 +32,9 @@ node tests/arc_v8_academic_administration.test.js
 # Stage 14 P3 normal Schedule/calendar UI authority adapter
 node tests/arc_schedule_authority_adapter.test.js
 
+# Stage 14 P4 shared Student/Enrollment/Schedule Assignment projection and consumer scopes
+node tests/arc_academic_consumer_projection.test.js
+
 # Simulation Foundation isolation, deterministic fixtures, and host contracts
 node tests/simulation_foundation.test.js
 node tests/simulation_fixtures.test.js

@@ -4,7 +4,7 @@
 
 Stage 2 implements the bounded academic cutover capability for Student, Course, School Year, Semester, Grading Period, Section, Course Enrollment, Enrollment Schedule Assignment, effective-date rosters, and atomic section moves.
 
-The real browser `arc_classroom_v8` database has not been initialized. This module is not loaded by `index.html` or `sw.js`. Production activation, v7 academic-write shutdown, and Samsung acceptance therefore have not occurred. Current classroom authority remains `V7_ONLY`; the target after all gates is `V8_AUTHORITATIVE` for the complete academic domain.
+The real Samsung Chrome `arc_classroom_v8` database is initialized as the verified protected empty Schema 8 / IndexedDB 10 / 53-store production foundation. Its 50 domain stores remain empty, its initial protected recovery package verified, and ordinary reset is refused. Production academic configuration and activation, v7 academic-write shutdown, and academic authority-transition acceptance have not occurred. Current classroom authority remains `V7_ONLY`; the target after all gates is `V8_AUTHORITATIVE` for the complete academic domain.
 
 ## Instructor decisions implemented
 
@@ -38,11 +38,11 @@ The local checkpoint manifest records `authorityState: V7_ONLY`, `targetAuthorit
 
 The immediate protected-production initialization procedure and its authorization boundary are recorded in `ARC_SCHEMA_V8_STAGE_14_STAGE_2_PRODUCTION_INITIALIZATION_CHECKPOINT.md`.
 
-1. Separately authorize and execute real-browser Stage 1 initialization.
-2. Verify the protected empty production database and create the Stage 2 recovery point.
-3. Wire and publish the bounded academic consumers only after those gates.
+1. Implement and separately authorize the bounded production academic-configuration coordinator and engineering surface for stable WT/AWT Courses plus instructor-entered School Year, Semester, Grading Period, and Section authority. Student and Enrollment controls remain unavailable.
+2. Revalidate the protected production database and create/read back the pre-configuration recovery point before those records are written.
+3. Wire and publish the bounded academic consumers only after configuration verification.
 4. Prove every academic read/write uses v8 and independent v7 academic writes stop.
-5. After production initialization and bounded academic-consumer activation, run the production academic cutover checks in the installed Samsung PWA and direct Chrome. The isolated engineering bridge and Cleanup Isolation Repair 1 lifecycle checkpoint are physically accepted, but they do not substitute for this production authority-transition verification.
+5. After bounded academic-consumer activation, run the production academic cutover checks in the installed Samsung PWA and direct Chrome. The isolated engineering bridge and Cleanup Isolation Repair 1 lifecycle checkpoint are physically accepted, but they do not substitute for this production authority-transition verification.
 6. Keep real Student production data prohibited until the separate Stage 15 authorization.
 
 ## Status

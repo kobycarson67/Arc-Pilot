@@ -93,11 +93,12 @@ The three initialization/protection records are committed in one infrastructure 
 
 ## Samsung requirement
 
-This implementation does not alter browser lifecycle behavior. It adds an explicit module that is not loaded by `index.html`, `sw.js`, or the installed PWA. No Samsung physical verification is required for this stage.
+The coordinator was later published only through the explicit Stage 2 engineering surface and executed once under bounded instructor authorization. Samsung Chrome verified the exact protected empty `arc_classroom_v8` foundation: Schema 8, IndexedDB 10, 53 stores, 50 empty domain stores, zero excluded identities, healthy audit, verified pre-protection and initial protected recovery packages, and protected reset refusal. Initial protected recovery SHA-256 is `81bd41452fb01c32608806ad7267a7232ea373c2cdfe0e4713ec2fcade090f8d`. Academic authority remains `V7_ONLY`; no Student, import, academic activation, or authority transfer occurred.
 
 ## Status
 
 - Classroom Authority: **V7_ONLY**
+- Production v8 Foundation: **INITIALIZED PROTECTED EMPTY — SAMSUNG VERIFIED**
 - Production Readiness: **NOT ACHIEVED**
 - Classroom Readiness: **NOT ACHIEVED**
 - Real Student Production Data: **NOT AUTHORIZED**

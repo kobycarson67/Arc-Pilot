@@ -14,7 +14,7 @@ This document records completion of **P1 — Freeze the parity contract**. The c
 - Production mutation: prohibited and not performed
 - Real Student data in v8: prohibited and not authorized
 
-The deterministic machine-readable contract is [`../parity/stage14_v7_v8_parity_contract.js`](../parity/stage14_v7_v8_parity_contract.js). Its canonical JSON SHA-256 is `18a2d9428d908ca14f8cab6a767dd3bf6a66cdf369d712ff8da17f6b66d363c3`.
+The deterministic machine-readable contract is [`../parity/stage14_v7_v8_parity_contract.js`](../parity/stage14_v7_v8_parity_contract.js). At P1 completion, its canonical JSON SHA-256 was `18a2d9428d908ca14f8cab6a767dd3bf6a66cdf369d712ff8da17f6b66d363c3`. Later bounded stages update that file only with evidence they actually achieve and pin a new fingerprint in the contract test.
 
 ## Registry semantics
 

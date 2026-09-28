@@ -26,6 +26,9 @@ node tests/arc_v8_production_academic_configuration.test.js
 # Stage 14 P1 frozen v7-to-v8 no-regression parity contract
 node tests/stage14_parity_contract.test.js
 
+# Stage 14 P2 academic-administration service authority
+node tests/arc_v8_academic_administration.test.js
+
 # Simulation Foundation isolation, deterministic fixtures, and host contracts
 node tests/simulation_foundation.test.js
 node tests/simulation_fixtures.test.js

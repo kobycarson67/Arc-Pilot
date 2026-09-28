@@ -10,7 +10,7 @@ const inlineEnd=html.indexOf('</style>');
 const visualLink=html.indexOf('src/arc_titanium_visual_system.css');
 assert(visualLink>inlineEnd,'Titanium design system must load after legacy inline presentation');
 assert(sw.includes("'./src/arc_titanium_visual_system.css'"),'offline shell must cache the visual system');
-assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1'"));
+assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1'"));
 assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
 
 ['--t-bg-canvas','--t-surface-1','--t-text','--t-blue','--t-success','--t-warning','--t-danger','--t-shadow-focus'].forEach(token=>assert(css.includes(token),'missing semantic token '+token));

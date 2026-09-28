@@ -36,6 +36,7 @@
 <script src="src/arc_academic_consumer_projection.js"></script>
 <script src="src/arc_academic_authority_adapter.js"></script>
 <script src="src/arc_attendance_authority_adapter.js"></script>
+<script src="src/arc_project_technical_authority_adapter.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -415,6 +416,7 @@ let state = simulationSession ? migrateStateData(simulationSession.state, CURREN
 const scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const attendanceAuthorityAdapter = ArcAttendanceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const projectTechnicalAuthorityAdapter = ArcProjectTechnicalAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 function ensureScheduleModel() {
     if (!state.academicYear)
         state.academicYear = "2026-27";
@@ -4182,6 +4184,41 @@ window.addEventListener("orientationchange", function() { setTimeout(reconcileAr
 document.addEventListener("visibilitychange", function() { if (!document.hidden) arcTimeController.wake(); });
 window.addEventListener("pageshow", function() { arcTimeController.wake(); });
 window.addEventListener("focus", function() { arcTimeController.wake(); });
+const p6LegacyHandlers = {
+    applyProjectCheckpointAction, setProjectStatus, setProjectRating, clearProjectRating, autosaveProjectNote,
+    setStudentProjectStage, setStudentProjectNeed, createClassProject, assignProjectStudents, assignSavedProject,
+    commitProjectAssignments, saveEditedClassProject, createCopiedClassProject, confirmDeleteClassProject,
+    restoreClassProject, saveStudentProjectCopy,
+    createIndividualTechnical, assignTechnicalToCurrent, saveStudentTechnical, createClassTechnical,
+    saveClassTechScore, saveClassTechStatus, saveTechnicalTemplateEditor, deleteTechnicalTemplateConfirmed
+};
+function p6RouteLegacy(name, args) {
+    return projectTechnicalAuthorityAdapter.runLegacy(name, { arguments: Array.from(args) }, () => p6LegacyHandlers[name].apply(null, args));
+}
+applyProjectCheckpointAction = function() { return p6RouteLegacy("applyProjectCheckpointAction", arguments); };
+setProjectStatus = function() { return p6RouteLegacy("setProjectStatus", arguments); };
+setProjectRating = function() { return p6RouteLegacy("setProjectRating", arguments); };
+clearProjectRating = function() { return p6RouteLegacy("clearProjectRating", arguments); };
+autosaveProjectNote = function() { return p6RouteLegacy("autosaveProjectNote", arguments); };
+setStudentProjectStage = function() { return p6RouteLegacy("setStudentProjectStage", arguments); };
+setStudentProjectNeed = function() { return p6RouteLegacy("setStudentProjectNeed", arguments); };
+createClassProject = function() { return p6RouteLegacy("createClassProject", arguments); };
+assignProjectStudents = function() { return p6RouteLegacy("assignProjectStudents", arguments); };
+assignSavedProject = function() { return p6RouteLegacy("assignSavedProject", arguments); };
+commitProjectAssignments = function() { return p6RouteLegacy("commitProjectAssignments", arguments); };
+saveEditedClassProject = function() { return p6RouteLegacy("saveEditedClassProject", arguments); };
+createCopiedClassProject = function() { return p6RouteLegacy("createCopiedClassProject", arguments); };
+confirmDeleteClassProject = function() { return p6RouteLegacy("confirmDeleteClassProject", arguments); };
+restoreClassProject = function() { return p6RouteLegacy("restoreClassProject", arguments); };
+saveStudentProjectCopy = function() { return p6RouteLegacy("saveStudentProjectCopy", arguments); };
+createIndividualTechnical = function() { return p6RouteLegacy("createIndividualTechnical", arguments); };
+assignTechnicalToCurrent = function() { return p6RouteLegacy("assignTechnicalToCurrent", arguments); };
+saveStudentTechnical = function() { return p6RouteLegacy("saveStudentTechnical", arguments); };
+createClassTechnical = function() { return p6RouteLegacy("createClassTechnical", arguments); };
+saveClassTechScore = function() { return p6RouteLegacy("saveClassTechScore", arguments); };
+saveClassTechStatus = function() { return p6RouteLegacy("saveClassTechStatus", arguments); };
+saveTechnicalTemplateEditor = function() { return p6RouteLegacy("saveTechnicalTemplateEditor", arguments); };
+deleteTechnicalTemplateConfirmed = function() { return p6RouteLegacy("deleteTechnicalTemplateConfirmed", arguments); };
 ensureProjectLibrary();
 ensureProjectBank();
 ensureBoothModel();

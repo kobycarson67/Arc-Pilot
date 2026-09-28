@@ -31,6 +31,8 @@
 <script src="src/arc_v8_artifacts.js"></script>
 <script src="src/arc_v8_booth_operations.js"></script>
 <script src="src/arc_v8_backup_recovery.js"></script>
+<script src="src/arc_v8_academic_administration.js"></script>
+<script src="src/arc_schedule_authority_adapter.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -407,6 +409,7 @@ let simulationStartupError = null, simulationSession = null;
 try { simulationSession = simulationManager.resume(); }
 catch (err) { simulationStartupError = err; }
 let state = simulationSession ? migrateStateData(simulationSession.state, CURRENT_SCHEMA_VERSION) : loadInitialState();
+const scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 function ensureScheduleModel() {
     if (!state.academicYear)
         state.academicYear = "2026-27";
@@ -509,8 +512,8 @@ function defaultDayPlan(d = new Date()) { let dow = d.getDay(); if (dow === 0 ||
 function dayPlan(d = new Date()) { ensureScheduleModel(); let base = defaultDayPlan(d), o = state.calendarOverrides[dateKey(d)]; return o ? Object.assign(Object.assign(Object.assign({}, base), o), { source: "override" }) : base; }
 function dayTypeLabel(x) { return { school: "School Day", no_school: "No School", holiday: "Holiday", pd: "PD / In-Service", other: "Special Day" }[x] || "School Day"; }
 function instructionModeLabel(x) { return { regular: "Regular Instruction", open_shop: "Open Shop", special: "Special Activity", none: "No Instruction" }[x] || "Regular Instruction"; }
-function updatePeriodTime(period, field, value, scheduleId = "regular") { ensureScheduleModel(); bellSchedule(scheduleId).times[period][field] = value; if (scheduleId === "regular")
-    state.periodTimes[period][field] = value; save(); renderScheduleSetup(); }
+function updatePeriodTime(period, field, value, scheduleId = "regular") { return scheduleAuthorityAdapter.runLegacy("bell-time", { period, field, value, scheduleId }, () => { ensureScheduleModel(); bellSchedule(scheduleId).times[period][field] = value; if (scheduleId === "regular")
+    state.periodTimes[period][field] = value; save(); renderScheduleSetup(); }); }
 function timeMinutes(v) { if (!v)
     return null; let [h, m] = v.split(":").map(Number); return h * 60 + m; }
 function periodTimeLabelFor(period, d = new Date()) { let plan = dayPlan(d), t = bellSchedule(plan.scheduleId).times[period] || {}; return t.start && t.end ? `${formatClock(t.start)}–${formatClock(t.end)}` : "Time not set"; }
@@ -1133,23 +1136,24 @@ function editCalendarDay(key, returnMonthOffset = 0) {
     document.body.appendChild(o);
 }
 function saveCalendarDay(key, returnMonthOffset = 0) {
+    return scheduleAuthorityAdapter.runLegacy("calendar-day", { key }, () => {
     let type = document.getElementById("calDayType").value, mode = document.getElementById("calMode").value;
     if (type !== "school" && mode !== "none")
         mode = "none";
     state.calendarOverrides[key] = { dayType: type, scheduleId: document.getElementById("calSchedule").value, instructionMode: mode };
     save();
-    showCalendar(Number(returnMonthOffset || 0), true);
+    showCalendar(Number(returnMonthOffset || 0), true); });
 }
-function clearCalendarDay(key, returnMonthOffset = 0) { delete state.calendarOverrides[key]; save(); showCalendar(Number(returnMonthOffset || 0), true); }
+function clearCalendarDay(key, returnMonthOffset = 0) { return scheduleAuthorityAdapter.runLegacy("calendar-day-clear", { key }, () => { delete state.calendarOverrides[key]; save(); showCalendar(Number(returnMonthOffset || 0), true); }); }
 function addCalendarEvent(key, returnMonthOffset = 0) {
     let title = document.getElementById("calEventTitle").value.trim();
     if (!title)
         return alert("Enter an event name.");
-    state.calendarEvents.push({ id: "calev_" + Date.now(), date: key, title, time: document.getElementById("calEventTime").value, remindDaysBefore: Number(document.getElementById("calEventReminder").value), createdAt: new Date().toISOString() });
+    return scheduleAuthorityAdapter.runLegacy("calendar-event", { key, title }, () => { state.calendarEvents.push({ id: "calev_" + Date.now(), date: key, title, time: document.getElementById("calEventTime").value, remindDaysBefore: Number(document.getElementById("calEventReminder").value), createdAt: new Date().toISOString() });
     save();
-    editCalendarDay(key, Number(returnMonthOffset || 0));
+    editCalendarDay(key, Number(returnMonthOffset || 0)); });
 }
-function deleteCalendarEvent(id, key, returnMonthOffset = 0) { state.calendarEvents = state.calendarEvents.filter(e => e.id !== id); save(); editCalendarDay(key, Number(returnMonthOffset || 0)); }
+function deleteCalendarEvent(id, key, returnMonthOffset = 0) { return scheduleAuthorityAdapter.runLegacy("calendar-event-delete", { id, key }, () => { state.calendarEvents = state.calendarEvents.filter(e => e.id !== id); save(); editCalendarDay(key, Number(returnMonthOffset || 0)); }); }
 function editSelectedCalendarDays(returnMonthOffset = 0) {
     let keys = sortedCalendarSelection();
     if (!keys.length)
@@ -1168,10 +1172,10 @@ function applySelectedCalendarDays(returnMonthOffset = 0) {
     let keys = sortedCalendarSelection(), type = document.getElementById("batchDayType").value, scheduleId = document.getElementById("batchSchedule").value, mode = document.getElementById("batchMode").value;
     if (type !== "school")
         mode = "none";
-    keys.forEach(key => state.calendarOverrides[key] = { dayType: type, scheduleId, instructionMode: mode });
+    return scheduleAuthorityAdapter.runLegacy("calendar-range", { keys: keys.slice(), dayType: type, scheduleId, instructionMode: mode }, () => { keys.forEach(key => state.calendarOverrides[key] = { dayType: type, scheduleId, instructionMode: mode });
     save();
     (_a = document.getElementById("batchOverlay")) === null || _a === void 0 ? void 0 : _a.remove();
-    showCalendar(Number(returnMonthOffset || 0), true);
+    showCalendar(Number(returnMonthOffset || 0), true); });
 }
 function upcomingCalendarItems(limit = 7) { let today = new Date(dateKey() + "T00:00:00"), items = []; for (let i = 0; i < limit; i++) {
     let d = new Date(today);
@@ -2020,7 +2024,8 @@ function archiveSectionSnapshot(sec, reason) {
     let roster = sectionStudents(sec.id).map(s => s.id), p = ((_a = state.pacingPlans) === null || _a === void 0 ? void 0 : _a[sec.id]) || null, pos = ((_b = state.sectionCurriculumProgress) === null || _b === void 0 ? void 0 : _b[sec.id]) || null;
     state.sectionArchives.push({ archiveId: "section_archive_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8), section: Object.assign({}, sec), year: state.academicYear, semester: state.semester, reason, studentIds: roster, pacingPlan: p ? JSON.parse(JSON.stringify(p)) : null, mapPosition: pos ? JSON.parse(JSON.stringify(pos)) : null, archivedAt: new Date().toISOString() });
 }
-function applySemesterTransition() {
+function applySemesterTransition() { return scheduleAuthorityAdapter.runLegacy("semester-transition", {}, applySemesterTransitionLegacy); }
+function applySemesterTransitionLegacy() {
     var _a;
     let choices = semesterTransitionChoices(), planning = Number(document.getElementById("transitionPlanning").value), target = document.getElementById("transitionSemester").value, targetYear = (document.getElementById("transitionAcademicYear").value || state.academicYear).trim(), err = validateSemesterTransition(choices, planning);
     if (err) {
@@ -2080,6 +2085,7 @@ function applySemesterTransition() {
     alert(`Semester transition applied. Prior records were preserved; the active schedule is now ${targetYear} ${target}.`);
 }
 function movePlanningPeriod(newPeriod) {
+    return scheduleAuthorityAdapter.runLegacy("planning-period", { newPeriod }, () => {
     ensureScheduleModel();
     let occupying = state.sections.find(x => x.period === newPeriod);
     let oldPlanning = state.planningPeriod;
@@ -2090,9 +2096,10 @@ function movePlanningPeriod(newPeriod) {
     }
     state.planningPeriod = newPeriod;
     save();
-    renderScheduleSetup();
+    renderScheduleSetup(); });
 }
 function moveSectionPeriod(sectionId, newPeriod) {
+    return scheduleAuthorityAdapter.runLegacy("section-period", { sectionId, newPeriod }, () => {
     let sec = state.sections.find(x => x.id === sectionId);
     if (!sec)
         return;
@@ -2113,7 +2120,7 @@ function moveSectionPeriod(sectionId, newPeriod) {
     }
     allStudents().forEach(s => (s.enrollments || []).filter(e => e.active && e.sectionId === sec.id).forEach(e => e.period = sec.period));
     save();
-    renderScheduleSetup();
+    renderScheduleSetup(); });
 }
 function manageSectionRoster(sectionId) {
     let sec = state.sections.find(x => x.id === sectionId);

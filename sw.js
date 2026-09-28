@@ -18,6 +18,8 @@ CORE.push('./engineering/arc_v8_production_academic_configuration.html');
 CORE.push('./engineering/arc_v8_production_academic_configuration_page.js');
 CORE.push('./src/arc_v8_production_academic_configuration.js?v=stage2-production-academic-configuration-1');
 CORE.push('./engineering/arc_v8_production_academic_configuration_page.js?v=stage2-production-academic-configuration-1');
+CORE.push('./src/arc_v8_academic_administration.js');
+CORE.push('./src/arc_schedule_authority_adapter.js');
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('arc-pilot-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();});

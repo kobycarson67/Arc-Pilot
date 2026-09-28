@@ -21,6 +21,7 @@ node tests/arc_v8_stage12_integration.test.js
 node tests/arc_v8_production_initialization.test.js
 node tests/arc_v8_academic_cutover.test.js
 node tests/arc_v8_stage2_verification.test.js
+node tests/arc_v8_production_academic_configuration.test.js
 
 # Simulation Foundation isolation, deterministic fixtures, and host contracts
 node tests/simulation_foundation.test.js

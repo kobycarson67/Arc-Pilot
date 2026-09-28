@@ -13,6 +13,11 @@ CORE.push('./engineering/arc_v8_stage2_verification.html');
 CORE.push('./engineering/arc_v8_stage2_verification_page.js');
 CORE.push('./src/arc_v8_stage2_verification.js?v=stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1');
 CORE.push('./engineering/arc_v8_stage2_verification_page.js?v=stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1');
+CORE.push('./src/arc_v8_production_academic_configuration.js');
+CORE.push('./engineering/arc_v8_production_academic_configuration.html');
+CORE.push('./engineering/arc_v8_production_academic_configuration_page.js');
+CORE.push('./src/arc_v8_production_academic_configuration.js?v=stage2-production-academic-configuration-1');
+CORE.push('./engineering/arc_v8_production_academic_configuration_page.js?v=stage2-production-academic-configuration-1');
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('arc-pilot-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();});
@@ -21,7 +26,7 @@ self.addEventListener('fetch',event=>{
   const url=new URL(event.request.url);
   if(url.origin!==self.location.origin)return;
   if(event.request.mode==='navigate'){
-    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':'./index.html';
+    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':url.pathname.endsWith('/engineering/arc_v8_production_academic_configuration.html')?'./engineering/arc_v8_production_academic_configuration.html':'./index.html';
     event.respondWith(fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;}).catch(()=>target==='./index.html'?caches.match('./index.html'):caches.match(target)));
     return;
   }

@@ -59,4 +59,7 @@ jobs:
           grep --fixed-strings 'src/simulation_foundation.js' "$verify_dir/index.html"
           grep --fixed-strings 'Demo & Testing' "$verify_dir/index.html"
           grep --fixed-strings "build:'" "$verify_dir/app-build.js"
+          grep --fixed-strings "cleanup-isolation-repair-1" "$verify_dir/app-build.js"
+          grep --fixed-strings "RUNTIME='stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1'" "$verify_dir/src/arc_v8_stage2_verification.js"
+          grep --fixed-strings "arc_v8_stage2_verification.js?v=stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1" "$verify_dir/engineering/arc_v8_stage2_verification.html"
           echo "Verified public ARC Pages deployment for $GITHUB_SHA"

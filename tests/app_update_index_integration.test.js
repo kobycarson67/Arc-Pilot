@@ -21,5 +21,5 @@ assert(controller.includes('Update check failed — Try Again.'),'failure state 
 assert(!/(localStorage\.clear|indexedDB\.deleteDatabase)/.test(controller),'update workflow must not clear classroom data');
 assert(html.includes('installOverscrollGuard()'),'Samsung pull-to-refresh protection must remain');
 assert(sw.includes("request.mode==='navigate'")&&sw.includes("'./index.html'")&&sw.includes('caches.match(target)'),'offline navigation fallback must remain');
-assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2'"),'tested shell must have a truthful stable build label');
+assert(build.includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1'"),'tested shell must have a truthful stable build label');
 console.log('PASS App update Settings and safety contracts');

@@ -79,7 +79,7 @@ test('Teaching Tips uses distinct lesson-connected shop guidance',()=>{
 
 test('schema remains v7 and build is truthful',()=>{
   assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-  assert(fs.readFileSync('app-build.js','utf8').includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2'"));
+  assert(fs.readFileSync('app-build.js','utf8').includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1'"));
 });
 
 if(!process.exitCode)console.log('\n'+pass+'/'+total+' Pre-Titanium UX Stabilization tests passed.');

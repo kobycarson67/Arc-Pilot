@@ -9,4 +9,7 @@ assert(workflow.includes("grep --fixed-strings 'App & Updates'"),'guardrail must
 assert(workflow.includes("grep --fixed-strings 'CURRENT_SCHEMA_VERSION = 7'"),'guardrail must verify current schema shell');
 assert(workflow.includes("grep --fixed-strings 'ensureBoothModel'"),'guardrail must verify Booth Manager shell');
 assert(workflow.includes('grep --fixed-strings "build:\'"'),'guardrail must verify the deployed build identifier');
+assert(workflow.includes('cleanup-isolation-repair-1'),'guardrail must verify the cleanup-isolation build authority');
+assert(workflow.includes("RUNTIME='stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1'"),'guardrail must verify the repaired bridge runtime');
+assert(workflow.includes('arc_v8_stage2_verification.js?v=stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1'),'guardrail must verify the repaired query-keyed bridge asset');
 console.log('PASS Pages live-deployment guardrail contracts');

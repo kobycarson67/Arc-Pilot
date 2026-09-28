@@ -46,6 +46,21 @@ Required result:
 
 Inspection is read-only. If production exists or any authority is unexplained, stop without pressing initialization.
 
+### Immediate gate result
+
+**PASSED — instructor-reported Samsung Chrome inspection**
+
+- `arc_classroom_v8`: `exists: false`
+- complete `knownDatabases`: `arc_classroom_v8_engineering_verification` only
+- `arc_classroom_v8_stage2_verification`: absent
+- initialization performed: no
+- academic activation performed: no
+- verification fixture recreated: no
+- cleanup rerun: no
+- other mutation performed: no
+
+This result authorizes requesting the separately bounded production-initialization decision. It does not itself authorize the mutation.
+
 ## Separately authorized initialization action
 
 Only after the read-only result is returned and the instructor separately authorizes the production mutation may the Samsung operator enter:
@@ -57,6 +72,12 @@ Only after the read-only result is returned and the instructor separately author
 - Exact confirmation: `INITIALIZE PROTECTED EMPTY PRODUCTION`.
 
 The operator may then press **Initialize protected empty production** exactly once.
+
+The required authorization must identify the operator string and be equivalent to:
+
+> I authorize one bounded Samsung Chrome execution of **Initialize protected empty production** against exact database `arc_classroom_v8`, using published commit `52b7d1b3ed920c0e889e211e41ea34b6e0395bbd`, tree `521e44fa1254e3f70b47b91d99d5749f7dabdcc0`, rollback reference `rollback/pre-stage-14-stage-2-production-v8-initialization`, and operator authority `<EXACT OPERATOR IDENTITY>`. This authorization creates only the protected empty Schema 8 / IndexedDB 10 / 53-store production foundation and its verified recovery packages. Academic authority remains `V7_ONLY`. It does not authorize Students, imports, academic configuration or activation, v7 write shutdown, fixture recreation, cleanup, or Stage 3.
+
+Without that explicit authorization and exact operator identity, do not enter the confirmation or press initialization.
 
 ## Required success evidence
 

@@ -36,6 +36,8 @@ The local checkpoint manifest records `authorityState: V7_ONLY`, `targetAuthorit
 
 ## Remaining acceptance gates
 
+The immediate protected-production initialization procedure and its authorization boundary are recorded in `ARC_SCHEMA_V8_STAGE_14_STAGE_2_PRODUCTION_INITIALIZATION_CHECKPOINT.md`.
+
 1. Separately authorize and execute real-browser Stage 1 initialization.
 2. Verify the protected empty production database and create the Stage 2 recovery point.
 3. Wire and publish the bounded academic consumers only after those gates.

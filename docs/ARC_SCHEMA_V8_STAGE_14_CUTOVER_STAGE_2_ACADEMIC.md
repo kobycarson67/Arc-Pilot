@@ -40,12 +40,12 @@ The local checkpoint manifest records `authorityState: V7_ONLY`, `targetAuthorit
 2. Verify the protected empty production database and create the Stage 2 recovery point.
 3. Wire and publish the bounded academic consumers only after those gates.
 4. Prove every academic read/write uses v8 and independent v7 academic writes stop.
-5. Run installed Samsung PWA and direct Chrome physical verification.
+5. After production initialization and bounded academic-consumer activation, run the production academic cutover checks in the installed Samsung PWA and direct Chrome. The isolated engineering bridge and Cleanup Isolation Repair 1 lifecycle checkpoint are physically accepted, but they do not substitute for this production authority-transition verification.
 6. Keep real Student production data prohibited until the separate Stage 15 authorization.
 
 ## Status
 
-- Stage 14 / Cutover Implementation Stage 2: **IMPLEMENTED LOCALLY — PHYSICAL VERIFICATION PENDING**
+- Stage 14 / Cutover Implementation Stage 2: **ENGINEERING PHYSICAL CHECKPOINT ACCEPTED — ACADEMIC AUTHORITY TRANSITION NOT FORMALLY ACCEPTED**
 - Academic Classroom Authority: **V7_ONLY**
 - Production Readiness: **NOT ACHIEVED**
 - Classroom Readiness: **NOT ACHIEVED**

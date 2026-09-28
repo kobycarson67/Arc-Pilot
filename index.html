@@ -35,6 +35,7 @@
 <script src="src/arc_schedule_authority_adapter.js"></script>
 <script src="src/arc_academic_consumer_projection.js"></script>
 <script src="src/arc_academic_authority_adapter.js"></script>
+<script src="src/arc_attendance_authority_adapter.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -413,6 +414,7 @@ catch (err) { simulationStartupError = err; }
 let state = simulationSession ? migrateStateData(simulationSession.state, CURRENT_SCHEMA_VERSION) : loadInitialState();
 const scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const attendanceAuthorityAdapter = ArcAttendanceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 function ensureScheduleModel() {
     if (!state.academicYear)
         state.academicYear = "2026-27";
@@ -2701,10 +2703,10 @@ function attendanceRecord(studentId, sectionId, d, create) { var _a, _b; if (sec
     b.students[studentId] = { status: "present", updatedAt: new Date().toISOString() }; return b.students[studentId] || null; }
 function attendanceStatus(studentId, sectionId, d) { var _a, _b; if (sectionId === void 0) { sectionId = (_a = activeSection()) === null || _a === void 0 ? void 0 : _a.id; } if (d === void 0) { d = dateKey(); } return ((_b = attendanceRecord(studentId, sectionId, d, false)) === null || _b === void 0 ? void 0 : _b.status) || "present"; }
 function attendanceStatusLabel(x) { return ATTENDANCE_STATUSES[x] || "Present"; }
-function setAttendanceStatus(studentId, status, d = dateKey()) { let sec = activeSection(), student = sectionStudents(sec.id).find(x => x.id === studentId); if (!sec || !student || !ATTENDANCE_STATUSES[status])
-    return; let r = attendanceRecord(studentId, sec.id, d, true), old = r.status || "present"; r.status = status; r.updatedAt = new Date().toISOString(); let prev = current; current = student; logEvent("profile", "attendance_status", "Attendance — " + d, attendanceStatusLabel(old), attendanceStatusLabel(status), `Recorded for ${sec.period}${ordinal(sec.period)} Period.`); current = prev; save(); renderAttendance(d); }
+function setAttendanceStatus(studentId, status, d = dateKey()) { let sec = activeSection(), student = sec && sectionStudents(sec.id).find(x => x.id === studentId); if (!sec || !student || !ATTENDANCE_STATUSES[status])
+    return; return attendanceAuthorityAdapter.runLegacy("attendance-set", { studentId, sectionId: sec.id, schoolDate: d, status: ATTENDANCE_STATUSES[status] }, () => { let r = attendanceRecord(studentId, sec.id, d, true), old = r.status || "present"; r.status = status; r.updatedAt = new Date().toISOString(); let prev = current; current = student; logEvent("profile", "attendance_status", "Attendance — " + d, attendanceStatusLabel(old), attendanceStatusLabel(status), `Recorded for ${sec.period}${ordinal(sec.period)} Period.`); current = prev; save(); renderAttendance(d); }); }
 function markAllAttendancePresent(d = dateKey()) { let sec = activeSection(); if (!sec)
-    return; sectionStudents(sec.id).forEach(st => { let r = attendanceRecord(st.id, sec.id, d, true); r.status = "present"; r.updatedAt = new Date().toISOString(); }); save(); renderAttendance(d); }
+    return; return attendanceAuthorityAdapter.runLegacy("attendance-mark-all-present", { sectionId: sec.id, schoolDate: d }, () => { sectionStudents(sec.id).forEach(st => { let r = attendanceRecord(st.id, sec.id, d, true); r.status = "present"; r.updatedAt = new Date().toISOString(); }); save(); renderAttendance(d); }); }
 function attendanceSummary(student, sectionId) { let rows = Object.values(state.attendanceRecords || {}).filter(b => { var _a; return b.sectionId === sectionId && ((_a = b.students) === null || _a === void 0 ? void 0 : _a[student.id]); }).map(b => ({ date: b.date, status: b.students[student.id].status || "present" })).sort((a, b) => b.date.localeCompare(a.date)); let counts = {}; Object.keys(ATTENDANCE_STATUSES).forEach(k => counts[k] = rows.filter(x => x.status === k).length); return { rows, counts, total: rows.filter(x => x.status !== "noclass").length }; }
 function activePasses(sectionId) { var _a; if (sectionId === void 0) { sectionId = (_a = activeSection()) === null || _a === void 0 ? void 0 : _a.id; } return (state.passLog || []).filter(x => x.sectionId === sectionId && !x.returnedAt); }
 function studentPasses(studentId, sectionId) { var _a; if (sectionId === void 0) { sectionId = (_a = activeSection()) === null || _a === void 0 ? void 0 : _a.id; } return (state.passLog || []).filter(x => x.studentId === studentId && (!sectionId || x.sectionId === sectionId)).sort((a, b) => String(b.outAt).localeCompare(String(a.outAt))); }
@@ -2716,11 +2718,11 @@ function refreshPassSourceView(dateKeyValue) {
     else
         renderAttendance(dateKeyValue || dateKey());
 }
-function startStudentPass(studentId, reason) { let sec = activeSection(), st = sectionStudents(sec.id).find(x => x.id === studentId); if (!sec || !st)
+function startStudentPass(studentId, reason) { let sec = activeSection(), st = sec && sectionStudents(sec.id).find(x => x.id === studentId); if (!sec || !st)
     return; let existing = activePasses(sec.id).find(x => x.studentId === studentId); if (existing)
-    return alert(`${st.name} is already marked out of the room.`); let x = { id: "pass_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), studentId, sectionId: sec.id, period: sec.period, date: dateKey(), reason, reasonLabel: PASS_REASONS[reason] || reason, outAt: new Date().toISOString(), returnedAt: null }; state.passLog.push(x); save(); refreshPassSourceView(x.date); }
+    return alert(`${st.name} is already marked out of the room.`); return attendanceAuthorityAdapter.runLegacy("pass-start", { studentId, sectionId: sec.id, schoolDate: dateKey(), reasonCode: reason }, () => { let x = { id: "pass_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), studentId, sectionId: sec.id, period: sec.period, date: dateKey(), reason, reasonLabel: PASS_REASONS[reason] || reason, outAt: new Date().toISOString(), returnedAt: null }; state.passLog.push(x); save(); refreshPassSourceView(x.date); return x; }); }
 function returnStudentPass(passId) { let x = (state.passLog || []).find(x => x.id === passId); if (!x)
-    return; x.returnedAt = new Date().toISOString(); save(); refreshPassSourceView(x.date); }
+    return; return attendanceAuthorityAdapter.runLegacy("pass-return", { passEventId: passId, studentId: x.studentId, sectionId: x.sectionId, schoolDate: x.date }, () => { x.returnedAt = new Date().toISOString(); save(); refreshPassSourceView(x.date); return x; }); }
 function closeQuickPassMenu() { let o = document.getElementById("quickPassOverlay"); if (o)
     o.remove(); }
 function showQuickPassMenu(studentId) {

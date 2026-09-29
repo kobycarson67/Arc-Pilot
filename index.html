@@ -37,6 +37,7 @@
 <script src="src/arc_academic_authority_adapter.js"></script>
 <script src="src/arc_attendance_authority_adapter.js"></script>
 <script src="src/arc_project_technical_authority_adapter.js"></script>
+<script src="src/arc_competency_evidence_authority_adapter.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -417,6 +418,8 @@ const scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityS
 const academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const attendanceAuthorityAdapter = ArcAttendanceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const projectTechnicalAuthorityAdapter = ArcProjectTechnicalAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const competencyEvidenceAuthorityAdapter = ArcCompetencyEvidenceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAuthorityAdapter.runLegacy(action, payload, mutation); }
 function ensureScheduleModel() {
     if (!state.academicYear)
         state.academicYear = "2026-27";
@@ -3046,20 +3049,20 @@ function logChange(code, oldVal, newVal, undone = false) {
     let c = byCode(code);
     current.history.push({ time: new Date().toISOString(), category: "competencies", type: undone ? "competency_undo" : "competency_change", code, name: c ? c.name : code, old: oldVal || 0, new: newVal || 0, undone });
 }
-function setRating(code, n) { var _a; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = n; window.openCompetencyCode = code; if (old === next) return; current.ratings[code] = next; stampCompetencyRatingScope(current, code); logChange(code, old, next, false); window.lastCompetencyChange = { code, old, next }; save(); renderModal(); }
-function undoCompetencyChange(code) { let x = window.lastCompetencyChange; if (!x || x.code !== code || current.ratings[code] !== x.next) return alert("This rating can no longer be undone from the quick confirmation."); let present = current.ratings[code]; if (x.old === null || x.old === undefined) { delete current.ratings[code]; if (current.ratingScopes) delete current.ratingScopes[code]; } else { current.ratings[code] = x.old; stampCompetencyRatingScope(current, code); } logChange(code, present, x.old, true); window.lastCompetencyChange = { code, old: present, next: x.old }; window.openCompetencyCode = code; save(); renderModal(); }
-function setCompetencyState(code, state) { var _a, _b; window.openCompetencyCode = code; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = old === state ? null : state; if (next === null) {
+function setRating(code, n) { return p7RouteLegacy("setRating", { code, level: n }, function () { var _a; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = n; window.openCompetencyCode = code; if (old === next) return; current.ratings[code] = next; stampCompetencyRatingScope(current, code); logChange(code, old, next, false); window.lastCompetencyChange = { code, old, next }; save(); renderModal(); }); }
+function undoCompetencyChange(code) { return p7RouteLegacy("undoCompetencyChange", { code }, function () { let x = window.lastCompetencyChange; if (!x || x.code !== code || current.ratings[code] !== x.next) return alert("This rating can no longer be undone from the quick confirmation."); let present = current.ratings[code]; if (x.old === null || x.old === undefined) { delete current.ratings[code]; if (current.ratingScopes) delete current.ratingScopes[code]; } else { current.ratings[code] = x.old; stampCompetencyRatingScope(current, code); } logChange(code, present, x.old, true); window.lastCompetencyChange = { code, old: present, next: x.old }; window.openCompetencyCode = code; save(); renderModal(); }); }
+function setCompetencyState(code, state) { return p7RouteLegacy("setCompetencyState", { code, state }, function () { var _a, _b; window.openCompetencyCode = code; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null, next = old === state ? null : state; if (next === null) {
     delete current.ratings[code]; if (current.ratingScopes) delete current.ratingScopes[code];
 }
 else {
     current.ratings[code] = next; stampCompetencyRatingScope(current, code);
-} logEvent("competencies", "competency_state", code + " — " + (((_b = byCode(code)) === null || _b === void 0 ? void 0 : _b.name) || code), ratingDisplay(old), ratingDisplay(next), state === "NE" ? "Student had an opportunity but provided no evidence / no attempt." : "Student absent/excused; excluded from grade."); save(); renderModal(); }
-function clearRating(code) { var _a, _b; window.openCompetencyCode = code; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null; if (old !== null) {
+} logEvent("competencies", "competency_state", code + " — " + (((_b = byCode(code)) === null || _b === void 0 ? void 0 : _b.name) || code), ratingDisplay(old), ratingDisplay(next), state === "NE" ? "Student had an opportunity but provided no evidence / no attempt." : "Student absent/excused; excluded from grade."); save(); renderModal(); }); }
+function clearRating(code) { return p7RouteLegacy("clearRating", { code }, function () { var _a, _b; window.openCompetencyCode = code; let old = (_a = current.ratings[code]) !== null && _a !== void 0 ? _a : null; if (old !== null) {
     delete current.ratings[code];
     if (current.ratingScopes) delete current.ratingScopes[code];
     logEvent("competencies", "competency_clear", code + " — " + (((_b = byCode(code)) === null || _b === void 0 ? void 0 : _b.name) || code), ratingDisplay(old), "Not Assessed", "Competency cleared.");
-} save(); renderModal(); }
-function undoLastChange() {
+} save(); renderModal(); }); }
+function undoLastChange() { return p7RouteLegacy("undoLastChange", {}, function () {
     if (!current.history || !current.history.length)
         return alert("There is no competency change to undo yet.");
     let last = current.history[current.history.length - 1];
@@ -3069,7 +3072,7 @@ function undoLastChange() {
     logChange(last.code, present, last.old || 0, true);
     save();
     renderModal();
-}
+}); }
 function setWork(n) { let old = current.work.rating || 0, next = old === n ? 0 : n; current.work.rating = next; if (old !== next)
     logEvent("workplace", "workplace_rating", "Workplace & Shop Practices", old ? old + " " + ratingNames[old] : "Not Rated", next ? next + " " + ratingNames[next] : "Not Rated", "Overall workplace rating changed."); save(); renderModal(); }
 function setWorkCode(k) { let old = current.work.code || "", next = old === k ? "" : k; current.work.code = next; if (old !== next)

@@ -16,6 +16,7 @@ node tests/arc_v8_gradebook.test.js
 node tests/arc_v8_attendance.test.js
 node tests/arc_attendance_authority_adapter.test.js
 node tests/arc_project_technical_authority_adapter.test.js
+node tests/arc_competency_evidence_authority_adapter.test.js
 node tests/arc_v8_artifacts.test.js
 node tests/arc_v8_booth_operations.test.js
 node tests/arc_v8_backup_recovery.test.js

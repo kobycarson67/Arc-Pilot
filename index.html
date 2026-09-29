@@ -29,6 +29,7 @@
 <script src="src/arc_v8_behavior.js"></script>
 <script src="src/arc_v8_gradebook.js"></script>
 <script src="src/arc_gradebook_authority_adapter.js"></script>
+<script src="src/arc_student_history_projection.js"></script>
 <script src="src/arc_v8_attendance.js"></script>
 <script src="src/arc_v8_artifacts.js"></script>
 <script src="src/arc_v8_booth_operations.js"></script>
@@ -424,6 +425,7 @@ const projectTechnicalAuthorityAdapter = ArcProjectTechnicalAuthorityAdapter.cre
 const competencyEvidenceAuthorityAdapter = ArcCompetencyEvidenceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const workplaceSafetyBehaviorAuthorityAdapter = ArcWorkplaceSafetyBehaviorAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const gradebookAuthorityAdapter = ArcGradebookAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const studentHistoryProjection = ArcStudentHistoryProjection.create({ authorityState: "V7_ONLY" });
 function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAuthorityAdapter.runLegacy(action, payload, mutation); }
 function ensureScheduleModel() {
     if (!state.academicYear)

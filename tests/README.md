@@ -23,6 +23,7 @@ node tests/arc_v8_backup_recovery.test.js
 node tests/arc_v8_behavior.test.js
 node tests/arc_workplace_safety_behavior_authority_adapter.test.js
 node tests/arc_gradebook_authority_adapter.test.js
+node tests/arc_student_history_projection.test.js
 node tests/arc_v8_stage12_integration.test.js
 node tests/arc_v8_production_initialization.test.js
 node tests/arc_v8_academic_cutover.test.js

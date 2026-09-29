@@ -42,6 +42,9 @@
 <script src="src/arc_project_technical_authority_adapter.js"></script>
 <script src="src/arc_competency_evidence_authority_adapter.js"></script>
 <script src="src/arc_workplace_safety_behavior_authority_adapter.js"></script>
+<script src="src/arc_v8_curriculum_pacing.js"></script>
+<script src="src/arc_curriculum_pacing_authority_adapter.js"></script>
+<script src="src/arc_curriculum_pacing_ui.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -425,6 +428,7 @@ const projectTechnicalAuthorityAdapter = ArcProjectTechnicalAuthorityAdapter.cre
 const competencyEvidenceAuthorityAdapter = ArcCompetencyEvidenceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const workplaceSafetyBehaviorAuthorityAdapter = ArcWorkplaceSafetyBehaviorAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const gradebookAuthorityAdapter = ArcGradebookAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const curriculumPacingAuthorityAdapter = ArcCurriculumPacingAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const studentHistoryProjection = ArcStudentHistoryProjection.create({ authorityState: "V7_ONLY" });
 function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAuthorityAdapter.runLegacy(action, payload, mutation); }
 function ensureScheduleModel() {
@@ -4238,6 +4242,32 @@ removeWorkplaceDeduction = function() { return p8RouteLegacy("removeWorkplaceDed
 setWorkplaceDayStatus = function() { return p8RouteLegacy("setWorkplaceDayStatus", arguments); };
 saveBehaviorEvent = function() { return p8RouteLegacy("saveBehaviorEvent", arguments); };
 confirmDeleteBehavior = function() { return p8RouteLegacy("confirmDeleteBehavior", arguments); };
+const p10bUiLegacyHandlers = {
+    renderCurriculumHub, setSectionCurriculumPosition, clearSectionCurriculumPosition,
+    setCurriculumPosition, clearCurriculumPosition, renderPacingPlanner,
+    showAutoBuildPacing, confirmAutoBuildPacing, savePacingDuration,
+    updatePacingAnchor, togglePacingOpenShop, applyPacingStatus,
+    movePacingItem, removePacingItem, createPacingHistorySnapshot, renderPacingHistory
+};
+function p10bUiRouteLegacy(name, args) {
+    return curriculumPacingAuthorityAdapter.runLegacy(name, { arguments: Array.from(args) }, () => p10bUiLegacyHandlers[name].apply(null, args));
+}
+renderCurriculumHub = function() { return p10bUiRouteLegacy("renderCurriculumHub", arguments); };
+setSectionCurriculumPosition = function() { return p10bUiRouteLegacy("setSectionCurriculumPosition", arguments); };
+clearSectionCurriculumPosition = function() { return p10bUiRouteLegacy("clearSectionCurriculumPosition", arguments); };
+setCurriculumPosition = function() { return p10bUiRouteLegacy("setCurriculumPosition", arguments); };
+clearCurriculumPosition = function() { return p10bUiRouteLegacy("clearCurriculumPosition", arguments); };
+renderPacingPlanner = function() { return p10bUiRouteLegacy("renderPacingPlanner", arguments); };
+showAutoBuildPacing = function() { return p10bUiRouteLegacy("showAutoBuildPacing", arguments); };
+confirmAutoBuildPacing = function() { return p10bUiRouteLegacy("confirmAutoBuildPacing", arguments); };
+savePacingDuration = function() { return p10bUiRouteLegacy("savePacingDuration", arguments); };
+updatePacingAnchor = function() { return p10bUiRouteLegacy("updatePacingAnchor", arguments); };
+togglePacingOpenShop = function() { return p10bUiRouteLegacy("togglePacingOpenShop", arguments); };
+applyPacingStatus = function() { return p10bUiRouteLegacy("applyPacingStatus", arguments); };
+movePacingItem = function() { return p10bUiRouteLegacy("movePacingItem", arguments); };
+removePacingItem = function() { return p10bUiRouteLegacy("removePacingItem", arguments); };
+createPacingHistorySnapshot = function() { return p10bUiRouteLegacy("createPacingHistorySnapshot", arguments); };
+renderPacingHistory = function() { return p10bUiRouteLegacy("renderPacingHistory", arguments); };
 ensureProjectLibrary();
 ensureProjectBank();
 ensureBoothModel();

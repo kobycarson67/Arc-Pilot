@@ -10,7 +10,7 @@
     if(state===ISOLATED&&(databaseName!==ISOLATED_DB||!service))fail('ISOLATED_AUTHORITY_REQUIRED','v8 Curriculum/Pacing verification is hard-bound to its dedicated nonproduction database.',{databaseName:databaseName});
     function runLegacy(action,payload,operation){if(state!==V7)fail('LEGACY_AUTHORITY_BLOCKED','Legacy Curriculum/Pacing behavior is available only under V7_ONLY.');if(typeof operation!=='function')fail('LEGACY_OPERATION_REQUIRED','V7_ONLY requires exactly one accepted legacy operation.',{action:action});return operation(payload);}
     async function runIsolated(action,payload){if(state!==ISOLATED)fail('V8_AUTHORITY_BLOCKED','Isolated v8 Curriculum/Pacing execution is disabled while classroom authority remains V7_ONLY.');if(READS.indexOf(action)<0&&COMMANDS.indexOf(action)<0)fail('UNSUPPORTED_CURRICULUM_ACTION','Unknown Curriculum/Pacing action.',{action:action});return service[action](payload||{});}
-    return{authorityState:state,databaseName:state===ISOLATED?databaseName:null,runLegacy:runLegacy,runIsolated:runIsolated,isAuthoritativeV8:false,dualWrite:false,uiConnected:false};
+    return{authorityState:state,databaseName:state===ISOLATED?databaseName:null,runLegacy:runLegacy,runIsolated:runIsolated,isAuthoritativeV8:false,dualWrite:false,uiConnected:state===ISOLATED};
   }
   return{create:create,states:Object.freeze({V7_ONLY:V7,V8_ISOLATED_VERIFICATION:ISOLATED}),isolatedDatabaseName:ISOLATED_DB,readInterfaces:READS.slice(),commandInterfaces:COMMANDS.slice()};
 }));

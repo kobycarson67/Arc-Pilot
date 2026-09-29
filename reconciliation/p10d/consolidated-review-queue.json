@@ -1,0 +1,230 @@
+{
+  "artifactId": "arc-p10d-r1a-consolidated-review-queue-v1",
+  "sourceManifestHash": "960dc548c984c0f6aed591f40856cb2947491928e31d71e3a8d65b0fbca501a2",
+  "sourceQueueCount": 408,
+  "principle": "Preserve exact source content independently from optional normalized relationships.",
+  "counts": {
+    "consolidatedEntries": 8,
+    "trueInstructorDecisions": 0,
+    "sourceVerificationDecisions": 2,
+    "mechanicalFollowOnGroups": 2,
+    "safeUnresolvedGroups": 4,
+    "originalItems": 408,
+    "originalItemsMapped": 408,
+    "originalItemsMechanical": 149,
+    "originalItemsSafeUnresolved": 259,
+    "originalItemsBlockingImport": 0
+  },
+  "importBlockers": [
+    {
+      "decisionId": "SV-WT-STANDARDS-SOURCE",
+      "scope": "WT Standards, Essential designations and dependent normalized Standard links only"
+    },
+    {
+      "decisionId": "SV-AWT-STANDARDS-SOURCE",
+      "scope": "AWT Standards, Essential designations and dependent normalized Standard links only"
+    }
+  ],
+  "trueInstructorDecisionPresentation": [],
+  "recommendedReviewOrder": [
+    "Obtain or explicitly identify the authoritative WT and AWT Standards source documents.",
+    "Resolve the two source-verification entries.",
+    "In a later disposition-freeze stage, mechanically separate exact Curriculum/Lesson content approval from optional relationship approval.",
+    "Preserve candidate-only Curriculum/Competency, Lesson/Competency, Lesson/Curriculum and Activity/Evidence links as absent.",
+    "Only open new pedagogical mapping decisions when explicit accepted authority is supplied."
+  ],
+  "decisions": [
+    {
+      "decisionId": "SV-WT-STANDARDS-SOURCE",
+      "category": "external authoritative-source verification",
+      "decisionClass": "source-verification decision",
+      "course": "wt",
+      "blocks": [
+        "authoritative WT Standard catalog/version import",
+        "WT Essential designation import",
+        "normalized WT Standard links"
+      ],
+      "doesNotBlock": [
+        "exact WT Curriculum raw content",
+        "exact WT Lesson raw content",
+        "P7 Competency preservation"
+      ],
+      "explanation": "Repository wording cannot be preferred over an unavailable authoritative WT source document.",
+      "choices": [
+        {
+          "id": "SUPPLY_SOURCE",
+          "label": "Supply authoritative WT source",
+          "effect": "Compare exact codes, wording, ordering and essential designations."
+        },
+        {
+          "id": "CONFIRM_REPOSITORY_COPY",
+          "label": "Confirm repository copy as authority",
+          "effect": "A separate disposition-freeze stage may approve the repository catalog."
+        },
+        {
+          "id": "DEFER",
+          "label": "Defer verification",
+          "effect": "Keep WT Standards and dependent normalized links blocked; preserve independent raw content only."
+        }
+      ],
+      "affectedOriginalItemCount": 0,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "SV-WT-STANDARDS-SOURCE"
+      }
+    },
+    {
+      "decisionId": "SV-AWT-STANDARDS-SOURCE",
+      "category": "external authoritative-source verification",
+      "decisionClass": "source-verification decision",
+      "course": "awt",
+      "blocks": [
+        "authoritative AWT Standard catalog/version import",
+        "AWT Essential designation import",
+        "normalized AWT Standard links"
+      ],
+      "doesNotBlock": [
+        "exact AWT Curriculum raw content",
+        "exact AWT Lesson raw content",
+        "P7 Competency preservation"
+      ],
+      "explanation": "Repository wording cannot be preferred over an unavailable authoritative AWT source document.",
+      "choices": [
+        {
+          "id": "SUPPLY_SOURCE",
+          "label": "Supply authoritative AWT source",
+          "effect": "Compare exact codes, wording, ordering and essential designations."
+        },
+        {
+          "id": "CONFIRM_REPOSITORY_COPY",
+          "label": "Confirm repository copy as authority",
+          "effect": "A separate disposition-freeze stage may approve the repository catalog."
+        },
+        {
+          "id": "DEFER",
+          "label": "Defer verification",
+          "effect": "Keep AWT Standards and dependent normalized links blocked; preserve independent raw content only."
+        }
+      ],
+      "affectedOriginalItemCount": 0,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "SV-AWT-STANDARDS-SOURCE"
+      }
+    },
+    {
+      "decisionId": "MF-CURRICULUM-CONTENT-SEPARATION",
+      "category": "Standard-reference interpretation / Curriculum → Standard relationship",
+      "decisionClass": "mechanical follow-on mapping",
+      "course": "both",
+      "blocks": [],
+      "doesNotBlock": [
+        "Curriculum item preservation/import"
+      ],
+      "explanation": "A Curriculum item can preserve exact rawStandardsText while only exact unambiguous Standard codes become links. Ranges, course-wide references and contextual prose remain source text, not mandatory normalized links.",
+      "choices": [],
+      "affectedOriginalItemCount": 35,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "MF-CURRICULUM-CONTENT-SEPARATION"
+      }
+    },
+    {
+      "decisionId": "MF-LESSON-CONTENT-SEPARATION",
+      "category": "Standard-reference interpretation / Lesson → Standard relationship",
+      "decisionClass": "mechanical follow-on mapping",
+      "course": "both",
+      "blocks": [],
+      "doesNotBlock": [
+        "Lesson definition/version preservation/import"
+      ],
+      "explanation": "A Lesson can preserve exact sourceStandardsText while only exact unambiguous Standard codes become links. Contextual instructor-selection language remains source text.",
+      "choices": [],
+      "affectedOriginalItemCount": 114,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "MF-LESSON-CONTENT-SEPARATION"
+      }
+    },
+    {
+      "decisionId": "SU-CURRICULUM-COMPETENCY-CANDIDATES",
+      "category": "Curriculum → Competency relationship",
+      "decisionClass": "safe unresolved relationship",
+      "course": "both",
+      "blocks": [],
+      "doesNotBlock": [
+        "Curriculum preservation/import",
+        "Competency preservation/import"
+      ],
+      "explanation": "Shared Standard codes do not assert Curriculum-to-Competency relationships. Candidate links remain absent unless later accepted authority explicitly selects them.",
+      "choices": [],
+      "affectedOriginalItemCount": 45,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "SU-CURRICULUM-COMPETENCY-CANDIDATES"
+      }
+    },
+    {
+      "decisionId": "SU-LESSON-COMPETENCY-CANDIDATES",
+      "category": "Lesson → Competency relationship",
+      "decisionClass": "safe unresolved relationship",
+      "course": "both",
+      "blocks": [],
+      "doesNotBlock": [
+        "Lesson preservation/import",
+        "Competency preservation/import"
+      ],
+      "explanation": "Shared Standard codes do not assert Lesson-to-Competency relationships. Exact WT competency-code links already approved by P10D are unaffected; no AWT mapping is invented.",
+      "choices": [],
+      "affectedOriginalItemCount": 107,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "SU-LESSON-COMPETENCY-CANDIDATES"
+      }
+    },
+    {
+      "decisionId": "SU-LESSON-CURRICULUM-CANDIDATES",
+      "category": "Lesson → Curriculum relationship",
+      "decisionClass": "safe unresolved relationship",
+      "course": "both",
+      "blocks": [],
+      "doesNotBlock": [
+        "Lesson preservation/import",
+        "Curriculum preservation/import"
+      ],
+      "explanation": "Shared Standard codes do not identify one authoritative Curriculum item. Optional candidate links remain absent.",
+      "choices": [],
+      "affectedOriginalItemCount": 105,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "SU-LESSON-CURRICULUM-CANDIDATES"
+      }
+    },
+    {
+      "decisionId": "SU-ACTIVITY-EVIDENCE-IDENTITIES",
+      "category": "Activity/Evidence relationship",
+      "decisionClass": "safe unresolved relationship",
+      "course": "awt",
+      "blocks": [],
+      "doesNotBlock": [
+        "Lesson preservation/import"
+      ],
+      "explanation": "Two Lessons imply assessment activity, but no exact P6 Activity Version or Evidence Declaration identity exists. The links remain absent without fabricating identity.",
+      "choices": [],
+      "affectedOriginalItemCount": 2,
+      "backReferences": {
+        "artifact": "original-item-resolution-map.json",
+        "matchField": "decisionId",
+        "matchValue": "SU-ACTIVITY-EVIDENCE-IDENTITIES"
+      }
+    }
+  ],
+  "artifactHash": "623692e763031dede4d5a23d5bab076d10b9da84f2c3ab61535c86df9e40a0e2"
+}

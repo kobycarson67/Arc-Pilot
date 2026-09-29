@@ -23,6 +23,7 @@ CORE.push('./src/arc_schedule_authority_adapter.js');
 CORE.push('./src/arc_academic_consumer_projection.js');
 CORE.push('./src/arc_academic_authority_adapter.js');
 CORE.push('./src/arc_v8_behavior.js');
+CORE.push('./src/arc_workplace_safety_behavior_authority_adapter.js');
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('arc-pilot-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
 self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();});

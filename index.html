@@ -26,6 +26,7 @@
 <script src="src/arc_v8_project.js"></script>
 <script src="src/arc_v8_evidence.js"></script>
 <script src="src/arc_v8_workplace_safety.js"></script>
+<script src="src/arc_v8_behavior.js"></script>
 <script src="src/arc_v8_gradebook.js"></script>
 <script src="src/arc_v8_attendance.js"></script>
 <script src="src/arc_v8_artifacts.js"></script>
@@ -38,6 +39,7 @@
 <script src="src/arc_attendance_authority_adapter.js"></script>
 <script src="src/arc_project_technical_authority_adapter.js"></script>
 <script src="src/arc_competency_evidence_authority_adapter.js"></script>
+<script src="src/arc_workplace_safety_behavior_authority_adapter.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -419,6 +421,7 @@ const academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityS
 const attendanceAuthorityAdapter = ArcAttendanceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const projectTechnicalAuthorityAdapter = ArcProjectTechnicalAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const competencyEvidenceAuthorityAdapter = ArcCompetencyEvidenceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const workplaceSafetyBehaviorAuthorityAdapter = ArcWorkplaceSafetyBehaviorAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAuthorityAdapter.runLegacy(action, payload, mutation); }
 function ensureScheduleModel() {
     if (!state.academicYear)
@@ -4222,6 +4225,15 @@ saveClassTechScore = function() { return p6RouteLegacy("saveClassTechScore", arg
 saveClassTechStatus = function() { return p6RouteLegacy("saveClassTechStatus", arguments); };
 saveTechnicalTemplateEditor = function() { return p6RouteLegacy("saveTechnicalTemplateEditor", arguments); };
 deleteTechnicalTemplateConfirmed = function() { return p6RouteLegacy("deleteTechnicalTemplateConfirmed", arguments); };
+const p8LegacyHandlers = { addWorkplaceDeduction, removeWorkplaceDeduction, setWorkplaceDayStatus, saveBehaviorEvent, confirmDeleteBehavior };
+function p8RouteLegacy(name, args) {
+    return workplaceSafetyBehaviorAuthorityAdapter.runLegacy(name, { arguments: Array.from(args) }, () => p8LegacyHandlers[name].apply(null, args));
+}
+addWorkplaceDeduction = function() { return p8RouteLegacy("addWorkplaceDeduction", arguments); };
+removeWorkplaceDeduction = function() { return p8RouteLegacy("removeWorkplaceDeduction", arguments); };
+setWorkplaceDayStatus = function() { return p8RouteLegacy("setWorkplaceDayStatus", arguments); };
+saveBehaviorEvent = function() { return p8RouteLegacy("saveBehaviorEvent", arguments); };
+confirmDeleteBehavior = function() { return p8RouteLegacy("confirmDeleteBehavior", arguments); };
 ensureProjectLibrary();
 ensureProjectBank();
 ensureBoothModel();

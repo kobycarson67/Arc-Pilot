@@ -105,7 +105,7 @@ test('Technical Assignments is plural, inert, and marked future',()=>{
 
 test('schema and repair build boundaries are exact',()=>{
   assert.match(html,/const CURRENT_SCHEMA_VERSION = 7;/);
-  assert.match(build,/build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1-parity-p7-competency-evidence-open-shop-1-parity-p8a-behavior-structural-foundation-1-parity-p8-workplace-safety-behavior-1-parity-p9-gradebook-authority-1-parity-p10a-unified-student-history-1-parity-p10b-ui-1'/);
+  assert.match(build,/build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1-parity-p7-competency-evidence-open-shop-1-parity-p8a-behavior-structural-foundation-1-parity-p8-workplace-safety-behavior-1-parity-p9-gradebook-authority-1-parity-p10a-unified-student-history-1-parity-p10b-ui-1-parity-p10c-ui-1'/);
   assert.doesNotMatch(html,/CURRENT_SCHEMA_VERSION = 8/);
 });
 

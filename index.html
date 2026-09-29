@@ -45,6 +45,9 @@
 <script src="src/arc_v8_curriculum_pacing.js"></script>
 <script src="src/arc_curriculum_pacing_authority_adapter.js"></script>
 <script src="src/arc_curriculum_pacing_ui.js"></script>
+<script src="src/arc_v8_lesson_plans.js"></script>
+<script src="src/arc_lesson_authority_adapter.js"></script>
+<script src="src/arc_lesson_pacing_ui.js"></script>
 <script src="src/project_checkpoints.js"></script>
 <script src="src/project_checkpoint_controller.js"></script>
 <script src="src/project_checkpoint_presenter.js"></script>
@@ -429,6 +432,7 @@ const competencyEvidenceAuthorityAdapter = ArcCompetencyEvidenceAuthorityAdapter
 const workplaceSafetyBehaviorAuthorityAdapter = ArcWorkplaceSafetyBehaviorAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const gradebookAuthorityAdapter = ArcGradebookAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const curriculumPacingAuthorityAdapter = ArcCurriculumPacingAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+const lessonAuthorityAdapter = ArcLessonAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const studentHistoryProjection = ArcStudentHistoryProjection.create({ authorityState: "V7_ONLY" });
 function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAuthorityAdapter.runLegacy(action, payload, mutation); }
 function ensureScheduleModel() {
@@ -4245,7 +4249,7 @@ confirmDeleteBehavior = function() { return p8RouteLegacy("confirmDeleteBehavior
 const p10bUiLegacyHandlers = {
     renderCurriculumHub, setSectionCurriculumPosition, clearSectionCurriculumPosition,
     setCurriculumPosition, clearCurriculumPosition, renderPacingPlanner,
-    showAutoBuildPacing, confirmAutoBuildPacing, savePacingDuration,
+    savePacingDuration,
     updatePacingAnchor, togglePacingOpenShop, applyPacingStatus,
     movePacingItem, removePacingItem, createPacingHistorySnapshot, renderPacingHistory
 };
@@ -4258,8 +4262,6 @@ clearSectionCurriculumPosition = function() { return p10bUiRouteLegacy("clearSec
 setCurriculumPosition = function() { return p10bUiRouteLegacy("setCurriculumPosition", arguments); };
 clearCurriculumPosition = function() { return p10bUiRouteLegacy("clearCurriculumPosition", arguments); };
 renderPacingPlanner = function() { return p10bUiRouteLegacy("renderPacingPlanner", arguments); };
-showAutoBuildPacing = function() { return p10bUiRouteLegacy("showAutoBuildPacing", arguments); };
-confirmAutoBuildPacing = function() { return p10bUiRouteLegacy("confirmAutoBuildPacing", arguments); };
 savePacingDuration = function() { return p10bUiRouteLegacy("savePacingDuration", arguments); };
 updatePacingAnchor = function() { return p10bUiRouteLegacy("updatePacingAnchor", arguments); };
 togglePacingOpenShop = function() { return p10bUiRouteLegacy("togglePacingOpenShop", arguments); };
@@ -4268,6 +4270,17 @@ movePacingItem = function() { return p10bUiRouteLegacy("movePacingItem", argumen
 removePacingItem = function() { return p10bUiRouteLegacy("removePacingItem", arguments); };
 createPacingHistorySnapshot = function() { return p10bUiRouteLegacy("createPacingHistorySnapshot", arguments); };
 renderPacingHistory = function() { return p10bUiRouteLegacy("renderPacingHistory", arguments); };
+const p10cUiLegacyHandlers = { renderLessonBank, filterLessonBank, scheduleLessonFromBank, confirmScheduleLesson, showAutoBuildPacing, updateHistoricalBuildPreview, confirmAutoBuildPacing };
+function p10cUiRouteLegacy(name, args) {
+    return lessonAuthorityAdapter.runLegacy(name, { arguments: Array.from(args) }, () => p10cUiLegacyHandlers[name].apply(null, args));
+}
+renderLessonBank = function() { return p10cUiRouteLegacy("renderLessonBank", arguments); };
+filterLessonBank = function() { return p10cUiRouteLegacy("filterLessonBank", arguments); };
+scheduleLessonFromBank = function() { return p10cUiRouteLegacy("scheduleLessonFromBank", arguments); };
+confirmScheduleLesson = function() { return p10cUiRouteLegacy("confirmScheduleLesson", arguments); };
+showAutoBuildPacing = function() { return p10cUiRouteLegacy("showAutoBuildPacing", arguments); };
+updateHistoricalBuildPreview = function() { return p10cUiRouteLegacy("updateHistoricalBuildPreview", arguments); };
+confirmAutoBuildPacing = function() { return p10cUiRouteLegacy("confirmAutoBuildPacing", arguments); };
 ensureProjectLibrary();
 ensureProjectBank();
 ensureBoothModel();

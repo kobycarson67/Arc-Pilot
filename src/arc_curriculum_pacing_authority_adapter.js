@@ -3,7 +3,7 @@
   'use strict';
   var V7='V7_ONLY',ISOLATED='V8_ISOLATED_VERIFICATION',ISOLATED_DB='arc_classroom_v8_p10b_verification';
   var READS=['getCourseStandards','getEssentialStandards','getCurriculumMap','getCurriculumItem','getCurriculumCoverage','getSectionPacing','getSectionPacingHistory'];
-  var COMMANDS=['previewPacingCommand','appendPacingCommand','createPacingSnapshot','previewSemesterPacingCloseout','closeSemesterPacing'];
+  var COMMANDS=['previewPacingCommand','appendPacingCommand','previewPacingBatch','appendPacingBatch','createPacingSnapshot','previewSemesterPacingCloseout','closeSemesterPacing'];
   function fail(code,message,context){var e=new Error(message);e.code=code;e.context=context||{};throw e;}
   function create(options){options=options||{};var state=options.authorityState||V7,databaseName=String(options.databaseName||''),service=options.service||null;
     if([V7,ISOLATED].indexOf(state)<0)fail('AUTHORITY_STATE_BLOCKED','Curriculum/Pacing adapter refuses an unapproved authority state.');

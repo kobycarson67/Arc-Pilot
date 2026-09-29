@@ -3,7 +3,7 @@
   'use strict';
   function fail(code,message,context){var e=new Error(message);e.code=code;e.context=context||{};throw e;}
   function copy(value){return value==null?value:JSON.parse(JSON.stringify(value));}
-  function create(options){options=options||{};var adapter=options.adapter;if(!adapter)fail('ADAPTER_REQUIRED','Curriculum/Pacing UI requires the exclusive authority adapter.');
+  function create(options){options=options||{};var adapter=options.adapter,lessonPacingUI=options.lessonPacingUI||null;if(!adapter)fail('ADAPTER_REQUIRED','Curriculum/Pacing UI requires the exclusive authority adapter.');
     async function read(action,payload){return adapter.runIsolated(action,payload||{});}
     async function courseView(input){
       var results=await Promise.all([
@@ -28,7 +28,7 @@
     }
     async function snapshot(input){return read('createPacingSnapshot',copy(input));}
     async function closeout(input){var preview=await read('previewSemesterPacingCloseout',copy(input));if(input.previewOnly)return preview;return read('closeSemesterPacing',copy(input));}
-    function autoBuild(){fail('LESSON_AUTHORITY_REQUIRED','Auto Build remains on the accepted v7 path until P10C provides reviewed Lesson Plan authority.');}
+    function autoBuild(input){if(!lessonPacingUI)fail('LESSON_AUTHORITY_REQUIRED','Auto Build requires the bounded P10C Lesson/P10B pacing orchestrator.');return input&&input.commit?lessonPacingUI.commitAutoBuild(input.preview):lessonPacingUI.previewAutoBuild(input||{});}
     return{courseView:courseView,curriculumItem:curriculumItem,command:command,snapshot:snapshot,closeout:closeout,autoBuild:autoBuild};
   }
   return{create:create};

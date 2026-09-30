@@ -35,6 +35,16 @@ This log preserves settled product reasoning that should survive individual engi
 
 ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module links, Planbook generation, essential-standard coverage, SLO reporting, inventory/material forecasting, and intelligent recommendations remain future integrations. Project Bank v1 stores clean identifiers and structured fields without activating those systems.
 
+## Recovered source-authority checkpoint
+
+- `source_authority/recovered_2026-09-29/` preserves 25 originals byte-for-byte with a deterministic SHA-256 manifest. Future work must consult it where its domain applies.
+- Official South Dakota DOE PDFs establish WT course `13207` and AWT course `13208`, adopted May 2022, exact Standard wording, metadata and Webb levels. Current ARC matches 27 statements exactly and abbreviates the organization names in WT 2.2 and AWT 2.2. Runtime and P10D remain unchanged pending R1B.
+- Instructor-selected Essential Standards are WT 1.1, 2.1, 3.3, 4.3 and AWT 1.1, 3.2, 5.3, 6.1, 7.3, 9.1. Authority is explicit instructor confirmation plus highlighted photographs plus recovered curriculum maps. Orange is not treated as a DOE designation.
+- Recovered WT/AWT curriculum maps and competency guides are instructor design authority. The existing Lesson Bank remains preservation input and requires improved future differentiation; immutable identity does not equal instructional approval.
+- The recovered Lesson Plan Review Rubric, Walk-through Rubric, and SLO form constrain future Administrative outputs. ARC does not self-score administrator rubrics or invent approvals, feedback, reflections, signatures, or IEP decisions.
+- The Oelrichs FERPA notice is institutional privacy authority and requires later product/security review across every student-record and export surface without speculative legal interpretation.
+- The state-provided education OneDrive account is the approved durable synchronization/recovery destination. ARC remains offline-first and must retain local work and pending sync through outages. Verified sync, deterministic conflict/retry behavior, recovery packages, privacy/security review and truthful protection status remain required. OneDrive integration is not implemented.
+
 ## Samsung pilot update control
 
 - Installed Android PWAs may not surface a newly deployed shell promptly enough for classroom testing. Settings therefore exposes the running version/build, online state, a real service-worker update check, waiting-update state, and an explicit Apply Update action.

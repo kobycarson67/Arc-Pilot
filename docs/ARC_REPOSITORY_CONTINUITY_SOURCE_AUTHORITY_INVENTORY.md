@@ -140,3 +140,15 @@ Do not freeze Standards or Essential dispositions from repository transcription 
 6. Update only the two source-verification gates and directly dependent Standard/Essential dispositions after comparison. Do not import content, advance parity, or turn roadmap items into present-day blockers in R1B.
 
 If the photographs cannot be made available to the bounded R1B process, choose the existing R1A **Defer** option. That permits exact non-Standards Curriculum/Lesson preservation while keeping WT/AWT Standards, Essential designations, and dependent normalized Standard links blocked.
+
+## Recovered source-authority resolution
+
+The missing source package was subsequently recovered and is preserved at `source_authority/recovered_2026-09-29/`. Its deterministic manifest covers 25 originals.
+
+- Official South Dakota DOE PDFs now establish WT `13207` and AWT `13208`, adopted May 2022, exact wording, course metadata and Webb levels.
+- Current ARC contains all 29 codes in order. WT 2.2 and AWT 2.2 abbreviate `American National Standards Institute (ANSI)/American Welding Society (AWS)` as `ANSI/AWS`; the other 27 statements match exactly. Current runtime also omits official metadata, parent Standard statements and Webb levels.
+- Instructor confirmation, highlighted photographs and recovered curriculum maps agree on all ten instructor-selected Essential Standards. Orange highlighting is now resolved as the instructor's selection mark, not a DOE designation.
+- The recovered curriculum maps, competency guides, weekly-plan examples, administrative rubrics, SLO form and FERPA notice supply durable source authority described in `SOURCE_AUTHORITY_FINDINGS.md`.
+- Weekly Lesson Plan and SLO generators are required future Administrative capabilities. The state-provided education OneDrive account is the approved durable destination within an offline-first, verified synchronization/recovery architecture. None is implemented by source preservation.
+
+P10D-R1B may now resolve the two Standards source-verification gates, record the two wording discrepancies, and freeze Essential provenance. It must remain a disposition-only stage with no import or parity advance.

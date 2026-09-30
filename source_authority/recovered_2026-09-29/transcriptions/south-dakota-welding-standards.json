@@ -1,0 +1,57 @@
+{
+  "transcriptionId": "sd-doe-welding-standards-may-2022",
+  "authority": "South Dakota Department of Education",
+  "adopted": "May 2022",
+  "courses": {
+    "wt": {
+      "courseName": "Welding Technology",
+      "courseCode": "13207",
+      "prerequisites": "None",
+      "credit": "0.5 or 1.0 credit",
+      "sourceFile": "../source_material/13207-WeldingTech.pdf",
+      "standards": [
+        {"code":"WT 1.1","parent":"WT 1: Implement welding safety practices.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Identify and demonstrate general safety in accordance with government regulations, health standards, and company and/or school policy."},
+        {"code":"WT 2.1","parent":"WT 2: Integrate core academic concepts as used in the welding industry.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Apply mathematical concepts to measurement techniques."},
+        {"code":"WT 2.2","parent":"WT 2: Integrate core academic concepts as used in the welding industry.","webbLevel":1,"webbLabel":"Recall","wording":"Read, comprehend, and communicate welding terms and definitions from American National Standards Institute (ANSI)/American Welding Society (AWS) A3.0, Standard Welding Terms and Definitions."},
+        {"code":"WT 3.1","parent":"WT 3: Interpret drawings and welding symbol information.","webbLevel":1,"webbLabel":"Recall","wording":"Identify basic weld symbols and joints."},
+        {"code":"WT 3.2","parent":"WT 3: Interpret drawings and welding symbol information.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Use appropriate lines in welding drawing."},
+        {"code":"WT 3.3","parent":"WT 3: Interpret drawings and welding symbol information.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Read and sketch drawings."},
+        {"code":"WT 4.1","parent":"WT 4: Perform thermal cutting operations.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Identify and explain the safety, parts, and operation of thermal cutting equipment."},
+        {"code":"WT 4.2","parent":"WT 4: Perform thermal cutting operations.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Prepare layouts for cutting individual parts."},
+        {"code":"WT 4.3","parent":"WT 4: Perform thermal cutting operations.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Perform cuts using thermal cutting processes."}
+      ],
+      "instructorSelectedEssentialStandards": ["WT 1.1","WT 2.1","WT 3.3","WT 4.3"]
+    },
+    "awt": {
+      "courseName": "Advanced Welding Technology",
+      "courseCode": "13208",
+      "prerequisites": "Welding Technology",
+      "credit": "0.5 or 1.0 credit",
+      "sourceFile": "../source_material/13208-Adv-Welding.pdf",
+      "standards": [
+        {"code":"AWT 1.1","parent":"AWT 1: Implement welding safety practices.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Identify and demonstrate general safety in accordance with government regulations, health standards, and company and/or school policy."},
+        {"code":"AWT 2.1","parent":"AWT 2: Integrate core academic concepts as used in the welding industry.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Demonstrate mathematical skills related to work assignments."},
+        {"code":"AWT 2.2","parent":"AWT 2: Integrate core academic concepts as used in the welding industry.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Communicate using welding terms and definitions from American National Standards Institute (ANSI)/American Welding Society (AWS) A3.0, Standard Welding Terms and Definitions."},
+        {"code":"AWT 3.1","parent":"AWT 3: Interpret, layout, and fabricate in conformance to fabrication drawings.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Interpret and apply dimensions and locations of components in fabrication drawings."},
+        {"code":"AWT 3.2","parent":"AWT 3: Interpret, layout, and fabricate in conformance to fabrication drawings.","webbLevel":4,"webbLabel":"Extended Thinking","wording":"Layout and fabricate according to the fabrication drawing industry standards."},
+        {"code":"AWT 4.1","parent":"AWT 4: Perform other advanced cutting processes.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Identify and explain the safety, parts, and operation of thermal cutting equipment."},
+        {"code":"AWT 4.2","parent":"AWT 4: Perform other advanced cutting processes.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Prepare layouts for cutting individual parts."},
+        {"code":"AWT 4.3","parent":"AWT 4: Perform other advanced cutting processes.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Perform cuts using thermal cutting processes."},
+        {"code":"AWT 5.1","parent":"AWT 5: Perform Gas Metal Arc Welding (GMAW) process.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Identify and understand the safety, parts, and operation of GMAW."},
+        {"code":"AWT 5.2","parent":"AWT 5: Perform Gas Metal Arc Welding (GMAW) process.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Prepare base metal for various welding processes."},
+        {"code":"AWT 5.3","parent":"AWT 5: Perform Gas Metal Arc Welding (GMAW) process.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Demonstrate Gas Metal Arc Welding (GMAW) on steel."},
+        {"code":"AWT 6.1","parent":"AWT 6: Identify and demonstrate knowledge of the inspection of welding and cutting processes.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Visually inspect a weld."},
+        {"code":"AWT 6.2","parent":"AWT 6: Identify and demonstrate knowledge of the inspection of welding and cutting processes.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Examine thermally cut surfaces and edges for discontinuities."},
+        {"code":"AWT 7.1","parent":"AWT 7: Perform other advanced welding processes.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Identify and understand the safety, parts, and operation of another advanced welding process."},
+        {"code":"AWT 7.2","parent":"AWT 7: Perform other advanced welding processes.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Prepare base metal for various welding processes."},
+        {"code":"AWT 7.3","parent":"AWT 7: Perform other advanced welding processes.","webbLevel":3,"webbLabel":"Strategic Thinking","wording":"Demonstrate another advanced welding process on steel."},
+        {"code":"AWT 8.1","parent":"AWT 8: Welding technology career exploration and development.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Define and compare career pathways in welding technology."},
+        {"code":"AWT 8.2","parent":"AWT 8: Welding technology career exploration and development.","webbLevel":4,"webbLabel":"Extended Thinking","wording":"Design a personal learning plan for career interest in welding technology."},
+        {"code":"AWT 8.3","parent":"AWT 8: Welding technology career exploration and development.","webbLevel":2,"webbLabel":"Skill/Concept","wording":"Explain trends and issues in welding technology careers."},
+        {"code":"AWT 9.1","parent":"AWT 9: Apply career readiness skills in the workplace as they relate to today's society.","webbLevel":1,"webbLabel":"Recall","wording":"Identify and demonstrate career readiness (soft skills) in the workplace."}
+      ],
+      "instructorSelectedEssentialStandards": ["AWT 1.1","AWT 3.2","AWT 5.3","AWT 6.1","AWT 7.3","AWT 9.1"]
+    }
+  },
+  "transcriptionStatus": "Faithfully transcribed and visually checked against the official PDFs. Essential selections come from explicit instructor confirmation, highlighted photographs, and recovered curriculum maps; they are not DOE designations."
+}

@@ -68,6 +68,12 @@ The code contains pacing forecasts and actual instructional dates but no authori
 - `docs/SAMSUNG_TABLET_TEST_2026-09-17.md`
 - `docs/PROJECT_BANK_PROGRESSION_v0.18.md`
 - `docs/ARC_CONTINUITY_LOG.md`
+- `docs/ARC_REPOSITORY_CONTINUITY_SOURCE_AUTHORITY_INVENTORY.md`
+- `source_authority/recovered_2026-09-29/README.md`
+- `source_authority/recovered_2026-09-29/source-manifest.json`
+- `source_authority/recovered_2026-09-29/SOURCE_AUTHORITY_FINDINGS.md`
+
+The recovered source archive controls source-dependent work involving South Dakota Standards, instructor Essential selections, Curriculum/competencies, administrative Lesson Plans and rubrics, SLO/data cycles, FERPA/privacy, and the approved OneDrive/offline-first direction. Originals remain byte-preserved and take precedence over derived summaries.
 
 ## Testing and next action
 

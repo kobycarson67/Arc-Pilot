@@ -343,6 +343,18 @@ If yes, it belongs somewhere in ARC. Then ask:
 
 ARC should become a system where using the application is part of the normal rhythm of a CTE classroom rather than another administrative chore performed afterward.
 
+## 25. Recovered source authority and durable continuity
+
+The byte-preserved archive at `source_authority/recovered_2026-09-29/` is required reading for work involving South Dakota WT/AWT Standards, Essential Standards, Curriculum, competencies, administrative Lesson Plans, instructional rubrics, SLO/data cycles, FERPA/privacy, or durable storage. Originals control over summaries where they conflict.
+
+South Dakota DOE course `13207` Welding Technology and course `13208` Advanced Welding Technology, adopted May 2022, are the institutional Standards sources. Orange highlighting in the recovered photographs records the instructor's selected Essential Standards; it is not a DOE designation. The recovered curriculum maps and competency guides are instructor design authority. The recovered weekly plans are administration-accepted output examples rather than district policy.
+
+Weekly Lesson Plan and SLO generation are required future Administrative capabilities. They derive supported facts from ARC authority, require instructor review, and must not invent human rationale, reflection, IEP decisions, administrator approval, or signatures.
+
+The state-provided education OneDrive account is the approved durable synchronization/recovery destination. ARC remains offline-first: classroom work continues in durable device-local storage, pending synchronization survives outages, and ARC claims cloud protection only after verified synchronization. Verified recovery packages remain required alongside ordinary synchronization. Authentication, conflict handling, automatic verified sync, device replacement, privacy/security review, and physical production verification remain unimplemented.
+
+The older statement in section 18 that Level 4 is Proficient is superseded. Governing authority is `0 Not Assessed`, `1 Introduced = 60%`, `2 Developing = 75%`, `3 Proficient = 90%`, and `4 Advanced = 100%`.
+
 **ARC — Advanced Readiness Classroom**
 
 **Readiness for the Whole Classroom.**

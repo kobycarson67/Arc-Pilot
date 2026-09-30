@@ -2,6 +2,13 @@
 
 This log preserves settled product reasoning that should survive individual engineering threads. The Master Plan remains the product north star.
 
+## Recovered product-authority governance
+
+- Future ARC product and architecture work must read `ARC_MASTER_PRODUCT_AUTHORITY.md`, `ARC_CLASSROOM_READINESS_CONTRACT.md`, and `ARC_AUTHORITY_GOVERNANCE.md` alongside this continuity log and the Master Plan.
+- The 47-row v7→v8 parity contract is the required no-regression cutover contract. It is not the entire ARC roadmap and does not by itself establish Classroom Ready status.
+- Classroom Ready requires the authority, UI, starter content, recovery/privacy protection, cross-view consistency, and physical Samsung acceptance specified by the Classroom Readiness Contract.
+- This documentation checkpoint preserves `V7_ONLY`, the existing P10D/R1A reconciliation state, all parity states, and every source-authority artifact committed at `7aaeb91615c4bcfc87751a49e37c85dad6659ec4`.
+
 ## Settled classroom architecture
 
 - Instructor ARC must operate independently of ARC Student and future ARC intelligence. Student devices may multiply value later; they are never a prerequisite for the instructor's dependable classroom core.

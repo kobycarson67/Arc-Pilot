@@ -2,6 +2,8 @@
 
 Verified against the physically accepted and published `arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1` authority. Stage 12 Samsung Physical Verification passed after the fixture initialization repair. Classroom runtime remains schema v7; the isolated v8 database has its own schema and structural metadata. Stage 13 defines the future classroom integration and cutover authority but implements no cutover. Update this registry whenever a later milestone changes a capability.
 
+Product scope and Classroom Ready status are governed by [`ARC_MASTER_PRODUCT_AUTHORITY.md`](ARC_MASTER_PRODUCT_AUTHORITY.md), [`ARC_CLASSROOM_READINESS_CONTRACT.md`](ARC_CLASSROOM_READINESS_CONTRACT.md), and [`ARC_AUTHORITY_GOVERNANCE.md`](ARC_AUTHORITY_GOVERNANCE.md). This registry and the 47-row parity contract are required implementation evidence, not the entire ARC roadmap or the complete Classroom Ready definition. The governance recovery changes no capability or parity state: classroom authority remains `V7_ONLY`, P10D remains at reconciliation evidence, and the recovered source-authority archive remains unchanged.
+
 ## Status key
 
 - **Implemented:** a usable authoritative workflow exists, within stated limits.

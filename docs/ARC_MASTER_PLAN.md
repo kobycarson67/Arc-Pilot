@@ -5,6 +5,12 @@
 
 This document preserves the product vision and architectural decisions developed during the original ARC design/build conversation. It is a north-star document, not a mandate to build every future feature before classroom deployment.
 
+## Governing product authority
+
+Future product and architecture work must also read [`ARC_MASTER_PRODUCT_AUTHORITY.md`](ARC_MASTER_PRODUCT_AUTHORITY.md), [`ARC_CLASSROOM_READINESS_CONTRACT.md`](ARC_CLASSROOM_READINESS_CONTRACT.md), and [`ARC_AUTHORITY_GOVERNANCE.md`](ARC_AUTHORITY_GOVERNANCE.md). Those recovered governing documents preserve the complete product authority, the finite Classroom Ready acceptance boundary, and the rules for changing authority. The 47-row v7→v8 parity contract is a required no-regression gate; it is not the entire ARC roadmap or the complete Classroom Ready definition.
+
+This governance recovery changes no achieved capability or authority state. Normal classroom authority remains `V7_ONLY`; P10D remains at reconciliation evidence through R1A; and the byte-preserved recovered source archive at `source_authority/recovered_2026-09-29/` remains unchanged.
+
 ## 1. Core philosophy
 
 ARC began as a tablet-first welding classroom system and is intended to grow into a CTE platform. The central problem is that a skilled tradesperson should not have to spend the class period acting as the classroom's database. ARC should remember who, where, what, when, what is next, and what needs attention so the instructor can teach.

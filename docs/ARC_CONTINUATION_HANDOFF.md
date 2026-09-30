@@ -2,6 +2,16 @@
 
 ## Repository state
 
+### Required governing authority
+
+Before changing ARC product scope, architecture, Classroom Ready criteria, or roadmap priority, read these documents in full:
+
+- `docs/ARC_MASTER_PRODUCT_AUTHORITY.md`
+- `docs/ARC_CLASSROOM_READINESS_CONTRACT.md`
+- `docs/ARC_AUTHORITY_GOVERNANCE.md`
+
+The 47-row v7→v8 parity contract remains a mandatory no-regression gate, but it is not the entire ARC roadmap or the complete Classroom Ready definition. This governance recovery does not change runtime authority: normal ARC remains `V7_ONLY`; P10D remains at source/reconciliation evidence; and the recovered source archive committed at `7aaeb91615c4bcfc87751a49e37c85dad6659ec4` remains authoritative and byte unchanged.
+
 - Branch: `samsung-stabilization` in the Engineering workspace; publication targets remain the established development branch and then `main`.
 - Pre-Project-Bank rollback checkpoint: `2eead96e94167b15d20839e7e1127c36c589771a`
 - Current HEAD: the commit containing this handoff (`git rev-parse HEAD` is authoritative)
@@ -65,6 +75,9 @@ The code contains pacing forecasts and actual instructional dates but no authori
 ## Important documents
 
 - `docs/ARC_MASTER_PLAN.md`
+- `docs/ARC_MASTER_PRODUCT_AUTHORITY.md`
+- `docs/ARC_CLASSROOM_READINESS_CONTRACT.md`
+- `docs/ARC_AUTHORITY_GOVERNANCE.md`
 - `docs/SAMSUNG_TABLET_TEST_2026-09-17.md`
 - `docs/PROJECT_BANK_PROGRESSION_v0.18.md`
 - `docs/ARC_CONTINUITY_LOG.md`

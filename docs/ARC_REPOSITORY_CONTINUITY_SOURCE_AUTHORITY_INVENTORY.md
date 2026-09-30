@@ -2,6 +2,12 @@
 
 ## Authority and boundary
 
+### Recovered product-governance authority
+
+The complete product and governance reading set now includes [`ARC_MASTER_PRODUCT_AUTHORITY.md`](ARC_MASTER_PRODUCT_AUTHORITY.md), [`ARC_CLASSROOM_READINESS_CONTRACT.md`](ARC_CLASSROOM_READINESS_CONTRACT.md), and [`ARC_AUTHORITY_GOVERNANCE.md`](ARC_AUTHORITY_GOVERNANCE.md). These documents distinguish the full ARC roadmap, the finite Classroom Ready contract, and the governance process from the narrower 47-row v7→v8 no-regression parity contract.
+
+Their preservation changes no runtime, build, cache, Schema, IndexedDB, database, P10D disposition, parity state, or academic authority. `V7_ONLY` remains authoritative, and all 25 originals plus derived source-authority artifacts committed at `7aaeb91615c4bcfc87751a49e37c85dad6659ec4` remain byte unchanged.
+
 This inventory starts from P10D-R1A commit `fee5f0d5a0461e32fb2e613b1bc40a88b60bbb6e`, tree `0f305308a560e64c026e530f9138205ab431d2ea`, and rollback reference `rollback/pre-stage-14-continuity-source-inventory`.
 
 It inventories the complete current repository and reachable Git history. It changes no runtime, build, cache, Schema, IndexedDB, database, P10D manifest, review queue, reconciliation disposition, parity state, or academic authority. `V7_ONLY` remains authoritative. P10D-R1B has not begun.

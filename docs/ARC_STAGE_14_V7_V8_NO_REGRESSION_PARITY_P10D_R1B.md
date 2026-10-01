@@ -54,3 +54,15 @@ Preserving 124 Lessons does not establish instructional acceptance. Their conten
 ## No-change result
 
 R1B performs no content import, runtime/UI change, build/cache/service-worker change, schema/store change, database operation, and no parity advance. It performs no authority transfer, production/Samsung action, or publication. It does not declare P10D import or Classroom Ready complete. A reviewed import/dry-run plan requires separate authorization after this source/disposition authority is accepted.
+
+## F1 follow-up — generator input validation
+
+The September 30, 2026 implementation review identified that the R1B generator trusted declared digest labels and did not fully reject unknown or contradictory queue mappings before writing output. An isolated copy of the original generator reproduced the defect: a mapping with a nonexistent decision ID exited successfully and replaced a sentinel output.
+
+The bounded F1 repair pins all eight accepted input files by byte length and SHA-256, recomputes each producer-specific internal digest, validates every preserved source file, and verifies complete one-to-one queue coverage, canonical fingerprints, manifest identities, decision routes, classifications, statuses, course scope, and established totals before output creation. Its pure relationship validator is exercised directly, while CLI rejection tests use temporary fixture roots outside the checkout. Invalid input now returns a nonzero status and either preserves a pre-existing output byte-for-byte or leaves an absent output absent.
+
+Valid frozen input still produces the original R1B artifact exactly: 462,783 bytes, file SHA-256 `6bf00f4973aa6e7be8860d810190df22c9ddf40787998fb0198e2216e0e3e22a`, and internal artifact hash `ce7ba279ba4e6958144c58ae76b756c0ead535b3a52f96da93eb06aaca3fbd76`. The original R1B dispositions and source decisions remain unchanged.
+
+Fresh local verification passed both changed-file syntax checks, all 20 focused R1B cases, the 47/47 static regression gate, and all 91 JavaScript regression files. Fifteen protected working-copy files were SHA-256 identical before and after the full gate.
+
+This follow-up changes reconciliation tooling and its local regression evidence only. Normal classroom authority remains Schema 7 / `V7_ONLY`; local isolated v8 remains Schema 8 / IndexedDB 13 / 73 stores; the protected Samsung foundation remains separately recorded at Schema 8 / IndexedDB 10 / 53 stores. No content import or dry run, parity advance, runtime/UI/build/cache/schema/database change, publication, deployment, or Samsung operation occurred. Independent review of this repaired checkpoint remains pending. The next possible work remains a separately authorized reviewed import/dry-run planning stage after F1 review.

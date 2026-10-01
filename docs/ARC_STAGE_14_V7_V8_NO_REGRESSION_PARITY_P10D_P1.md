@@ -66,3 +66,16 @@ P10D-P1 changes no application runtime, UI, build, cache, service worker, schema
 The local isolated structural authority remains Schema 8 / IndexedDB 13 / 73 stores. The separately recorded protected Samsung foundation remains Schema 8 / IndexedDB 10 / 53 stores. Neither is opened or modified here.
 
 The next bounded work requires reviewed ownership decisions for target representation, identity/version rebinding, provenance, and package recovery before a persisted rehearsal can be authorized. Any instructional availability decision that remains after those technical ownership contracts are frozen must remain explicit instructor authority. P10D-P1 itself authorizes no subsequent stage.
+
+## Repair 1 — proposal fidelity and test isolation
+
+Independent review of the original P1 snapshot identified four bounded findings. Repair 1 begins from commit `947d1e29f592d7c6544c0bc4a4cbd5255b8dab20`, tree `e6a427ee09739a6af8e4b073e4044bc1215ad3b3`, with rollback `rollback/pre-stage-14-parity-program-p10d-p1-repair-1`.
+
+- **P1-01:** Lesson Version review roles retain their actual Lesson Version identity while joining the historical R1B overlay through the family-correct Lesson ID. All 149 preservation decisions now bind exactly once: 35 Curriculum items, 57 Lesson Definitions, and 57 Lesson Versions, including 27 WT and 30 AWT versions. Required overlays cannot silently fall back to `REVIEW_REQUIRED`.
+- **P1-02:** The review package preserves both complete R1B source-resolution records, both complete Essential-provenance records, and exact associations from the Course contexts and ten Essential roles. All 29 Standard Version proposals preserve official wording, exact `parent` statements, Webb levels, and Webb labels as accepted review evidence. This does not establish a persisted owner or representation.
+- **P1-03:** All 15 included role types have explicit validated routes. The 60 Competency Definitions use `ArcV8Evidence.createCompetency`; the 60 Competency Versions use `ArcV8Evidence.createCompetencyVersion`. Curriculum/Standards/Essentials and Lesson routes retain their existing owners.
+- **P1-04:** All temporary fixture, sentinel, invalid-output, and neighbor paths are contained within roots exclusively allocated by `fs.mkdtempSync`. Refusal tests prove sentinel and unrelated neighbor bytes remain unchanged and absent output stays absent. Cleanup removes only the owned root.
+
+The corrected compiler revision is `p10d-p1-proposal-fidelity-repair-1`. It preserves the same 859 source-role keys and records, 408 historical dispositions, 259 absent optional relationships, 51 approved WT Lesson-to-Competency links, two Course checks, and eight unresolved blocker areas. Corrected review-envelope, package, identity-map, report, and inventory hashes are derived from the repaired proposal; final target IDs/version IDs/payload hashes remain null.
+
+Repair 1 does not change the application, runtime, UI, build/cache, schema, database, parity state, source archive, R1B decisions, production authority, or Samsung state. Outputs remain `PROPOSED_UNIMPORTED` / `NOT_READY_FOR_REHEARSAL`; normal classroom authority remains Schema 7 / `V7_ONLY`. Independent review of the repaired snapshot remains pending, and no subsequent stage is authorized.

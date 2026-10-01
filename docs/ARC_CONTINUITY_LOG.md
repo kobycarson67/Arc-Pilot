@@ -230,3 +230,13 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Outputs remain `PROPOSED_UNIMPORTED` / `NOT_READY_FOR_REHEARSAL`. Target identities and target payload hashes remain unresolved; no database is inspected and no readback or persistence occurs.
 - Normal classroom authority remains Schema 7 / `V7_ONLY`. No application, UI, build/cache, schema, database, parity, production, publication, deployment, remote, or Samsung authority changes occurred.
 - Next bounded recommendation: freeze the owning representation, identity/version rebinding, provenance, and recovery contracts, with any remaining instructional availability decision reserved to the instructor, before authorizing a persisted rehearsal.
+
+## 2026-10-01 — P10D-P1 Repair 1 proposal fidelity and test isolation
+
+- Began from P10D-P1 commit `947d1e29f592d7c6544c0bc4a4cbd5255b8dab20`, tree `e6a427ee09739a6af8e4b073e4044bc1215ad3b3`, with rollback `rollback/pre-stage-14-parity-program-p10d-p1-repair-1`.
+- Corrected all 57 reviewed Lesson Version overlay joins while preserving Lesson Version review identity and full historical source records. All 149 accepted preservation decisions now bind exactly once.
+- Preserved the two complete official source resolutions, all 29 official parent/Webb records, both complete Essential-provenance records, and exact evidence associations for all ten instructor-selected Essentials.
+- Correctly named `ArcV8Evidence` as the owner of all 120 Competency roles and validated explicit owner/method/store routes for all 15 included role types.
+- Replaced predictable temp paths before running the focused suite. All refusal and invalid-input cleanup is confined to exclusively allocated temporary roots, with sentinel, neighbor, and absent-output behavior verified.
+- The compiler revision is `p10d-p1-proposal-fidelity-repair-1`. Counts and boundaries remain 859 blocked roles, 408 historical dispositions, 259 absent optional relationships, 51 approved WT links, and eight unresolved areas.
+- Outputs remain `PROPOSED_UNIMPORTED` / `NOT_READY_FOR_REHEARSAL`. Schema 7 / `V7_ONLY` remains controlling; no runtime, database, parity, production, remote, publication, deployment, or Samsung authority changed. Independent review remains pending and no subsequent stage is authorized.

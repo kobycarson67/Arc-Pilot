@@ -221,3 +221,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Fresh local verification passed both changed-file syntax checks, 20/20 focused R1B tests, 47/47 static checks, all 91 JavaScript regression files, and pre/post SHA-256 identity for 15 protected files.
 - This is tooling maintenance only. R1B decisions, preserved source authority, application behavior, parity states, Schema 7 / `V7_ONLY`, local isolated Schema 8 / IndexedDB 13 / 73 stores, and the protected Samsung Schema 8 / IndexedDB 10 / 53-store foundation remain unchanged. No import/dry run, remote action, publication, deployment, database, or Samsung work occurred.
 - Independent review of the repaired checkpoint remains pending. After that review, the next possible boundary remains separately authorized reviewed import/dry-run planning; it is not authorized by this checkpoint.
+
+## 2026-10-01 — P10D-P1 proposed instructional payload compiler
+
+- Began from F1-complete commit `33be2d4073a7f5122cd4bccc5fc977f42c352b8b`, tree `a10be27d8cd55ec0dac47a7558a35e4053cf0580`, with rollback `rollback/pre-stage-14-parity-program-p10d-p1`.
+- Added a pure, deterministic external-file compiler and focused regression suite. It validates the nine frozen authorities and preserved source files before producing five review artifacts outside the repository.
+- The accepted baseline accounts for 859 proposed content roles, all blocked; 408 historical dispositions; 259 settled nonblocking absent relationships; 51 approved WT Lesson-to-Competency links; and eight unresolved representation/package areas.
+- Outputs remain `PROPOSED_UNIMPORTED` / `NOT_READY_FOR_REHEARSAL`. Target identities and target payload hashes remain unresolved; no database is inspected and no readback or persistence occurs.
+- Normal classroom authority remains Schema 7 / `V7_ONLY`. No application, UI, build/cache, schema, database, parity, production, publication, deployment, remote, or Samsung authority changes occurred.
+- Next bounded recommendation: freeze the owning representation, identity/version rebinding, provenance, and recovery contracts, with any remaining instructional availability decision reserved to the instructor, before authorizing a persisted rehearsal.

@@ -9,6 +9,14 @@ This log preserves settled product reasoning that should survive individual engi
 - Classroom Ready requires the authority, UI, starter content, recovery/privacy protection, cross-view consistency, and physical Samsung acceptance specified by the Classroom Readiness Contract.
 - This documentation checkpoint preserves `V7_ONLY`, the existing P10D/R1A reconciliation state, all parity states, and every source-authority artifact committed at `7aaeb91615c4bcfc87751a49e37c85dad6659ec4`.
 
+## P10D-R1B source verification and disposition freeze
+
+- Official South Dakota DOE WT course `13207` and AWT course `13208`, adopted May 2022, resolve the two R1A source-verification gates. All 29 codes/order match current ARC; WT 2.2 and AWT 2.2 are the only wording differences because current ARC abbreviates the issuing organizations as `ANSI/AWS`.
+- Official wording controls a later authorized import. R1B leaves runtime text unchanged and records course metadata, parent Standards, Webb levels/labels, and future target-version identity as later import-design concerns.
+- The ten existing instructor Essential selections are frozen with explicit instructor confirmation, highlighted photographs, and recovered Curriculum Maps as provenance. They are not DOE designations.
+- All 408 historical queue items receive one effective overlay disposition: 149 preserve exact Curriculum/Lesson content and 259 leave unsupported optional relationships absent. The 51 approved exact WT Lesson-to-Competency links remain preserved; no AWT or P6 identity is invented.
+- R1B imports nothing and changes no runtime, Schema/IndexedDB/store, parity, production, or classroom authority. `V7_ONLY` remains controlling. A reviewed import/dry-run plan is a separate future authorization.
+
 ## Settled classroom architecture
 
 - Instructor ARC must operate independently of ARC Student and future ARC intelligence. Student devices may multiply value later; they are never a prerequisite for the instructor's dependable classroom core.

@@ -158,3 +158,9 @@ The missing source package was subsequently recovered and is preserved at `sourc
 - Weekly Lesson Plan and SLO generators are required future Administrative capabilities. The state-provided education OneDrive account is the approved durable destination within an offline-first, verified synchronization/recovery architecture. None is implemented by source preservation.
 
 P10D-R1B may now resolve the two Standards source-verification gates, record the two wording discrepancies, and freeze Essential provenance. It must remain a disposition-only stage with no import or parity advance.
+
+## P10D-R1B current checkpoint
+
+The earlier missing-source passages and the recommendation above are retained as historical audit context. P10D-R1B subsequently resolved `SV-WT-STANDARDS-SOURCE` and `SV-AWT-STANDARDS-SOURCE` independently from the preserved official South Dakota DOE May 2022 PDFs. The current overlay is `reconciliation/p10d/r1b-source-disposition-freeze.json`; it records 29 matching codes/order, the WT 2.2 and AWT 2.2 wording differences, ten instructor-selected Essential Standards with three-part provenance, 149 exact-content dispositions, and 259 optional relationships safely left absent. The original four P10D/R1A artifacts and the recovered source archive remain byte unchanged.
+
+R1B is reconciliation authority only. It imports no content, advances no parity state, changes no schema/store/runtime authority, and leaves normal classroom authority `V7_ONLY`. A reviewed import/dry-run plan remains a separately authorized future boundary.

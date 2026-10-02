@@ -36,3 +36,15 @@ Focused Node tests cover Lesson validation and rollback, focus preview/commit an
 ## Next bounded recommendation
 
 After independent review, authorize an isolated browser verification checkpoint for this exact engineering page using a new task-owned browser profile. Do not activate normal ARC or publish until browser behavior, content review, build/cache integration and the separate classroom-authority boundary are explicitly authorized.
+
+## Repair 1 — isolated setup, focus history, interaction, and source proof
+
+Repair 1 keeps the approved classroom experience and isolated boundary while correcting five implementation defects found in independent source review. The coordinator now composes each owner from the opened connection plus the storage factory's bound identifier generator, includes Academic Administration, writes explicit fictional schedule/calendar/placement authority, inspects the complete store manifest, and records an in-progress/failed/ready marker instead of treating partial setup as ready. Reopen accepts only the exact ready fixture revision `daily-teaching-first-slice-1-repair-1` and verified inventory.
+
+Teaching Focus corrections and clears now append a new chain event without mutating earlier rows. Their semantic fingerprint includes full academic scope and expected chain revision; invalid dates, mismatched scope, duplicate chain identity, stale heads, overlap, and unavailable exact pacing/Lesson references are refused. Generic correction/void routes refuse Teaching Focus targets. Current/as-of reads validate that the pinned pacing item still points to the exact Lesson Version.
+
+The review UI now exposes stored preparation, shared questions, demonstrations, coaching steps, and nested **Help me teach this** content. Back remains available in loading, empty, error, AWT/no-focus, and ready states. Per-context expansion/scroll state and controller generation tokens protect return behavior and out-of-order reads. Session state is read only after the exact ready fixture is recognized.
+
+The fixture embeds the complete preserved reading extract with SHA-256 `bb11ff2828d0ffa3eddcb81801934a6207fc1d829fb7993928fc39718ee7eda9`, byte length, exact source-bound field map, and a deterministic Lesson-content checksum. Stored instructional excerpts must match that full source byte proof; authored UI labels are distinguishable from source wording. Sample content remains fictional, draft review material.
+
+Normal ARC, Today's Focus, build/cache/service worker, Schema 7 classroom storage, authority state `V7_ONLY`, and production/verification databases remain outside this repair. Browser and Samsung acceptance are recorded only when actually executed.

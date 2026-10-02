@@ -1,40 +1,498 @@
 {
-  "fixtureId": "daily-teaching-first-slice-1",
-  "sampleDate": "2031-10-01",
-  "source": {
+  "fixtureId": "daily-teaching-first-slice-1-repair-1",
+  "fixtureVersion": "daily-teaching-first-slice-1-repair-1",
+  "sampleDates": {
+    "instructional": "2031-10-01",
+    "noninstructional": "2031-10-03",
+    "unknown": "2032-01-15"
+  },
+  "sourceEvidence": {
     "authorityKey": "ARC_WT_LAP_JOINT_GUIDE_DRAFT_1",
-    "recordKey": "isolated-review-excerpts",
-    "checksum": "bb11ff2828d0ffa3eddcb81801934a6207fc1d829fb7993928fc39718ee7eda9",
-    "locators": ["body paragraphs 17-24", "body paragraphs 30-44", "body paragraphs 46-59", "body paragraphs 62-76", "body paragraphs 81 and 83"],
-    "contentStatus": "draft_review_fixture"
+    "recordKey": "full-reading-extract",
+    "sha256": "bb11ff2828d0ffa3eddcb81801934a6207fc1d829fb7993928fc39718ee7eda9",
+    "byteLength": 36269,
+    "fullText": "ARC WT LAP-JOINT TEACHING GUIDE — READING EXTRACT\nPrepared for Codex build preparation, October 1, 2026.\n\nSource: ARC_WT_Lap_Joint_Differentiated_Teaching_Guide_DRAFT_1.docx\nOriginal DOCX bytes: 51421\nOriginal DOCX SHA-256: 90cbaa08ee035691bb7d70ecfa01c378f617321cda37cd986f21974a0732a455\n\nThis is a full body-text/table-cell extraction in source order, not a revised\nlesson, a summary, or a replacement for the original DOCX. Paragraph/table\nlocators below refer to OOXML body-child order, not printed pages.\nLayout, decorative headers, page numbers, and formatting are not reproduced.\nSource wording, source qualifiers, table cell values, and references remain\nas supplied. No new pedagogical or technical facts are added.\n\nStatus: DRAFT teaching content for the approved UI example. Positive feedback\non this guide and walkthrough is not acceptance of the entire WT/AWT library,\nnew assessment thresholds, or unconfirmed equipment settings.\nThe later two daily-teaching decision records control UI and workflow intent.\n\nNonempty body paragraphs: 134\nBody tables: 6\n\n[BODY PARAGRAPH 1]\nLap-joint fillet welds\n\n[BODY PARAGRAPH 2]\nWelding Technology • SMAW / stick welding • Reusable 50-minute lesson cycle\n\n[BODY PARAGRAPH 3]\nFirst teaching-content draft for Koby Carson. Not yet installed in ARC, instructionally approved, or submitted to administration. The sequence below is newly drafted teaching guidance built from the preserved sources and Koby’s classroom decisions; it is not a transcription of an approved old lesson.\n\n[BODY PARAGRAPH 4]\nShared teaching. Different starting points. Progress when ready.\n\n[BODY PARAGRAPH 5]\nWhat this lesson is for\n\n[BODY PARAGRAPH 6]\nThe class’s shared focus is fillet welds on lap joints. Everyone participates in the relevant explanation and safe demonstration. Shop practice then follows each student’s current need: arc starting and control on plate, lap joints with support, increasingly independent lap-joint work, or T-joint work after an instructor check. Exposure to a task is not permission to attempt it independently.\n\n[BODY PARAGRAPH 7]\nThe focus can last more than one week. Each WT period uses this guide when it fits that class. A class that has moved its main instruction to T joints needs a different weekly plan even while some of its students continue earlier work. These are flexible pathways, not permanent ability groups. [S1–S3]\n\n[BODY PARAGRAPH 8]\nPost a common target and the student’s actual work target\n\n[BODY PARAGRAPH 9]\nCommon target: I am learning to recognize lap and T joints and explain where a fillet weld belongs.\n\n[BODY TABLE 10]\n[ROW 1 / CELL 1]\nToday’s work\n\n[ROW 1 / CELL 2]\nLearning target\n\n[ROW 1 / CELL 3]\nSuccess to look for\n\n[ROW 2 / CELL 1]\nBuilding foundations\n\n[ROW 2 / CELL 2]\nI am learning to start and maintain a controlled arc on flat plate.\n\n[ROW 2 / CELL 3]\nI can show my start, explain what happened, and use feedback on my next attempt.\n\n[ROW 3 / CELL 1]\nLap joints, with support or independently\n\n[ROW 3 / CELL 2]\nI am learning to place a more consistent fillet weld in a lap joint.\n\n[ROW 3 / CELL 3]\nI can follow the demonstrated setup and technique, inspect the visible result, and explain one improvement.\n\n[ROW 4 / CELL 1]\nMoving to T joints\n\n[ROW 4 / CELL 2]\nI am learning to apply my fillet-welding skills to a T joint.\n\n[ROW 4 / CELL 3]\nI can explain what changes in the joint, follow the demonstrated setup, and compare my result with the task criteria.\n\n[BODY PARAGRAPH 12]\nStandards and skill connections\n\n[BODY PARAGRAPH 13]\nWT 3.1: “Identify basic weld symbols and joints.” This guide addresses joint identification; it does not claim to assess every part of that Standard. WT 1.1 supports the safety work and is one of your selected Essentials. WT 2.2 supports explicitly taught welding vocabulary. SMAW practice also comes from the WT course description. Do not relabel WT 3.1 as an Essential. [S4]\n\n[BODY PARAGRAPH 14]\nRelevant ARC competencies: WT-W1 SMAW Equipment & Setup; WT-W2 Arc Control; WT-W3 Stringer Beads; WT-W4 Fillet Weld; WT-W5 Basic Joints; WT-W6 Welding Improvement. Use only the ones actually demonstrated or assessed. Working on T joints does not automatically mean Level 4. [S5]\n\n[BODY PARAGRAPH 15]\nBefore students begin\n\n[BODY PARAGRAPH 16]\nPrepare one small set of useful examples\n\n[BODY PARAGRAPH 17]\nHave a cold, unwelded lap assembly, a cold T assembly, and a clean, instructor-checked example of the intended introductory weld. Add one safe example with a visible issue to discuss. Use nonstructural practice coupons and your familiar approved welding position; moving to T joints is not permission to introduce vertical or overhead welding at the same time.\n\n[BODY PARAGRAPH 18]\nSet out approved plate for foundational practice and approved coupons for lap/T work. Make cleaning and inspection tools available under normal shop procedures. Keep the examples accessible for students who need another look rather than another full explanation. These are preparation recommendations, not a claim that those supplies are already available.\n\n[BODY PARAGRAPH 19]\nShop-specific details to settle before live practice\n\n[BODY PARAGRAPH 20]\nThe sources do not identify your electrode classification/diameter, plate thickness, machine, welding position, current/polarity, required weld dimensions, or inspection tolerances. Use your established procedure and the actual equipment/electrode instructions. This draft deliberately does not guess those values. Manufacturer guidance makes electrode/application context important to correct setup and technique. [T1–T2]\n\n[BODY PARAGRAPH 21]\nBefore the first run of this lesson, identify the exact sample or procedure students should match and what you will consider a satisfactory introductory result. This is setup work for the instructor—not another set of curriculum examples you need to invent.\n\n[BODY PARAGRAPH 22]\nSafety is separate from how far a student has progressed\n\n[BODY PARAGRAPH 23]\nBefore an arc is struck, verify the school’s required PPE, properly shaded welding protection for everyone watching, safety glasses, screens, ventilation, sound equipment and leads, and safe work-area conditions. Follow the equipment manual and school procedures for hot metal, cleaning, shutdown and emergencies. Use only instructor-approved material. This guide supplements, not replaces, that safety instruction. [T3]\n\n[BODY PARAGRAPH 24]\nA student lacking a safety clearance does not perform live welding while waiting for you. Provide a safe cold-sample identification or non-energized demonstration activity, followed by the required instructor reteaching/check. A student who is safe but still struggles to strike an arc receives supervised skill practice—not exclusion from the weekly focus. [S2–S3]\n\n[BODY PARAGRAPH 25]\nBegin with a quick readiness check\n\n[BODY PARAGRAPH 26]\n“What were you practicing last time? Show or tell me the feedback you are working on. What is your next approved task?”\n\n[BODY PARAGRAPH 27]\nUse the student’s recent work and your observations. A confident answer alone does not establish practical readiness. Tell each student their starting task and whether they may continue independently, need a check before the first weld, or must wait for direct supervision.\n\n[BODY PARAGRAPH 28]\nDo not require perfection in every earlier competency before allowing supported focus work. The question is whether the missing skill prevents safe, productive participation. [S2]\n\n[BODY PARAGRAPH 29]\nThe shared explanation and demonstration\n\n[BODY PARAGRAPH 30]\nUse this when the class needs the introduction or a shared correction—not automatically every Monday. For a class already practicing lap joints, shorten it to a relevant reminder or a brief demonstration of the problem you actually observed. [S2–S3]\n\n[BODY PARAGRAPH 31]\n1. Explain why students will do different work\n\n[BODY PARAGRAPH 32]\n“Our shared focus is lap-joint fillet welds. Some of you will work on the arc control that leads to that skill. Some will practice lap joints. Some are ready to apply that skill to T joints. Everyone needs a useful next step; nobody moves forward just because the calendar changes.”\n\n[BODY PARAGRAPH 33]\n2. Make the shared learning visible\n\n[BODY PARAGRAPH 34]\nShow the cold lap and T examples. Ask every student to identify each joint—by pointing, sketching briefly, or answering a partner before you check several responses. Use a nonconductive pointer to show the weld location on the cold sample. A lap joint uses overlapping pieces; a T joint changes how the pieces meet. The joint arrangement and the weld placed in it are related, but not the same term. [T2]\n\n[BODY PARAGRAPH 35]\nAsk: “Which is the lap joint? Where should the weld go? What would you need to control before trying this?”\n\n[BODY PARAGRAPH 36]\nExpected responses include the overlapping pieces, the intended joint location, and control of starting/maintaining the arc. A student can answer the joint question correctly while still needing foundational welding practice.\n\n[BODY PARAGRAPH 37]\n3. Give students something specific to watch\n\n[BODY PARAGRAPH 38]\nBefore live welding, demonstrate the intended hand movement with a non-energized teaching aid and cold sample. Explain the across-joint angle separately from the tilt along the travel direction. Then demonstrate the technique appropriate to your actual electrode and setup. Do not hand students a live holder for a dry rehearsal. [T2–T3]\n\n[BODY PARAGRAPH 39]\nSay: “Watch where I place the weld, how I keep control as the electrode shortens, and how steadily I move. Afterwards, tell me which of those you noticed.”\n\n[BODY PARAGRAPH 40]\nRun a short instructor demonstration with the approved protective arrangements. Students needing arc control watch the start and maintenance of the arc. Lap-joint students watch placement and consistency. T-joint students consider what may transfer and what will need a separate demonstration. [T2]\n\n[BODY PARAGRAPH 41]\n4. Inspect, ask, then release to the right task\n\n[BODY PARAGRAPH 42]\nMake the piece safe for handling and clean it under the shop’s procedure before discussing it. Have students point to placement and visible consistency relative to the reference sample. Do not describe an attractive surface as proof of internal fusion or penetration; subsurface problems require appropriate inspection beyond appearance. [T4]\n\n[BODY PARAGRAPH 43]\nExit from the explanation: “Our class focus is ____. My work today is ____. Before I move on, I need to show ____.”\n\n[BODY PARAGRAPH 44]\nCheck that every student has a task. If an answer is unclear, clarify it before the student begins. Students do not need to perform a lap weld merely to show they took part in the shared explanation.\n\n[BODY PARAGRAPH 45]\nPathway: building the prerequisites\n\n[BODY PARAGRAPH 46]\nFor students still learning to strike and maintain an arc on flat plate. This is planned instruction, not “keep busy until everyone else catches up.” The short sequences below are teaching recommendations, not new competency-promotion rules.\n\n[BODY PARAGRAPH 47]\nStart with one small, observable goal\n\n[BODY PARAGRAPH 48]\n“For this practice, show me how you start the arc and keep it going. We are not judging a finished lap-joint weld today.”\n\n[BODY PARAGRAPH 49]\nObserve one attempt before giving a long explanation. Decide whether the immediate difficulty is starting, maintaining the arc, seeing the work, or controlling travel. Check the equipment/setup as well as the learner’s movement. Repeated sticking can have more than one cause; do not assume effort is the problem or have the student change machine settings at random. [T1]\n\n[BODY PARAGRAPH 50]\nTeach a short practice loop\n\n[BODY PARAGRAPH 51]\nModel only the part the student needs next. For a student unable to start, demonstrate your electrode-appropriate starting method and safe response to a stuck electrode. Let the student rehearse the motion with a non-energized teaching aid, then make a supervised attempt under the shop procedure.\n\n[BODY PARAGRAPH 52]\nFor a student who starts but immediately loses the arc, focus the next attempt on maintaining it rather than making a long bead. Once that is manageable, introduce controlled travel and short stringer-bead practice. Do not skip that bridge simply because the shared focus is lap joints. The source competencies distinguish Arc Control from Stringer Beads. [S5]\n\n[BODY PARAGRAPH 53]\nFeedback: “The start worked that time. Next, watch the gap as the electrode shortens. Show me what you will do to keep it steady.” [T2]\n\n[BODY PARAGRAPH 54]\nUse: attempt → brief inspection/explanation → one agreed change → another attempt → compare. The learner should know what to change before repeating. Reduce the difficulty or reteach differently when repeated attempts show the same unresolved problem.\n\n[BODY PARAGRAPH 55]\nWhat happens while you help someone else?\n\n[BODY PARAGRAPH 56]\nA student cleared for that specific independent practice may continue the assigned practice loop. A student who still needs you beside them does not start live work alone. Their short waiting task can be identifying the intended movement on a cold sample, using a non-energized teaching aid, or explaining the last attempt. Return to them deliberately; this is a brief bridge to instruction, not their entire period.\n\n[BODY PARAGRAPH 57]\nIf supervision or equipment cannot support another live welding station safely, reduce simultaneous welding and use planned rotations. Other students may compare cold examples or review their own work. Do not use a more advanced student as a replacement for required instructor supervision.\n\n[BODY PARAGRAPH 58]\nCheck the next step, not a fixed number of coupons\n\n[BODY PARAGRAPH 59]\nLook at whether the student can now start and maintain the arc with the support available for the next task, and whether they can sustain suitable bead control. When it is safe and productive, let them try the next practice or a supported lap-joint introduction. They do not have to wait until Monday or become flawless first. Formal proficiency remains governed by your existing assessment rules. [S2, S5]\n\n[BODY PARAGRAPH 60]\nPathways: lap joints and beyond\n\n[BODY PARAGRAPH 61]\nLap joints with support\n\n[BODY PARAGRAPH 62]\nUse this pathway when the student can participate safely but still needs coaching. Check fit-up and the intended weld location before the first attempt. Ask the student to show the movement on a cold sample, then observe a short section of live practice under the approved procedure.\n\n[BODY PARAGRAPH 63]\n“Point to where the weld belongs. Show me the position you are trying to maintain. On this attempt, let’s concentrate on one thing: ____.”\n\n[BODY PARAGRAPH 64]\nChoose the coaching target from what you actually see: placement, angle, arc length or travel. Keep the rest of the approved setup stable while checking whether that one change helps. Do not give four corrections at once. These practice variables are consistent with the existing WT plan. [S3]\n\n[BODY PARAGRAPH 65]\nAfter the attempt, have the student identify one improvement and one remaining concern. Provide another short demonstration when explanation alone is not enough. Gradually reduce prompts as the student demonstrates the skill; needing support does not mean automatic return to plate practice.\n\n[BODY PARAGRAPH 66]\nLap joints with increasing independence\n\n[BODY PARAGRAPH 67]\nThe student completes the approved practice task, inspects the cleaned result against the reference, identifies a specific next adjustment, and compares the next attempt. You make periodic technique checks and targeted reviews rather than approving every bead.\n\n[BODY PARAGRAPH 68]\n“Show me the part that best matches our example. What happened where the result changed? What will you keep the same, and what will you change?”\n\n[BODY PARAGRAPH 69]\nWhen observation suggests readiness, arrange an instructor check using the existing task/rubric. Do not force unnecessary repeated lap joints solely because the class focus remains there. Do not equate task completion, confidence, speed, or one good weld with an automatic competency change. [S1, S5]\n\n[BODY PARAGRAPH 70]\nT-joint progression\n\n[BODY PARAGRAPH 71]\nStudents ready for the next task first receive an appropriate T-joint setup/technique demonstration and instructor check. Keep the current approved electrode, material and position unless you intentionally teach and authorize a change. The learning goal is applying the skill to a different joint—not making the student’s task harder in every possible way.\n\n[BODY PARAGRAPH 72]\n“What stays the same from your lap-joint work? What changes when the pieces form a T? Show me how you will place and control this weld.”\n\n[BODY PARAGRAPH 73]\nHave the student prepare the approved assembly, check its fit-up and intended weld location, perform the assigned practice, and inspect it against a suitable T-joint reference. Ask them to explain one useful comparison with their lap-joint work. Hobart’s guidance distinguishes joint/work angle from travel angle; use the setup-specific procedure rather than one unexplained angle for every task. [T2]\n\n[BODY PARAGRAPH 74]\nA student new to T joints may need substantial help even after successful lap joints. Provide that help without describing them as having “gone backward.” Further extension requires a meaningful approved next task; it is not automatic permission for new positions, equipment, or independent structural fabrication.\n\n[BODY PARAGRAPH 75]\nKeep each pathway visible without ranking students publicly\n\n[BODY PARAGRAPH 76]\nShow task names such as Arc Control, Lap Joint and T Joint—not “low” and “high.” Students can move between support levels. Their place in this sequence is not a permanent label or a grade by itself.\n\n[BODY PARAGRAPH 77]\nManage the period without four separate lessons\n\n[BODY PARAGRAPH 78]\nSuggested first-demonstration day: 50 minutes\n\n[BODY TABLE 79]\n[ROW 1 / CELL 1]\nMinutes\n\n[ROW 1 / CELL 2]\nWhat happens\n\n[ROW 2 / CELL 1]\n0–5\n\n[ROW 2 / CELL 2]\nWelcome, brief task/readiness check, preparation and safety check. Identify who needs direct help first.\n\n[ROW 3 / CELL 1]\n5–13\n\n[ROW 3 / CELL 2]\nShared explanation, demonstration and short understanding check. Students know their individual work before dispersing.\n\n[ROW 4 / CELL 1]\n13–18\n\n[ROW 4 / CELL 2]\nRelease prepared, cleared students to known tasks. Check supported lap/T setups; start the foundation coaching group safely.\n\n[ROW 5 / CELL 1]\n18–35\n\n[ROW 5 / CELL 2]\nTargeted coaching, assigned practice and brief checks across all pathways. Safety always interrupts the planned order.\n\n[ROW 6 / CELL 1]\n35–40\n\n[ROW 6 / CELL 2]\nFinal comparison or instructor check where appropriate. Establish each student’s likely next task; no rushed new setup.\n\n[ROW 7 / CELL 1]\n40–50\n\n[ROW 7 / CELL 2]\nPlanned shutdown, safe handling/storage, cleanup and station check. A brief exit explanation happens after the student’s work is safe.\n\n[BODY PARAGRAPH 81]\nThis is a suggested allocation, not a new bell schedule or safety policy. Retain the school’s actual cleanup rules. A continuation day can replace the long demonstration with a short reminder and return the time to supervised practice. Do not start work that cannot be stopped safely within the remaining period.\n\n[BODY PARAGRAPH 82]\nMake your first coaching stop intentional\n\n[BODY PARAGRAPH 83]\nAfter the initial safety/setup scan, prioritize students who cannot begin their next task without your instruction. Already-cleared students continue known work; students needing first-time T-joint or lap-joint clearance wait on a safe preparation task. Return later for their first-task check. The order can change with immediate need.\n\n[BODY PARAGRAPH 84]\nUse three quick questions throughout the shop\n\n[BODY PARAGRAPH 85]\n“What are you working on?”  “What are you checking?”  “What are you changing next?”\n\n[BODY PARAGRAPH 86]\nA student may point, demonstrate or answer briefly; lengthy written reflection is not required for every attempt. During paired comparison, each student should explain their own work. Peer feedback does not grant clearance, change grades, or replace your assessment.\n\n[BODY PARAGRAPH 87]\nWhen work stalls\n\n[BODY TABLE 88]\n[ROW 1 / CELL 1]\nWhat you notice\n\n[ROW 1 / CELL 2]\nUseful next teaching move\n\n[ROW 2 / CELL 1]\nThe student repeats without improving.\n\n[ROW 2 / CELL 2]\nObserve the next attempt, choose one visible issue, model a correction and compare the following attempt. Check setup rather than diagnosing from appearance alone.\n\n[ROW 3 / CELL 1]\nThe student says, “I can’t do it.”\n\n[ROW 3 / CELL 2]\nNarrow the immediate goal: “Show me just the start,” or “Show me one controlled section.” Describe the specific progress you observe.\n\n[ROW 4 / CELL 1]\nThe student is waiting for your review.\n\n[ROW 4 / CELL 2]\nLet them use an already-cleared practice task or inspect a safe, cold sample. Do not make waiting become permission to begin a new operation.\n\n[ROW 5 / CELL 1]\nSeveral students share the same problem.\n\n[ROW 5 / CELL 2]\nUse one short, safely organized mini-demonstration for that group. Keep the rest on approved work only if supervision remains adequate.\n\n[BODY PARAGRAPH 90]\nCheck learning and decide the next work\n\n[BODY PARAGRAPH 91]\nLook at the skill the student actually practiced\n\n[BODY TABLE 92]\n[ROW 1 / CELL 1]\nPathway\n\n[ROW 1 / CELL 2]\nCheck during practice\n\n[ROW 1 / CELL 3]\nUseful end-of-period evidence\n\n[ROW 2 / CELL 1]\nArc control / foundations\n\n[ROW 2 / CELL 2]\nObserve the start, maintenance of the arc and level of help needed. Check emerging bead control when appropriate.\n\n[ROW 2 / CELL 3]\nStudent demonstrates the current target and explains one correction; instructor identifies the next supported step.\n\n[ROW 3 / CELL 1]\nLap joints with support\n\n[ROW 3 / CELL 2]\nCheck fit-up, weld location and the specific control being coached.\n\n[ROW 3 / CELL 3]\nCompare the attempt before and after feedback; record what the student can now do and what still needs prompting.\n\n[ROW 4 / CELL 1]\nLap joints with independence\n\n[ROW 4 / CELL 2]\nObserve technique as well as inspect the visible result against the task criteria.\n\n[ROW 4 / CELL 3]\nStudent justifies one self-correction; instructor decides whether continued practice or a formal check is useful.\n\n[ROW 5 / CELL 1]\nT joints\n\n[ROW 5 / CELL 2]\nCheck understanding of the changed joint and the first approved setup; observe application of earlier control.\n\n[ROW 5 / CELL 3]\nStudent compares lap and T work and identifies one adjustment needed for the new task.\n\n[BODY PARAGRAPH 94]\nVisual review concerns visible features. It cannot establish that hidden fusion or penetration is adequate. Do not add bend tests, destructive tests or acceptance tolerances without an appropriate existing procedure and explicit preparation. [T4]\n\n[BODY PARAGRAPH 95]\nFeedback that gives the student something to do\n\n[BODY PARAGRAPH 96]\nInstead of “That looks better”: “This section is more consistent than the first. What did you keep steady here? Try to repeat that on the next approved attempt.”\n\n[BODY PARAGRAPH 97]\nInstead of “You need to catch up”: “You are working on arc control. Show me the part you can manage now, and we will choose the next step from there.”\n\n[BODY PARAGRAPH 98]\nRecord only information that helps the next lesson\n\n[BODY PARAGRAPH 99]\nUse your current recording method. A short entry can be: task attempted | what was observed | support needed | next action. Do not create a second gradebook or a long note for every bead. Example only: “Plate arc control | start improving; loses arc during travel | brief coaching | maintain arc, then short stringer.”\n\n[BODY PARAGRAPH 100]\nPractice is normally ungraded and does not automatically count as qualifying evidence. Clearly distinguish a practice check from a formally assigned assessment. When assessing, use the existing course-specific rubric/evidence rules and preserve the actual task context. Do not award a lap-joint result to a student doing plate practice. Exposure to the shared explanation is not proof of welding performance. [S1, S5]\n\n[BODY PARAGRAPH 101]\nDecide readiness without rushing or holding students back\n\n[BODY PARAGRAPH 102]\nUse demonstrated performance and the support needed for the next task. Continue prerequisite practice when it is necessary; allow supported participation when productive; move students on when appropriate. These lesson checks do not redefine the 1–4 scale or establish a fixed “number of welds to pass.” [S1–S2]\n\n[BODY PARAGRAPH 103]\nLack of opportunity or not yet being assessed must not be silently treated as a failed lap-joint assessment. Any attendance or required-work grading decision belongs to the established grading policy, not a new rule inside this lesson.\n\n[BODY PARAGRAPH 104]\nA week that can change with the class\n\n[BODY PARAGRAPH 105]\nThe following is a reusable planning example for a normal five-day week. It is not a claim about instruction already delivered. Each day continues the student pathways; a later weekday does not force a student to advance.\n\n[BODY TABLE 106]\n[ROW 1 / CELL 1]\nDay\n\n[ROW 1 / CELL 2]\nClass emphasis\n\n[ROW 1 / CELL 3]\nWhat continues for different students\n\n[ROW 2 / CELL 1]\nMonday\n\n[ROW 2 / CELL 2]\nResume from recent work. Use a shared demonstration only if this class needs it.\n\n[ROW 2 / CELL 3]\nFoundation practice, supported/independent lap work, and checked T-joint progression start from actual readiness.\n\n[ROW 3 / CELL 1]\nTuesday\n\n[ROW 3 / CELL 2]\nApply one useful piece of feedback.\n\n[ROW 3 / CELL 3]\nCoach the individual skill, compare attempts and adjust support. A student can advance during the week when ready.\n\n[ROW 4 / CELL 1]\nWednesday\n\n[ROW 4 / CELL 2]\nExplain and inspect your own work.\n\n[ROW 4 / CELL 3]\nUse a small-group reteach for a shared need; keep others on appropriate approved tasks.\n\n[ROW 5 / CELL 1]\nThursday\n\n[ROW 5 / CELL 2]\nCheck progress and choose next steps.\n\n[ROW 5 / CELL 3]\nAssess only where a meaningful assessment opportunity is appropriate. Others keep learning; this is not a universal deadline.\n\n[ROW 6 / CELL 1]\nFriday, when school meets\n\n[ROW 6 / CELL 2]\nOpen Shop: choose the highest-value appropriate work.\n\n[ROW 6 / CELL 3]\nPrerequisites, lap/T practice, reassessment, active project work or another approved need. It need not all match the weekly focus.\n\n[BODY PARAGRAPH 108]\nCalendar exception: the preserved September 28–October 2, 2026 WT plan marks Friday, October 2 as NO CLASS — Professional Development. Do not put Open Shop into that dated plan. Confirm the actual school calendar before dating any new weekly plan. [S3]\n\n[BODY PARAGRAPH 109]\nWhen class periods separate in pace\n\n[BODY PARAGRAPH 110]\nUse one shared WT administrative plan only for periods whose planned teaching still matches. Write the covered periods on the plan. Do not use “All WT Sections” automatically. One or two students at a different skill level belongs in differentiation; a class whose main focus has changed may need a separate plan. [S2]\n\n[BODY TABLE 111]\n[ROW 1 / CELL 1]\nClass planning example—not actual period assignments\n\n[ROW 1 / CELL 2]\nAccurate paperwork\n\n[ROW 2 / CELL 1]\nTwo WT periods continue lap-joint instruction.\n\n[ROW 2 / CELL 2]\nOne shared lap-joint plan naming those periods; each retains its own student pathways and observations.\n\n[ROW 3 / CELL 1]\nAnother WT period’s main instruction has advanced to T joints.\n\n[ROW 3 / CELL 2]\nA separate T-joint plan with its own focus, demonstration and checks. Some students can still practice lap joints or foundations.\n\n[ROW 4 / CELL 1]\nAWT periods still share a plan.\n\n[ROW 4 / CELL 2]\nKeep one AWT plan while accurate. Split it when its classes’ planned instruction meaningfully differs.\n\n[BODY PARAGRAPH 113]\nKeep the plan actually submitted as a historical record. Document later changes separately and reflect the class’s new position in the next plan. Do not rewrite an earlier submission to make it appear you predicted every detour. [S2]\n\n[BODY PARAGRAPH 114]\nAdministrative weekly plan — draft example\n\n[BODY PARAGRAPH 115]\nInstructor: Koby Carson     Course: Welding Technology\nWeek of: __________________     Periods covered: __________________\n\n[BODY PARAGRAPH 116]\nTitle / Weekly focus\n\n[BODY PARAGRAPH 117]\nSMAW Fillet Welds on Lap Joints — Differentiated Development and Application\n\n[BODY PARAGRAPH 118]\nPlanned shared instruction addresses lap-joint identification, intended fillet placement, technique and reflection. Student practice follows individual readiness rather than one required class-wide task.\n\n[BODY PARAGRAPH 119]\nStandards\n\n[BODY PARAGRAPH 120]\nWT 3.1 — Identify basic weld symbols and joints. Focus here: joint identification.\nWT 1.1 — Identify and demonstrate general safety in accordance with government regulations, health standards, and company and/or school policy. Instructor-selected Essential.\nWT 2.2 — Read, comprehend, and communicate welding terms and definitions from American National Standards Institute (ANSI)/American Welding Society (AWS) A3.0, Standard Welding Terms and Definitions. Focus here: selected terms explicitly taught.\nSMAW practice also aligns with the WT course description. Listing a Standard does not claim full mastery or regulatory compliance. [S4]\n\n[BODY PARAGRAPH 121]\nLearning targets\n\n[BODY PARAGRAPH 122]\nI am learning to identify lap and T joints and explain where a fillet weld belongs.\nUse the applicable pathway target:\nI am learning to start and maintain a controlled arc on plate; OR\nI am learning to place a more consistent fillet weld in a lap joint; OR\nI am learning to apply my fillet-welding skills to a T joint.\n\n[BODY PARAGRAPH 123]\nCriteria for success\n\n[BODY PARAGRAPH 124]\nI can identify the joint and my current work target.\nI can use the demonstrated procedure and follow the safety expectations for my assigned task.\nI can compare my work with the appropriate example, explain one change and act on feedback.\nI can show my instructor the skill I have been practicing before beginning a new task.\n\n[BODY PARAGRAPH 125]\nPlanned instruction and assessment\n\n[BODY PARAGRAPH 126]\nMonday: readiness check and relevant shared explanation/demonstration; verify each student’s starting task. Tuesday: targeted practice and feedback; compare attempts. Wednesday: self-checking and need-based mini-demonstrations; ask students to explain adjustments. Thursday: progress checks or appropriate assigned assessments; identify next work. Friday when in session: Open Shop, with approved tasks based on current needs. Adjust the plan to the actual calendar and this class’s position; use the preceding page for pathway details.\n\n[BODY PARAGRAPH 127]\nDifferentiation / student pathways\n\n[BODY PARAGRAPH 128]\nAll students join relevant shared instruction for exposure. Students missing necessary prerequisites then receive arc-starting/control and short-bead instruction on plate. Students ready for lap joints practice with support matched to their needs. Students ready to progress receive T-joint instruction and appropriate practice. Teacher observation guides movement; no student advances or repeats work solely to match the weekly calendar. Safety restrictions remain distinct from skill readiness.\n\n[BODY PARAGRAPH 129]\nEngagement strategies; resources\n\n[BODY PARAGRAPH 130]\nPurposeful demonstration watching; brief partner/individual explanation; hands-on practice; sample comparison; one-change feedback; self-checks; targeted individual/small-group coaching. Resources: approved SMAW equipment/PPE, plate and lap/T coupons, electrode guidance, safe reference samples, and cleaning/inspection tools. No student names or invented accommodations appear in this plan.\n\n[BODY PARAGRAPH 131]\nSources, limits and what is new\n\n[BODY PARAGRAPH 132]\nSource-derived foundations\n\n[BODY PARAGRAPH 133]\nS1. ARC_MASTER_PRODUCT_AUTHORITY.md and ARC_CLASSROOM_READINESS_CONTRACT.md. Existing duties: differentiated WT/AWT content, meaningful prerequisite/support/extension paths, instructor-controlled assessment, independently paced Sections, and administrative outputs that reuse teaching information. Read with ARC_AUTHORITY_GOVERNANCE.md.\n\n[BODY PARAGRAPH 134]\nS2. ARC_ADMIN_WEEKLY_PLANS_PACING_SIDEBAR_DESIGN_AUTHORITY_AMENDMENT.md, especially Weekly Focus, Readiness states, Common instruction + differentiated application, Friday Open Shop, pacing, and default plan grouping. Later explicit instructor clarification in this conversation reinforces exposure before prerequisite work and separate class plans when periods diverge.\n\n[BODY PARAGRAPH 135]\nS3. WT Weekly Lesson Plan Sep28-Oct2 2026.docx. Source for the SMAW lap-joint focus, practice/feedback/self-checking model, broad material list, and the dated Friday no-class exception. This new guide is not a replacement of that saved historical plan.\n\n[BODY PARAGRAPH 136]\nS4. source_authority/recovered_2026-09-29/transcriptions/south-dakota-welding-standards.json, checked as source text inside the accepted 16:10:39 review package. Preserved May 2022 WT course 13207 Standards. No source wording or Essential selection was altered.\n\n[BODY PARAGRAPH 137]\nS5. Welding Technology Competencies Printable.docx. WT-W1 through WT-W6 establish the relevant setup, arc control, bead, fillet, joint and improvement competencies. This guide does not replace their level descriptors or the existing evidence/grade rules.\n\n[BODY PARAGRAPH 138]\nS6. Preserved transcriptions of the Lesson Plan Review Rubric and Oelrichs School Instructional Walk-through Rubric: student-friendly targets, active criteria, modeling, questions, feedback, differentiated support and checks during learning. This guide does not award administrator ratings or claim any classroom observation.\n\n[BODY PARAGRAPH 139]\nExternal technical checks—not local policy\n\n[BODY PARAGRAPH 140]\nT1. Miller, “Five Steps to Improving Your Stick Welding Technique.” Used narrowly for electrode/application-dependent setup and the need to check several possible causes of difficulty.\nhttps://www.millerwelds.com/en-us/resources/knowledge-hub/stick-welding/five-steps-to-improving-your-stick-welding-technique\n\n[BODY PARAGRAPH 141]\nT2. Hobart Brothers, “Basic Stick Welding – Electrode Technique.” Used for joint/angle distinctions and maintaining the arc as the electrode is consumed. No universal numerical setup was prescribed.\nhttps://www.hobartbrothers.com/resources/technical-guides/helpful-hints-basic-welding/basic-stick-welding-electrode-technique/\n\n[BODY PARAGRAPH 142]\nT3. Miller, “How Do Safety and Scheduled Welding Machine Maintenance Protect Your Welding Assets?” Used for arc/eye protection, electrical safety, ventilation and following equipment instructions. Not a complete school safety program.\nhttps://www.millerwelds.com/en-us/resources/knowledge-hub/industrial-welding/safety-and-scheduled-maintenance-protect-your-welding-assets\n\n[BODY PARAGRAPH 143]\nT4. TWI, “Weld defects: lack of sidewall and inter-run fusion.” Used only for the limits of surface appearance and the need for appropriate subsurface inspection. No code acceptance limits or repair/testing procedure was adopted.\nhttps://www.twi-global.com/technical-knowledge/job-knowledge/weld-defects-imperfections-in-welds-lack-of-sidewall-and-inter-run-fusion-041\n\n[BODY PARAGRAPH 144]\nDraft status and next use\n\n[BODY PARAGRAPH 145]\nTeacher scripts, suggested time blocks, practice organization and example administrative wording are newly authored proposals. No classroom trial, technical-procedure approval, instructional acceptance, ARC import or app change occurred. Improved lessons are required before Koby begins relying on ARC for teaching; keeping older lessons for reference/development does not approve them as the working instructional bank.\n\n[BODY PARAGRAPH 146]\nThe app snapshot remains unchanged. No new implementation export is needed for this content draft. Keep this as a separate review document rather than replacing the governing files or old lesson records.\n"
+  },
+  "sourceBoundFields": [
+    {
+      "path": "lesson.engagementStrategies.0",
+      "locator": "body paragraph 30",
+      "text": "Use this when the class needs the introduction or a shared correction—not automatically every Monday. For a class already practicing lap joints, shorten it to a relevant reminder or a brief demonstration of the problem you actually observed. [S2–S3]"
+    },
+    {
+      "path": "lesson.assessment",
+      "locator": "body paragraph 42",
+      "text": "Make the piece safe for handling and clean it under the shop’s procedure before discussing it. Have students point to placement and visible consistency relative to the reference sample. Do not describe an attractive surface as proof of internal fusion or penetration; subsurface problems require appropriate inspection beyond appearance. [T4]"
+    },
+    {
+      "path": "lesson.checksForUnderstanding.0",
+      "locator": "body paragraph 35",
+      "text": "Ask: “Which is the lap joint? Where should the weld go? What would you need to control before trying this?”"
+    },
+    {
+      "path": "lesson.teachingGuide.preparation.0",
+      "locator": "body paragraph 17",
+      "text": "Have a cold, unwelded lap assembly, a cold T assembly, and a clean, instructor-checked example of the intended introductory weld. Add one safe example with a visible issue to discuss. Use nonstructural practice coupons and your familiar approved welding position; moving to T joints is not permission to introduce vertical or overhead welding at the same time."
+    },
+    {
+      "path": "lesson.teachingGuide.preparation.1",
+      "locator": "body paragraph 18",
+      "text": "Set out approved plate for foundational practice and approved coupons for lap/T work. Make cleaning and inspection tools available under normal shop procedures. Keep the examples accessible for students who need another look rather than another full explanation. These are preparation recommendations, not a claim that those supplies are already available."
+    },
+    {
+      "path": "lesson.teachingGuide.preparation.2",
+      "locator": "body paragraph 20",
+      "text": "The sources do not identify your electrode classification/diameter, plate thickness, machine, welding position, current/polarity, required weld dimensions, or inspection tolerances. Use your established procedure and the actual equipment/electrode instructions. This draft deliberately does not guess those values. Manufacturer guidance makes electrode/application context important to correct setup and technique. [T1–T2]"
+    },
+    {
+      "path": "lesson.teachingGuide.preparation.3",
+      "locator": "body paragraph 21",
+      "text": "Before the first run of this lesson, identify the exact sample or procedure students should match and what you will consider a satisfactory introductory result. This is setup work for the instructor—not another set of curriculum examples you need to invent."
+    },
+    {
+      "path": "lesson.teachingGuide.sharedInstruction.summary",
+      "locator": "body paragraph 30",
+      "text": "Use this when the class needs the introduction or a shared correction—not automatically every Monday. For a class already practicing lap joints, shorten it to a relevant reminder or a brief demonstration of the problem you actually observed. [S2–S3]"
+    },
+    {
+      "path": "lesson.teachingGuide.sharedInstruction.demonstrationSteps.0",
+      "locator": "body paragraph 34",
+      "text": "Show the cold lap and T examples. Ask every student to identify each joint—by pointing, sketching briefly, or answering a partner before you check several responses. Use a nonconductive pointer to show the weld location on the cold sample. A lap joint uses overlapping pieces; a T joint changes how the pieces meet. The joint arrangement and the weld placed in it are related, but not the same term. [T2]"
+    },
+    {
+      "path": "lesson.teachingGuide.sharedInstruction.demonstrationSteps.1",
+      "locator": "body paragraph 38",
+      "text": "Before live welding, demonstrate the intended hand movement with a non-energized teaching aid and cold sample. Explain the across-joint angle separately from the tilt along the travel direction. Then demonstrate the technique appropriate to your actual electrode and setup. Do not hand students a live holder for a dry rehearsal. [T2–T3]"
+    },
+    {
+      "path": "lesson.teachingGuide.sharedInstruction.demonstrationSteps.2",
+      "locator": "body paragraph 40",
+      "text": "Run a short instructor demonstration with the approved protective arrangements. Students needing arc control watch the start and maintenance of the arc. Lap-joint students watch placement and consistency. T-joint students consider what may transfer and what will need a separate demonstration. [T2]"
+    },
+    {
+      "path": "lesson.teachingGuide.sharedInstruction.questions.0",
+      "locator": "body paragraph 35",
+      "text": "Ask: “Which is the lap joint? Where should the weld go? What would you need to control before trying this?”"
+    },
+    {
+      "path": "lesson.teachingGuide.sharedInstruction.safetyPrompts.0",
+      "locator": "body paragraph 23",
+      "text": "Before an arc is struck, verify the school’s required PPE, properly shaded welding protection for everyone watching, safety glasses, screens, ventilation, sound equipment and leads, and safe work-area conditions. Follow the equipment manual and school procedures for hot metal, cleaning, shutdown and emergencies. Use only instructor-approved material. This guide supplements, not replaces, that safety instruction. [T3]"
+    },
+    {
+      "path": "lesson.teachingGuide.sharedInstruction.safetyPrompts.1",
+      "locator": "body paragraph 24",
+      "text": "A student lacking a safety clearance does not perform live welding while waiting for you. Provide a safe cold-sample identification or non-energized demonstration activity, followed by the required instructor reteaching/check. A student who is safe but still struggles to strike an arc receives supervised skill practice—not exclusion from the weekly focus. [S2–S3]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.task",
+      "locator": "body paragraph 48",
+      "text": "“For this practice, show me how you start the arc and keep it going. We are not judging a finished lap-joint weld today.”"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.instructorFocus",
+      "locator": "body paragraph 49",
+      "text": "Observe one attempt before giving a long explanation. Decide whether the immediate difficulty is starting, maintaining the arc, seeing the work, or controlling travel. Check the equipment/setup as well as the learner’s movement. Repeated sticking can have more than one cause; do not assume effort is the problem or have the student change machine settings at random. [T1]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.coachingSteps.0",
+      "locator": "body paragraph 51",
+      "text": "Model only the part the student needs next. For a student unable to start, demonstrate your electrode-appropriate starting method and safe response to a stuck electrode. Let the student rehearse the motion with a non-energized teaching aid, then make a supervised attempt under the shop procedure."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.coachingSteps.1",
+      "locator": "body paragraph 54",
+      "text": "Use: attempt → brief inspection/explanation → one agreed change → another attempt → compare. The learner should know what to change before repeating. Reduce the difficulty or reteach differently when repeated attempts show the same unresolved problem."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.questions.0",
+      "locator": "body paragraph 53",
+      "text": "Feedback: “The start worked that time. Next, watch the gap as the electrode shortens. Show me what you will do to keep it steady.” [T2]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.lookFors.0",
+      "locator": "body paragraph 59",
+      "text": "Look at whether the student can now start and maintain the arc with the support available for the next task, and whether they can sustain suitable bead control. When it is safe and productive, let them try the next practice or a supported lap-joint introduction. They do not have to wait until Monday or become flawless first. Formal proficiency remains governed by your existing assessment rules. [S2, S5]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.safetyPrompts.0",
+      "locator": "body paragraph 56",
+      "text": "A student cleared for that specific independent practice may continue the assigned practice loop. A student who still needs you beside them does not start live work alone. Their short waiting task can be identifying the intended movement on a cold sample, using a non-energized teaching aid, or explaining the last attempt. Return to them deliberately; this is a brief bridge to instruction, not their entire period."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.safetyPrompts.1",
+      "locator": "body paragraph 57",
+      "text": "If supervision or equipment cannot support another live welding station safely, reduce simultaneous welding and use planned rotations. Other students may compare cold examples or review their own work. Do not use a more advanced student as a replacement for required instructor supervision."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.0.helpSections.0.body.0",
+      "locator": "body paragraph 52",
+      "text": "For a student who starts but immediately loses the arc, focus the next attempt on maintaining it rather than making a long bead. Once that is manageable, introduce controlled travel and short stringer-bead practice. Do not skip that bridge simply because the shared focus is lap joints. The source competencies distinguish Arc Control from Stringer Beads. [S5]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.1.task",
+      "locator": "body paragraph 62",
+      "text": "Use this pathway when the student can participate safely but still needs coaching. Check fit-up and the intended weld location before the first attempt. Ask the student to show the movement on a cold sample, then observe a short section of live practice under the approved procedure."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.1.instructorFocus",
+      "locator": "body paragraph 64",
+      "text": "Choose the coaching target from what you actually see: placement, angle, arc length or travel. Keep the rest of the approved setup stable while checking whether that one change helps. Do not give four corrections at once. These practice variables are consistent with the existing WT plan. [S3]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.1.coachingSteps.0",
+      "locator": "body paragraph 65",
+      "text": "After the attempt, have the student identify one improvement and one remaining concern. Provide another short demonstration when explanation alone is not enough. Gradually reduce prompts as the student demonstrates the skill; needing support does not mean automatic return to plate practice."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.1.questions.0",
+      "locator": "body paragraph 63",
+      "text": "“Point to where the weld belongs. Show me the position you are trying to maintain. On this attempt, let’s concentrate on one thing: ____.”"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.1.lookFors.0",
+      "locator": "body paragraph 65",
+      "text": "After the attempt, have the student identify one improvement and one remaining concern. Provide another short demonstration when explanation alone is not enough. Gradually reduce prompts as the student demonstrates the skill; needing support does not mean automatic return to plate practice."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.1.safetyPrompts.0",
+      "locator": "body paragraph 57",
+      "text": "If supervision or equipment cannot support another live welding station safely, reduce simultaneous welding and use planned rotations. Other students may compare cold examples or review their own work. Do not use a more advanced student as a replacement for required instructor supervision."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.1.helpSections.0.body.0",
+      "locator": "body paragraph 64",
+      "text": "Choose the coaching target from what you actually see: placement, angle, arc length or travel. Keep the rest of the approved setup stable while checking whether that one change helps. Do not give four corrections at once. These practice variables are consistent with the existing WT plan. [S3]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.2.task",
+      "locator": "body paragraph 67",
+      "text": "The student completes the approved practice task, inspects the cleaned result against the reference, identifies a specific next adjustment, and compares the next attempt. You make periodic technique checks and targeted reviews rather than approving every bead."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.2.instructorFocus",
+      "locator": "body paragraph 69",
+      "text": "When observation suggests readiness, arrange an instructor check using the existing task/rubric. Do not force unnecessary repeated lap joints solely because the class focus remains there. Do not equate task completion, confidence, speed, or one good weld with an automatic competency change. [S1, S5]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.2.coachingSteps.0",
+      "locator": "body paragraph 67",
+      "text": "The student completes the approved practice task, inspects the cleaned result against the reference, identifies a specific next adjustment, and compares the next attempt. You make periodic technique checks and targeted reviews rather than approving every bead."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.2.questions.0",
+      "locator": "body paragraph 68",
+      "text": "“Show me the part that best matches our example. What happened where the result changed? What will you keep the same, and what will you change?”"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.2.lookFors.0",
+      "locator": "body paragraph 69",
+      "text": "When observation suggests readiness, arrange an instructor check using the existing task/rubric. Do not force unnecessary repeated lap joints solely because the class focus remains there. Do not equate task completion, confidence, speed, or one good weld with an automatic competency change. [S1, S5]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.2.safetyPrompts.0",
+      "locator": "body paragraph 56",
+      "text": "A student cleared for that specific independent practice may continue the assigned practice loop. A student who still needs you beside them does not start live work alone. Their short waiting task can be identifying the intended movement on a cold sample, using a non-energized teaching aid, or explaining the last attempt. Return to them deliberately; this is a brief bridge to instruction, not their entire period."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.2.helpSections.0.body.0",
+      "locator": "body paragraph 69",
+      "text": "When observation suggests readiness, arrange an instructor check using the existing task/rubric. Do not force unnecessary repeated lap joints solely because the class focus remains there. Do not equate task completion, confidence, speed, or one good weld with an automatic competency change. [S1, S5]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.3.task",
+      "locator": "body paragraph 73",
+      "text": "Have the student prepare the approved assembly, check its fit-up and intended weld location, perform the assigned practice, and inspect it against a suitable T-joint reference. Ask them to explain one useful comparison with their lap-joint work. Hobart’s guidance distinguishes joint/work angle from travel angle; use the setup-specific procedure rather than one unexplained angle for every task. [T2]"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.3.instructorFocus",
+      "locator": "body paragraph 71",
+      "text": "Students ready for the next task first receive an appropriate T-joint setup/technique demonstration and instructor check. Keep the current approved electrode, material and position unless you intentionally teach and authorize a change. The learning goal is applying the skill to a different joint—not making the student’s task harder in every possible way."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.3.coachingSteps.0",
+      "locator": "body paragraph 74",
+      "text": "A student new to T joints may need substantial help even after successful lap joints. Provide that help without describing them as having “gone backward.” Further extension requires a meaningful approved next task; it is not automatic permission for new positions, equipment, or independent structural fabrication."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.3.questions.0",
+      "locator": "body paragraph 72",
+      "text": "“What stays the same from your lap-joint work? What changes when the pieces form a T? Show me how you will place and control this weld.”"
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.3.lookFors.0",
+      "locator": "body paragraph 74",
+      "text": "A student new to T joints may need substantial help even after successful lap joints. Provide that help without describing them as having “gone backward.” Further extension requires a meaningful approved next task; it is not automatic permission for new positions, equipment, or independent structural fabrication."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.3.safetyPrompts.0",
+      "locator": "body paragraph 71",
+      "text": "Students ready for the next task first receive an appropriate T-joint setup/technique demonstration and instructor check. Keep the current approved electrode, material and position unless you intentionally teach and authorize a change. The learning goal is applying the skill to a different joint—not making the student’s task harder in every possible way."
+    },
+    {
+      "path": "lesson.teachingGuide.pathways.3.helpSections.0.body.0",
+      "locator": "body paragraph 74",
+      "text": "A student new to T joints may need substantial help even after successful lap joints. Provide that help without describing them as having “gone backward.” Further extension requires a meaningful approved next task; it is not automatic permission for new positions, equipment, or independent structural fabrication."
+    },
+    {
+      "path": "lesson.learningTargets.0",
+      "locator": "body paragraph 9",
+      "text": "I am learning to recognize lap and T joints and explain where a fillet weld belongs."
+    },
+    {
+      "path": "lesson.successCriteria.0",
+      "locator": "body table 10 row 3 cell 3",
+      "text": "I can follow the demonstrated setup and technique, inspect the visible result, and explain one improvement."
+    }
+  ],
+  "academic": {
+    "schoolYear": {
+      "label": "FICTIONAL 2031-32",
+      "startDate": "2031-08-20",
+      "endDate": "2032-05-20"
+    },
+    "semester": {
+      "code": "S1",
+      "label": "FICTIONAL Semester 1",
+      "startDate": "2031-08-20",
+      "endDate": "2031-12-20",
+      "order": 1
+    },
+    "gradingPeriod": {
+      "code": "Q1",
+      "label": "FICTIONAL Q1",
+      "startDate": "2031-08-20",
+      "endDate": "2031-10-20",
+      "order": 1
+    },
+    "bellSchedule": {
+      "name": "Fictional review bell",
+      "periods": [
+        {
+          "code": "1",
+          "label": "Period 1",
+          "startTime": "08:00",
+          "endTime": "08:50",
+          "kind": "Instructional"
+        },
+        {
+          "code": "2",
+          "label": "Period 2",
+          "startTime": "09:00",
+          "endTime": "09:50",
+          "kind": "Instructional"
+        },
+        {
+          "code": "3",
+          "label": "Period 3",
+          "startTime": "10:00",
+          "endTime": "10:50",
+          "kind": "Instructional"
+        }
+      ]
+    },
+    "instructionalWeekdays": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "scheduleModeName": "Fictional regular week",
+    "sections": [
+      {
+        "courseCode": "WT",
+        "period": "1",
+        "displayName": "Sample WT — Lap Joint"
+      },
+      {
+        "courseCode": "WT",
+        "period": "2",
+        "displayName": "Sample WT — T Joint Continuation"
+      },
+      {
+        "courseCode": "AWT",
+        "period": "3",
+        "displayName": "Sample AWT — No Focus"
+      }
+    ]
+  },
+  "focus": {
+    "effectiveFrom": "2031-09-29",
+    "effectiveThrough": "2031-10-10",
+    "fullLabel": "Lap-joint differentiated practice",
+    "continuationLabel": "T-joint continuation",
+    "fullNote": "Shared instruction followed by appropriate teaching options.",
+    "continuationNote": "Brief continuation after prior shared instruction."
   },
   "lesson": {
-    "title": "SMAW Lap and T Joint Teaching Review",
-    "learningTargets": ["I am learning to identify lap and T joints and explain where a fillet weld belongs."],
-    "successCriteria": ["I can identify the joint and my current work target."],
+    "title": "Lap-joint fillet welds",
+    "learningTargets": [
+      "I am learning to recognize lap and T joints and explain where a fillet weld belongs."
+    ],
+    "successCriteria": [
+      "I can follow the demonstrated setup and technique, inspect the visible result, and explain one improvement."
+    ],
+    "engagementStrategies": [
+      "Use this when the class needs the introduction or a shared correction—not automatically every Monday. For a class already practicing lap joints, shorten it to a relevant reminder or a brief demonstration of the problem you actually observed. [S2–S3]"
+    ],
+    "assessment": "Make the piece safe for handling and clean it under the shop’s procedure before discussing it. Have students point to placement and visible consistency relative to the reference sample. Do not describe an attractive surface as proof of internal fusion or penetration; subsurface problems require appropriate inspection beyond appearance. [T4]",
+    "checksForUnderstanding": [
+      "Ask: “Which is the lap joint? Where should the weld go? What would you need to control before trying this?”"
+    ],
     "teachingGuide": {
       "version": "arc-teaching-guide-v1",
       "courseId": "arc-course-wt",
-      "preparation": ["Confirm the approved setup, PPE, ventilation, samples, and safe waiting work before students begin."],
+      "preparation": [
+        "Have a cold, unwelded lap assembly, a cold T assembly, and a clean, instructor-checked example of the intended introductory weld. Add one safe example with a visible issue to discuss. Use nonstructural practice coupons and your familiar approved welding position; moving to T joints is not permission to introduce vertical or overhead welding at the same time.",
+        "Set out approved plate for foundational practice and approved coupons for lap/T work. Make cleaning and inspection tools available under normal shop procedures. Keep the examples accessible for students who need another look rather than another full explanation. These are preparation recommendations, not a claim that those supplies are already available.",
+        "The sources do not identify your electrode classification/diameter, plate thickness, machine, welding position, current/polarity, required weld dimensions, or inspection tolerances. Use your established procedure and the actual equipment/electrode instructions. This draft deliberately does not guess those values. Manufacturer guidance makes electrode/application context important to correct setup and technique. [T1–T2]",
+        "Before the first run of this lesson, identify the exact sample or procedure students should match and what you will consider a satisfactory introductory result. This is setup work for the instructor—not another set of curriculum examples you need to invent."
+      ],
       "sharedInstruction": {
-        "summary": "Use a short shared explanation and demonstration, then return students to the appropriate work for their current need.",
-        "demonstrationSteps": ["Identify the joint and intended weld location.", "Model one controlled attempt and one useful comparison."],
-        "questions": ["What will you check first, and why?"],
-        "safetyPrompts": ["Students begin only work for which the required setup, supervision, and safety expectations are in place."]
+        "summary": "Use this when the class needs the introduction or a shared correction—not automatically every Monday. For a class already practicing lap joints, shorten it to a relevant reminder or a brief demonstration of the problem you actually observed. [S2–S3]",
+        "demonstrationSteps": [
+          "Show the cold lap and T examples. Ask every student to identify each joint—by pointing, sketching briefly, or answering a partner before you check several responses. Use a nonconductive pointer to show the weld location on the cold sample. A lap joint uses overlapping pieces; a T joint changes how the pieces meet. The joint arrangement and the weld placed in it are related, but not the same term. [T2]",
+          "Before live welding, demonstrate the intended hand movement with a non-energized teaching aid and cold sample. Explain the across-joint angle separately from the tilt along the travel direction. Then demonstrate the technique appropriate to your actual electrode and setup. Do not hand students a live holder for a dry rehearsal. [T2–T3]",
+          "Run a short instructor demonstration with the approved protective arrangements. Students needing arc control watch the start and maintenance of the arc. Lap-joint students watch placement and consistency. T-joint students consider what may transfer and what will need a separate demonstration. [T2]"
+        ],
+        "questions": [
+          "Ask: “Which is the lap joint? Where should the weld go? What would you need to control before trying this?”"
+        ],
+        "safetyPrompts": [
+          "Before an arc is struck, verify the school’s required PPE, properly shaded welding protection for everyone watching, safety glasses, screens, ventilation, sound equipment and leads, and safe work-area conditions. Follow the equipment manual and school procedures for hot metal, cleaning, shutdown and emergencies. Use only instructor-approved material. This guide supplements, not replaces, that safety instruction. [T3]",
+          "A student lacking a safety clearance does not perform live welding while waiting for you. Provide a safe cold-sample identification or non-energized demonstration activity, followed by the required instructor reteaching/check. A student who is safe but still struggles to strike an arc receives supervised skill practice—not exclusion from the weekly focus. [S2–S3]"
+        ]
       },
       "pathways": [
-        {"pathwayKey":"arc-control","title":"Arc starting and control","useWhen":"Use when a learner needs prerequisite arc control instruction.","task":"Practice the approved start and a short controlled section on plate.","instructorFocus":"Narrow the immediate goal and change one variable at a time.","coachingSteps":["Demonstrate the approved start.","Compare the next short attempt."],"questions":["What changed after the start?"],"lookFors":["The learner can start and maintain the arc with the available support."],"safetyPrompts":["Live work requires the approved setup and instructor supervision."],"helpSections":[{"key":"practice-loop","title":"Practice loop","body":["Attempt, inspect, agree on one change, try again, and compare."]}]},
-        {"pathwayKey":"supported-lap","title":"Supported lap-joint work","useWhen":"Use when a learner can participate safely but still needs coaching.","task":"Show the movement on a cold sample, then complete a short supported attempt.","instructorFocus":"Choose one observed target: placement, angle, arc length, or travel.","coachingSteps":["Check fit-up and intended weld location.","Reduce prompts as the skill becomes more consistent."],"questions":["What is the one change for the next attempt?"],"lookFors":["The learner can identify one improvement and one remaining concern."],"safetyPrompts":["Keep all other approved setup variables stable while coaching one change."],"helpSections":[{"key":"reteach","title":"When explanation is not enough","body":["Provide another short demonstration and compare the next attempt."]}]},
-        {"pathwayKey":"independent-lap","title":"Independent lap-joint practice","useWhen":"Use for a learner already cleared for that specific practice.","task":"Complete the approved practice, inspect it against the reference, and identify the next adjustment.","instructorFocus":"Use periodic technique checks rather than approving every bead.","coachingSteps":["Ask for one self-correction.","Arrange an instructor check when observation suggests readiness."],"questions":["What did you keep steady here?"],"lookFors":["The learner justifies a specific self-correction."],"safetyPrompts":["Clearance for this practice does not authorize a new operation or setup."],"helpSections":[{"key":"feedback","title":"Actionable feedback","body":["Name the visible improvement and ask the learner to repeat the useful control."]}]},
-        {"pathwayKey":"t-joint-next","title":"T-joint next step","useWhen":"Use when a learner is ready for an instructor-checked next task.","task":"Compare the lap and T joint, then complete the approved first T-joint practice.","instructorFocus":"Teach what stays the same and what changes with the joint.","coachingSteps":["Demonstrate the appropriate setup and technique.","Check fit-up and intended weld location before live work."],"questions":["What stays the same from the lap joint, and what changes?"],"lookFors":["The learner identifies one adjustment needed for the new task."],"safetyPrompts":["A next step is not automatic permission for new equipment, positions, or fabrication."],"helpSections":[{"key":"first-task","title":"First-task support","body":["Provide substantial help when needed without describing the learner as going backward."]}]}
+        {
+          "pathwayKey": "arc-control",
+          "title": "Arc starting and control",
+          "useWhen": "Prerequisite arc-control instruction",
+          "task": "“For this practice, show me how you start the arc and keep it going. We are not judging a finished lap-joint weld today.”",
+          "instructorFocus": "Observe one attempt before giving a long explanation. Decide whether the immediate difficulty is starting, maintaining the arc, seeing the work, or controlling travel. Check the equipment/setup as well as the learner’s movement. Repeated sticking can have more than one cause; do not assume effort is the problem or have the student change machine settings at random. [T1]",
+          "coachingSteps": [
+            "Model only the part the student needs next. For a student unable to start, demonstrate your electrode-appropriate starting method and safe response to a stuck electrode. Let the student rehearse the motion with a non-energized teaching aid, then make a supervised attempt under the shop procedure.",
+            "Use: attempt → brief inspection/explanation → one agreed change → another attempt → compare. The learner should know what to change before repeating. Reduce the difficulty or reteach differently when repeated attempts show the same unresolved problem."
+          ],
+          "questions": [
+            "Feedback: “The start worked that time. Next, watch the gap as the electrode shortens. Show me what you will do to keep it steady.” [T2]"
+          ],
+          "lookFors": [
+            "Look at whether the student can now start and maintain the arc with the support available for the next task, and whether they can sustain suitable bead control. When it is safe and productive, let them try the next practice or a supported lap-joint introduction. They do not have to wait until Monday or become flawless first. Formal proficiency remains governed by your existing assessment rules. [S2, S5]"
+          ],
+          "safetyPrompts": [
+            "A student cleared for that specific independent practice may continue the assigned practice loop. A student who still needs you beside them does not start live work alone. Their short waiting task can be identifying the intended movement on a cold sample, using a non-energized teaching aid, or explaining the last attempt. Return to them deliberately; this is a brief bridge to instruction, not their entire period.",
+            "If supervision or equipment cannot support another live welding station safely, reduce simultaneous welding and use planned rotations. Other students may compare cold examples or review their own work. Do not use a more advanced student as a replacement for required instructor supervision."
+          ],
+          "helpSections": [
+            {
+              "key": "practice-loop",
+              "title": "Help me teach this",
+              "body": [
+                "For a student who starts but immediately loses the arc, focus the next attempt on maintaining it rather than making a long bead. Once that is manageable, introduce controlled travel and short stringer-bead practice. Do not skip that bridge simply because the shared focus is lap joints. The source competencies distinguish Arc Control from Stringer Beads. [S5]"
+              ]
+            }
+          ]
+        },
+        {
+          "pathwayKey": "supported-lap",
+          "title": "Supported lap-joint work",
+          "useWhen": "Supported lap-joint practice",
+          "task": "Use this pathway when the student can participate safely but still needs coaching. Check fit-up and the intended weld location before the first attempt. Ask the student to show the movement on a cold sample, then observe a short section of live practice under the approved procedure.",
+          "instructorFocus": "Choose the coaching target from what you actually see: placement, angle, arc length or travel. Keep the rest of the approved setup stable while checking whether that one change helps. Do not give four corrections at once. These practice variables are consistent with the existing WT plan. [S3]",
+          "coachingSteps": [
+            "After the attempt, have the student identify one improvement and one remaining concern. Provide another short demonstration when explanation alone is not enough. Gradually reduce prompts as the student demonstrates the skill; needing support does not mean automatic return to plate practice."
+          ],
+          "questions": [
+            "“Point to where the weld belongs. Show me the position you are trying to maintain. On this attempt, let’s concentrate on one thing: ____.”"
+          ],
+          "lookFors": [
+            "After the attempt, have the student identify one improvement and one remaining concern. Provide another short demonstration when explanation alone is not enough. Gradually reduce prompts as the student demonstrates the skill; needing support does not mean automatic return to plate practice."
+          ],
+          "safetyPrompts": [
+            "If supervision or equipment cannot support another live welding station safely, reduce simultaneous welding and use planned rotations. Other students may compare cold examples or review their own work. Do not use a more advanced student as a replacement for required instructor supervision."
+          ],
+          "helpSections": [
+            {
+              "key": "reteach",
+              "title": "Help me teach this",
+              "body": [
+                "Choose the coaching target from what you actually see: placement, angle, arc length or travel. Keep the rest of the approved setup stable while checking whether that one change helps. Do not give four corrections at once. These practice variables are consistent with the existing WT plan. [S3]"
+              ]
+            }
+          ]
+        },
+        {
+          "pathwayKey": "independent-lap",
+          "title": "Independent lap-joint practice",
+          "useWhen": "Independent approved practice",
+          "task": "The student completes the approved practice task, inspects the cleaned result against the reference, identifies a specific next adjustment, and compares the next attempt. You make periodic technique checks and targeted reviews rather than approving every bead.",
+          "instructorFocus": "When observation suggests readiness, arrange an instructor check using the existing task/rubric. Do not force unnecessary repeated lap joints solely because the class focus remains there. Do not equate task completion, confidence, speed, or one good weld with an automatic competency change. [S1, S5]",
+          "coachingSteps": [
+            "The student completes the approved practice task, inspects the cleaned result against the reference, identifies a specific next adjustment, and compares the next attempt. You make periodic technique checks and targeted reviews rather than approving every bead."
+          ],
+          "questions": [
+            "“Show me the part that best matches our example. What happened where the result changed? What will you keep the same, and what will you change?”"
+          ],
+          "lookFors": [
+            "When observation suggests readiness, arrange an instructor check using the existing task/rubric. Do not force unnecessary repeated lap joints solely because the class focus remains there. Do not equate task completion, confidence, speed, or one good weld with an automatic competency change. [S1, S5]"
+          ],
+          "safetyPrompts": [
+            "A student cleared for that specific independent practice may continue the assigned practice loop. A student who still needs you beside them does not start live work alone. Their short waiting task can be identifying the intended movement on a cold sample, using a non-energized teaching aid, or explaining the last attempt. Return to them deliberately; this is a brief bridge to instruction, not their entire period."
+          ],
+          "helpSections": [
+            {
+              "key": "feedback",
+              "title": "Help me teach this",
+              "body": [
+                "When observation suggests readiness, arrange an instructor check using the existing task/rubric. Do not force unnecessary repeated lap joints solely because the class focus remains there. Do not equate task completion, confidence, speed, or one good weld with an automatic competency change. [S1, S5]"
+              ]
+            }
+          ]
+        },
+        {
+          "pathwayKey": "t-joint-next",
+          "title": "T-joint next step",
+          "useWhen": "Instructor-checked next task",
+          "task": "Have the student prepare the approved assembly, check its fit-up and intended weld location, perform the assigned practice, and inspect it against a suitable T-joint reference. Ask them to explain one useful comparison with their lap-joint work. Hobart’s guidance distinguishes joint/work angle from travel angle; use the setup-specific procedure rather than one unexplained angle for every task. [T2]",
+          "instructorFocus": "Students ready for the next task first receive an appropriate T-joint setup/technique demonstration and instructor check. Keep the current approved electrode, material and position unless you intentionally teach and authorize a change. The learning goal is applying the skill to a different joint—not making the student’s task harder in every possible way.",
+          "coachingSteps": [
+            "A student new to T joints may need substantial help even after successful lap joints. Provide that help without describing them as having “gone backward.” Further extension requires a meaningful approved next task; it is not automatic permission for new positions, equipment, or independent structural fabrication."
+          ],
+          "questions": [
+            "“What stays the same from your lap-joint work? What changes when the pieces form a T? Show me how you will place and control this weld.”"
+          ],
+          "lookFors": [
+            "A student new to T joints may need substantial help even after successful lap joints. Provide that help without describing them as having “gone backward.” Further extension requires a meaningful approved next task; it is not automatic permission for new positions, equipment, or independent structural fabrication."
+          ],
+          "safetyPrompts": [
+            "Students ready for the next task first receive an appropriate T-joint setup/technique demonstration and instructor check. Keep the current approved electrode, material and position unless you intentionally teach and authorize a change. The learning goal is applying the skill to a different joint—not making the student’s task harder in every possible way."
+          ],
+          "helpSections": [
+            {
+              "key": "first-task",
+              "title": "Help me teach this",
+              "body": [
+                "A student new to T joints may need substantial help even after successful lap joints. Provide that help without describing them as having “gone backward.” Further extension requires a meaningful approved next task; it is not automatic permission for new positions, equipment, or independent structural fabrication."
+              ]
+            }
+          ]
+        }
       ],
       "source": {
         "authorityKey": "ARC_WT_LAP_JOINT_GUIDE_DRAFT_1",
-        "recordKey": "isolated-review-excerpts",
+        "recordKey": "full-reading-extract",
         "checksum": "bb11ff2828d0ffa3eddcb81801934a6207fc1d829fb7993928fc39718ee7eda9",
-        "locators": ["body paragraphs 17-24", "body paragraphs 30-44", "body paragraphs 46-59", "body paragraphs 62-76", "body paragraphs 81 and 83"],
+        "locators": [
+          "body paragraphs 17-24",
+          "body paragraphs 30-44",
+          "body paragraphs 46-59",
+          "body paragraphs 62-76"
+        ],
         "contentStatus": "draft_review_fixture"
       }
-    }
+    },
+    "fixtureContentHash": "2aa5784ce583ce3ba757e1606b964c06aa4be8ba53eeba9cbf850aa7d20b5b89"
   }
 }

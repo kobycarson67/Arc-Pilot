@@ -249,3 +249,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Normal `index.html`, Titanium shell, existing adapters, schema/storage, build/cache/service worker and Today's Focus remain unchanged. Normal classroom authority remains Schema 7 / `V7_ONLY`.
 - Draft lap-joint excerpts remain isolated review content with exact checksum/locators. They are not production instructional acceptance or an import.
 - Browser/Samsung acceptance, publication, normal-shell activation, real content, Student-path connections and following stages remain separately authorized work.
+
+## 2026-10-01 — Daily Teaching First Slice 1 Repair 1
+
+- Continued from local First Slice 1 commit `5bb36b268274ceeaf2e068b3d05c93a9296c073e` on a bounded repair branch with rollback `rollback/pre-daily-teaching-first-slice-1-repair-1`.
+- Corrected the actual opened-connection/storage-factory composition, explicit fictional Academic Administration setup, all-store fixture recognition, and durable preparation status.
+- Made Teaching Focus correction/clear append-first and protected its event family from generic mutation routes; strengthened scope, date, chain, and exact Lesson/pacing validation.
+- Completed the approved teaching interactions and stored guide visibility, including preparation, questions, coaching, nested help, reliable Back, context state, and asynchronous cancellation.
+- Replaced excerpt-only provenance with complete source-text SHA-256/byte proof, exact field bindings, strict malformed-data refusal, and a deterministic fixture-content hash.
+- Normal ARC remains Schema 7 / `V7_ONLY`; the local v8 declarations remain Schema 8 / IndexedDB 13 / 73 stores. No production/classroom database, global storage, navigation, build/cache/service worker, deployment, or Samsung authority changed.

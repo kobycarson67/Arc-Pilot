@@ -1,0 +1,40 @@
+{
+  "fixtureId": "daily-teaching-first-slice-1",
+  "sampleDate": "2031-10-01",
+  "source": {
+    "authorityKey": "ARC_WT_LAP_JOINT_GUIDE_DRAFT_1",
+    "recordKey": "isolated-review-excerpts",
+    "checksum": "bb11ff2828d0ffa3eddcb81801934a6207fc1d829fb7993928fc39718ee7eda9",
+    "locators": ["body paragraphs 17-24", "body paragraphs 30-44", "body paragraphs 46-59", "body paragraphs 62-76", "body paragraphs 81 and 83"],
+    "contentStatus": "draft_review_fixture"
+  },
+  "lesson": {
+    "title": "SMAW Lap and T Joint Teaching Review",
+    "learningTargets": ["I am learning to identify lap and T joints and explain where a fillet weld belongs."],
+    "successCriteria": ["I can identify the joint and my current work target."],
+    "teachingGuide": {
+      "version": "arc-teaching-guide-v1",
+      "courseId": "arc-course-wt",
+      "preparation": ["Confirm the approved setup, PPE, ventilation, samples, and safe waiting work before students begin."],
+      "sharedInstruction": {
+        "summary": "Use a short shared explanation and demonstration, then return students to the appropriate work for their current need.",
+        "demonstrationSteps": ["Identify the joint and intended weld location.", "Model one controlled attempt and one useful comparison."],
+        "questions": ["What will you check first, and why?"],
+        "safetyPrompts": ["Students begin only work for which the required setup, supervision, and safety expectations are in place."]
+      },
+      "pathways": [
+        {"pathwayKey":"arc-control","title":"Arc starting and control","useWhen":"Use when a learner needs prerequisite arc control instruction.","task":"Practice the approved start and a short controlled section on plate.","instructorFocus":"Narrow the immediate goal and change one variable at a time.","coachingSteps":["Demonstrate the approved start.","Compare the next short attempt."],"questions":["What changed after the start?"],"lookFors":["The learner can start and maintain the arc with the available support."],"safetyPrompts":["Live work requires the approved setup and instructor supervision."],"helpSections":[{"key":"practice-loop","title":"Practice loop","body":["Attempt, inspect, agree on one change, try again, and compare."]}]},
+        {"pathwayKey":"supported-lap","title":"Supported lap-joint work","useWhen":"Use when a learner can participate safely but still needs coaching.","task":"Show the movement on a cold sample, then complete a short supported attempt.","instructorFocus":"Choose one observed target: placement, angle, arc length, or travel.","coachingSteps":["Check fit-up and intended weld location.","Reduce prompts as the skill becomes more consistent."],"questions":["What is the one change for the next attempt?"],"lookFors":["The learner can identify one improvement and one remaining concern."],"safetyPrompts":["Keep all other approved setup variables stable while coaching one change."],"helpSections":[{"key":"reteach","title":"When explanation is not enough","body":["Provide another short demonstration and compare the next attempt."]}]},
+        {"pathwayKey":"independent-lap","title":"Independent lap-joint practice","useWhen":"Use for a learner already cleared for that specific practice.","task":"Complete the approved practice, inspect it against the reference, and identify the next adjustment.","instructorFocus":"Use periodic technique checks rather than approving every bead.","coachingSteps":["Ask for one self-correction.","Arrange an instructor check when observation suggests readiness."],"questions":["What did you keep steady here?"],"lookFors":["The learner justifies a specific self-correction."],"safetyPrompts":["Clearance for this practice does not authorize a new operation or setup."],"helpSections":[{"key":"feedback","title":"Actionable feedback","body":["Name the visible improvement and ask the learner to repeat the useful control."]}]},
+        {"pathwayKey":"t-joint-next","title":"T-joint next step","useWhen":"Use when a learner is ready for an instructor-checked next task.","task":"Compare the lap and T joint, then complete the approved first T-joint practice.","instructorFocus":"Teach what stays the same and what changes with the joint.","coachingSteps":["Demonstrate the appropriate setup and technique.","Check fit-up and intended weld location before live work."],"questions":["What stays the same from the lap joint, and what changes?"],"lookFors":["The learner identifies one adjustment needed for the new task."],"safetyPrompts":["A next step is not automatic permission for new equipment, positions, or fabrication."],"helpSections":[{"key":"first-task","title":"First-task support","body":["Provide substantial help when needed without describing the learner as going backward."]}]}
+      ],
+      "source": {
+        "authorityKey": "ARC_WT_LAP_JOINT_GUIDE_DRAFT_1",
+        "recordKey": "isolated-review-excerpts",
+        "checksum": "bb11ff2828d0ffa3eddcb81801934a6207fc1d829fb7993928fc39718ee7eda9",
+        "locators": ["body paragraphs 17-24", "body paragraphs 30-44", "body paragraphs 46-59", "body paragraphs 62-76", "body paragraphs 81 and 83"],
+        "contentStatus": "draft_review_fixture"
+      }
+    }
+  }
+}

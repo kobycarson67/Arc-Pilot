@@ -240,3 +240,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Replaced predictable temp paths before running the focused suite. All refusal and invalid-input cleanup is confined to exclusively allocated temporary roots, with sentinel, neighbor, and absent-output behavior verified.
 - The compiler revision is `p10d-p1-proposal-fidelity-repair-1`. Counts and boundaries remain 859 blocked roles, 408 historical dispositions, 259 absent optional relationships, 51 approved WT links, and eight unresolved areas.
 - Outputs remain `PROPOSED_UNIMPORTED` / `NOT_READY_FOR_REHEARSAL`. Schema 7 / `V7_ONLY` remains controlling; no runtime, database, parity, production, remote, publication, deployment, or Samsung authority changed. Independent review remains pending and no subsequent stage is authorized.
+
+## 2026-10-01 — Daily Teaching First Slice 1 isolated review
+
+- Began from commit `488b5d7f8d00bd25168e05b69abbe8da2d3eebb5`, tree `64b2922893161a2eae4f1f33d23b675cb141a420`, with rollback `rollback/pre-daily-teaching-first-slice-1`.
+- Added optional validated teaching guidance to immutable Lesson Versions and append-first explicit Section focus windows to P10B pacing authority.
+- Added a reusable read-only projection/UI and dedicated engineering review coordinator hard-bound to `arc_classroom_v8_daily_teaching_verification`. Page load does not open or seed data; fictional setup is explicit and no Students are created.
+- Normal `index.html`, Titanium shell, existing adapters, schema/storage, build/cache/service worker and Today's Focus remain unchanged. Normal classroom authority remains Schema 7 / `V7_ONLY`.
+- Draft lap-joint excerpts remain isolated review content with exact checksum/locators. They are not production instructional acceptance or an import.
+- Browser/Samsung acceptance, publication, normal-shell activation, real content, Student-path connections and following stages remain separately authorized work.

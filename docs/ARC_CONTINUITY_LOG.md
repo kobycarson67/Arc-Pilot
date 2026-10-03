@@ -290,3 +290,13 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Extended synthetic migration, integrity, backup, readback, restore, compatibility, owner, and package verification for 74 stores. Historical protected 10/53, 11/54, 12/67, and 13/73 production manifests remain recognized without production access or upgrade.
 - The resolved R2 package remains `PROPOSED_UNPERSISTED`. Normal ARC remains Schema 7 / `V7_ONLY`; no UI, build/cache, service worker, production, publication, deployment, Samsung, real Student, or authority-transfer action occurred.
 - After independent review, the next separately authorized boundary is one exact frozen-package rehearsal in a new isolated nonproduction database with recovery, phase readback, failure/retry, completion-gate, and backup/restore proof.
+
+## 2026-10-02 — P10D-PR1 isolated persisted rehearsal and Essential history repair
+
+- Continued from the accepted O1 commit on `codex/p10d-pr1-isolated-persisted-rehearsal-1` with rollback `rollback/pre-p10d-pr1-isolated-persisted-rehearsal-1`.
+- Preserved the first failed Edge rehearsal as historical lineage. That run proved the accepted frozen Essential records omit unknown `recordedAt`/`recordedBy` fields and exposed an unsafe reader assumption.
+- Repaired only Essential-history read ordering. Dated records sort first; undated records use deterministic Standard, chain-revision, and designation-identity fallbacks. No historical date or operator is fabricated.
+- Completed a fresh installed-Edge rehearsal in only `arc_classroom_v8_p10d_persisted_rehearsal_1`: authorized injected stop, close/reopen persistence, 62-row idempotent resume, all eight phases, controlled conflict refusal, exact 859/359/259 readback, completion/read gates, rehearsal-only availability, and 74-store backup/reset/restore/reopen parity.
+- All ten Essential projections retained null historical selection facts and absent import-history facts. All 124 legacy Lessons remained `reference_only`, instructionally unaccepted, ordinary-scheduling and Auto Build ineligible, and without fabricated `teachingGuide`.
+- The dedicated database, Edge profile, loopback server, and temporary harness were removed after evidence capture. Normal ARC remains Schema 7 / `V7_ONLY`; production, Samsung, publication, deployment, and authority transfer remain untouched and unauthorized.
+- Independent review is pending. Production structural upgrade/import requires separate authorization.

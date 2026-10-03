@@ -319,3 +319,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The five repaired historical suites passed `9/9`, `8/8`, `20/20`, `7/7`, and `7/7`; the complete JavaScript gate passed `101/101` and static regression passed `47/47` before publication.
 - Normal ARC, `index.html`, `app-build.js`, storage, migrations, backup/recovery, production initialization, instructional owners/package/coordinator, and physical Samsung state remain unchanged.
 - The published engineering bridge does not authorize Samsung access. The next separately authorized physical checkpoint begins with read-only inspection and pre-upgrade recovery capture only; physical mutation requires a later explicit one-time authorization.
+
+## 2026-10-03 — P10D-PI1 guarded production instructional-import bridge
+
+- Began from accepted and published PU2 commit `44de8ee339ded9bbe820a684c7fc1204eb3ab3fb`, tree `3766a9f4d50a4771b3dcab026b495686596bd553`, with local rollback `rollback/pre-p10d-pi1-production-instructional-import-bridge-1` and publication rollback `rollback/pre-p10d-pi1-main-publication`.
+- Extended only the existing Stage-2 engineering surface with an inert, exact-production instructional-import bridge and a separately explicit production coordinator factory. Normal `index.html` remains unwired.
+- Preserved the exact frozen 859-UUID identity map and resolved payload bytes. The bridge requires exact protected 14/74 production, a fresh verified backup, URL-bound publication authority, and exact destructive confirmation.
+- Completed a real installed-Edge production-shaped rehearsal from the supplied Samsung PU3 post-upgrade backup. The exact 859 roles, 359 retained links, 259 intentional absences, 51 WT links, zero AWT competency links, and 124 reference-only Lessons survived complete import, close/reopen, destructive backup restore, and exact per-store parity.
+- The package remained `verified_complete` and unavailable; ordinary owner reads remained blocked. Only canonical WT/AWT Courses were created. No Student or other classroom transaction was created, no teaching guide was fabricated, and `V7_ONLY` was preserved.
+- Physical Samsung production remained untouched. PI1 does not authorize Samsung instructional import, package availability, normal v8 activation, real Student data, or classroom authority transfer.

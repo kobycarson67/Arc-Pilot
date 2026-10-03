@@ -258,3 +258,13 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Completed the approved teaching interactions and stored guide visibility, including preparation, questions, coaching, nested help, reliable Back, context state, and asynchronous cancellation.
 - Replaced excerpt-only provenance with complete source-text SHA-256/byte proof, exact field bindings, strict malformed-data refusal, and a deterministic fixture-content hash.
 - Normal ARC remains Schema 7 / `V7_ONLY`; the local v8 declarations remain Schema 8 / IndexedDB 13 / 73 stores. No production/classroom database, global storage, navigation, build/cache/service worker, deployment, or Samsung authority changed.
+
+## 2026-10-02 — P10D-R2 resolved instructional representation
+
+- Began from Daily Teaching Repair 1 commit `48b1f6f49145ae95f85fb020004697a2012dbcd3`, tree `b0890b7fe114fedacc254ec2d0e928809af6f28e`, with rollback `rollback/pre-p10d-r2-resolved-representation-1`.
+- Froze one pure representation context for all 859 accepted P10D roles and separated one-time opaque UUID allocation from deterministic compilation using exact frozen identity-map bytes.
+- Preserved 408 dispositions, 149 overlays, 259 absent optional relationships, 80 Curriculum→Standard links, 228 Lesson→Standard links, 51 WT Lesson→Competency links, and zero invented AWT Lesson→Competency links.
+- Carried the instructor decision that all 124 preserved legacy Lessons begin `reference_only`, without instructional acceptance, ordinary new-scheduling eligibility, Auto Build eligibility, or fabricated `teachingGuide` content.
+- Resolved representation and provenance for 29 Standards, 10 Essentials, 60 Competencies, 56 Curriculum items, and 124 Lesson Versions while preserving exact source meaning and reversible source shapes.
+- Outputs remain `PROPOSED_UNPERSISTED` / `READY_FOR_OWNER_IMPLEMENTATION`; persisted rehearsal remains blocked by owner-service, durable package storage, command/read gates, atomic recovery, and separate authorization.
+- Normal ARC remains Schema 7 / `V7_ONLY`. No database, import, runtime/UI, build/cache/service worker, schema/store, parity, production, remote, publication, deployment, or Samsung authority changed.

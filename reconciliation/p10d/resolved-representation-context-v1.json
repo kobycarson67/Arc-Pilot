@@ -1,0 +1,93 @@
+{
+  "format": "arc-p10d-resolved-representation-context-v1",
+  "version": 1,
+  "status": "PROPOSED_UNPERSISTED",
+  "academicAuthority": "V7_ONLY",
+  "purpose": "Pure source-to-target representation contract for the 859 accepted P10D roles; no database, runtime, import, or classroom activation authority.",
+  "courseContext": {
+    "wt": "arc-course-wt",
+    "awt": "arc-course-awt"
+  },
+  "identityContract": {
+    "allocation": "one-time external opaque UUID allocation",
+    "compilation": "requires the exact supplied frozen identity-map bytes",
+    "derivationProhibited": ["source code", "name", "ordinal", "index", "content hash"],
+    "silentReplacementProhibited": true
+  },
+  "contentHashContract": {
+    "algorithm": "SHA-256",
+    "canonicalization": "recursively sorted JSON object keys with array order preserved",
+    "includes": "resolved semantic target representation and source-shape/provenance fields",
+    "excludes": ["allocated target identity", "future persistence timestamps", "future operator identity"]
+  },
+  "lessonPolicy": {
+    "legacyLessonVersionCount": 124,
+    "initialAvailability": "reference_only",
+    "instructionalAcceptance": null,
+    "ordinarySchedulingEligible": false,
+    "autoBuildEligible": false,
+    "teachingGuide": {
+      "capability": "optional structured field on improved exact Lesson Versions",
+      "legacyContentMayOmit": true,
+      "legacyContentFabricationProhibited": true
+    }
+  },
+  "sourceShapeContract": {
+    "preserveDistinctions": ["missing", "null", "empty string", "empty array", "scalar", "array"],
+    "normalizationMayNotReplaceExactSourceShape": true
+  },
+  "essentialEvidenceContract": {
+    "recoverableBytesRequired": true,
+    "sourceResolutionCount": 2,
+    "essentialSelectionCount": 10,
+    "historicalSelectionDateWhenUnknown": null,
+    "historicalSelectionOperatorWhenUnknown": null,
+    "futureImportTimeAndOperatorAreSeparateFacts": true
+  },
+  "relationshipContract": {
+    "retained": {
+      "CURRICULUM_STANDARD_LINK": 80,
+      "LESSON_STANDARD_LINK": 228,
+      "LESSON_COMPETENCY_LINK": 51
+    },
+    "optionalAbsent": 259,
+    "awtLessonCompetencyLinks": 0,
+    "endpointRebinding": "exact included target-role UUIDs only"
+  },
+  "roleContracts": {
+    "STANDARD_CATALOG": {"owner":"ArcV8CurriculumPacing","method":"createStandardCatalog","store":"standard_catalogs","idField":"standardCatalogId","representation":"exact accepted catalog identity, course scope, title, lifecycle and source provenance"},
+    "STANDARD_CATALOG_VERSION": {"owner":"ArcV8CurriculumPacing","method":"createStandardCatalogVersion","store":"standard_catalog_versions","idField":"standardCatalogVersionId","representation":"immutable reviewed official course-publication profile and exact source provenance"},
+    "STANDARD_DEFINITION": {"owner":"ArcV8CurriculumPacing","method":"createStandardDefinition","store":"standard_definitions","idField":"standardId","representation":"stable course-scoped Standard identity and lifecycle"},
+    "STANDARD_VERSION": {"owner":"ArcV8CurriculumPacing","method":"createStandardVersion","store":"standard_versions","idField":"standardVersionId","representation":"immutable official wording, exact parent statement, Webb level/label, historical repository wording and evidence"},
+    "ESSENTIAL_STANDARD_DESIGNATION": {"owner":"ArcV8CurriculumPacing","method":"designateEssentialStandard","store":"essential_standard_designations","idField":"essentialStandardDesignationId","representation":"explicit course/catalog-version designation with recoverable accepted evidence; unknown historical actor/date remain null"},
+    "CURRICULUM_MAP": {"owner":"ArcV8CurriculumPacing","method":"createCurriculumMap","store":"curriculum_maps","idField":"curriculumMapId","representation":"stable WT/AWT map identity, lifecycle and source provenance"},
+    "CURRICULUM_MAP_VERSION": {"owner":"ArcV8CurriculumPacing","method":"createCurriculumMapVersion","store":"curriculum_map_versions","idField":"curriculumMapVersionId","representation":"immutable ordered map-version identity and exact source provenance"},
+    "CURRICULUM_MAP_ITEM": {"owner":"ArcV8CurriculumPacing","method":"createCurriculumMapItem","store":"curriculum_map_items","idField":"curriculumMapItemId","representation":"quarter, order, timeframe, focus, Standards prose, targets, criteria, strategies, assessment, duration and reversible source shapes"},
+    "CURRICULUM_STANDARD_LINK": {"owner":"ArcV8CurriculumPacing","method":"linkCurriculumItemStandard","store":"curriculum_item_standard_links","idField":"curriculumItemStandardLinkId","representation":"exact normalized endpoint identities plus source relationship identity, text, hash and R1B basis"},
+    "COMPETENCY_DEFINITION": {"owner":"ArcV8Evidence","method":"createCompetency","store":"competency_definitions","idField":"competencyId","representation":"stable WT/AWT Competency identity"},
+    "COMPETENCY_VERSION": {"owner":"ArcV8Evidence","method":"createCompetencyVersion","store":"competency_versions","idField":"competencyVersionId","representation":"immutable category, display order, exact Standard text, four ordered levels, Student statement and source provenance"},
+    "LESSON_DEFINITION": {"owner":"ArcV8LessonPlans","method":"createLessonDefinition","store":"lesson_definitions","idField":"lessonId","representation":"stable Lesson identity, WT/AWT scope, numbered/reusable classification, lifecycle and provenance"},
+    "LESSON_VERSION": {"owner":"ArcV8LessonPlans","method":"createLessonVersionBundle","store":"lesson_versions","idField":"lessonVersionId","representation":"immutable exact Lesson content, reversible source shape, separate checksums, reference_only availability, no instructional acceptance, and optional future teachingGuide capability"},
+    "LESSON_STANDARD_LINK": {"owner":"ArcV8LessonPlans","method":"createLessonVersionBundle.relationships.standards","store":"lesson_version_standard_links","idField":"lessonStandardLinkId","representation":"exact normalized endpoint identities plus source relationship identity, text, hash and R1B basis"},
+    "LESSON_COMPETENCY_LINK": {"owner":"ArcV8LessonPlans","method":"createLessonVersionBundle.relationships.competencies","store":"lesson_version_competency_links","idField":"lessonCompetencyLinkId","representation":"only the 51 approved WT endpoint bindings with source relationship identity, hash and R1B basis"}
+  },
+  "packageRecoveryContract": {
+    "futureDurableAuthorityRequired": true,
+    "thisTaskAddsStore": false,
+    "requiredRecoverableMembers": ["resolved context bytes", "frozen identity-map bytes", "resolved payload bytes", "source-to-target membership bytes", "accepted source-resolution evidence bytes", "accepted Essential-provenance evidence bytes", "per-member SHA-256"],
+    "states": ["proposed", "assembling", "verified_complete", "available", "failed_or_superseded"],
+    "transitionOrder": ["freeze exact members", "verify hashes and coverage", "write complete package", "read back and reverify", "mark available"],
+    "commandGate": "ordinary classroom commands must reject every role whose package is not available and verified_complete",
+    "readGate": "ordinary selectable/Auto Build reads must reject incomplete package roles; authorized reference/audit reads may include reference_only Lessons",
+    "retry": "same frozen map and member bytes are idempotent; changed bytes require a new package proposal",
+    "conflict": "stale revision or member-hash mismatch refuses the transition",
+    "availabilityTransition": "future reviewed transition creates distinct authority and never changes source or normalized content hashes"
+  },
+  "remainingImplementationBlockers": [
+    "OWNER_SERVICE_CONTRACT_IMPLEMENTATION",
+    "DURABLE_PACKAGE_STORAGE_IMPLEMENTATION",
+    "COMMAND_AND_READ_GATE_IMPLEMENTATION",
+    "ATOMIC_PACKAGE_RECOVERY_IMPLEMENTATION",
+    "PERSISTED_ISOLATED_REHEARSAL_NOT_AUTHORIZED"
+  ]
+}

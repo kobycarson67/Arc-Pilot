@@ -280,3 +280,13 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Closed R2-05 with explicit machine-readable package completion and conflict-refusal criteria. No package store or database behavior was added.
 - All prior R2 counts and decisions remain exact: 859 roles, 408 dispositions, 149 overlays, 259 optional absences, 359 retained links, 51 WT Lesson→Competency links, zero AWT links, and 124 `reference_only` legacy Lessons.
 - Outputs remain `PROPOSED_UNPERSISTED` / `READY_FOR_OWNER_IMPLEMENTATION`; normal ARC remains Schema 7 / `V7_ONLY`. No database, import/rehearsal, owner service, runtime/UI, schema/store, build/cache, production, remote, publication, deployment, or Samsung action occurred.
+
+## 2026-10-02 — P10D-O1 owner and durable package foundation
+
+- Began from accepted P10D-R2 Repair 1 commit `7b53660cb9b1aa84f734b9499ed2102a9c6e4087`, tree `e8bdf94611c201a994055e0496ef0c097f150e9c`, with rollback `rollback/pre-p10d-o1-owner-package-foundation-1`.
+- Preserved logical Schema 8 and advanced only local isolated IndexedDB authority from 13 to 14 and 73 to 74 stores. Ordered migration `indexeddb-13-to-14` adds only append-first `instructional_content_packages` authority.
+- Added derived package lifecycle, strict completion, write, ordinary-read, and explicit audit/reference gates. Curriculum/Standards/Essentials, Competency, and preserved Lesson owners now accept exact package-bound R2 target representations while retaining ordinary authoring compatibility.
+- Preserved the exact 859-UUID identity map, all accepted R2 relationship decisions, and the 124-Lesson `reference_only` boundary. No real R2 role was persisted and no teaching guidance was fabricated.
+- Extended synthetic migration, integrity, backup, readback, restore, compatibility, owner, and package verification for 74 stores. Historical protected 10/53, 11/54, 12/67, and 13/73 production manifests remain recognized without production access or upgrade.
+- The resolved R2 package remains `PROPOSED_UNPERSISTED`. Normal ARC remains Schema 7 / `V7_ONLY`; no UI, build/cache, service worker, production, publication, deployment, Samsung, real Student, or authority-transfer action occurred.
+- After independent review, the next separately authorized boundary is one exact frozen-package rehearsal in a new isolated nonproduction database with recovery, phase readback, failure/retry, completion-gate, and backup/restore proof.

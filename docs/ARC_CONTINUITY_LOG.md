@@ -300,3 +300,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - All ten Essential projections retained null historical selection facts and absent import-history facts. All 124 legacy Lessons remained `reference_only`, instructionally unaccepted, ordinary-scheduling and Auto Build ineligible, and without fabricated `teachingGuide`.
 - The dedicated database, Edge profile, loopback server, and temporary harness were removed after evidence capture. Normal ARC remains Schema 7 / `V7_ONLY`; production, Samsung, publication, deployment, and authority transfer remain untouched and unauthorized.
 - Independent review is pending. Production structural upgrade/import requires separate authorization.
+
+## 2026-10-03 — P10D-PU1 protected production structural-upgrade rehearsal
+
+- Began from accepted PR1 commit `d20b472eff0ed282e1e0f81c1e395accad3ba498`, tree `67e3611c90b637bc2b99af083aa07a82a9238670`, with rollback `rollback/pre-p10d-pu1-protected-production-upgrade-rehearsal-1`.
+- Reconstructed the exact published protected Schema 8 / IDB 10 / 53-store empty production foundation from commit `52b7d1b3ed920c0e889e211e41ea34b6e0395bbd` in a new task-owned Edge profile, then verified its backup and destructive restore before migration.
+- Completed the existing ordered 10→11→12→13→14 path to exactly 74 stores. All 21 added stores remained empty; historical domain records and production initialization, zero-import reconciliation, and protection manifests were preserved.
+- Verified healthy integrity, `V7_ONLY`, no classroom transfer, no real-Student authorization, protected-reset refusal, current 74-store backup, destructive restore, reopen, and per-store count/checksum parity.
+- Imported no instructional content and created no package event. The task database, Edge profile, loopback server, and temporary execution machinery were removed after evidence capture. Physical Samsung production remained untouched.
+- PU1 is isolated engineering evidence only. Publication, Samsung pre-upgrade recovery and structural upgrade, instructional import, normal v8 activation, and authority transfer require separate authorization after independent review.

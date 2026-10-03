@@ -268,3 +268,15 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Resolved representation and provenance for 29 Standards, 10 Essentials, 60 Competencies, 56 Curriculum items, and 124 Lesson Versions while preserving exact source meaning and reversible source shapes.
 - Outputs remain `PROPOSED_UNPERSISTED` / `READY_FOR_OWNER_IMPLEMENTATION`; persisted rehearsal remains blocked by owner-service, durable package storage, command/read gates, atomic recovery, and separate authorization.
 - Normal ARC remains Schema 7 / `V7_ONLY`. No database, import, runtime/UI, build/cache/service worker, schema/store, parity, production, remote, publication, deployment, or Samsung authority changed.
+
+## 2026-10-02 — P10D-R2 Repair 1
+
+- Continued from R2 commit `efbc735dca4c8dd33609d683d1d40ef7b841b411`, tree `fe8bdd5a080ab98e2da39cdab500cad0c79489b9`, with rollback `rollback/pre-p10d-r2-resolved-representation-repair-1`.
+- Preserved the exact accepted 627,717-byte identity map at SHA-256 `7ba2956022875c03cc1bea1ee9ffa205fa78c204bfdc967c06c66fc5b1c3b750`; no UUID was reallocated or replaced.
+- Closed R2-01 by making every one of 859 target primary-key fields equal its frozen UUID.
+- Closed R2-02 with allocation-independent semantic content hashes that retain logical relationship meaning and change on controlled semantic mutation.
+- Closed R2-03 by placing the exact accepted official Course profile on the two Standard Catalog Versions and keeping wording/parent/Webb evidence on 29 Standard Versions.
+- Closed R2-04 with machine-readable owner-ready field/translation contracts for all 15 role types, complete Competency fields, ordinary Curriculum/Lesson arrays, reversible exact source shapes, explicit Essential history/evidence, and exact retained-link provenance.
+- Closed R2-05 with explicit machine-readable package completion and conflict-refusal criteria. No package store or database behavior was added.
+- All prior R2 counts and decisions remain exact: 859 roles, 408 dispositions, 149 overlays, 259 optional absences, 359 retained links, 51 WT Lesson→Competency links, zero AWT links, and 124 `reference_only` legacy Lessons.
+- Outputs remain `PROPOSED_UNPERSISTED` / `READY_FOR_OWNER_IMPLEMENTATION`; normal ARC remains Schema 7 / `V7_ONLY`. No database, import/rehearsal, owner service, runtime/UI, schema/store, build/cache, production, remote, publication, deployment, or Samsung action occurred.

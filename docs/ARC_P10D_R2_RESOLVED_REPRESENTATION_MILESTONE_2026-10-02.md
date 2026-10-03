@@ -59,3 +59,19 @@ No ARC database or browser service was opened. No content was imported. No runti
 ## Next boundary
 
 Independent review of the R2 code and external artifacts is required. A future owner-service/package implementation needs separate authorization. Database rehearsal, import, publication, deployment, and classroom activation remain prohibited.
+
+## Repair 1 qualification
+
+Independent review accepted the R2 archive and deterministic identity replay but opened findings R2-01 through R2-05. Repair 1 closes those findings without changing the accepted 859 UUID allocations or any source, Standards, Essential, relationship, Lesson-availability, runtime, or authority decision.
+
+### Corrected representation
+
+- Every target record now places its exact frozen UUID in its declared primary-key field. Historical identifiers remain only in source identity and provenance.
+- `targetContentHash` now hashes canonical semantic content and logical source endpoint meaning while excluding the role UUID and all rebound endpoint UUIDs. Independent valid allocations produce the same 859 semantic hashes; controlled content changes change the affected hash.
+- Each Standard Catalog Version owns the exact accepted official Course profile: course number, `May 2022` label, prerequisites, credit text, and source-resolution decision. Standard Versions own wording, parent statement, Webb metadata, evidence reference, and historical wording provenance.
+- All 15 role types now have machine-readable required target fields and translation rules. The resolved fields use owner-ready names and types while `sourceRecordExact`, source-shape companions, and provenance retain complete source meaning.
+- Package `verified_complete` / `available` criteria now explicitly require 859 verified roles, 359 exact links, 259 confirmed absences, both canonical Course contexts, recoverable accepted evidence, owner projection/readback agreement, checksum verification, and absence of defined conflicts.
+
+Competency `catalogId` is mechanically grounded as the exact accepted `COMP` source authority plus exact source Course (`COMP|wt` or `COMP|awt`). `domainCode` is the exact accepted source category. This defines no new catalog policy or store.
+
+Legacy Lessons remain `reference_only`, instructionally unaccepted, unavailable to ordinary scheduling and Auto Build, and free of fabricated `teachingGuide` content. The repaired artifacts remain `PROPOSED_UNPERSISTED` / `READY_FOR_OWNER_IMPLEMENTATION`; package/storage/owner implementation and persisted rehearsal remain separate future authorization boundaries.

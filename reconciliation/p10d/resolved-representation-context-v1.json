@@ -11,14 +11,19 @@
   "identityContract": {
     "allocation": "one-time external opaque UUID allocation",
     "compilation": "requires the exact supplied frozen identity-map bytes",
+    "acceptedFrozenMapContextSha256": "8492801815f2078a8475ccdf1976a400714a0a7968682540cda055a01d7e41d9",
+    "acceptedFrozenIdentityMapSha256": "7ba2956022875c03cc1bea1ee9ffa205fa78c204bfdc967c06c66fc5b1c3b750",
+    "acceptedFrozenIdentityMapInternalHash": "22845a0cf646df5297b82e6b305b20e0e39e46df5fb9743bc80daafe966e2038",
+    "repairCompatibility": "Repair 1 changes target field/hash/package contracts without changing any logical role or allocated identity; the exact R2 identity map remains controlling and must not be rewritten",
     "derivationProhibited": ["source code", "name", "ordinal", "index", "content hash"],
     "silentReplacementProhibited": true
   },
   "contentHashContract": {
     "algorithm": "SHA-256",
     "canonicalization": "recursively sorted JSON object keys with array order preserved",
-    "includes": "resolved semantic target representation and source-shape/provenance fields",
-    "excludes": ["allocated target identity", "future persistence timestamps", "future operator identity"]
+    "includes": "resolved semantic target representation, logical source endpoint identities, and source-shape/provenance fields",
+    "excludes": ["allocated target identity", "all rebound allocated endpoint UUIDs", "package/attempt identities", "future persistence timestamps", "future operator identity"],
+    "logicalEndpointRule": "relationship meaning is hashed through exact accepted source endpoint identities and source relationship content, never allocated UUID values"
   },
   "lessonPolicy": {
     "legacyLessonVersionCount": 124,
@@ -71,6 +76,23 @@
     "LESSON_STANDARD_LINK": {"owner":"ArcV8LessonPlans","method":"createLessonVersionBundle.relationships.standards","store":"lesson_version_standard_links","idField":"lessonStandardLinkId","representation":"exact normalized endpoint identities plus source relationship identity, text, hash and R1B basis"},
     "LESSON_COMPETENCY_LINK": {"owner":"ArcV8LessonPlans","method":"createLessonVersionBundle.relationships.competencies","store":"lesson_version_competency_links","idField":"lessonCompetencyLinkId","representation":"only the 51 approved WT endpoint bindings with source relationship identity, hash and R1B basis"}
   },
+  "targetFieldContracts": {
+    "STANDARD_CATALOG": {"required":["standardCatalogId","courseId","catalogCode","title","sourceAuthorityKey","sourceRecordKey","sourceHash","lifecycle"],"translation":"exact source catalog and canonical Course context"},
+    "STANDARD_CATALOG_VERSION": {"required":["standardCatalogVersionId","standardCatalogId","versionNumber","versionRule","versionLabel","sourceHash","sourceRecordKey","sourceProvenance","officialCourseProfile","supersedesStandardCatalogVersionId","lifecycle"],"translation":"source-declared positive version; officialCourseProfile is exact accepted R1B course identity and remains catalog-version authority"},
+    "STANDARD_DEFINITION": {"required":["standardId","standardCatalogId","courseId","externalCode","displayOrder","lifecycle","sourceRecordKey","sourceHash","sourceProvenance"],"translation":"displayOrder is exact accepted source order"},
+    "STANDARD_VERSION": {"required":["standardVersionId","standardId","standardCatalogVersionId","versionNumber","versionRule","wording","parentStatement","webbLevel","webbLabel","officialWordingSourceRef","historicalRepositoryWording","historicalSourceProvenance","sourceRecordKey","sourceHash","reviewManifestId","supersedesStandardVersionId","lifecycle"],"translation":"initial v8 version 1 because the accepted source family has no historical version number; official wording and metadata come from accepted source evidence"},
+    "ESSENTIAL_STANDARD_DESIGNATION": {"required":["essentialStandardDesignationId","courseId","standardCatalogVersionId","standardId","standardVersionId","designation","reason","selectionEvidenceRef","historicalSelectionAt","historicalSelectionBy","technicalImportEvent","sourceRelationshipIdentity","sourceRelationshipHash","chainRevision","supersedesEssentialStandardDesignationId","lifecycle"],"translation":"historical selection actor/time stay null; a future technical import event is separate"},
+    "CURRICULUM_MAP": {"required":["curriculumMapId","courseId","mapCode","title","sourceAuthorityKey","sourceRecordKey","sourceHash","lifecycle"],"translation":"exact accepted map identity and Course"},
+    "CURRICULUM_MAP_VERSION": {"required":["curriculumMapVersionId","curriculumMapId","courseId","versionNumber","versionRule","versionLabel","sourceHash","sourceRecordKey","sourceProvenance","supersedesCurriculumMapVersionId","lifecycle"],"translation":"source-declared positive version"},
+    "CURRICULUM_MAP_ITEM": {"required":["curriculumMapItemId","curriculumMapVersionId","courseId","parentCurriculumMapItemId","itemType","itemCode","orderPath","quarterName","timeframeText","focus","rawStandardsText","learningTargets","successCriteria","instructionalStrategies","assessmentText","approximateDuration","sourceFieldShapes","sourceRecordKey","sourceHash","sourceProvenance"],"translation":"ordinary instructional collections are arrays; exact scalar/null/empty/missing source shapes remain reversible companions"},
+    "CURRICULUM_STANDARD_LINK": {"required":["curriculumItemStandardLinkId","curriculumMapVersionId","curriculumMapItemId","standardCatalogVersionId","standardVersionId","relationshipType","sourceText","sourceRelationshipIdentity","sourceRelationshipHash","approvedLinkBasis","reviewManifestId"],"translation":"own and endpoint IDs are exact frozen UUIDs; source relationship identity/hash and approval basis remain provenance"},
+    "COMPETENCY_DEFINITION": {"required":["competencyId","catalogId","code","courseIds","domainCode","catalogProvenance","sourceRecordKey","sourceHash","lifecycle"],"translation":"catalogId is the exact source authority plus exact source Course (COMP|wt or COMP|awt); domainCode is the exact accepted source category; no new catalog policy is inferred"},
+    "COMPETENCY_VERSION": {"required":["competencyVersionId","competencyId","versionNumber","versionRule","title","category","displayOrder","standardText","levelDescriptors","studentStatement","provenance","sourceRecordKey","sourceHash","immutableContent","publicationState","supersedesCompetencyVersionId","lifecycle"],"translation":"initial v8 version 1; exact name becomes title; exact source levels become ordered Introduced/Developing/Proficient/Advanced descriptors; Draft means unaccepted proposed content"},
+    "LESSON_DEFINITION": {"required":["lessonId","courseId","lessonCode","reusableKind","lifecycle","sourceAuthorityKey","sourceRecordKey","sourceHash","sourceOrdinal","sourceDuplicateAssessment","sourceValidation"],"translation":"stable identity only; title remains exclusively Lesson Version content"},
+    "LESSON_VERSION": {"required":["lessonVersionId","lessonId","versionNumber","versionRule","title","learningTargets","successCriteria","engagementStrategies","assessment","checksForUnderstanding","instructionalPhases","sourceStandardsText","instructionalAvailability","instructionalAcceptanceRef","preservationState","ordinarySchedulingEligible","autoBuildEligible","teachingGuideCapability","sourceFieldShapes","sourceAuthorityKey","sourceRecordKey","originalSourceChecksum","normalizedContentChecksum","sourceProvenance","supersedesLessonVersionId","lifecycle"],"translation":"exact ordinary content uses arrays with reversible source-shape companions; all preserved legacy versions are reference_only and unaccepted; no legacy teachingGuide content is created"},
+    "LESSON_STANDARD_LINK": {"required":["lessonStandardLinkId","lessonVersionId","standardCatalogVersionId","standardVersionId","relationshipType","sourceText","sourceRelationshipIdentity","sourceRelationshipHash","approvedLinkBasis","order"],"translation":"own and endpoint IDs are exact frozen UUIDs with exact source relationship provenance"},
+    "LESSON_COMPETENCY_LINK": {"required":["lessonCompetencyLinkId","lessonVersionId","competencyId","competencyVersionId","relationshipType","sourceRelationshipIdentity","sourceRelationshipHash","approvedLinkBasis","order"],"translation":"only the 51 approved WT links; own and endpoint IDs are exact frozen UUIDs"}
+  },
   "packageRecoveryContract": {
     "futureDurableAuthorityRequired": true,
     "thisTaskAddsStore": false,
@@ -81,7 +103,22 @@
     "readGate": "ordinary selectable/Auto Build reads must reject incomplete package roles; authorized reference/audit reads may include reference_only Lessons",
     "retry": "same frozen map and member bytes are idempotent; changed bytes require a new package proposal",
     "conflict": "stale revision or member-hash mismatch refuses the transition",
-    "availabilityTransition": "future reviewed transition creates distinct authority and never changes source or normalized content hashes"
+    "availabilityTransition": "future reviewed transition creates distinct authority and never changes source or normalized content hashes",
+    "completionCriteria": {
+      "requiredRoleCount": 859,
+      "requiredRetainedLinkCount": 359,
+      "requiredAbsentOptionalRelationshipCount": 259,
+      "requiredCanonicalCourseContexts": ["arc-course-wt", "arc-course-awt"],
+      "substituteCourseCreationAllowed": false,
+      "allMemberContentHashesVerifiedByReadback": true,
+      "allRetainedLinksBoundToExactEndpoints": true,
+      "allOptionalExclusionsConfirmedAbsent": true,
+      "sourceResolutionAndEssentialEvidenceRecoverable": true,
+      "allOwnerProjectionsMatchFrozenPackage": true,
+      "packageAndMemberChecksumsVerified": true,
+      "conflictsRequiredAbsent": ["same-ID/different-content", "same-source/different-ID", "stale-version", "unrelated occupancy"],
+      "completionDoesNotMean": ["instructional acceptance", "classroom authority transfer", "publication", "production acceptance"]
+    }
   },
   "remainingImplementationBlockers": [
     "OWNER_SERVICE_CONTRACT_IMPLEMENTATION",

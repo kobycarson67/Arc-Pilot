@@ -25,12 +25,18 @@ jobs:
           set -euo pipefail
           verify_dir="$(mktemp -d)"
           trap 'rm -rf "$verify_dir"' EXIT
+          mkdir -p "$verify_dir/src"
           ready=false
           for attempt in $(seq 1 24); do
             if curl --fail --silent --show-error --location \
               --header 'Cache-Control: no-cache' \
               "$LIVE_BASE/app-build.js?verify=$GITHUB_SHA-$attempt" \
-              --output "$verify_dir/app-build.js" && cmp --silent app-build.js "$verify_dir/app-build.js"; then
+              --output "$verify_dir/app-build.js" && cmp --silent app-build.js "$verify_dir/app-build.js" && \
+              curl --fail --silent --show-error --location \
+              --header 'Cache-Control: no-cache' \
+              "$LIVE_BASE/src/arc_v8_instructional_import_production_physical.js?verify=$GITHUB_SHA-$attempt" \
+              --output "$verify_dir/src/arc_v8_instructional_import_production_physical.js" && \
+              cmp --silent src/arc_v8_instructional_import_production_physical.js "$verify_dir/src/arc_v8_instructional_import_production_physical.js"; then
               ready=true
               break
             fi

@@ -353,3 +353,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The boundary exposes only Standards, Essential Standards, Curriculum Maps/items, and Curriculum/Standard coverage. It contains no direct store access, mutation, pacing, Lesson, Student, competency-rating, Evidence, Project, Gradebook, or fallback authority.
 - The instructor-reported PA2 Samsung package was already available; this milestone did not repeat availability or access Samsung/production. Normal `index.html`, build/cache/service worker, adapters, Schema 7, and `V7_ONLY` remain unchanged.
 - Focused verification proved inert construction, exact read-only surface, `9/20` Standards, `4/6` Essentials, `29/27` Curriculum items, Course separation, fail-closed gates, and normal-shell isolation. Publication, deployment, production reads, Samsung action, and authority transfer remain separately unauthorized.
+
+## 2026-10-04 — Instructional Reference Read Boundary Repair 1
+
+- Continued from local boundary commit `eca36b4f6a6efe0cc40ede20f7ab27c74ff4542a`, tree `1004d8872e60e8e155fdc90237cb96f33724d3d8`, with rollback `rollback/pre-instructional-reference-read-boundary-repair-1`.
+- Closed IRB1-01 by requiring a native, versionless inspection of exact `arc_classroom_v8` before the versioned storage controller may open. The boundary now requires exact IndexedDB 14 and the exact 74-store `ArcV8Storage.STORES` inventory.
+- Absent database creation is aborted and remains absent. Older, newer, missing-store, and extra-store states fail closed before package or Curriculum owner access and before any versioned storage open.
+- The validated native connection remains open until the same-version owner connection succeeds, closing the inspection/open race without reading or changing any domain record.
+- Normal ARC remains Schema 7 / `V7_ONLY`; `index.html`, service worker, build/cache authority, production, Samsung, package history, Lessons, and classroom authority remain untouched and unwired.

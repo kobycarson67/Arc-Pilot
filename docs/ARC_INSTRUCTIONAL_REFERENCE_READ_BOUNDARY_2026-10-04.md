@@ -18,6 +18,8 @@ This milestone did not inspect Samsung, repeat package availability, access prod
 
 `ArcInstructionalReferenceBoundary` is an inert, read-only module. Construction performs no database open, package read, Curriculum read, or mutation. Its production composition is lazy and accepts only the exact production database and accepted package identity.
 
+Repair 1 adds a native structural preflight before the versioned storage controller can open. The first read opens `arc_classroom_v8` without specifying a version, then requires exact IndexedDB version `14` and the exact 74-store `ArcV8Storage.STORES` inventory. An absent database has its creation transaction aborted; an older, newer, missing-store, or extra-store database fails closed before package or Curriculum owners are constructed. The native inspection connection stays open until the same-version owner connection succeeds, preventing a delete or version-change race between inspection and owner open.
+
 Every read first calls the existing instructional package authority's `assertOrdinaryReadGate()` for the accepted package. The result then comes only from existing `ArcV8CurriculumPacing` owner reads. There is no legacy fallback and no direct store read.
 
 The complete public read surface is:
@@ -48,6 +50,10 @@ Normal `index.html`, service worker, build/cache authority, normal adapters, PA1
 Focused tests prove:
 
 - inert construction;
+- absent-database creation abort with the database remaining absent;
+- exact IndexedDB 14 / 74-store structural preflight before owner construction;
+- refusal of older, newer, missing-store, and extra-store databases before any versioned owner open or package read;
+- retention of the inspection connection until the same-version owner connection succeeds;
 - the exact five-method read surface;
 - canonical and separate WT/AWT owner delegation;
 - WT/AWT Standards `9/20`, Essential Standards `4/6`, and Curriculum items `29/27`;
@@ -56,4 +62,6 @@ Focused tests prove:
 - no direct storage access or mutation API; and
 - normal Schema 7 ARC does not load the boundary through `index.html` or `sw.js`.
 
-This local milestone does not claim publication, deployment, Samsung verification, production read execution, package transition, or authority transfer.
+The structural preflight reads only native database identity, version, and store names. It performs no data read, write, migration, reset, restore, or direct domain-store access.
+
+This local milestone and Repair 1 do not claim publication, deployment, Samsung verification, production read execution, package transition, or authority transfer.

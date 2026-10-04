@@ -379,3 +379,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Student, Enrollment, Schedule Assignment, pacing, Project, Evidence, assessment, Workplace, Safety, Behavior, Gradebook, Attendance, Pass, Artifact, Booth, and all other classroom transaction/domain records remain fail-closed. Partial, foreign, extra, or changed instructional content also fails closed.
 - The existing Production Academic Configuration engineering page loads the package owner before cutover preflight; verified preparation can reach recovery/review without a write. No configuration was entered or applied.
 - The supplied post-reference backup hash remained unchanged during read-only verification. Normal ARC remains Schema 7 / `V7_ONLY`; no production, Samsung, package, publication, deployment, Student, authority-transfer, or Stage 3 action occurred.
+
+## 2026-10-04 — Academic Cutover Prerequisite Reconciliation 1 Repair 1
+
+- Continued from unaccepted candidate `bde67a11e01972e340459544456304144fc1dcf5`, tree `180b02eacd5647e16c751dcb2febff1eea792819`, with rollback `rollback/pre-academic-cutover-prerequisite-reconciliation-1-repair-1`.
+- Independent review confirmed the candidate's shape and package checks but reproduced acceptance after a content-only Curriculum mutation. Repair 1 now requires the existing verified recovery manifest's exact accepted per-store SHA-256 checksums for canonical Courses and every populated instructional-reference store.
+- The exact supplied Samsung POST backup passes read-only preflight. A same-count content change to Standards, Competencies, Curriculum, Lessons, package-event payload, Course metadata, or another accepted store fails with `REFERENCE_CONTENT_CHECKSUM_MISMATCH` and the affected store.
+- The initial malformed external review manifest is superseded. Repair 1 export requires literal-safe actual authority values, control-character refusal, complete inventory verification, reconstructed-tree equality, and zero raw Git-byte mismatches.
+- All earlier package-owner, event 1–12, event-12 availability, reference-only Lesson, intentional-absence, Course, transaction refusal, nonmutating preparation, recovery, normal-shell, Schema 7, and `V7_ONLY` protections remain in force.
+- No academic configuration, Student data, production/Samsung access, package transition, publication, deployment, activation, authority transfer, or Stage 3 action occurred.

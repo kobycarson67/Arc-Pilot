@@ -4,6 +4,10 @@ Date: 2026-10-04
 Status: Implemented locally; not published; no production execution
 Normal classroom authority: Schema 7 / `V7_ONLY`
 
+## Repair 1 supersession notice
+
+Independent review found that the initial candidate validated exact counts, package state, and Lesson policy but did not bind the accepted records' content bytes. That candidate was not accepted. Repair 1 adds stable per-store checksum validation through the verified recovery manifest; [`ARC_ACADEMIC_CUTOVER_PREREQUISITE_RECONCILIATION_1_REPAIR_1_2026-10-04.md`](ARC_ACADEMIC_CUTOVER_PREREQUISITE_RECONCILIATION_1_REPAIR_1_2026-10-04.md) is the controlling completion record.
+
 ## Purpose
 
 The Stage 14 academic-cutover preflight previously classified every nonacademic, noninfrastructure v8 record as later-domain data. That rule protected the original empty Stage-1 foundation, but it also rejected the accepted instructional-reference package that now exists in protected production.

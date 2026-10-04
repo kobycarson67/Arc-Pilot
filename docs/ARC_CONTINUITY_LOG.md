@@ -345,3 +345,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The only write delegates once to package authority `markAvailable()`. It must produce exactly 890→891 records and 11→12 package events while every non-package store retains exact count/checksum parity.
 - Real installed-Edge production-shaped rehearsal passed from the supplied Samsung PI2 backup, including exact ordinary Standards, Essential, Curriculum and Competency reads; zero ordinary/Auto Build Lessons; `LESSON_REFERENCE_ONLY`; close/reopen; recovery backup; destructive task-profile restore/reopen parity; and cleanup.
 - Normal ARC remains Schema 7 / `V7_ONLY`. The physical Samsung was untouched, and its package remains unavailable. Production academic activation, real Student authorization, classroom transfer, dual write, and any following stage remain unauthorized.
+
+## 2026-10-04 — Instructional Reference Read Boundary
+
+- Began from published PA1 authority `36d1b074f1d10b6ea48fc20bb92f9cb14d0f6855`, tree `0c04a31f95613c88ed713f79294cf13ceeb31201`, with rollback `rollback/pre-instructional-reference-read-boundary-1`.
+- Added one inert, read-only boundary over the accepted production package and existing Curriculum owner. Each read requires exact `arc_classroom_v8`, exact package `ae06a3f8-cd1b-4a2a-943f-2f3d4e1f3f3b`, canonical WT/AWT scope, and the existing ordinary package-read gate.
+- The boundary exposes only Standards, Essential Standards, Curriculum Maps/items, and Curriculum/Standard coverage. It contains no direct store access, mutation, pacing, Lesson, Student, competency-rating, Evidence, Project, Gradebook, or fallback authority.
+- The instructor-reported PA2 Samsung package was already available; this milestone did not repeat availability or access Samsung/production. Normal `index.html`, build/cache/service worker, adapters, Schema 7, and `V7_ONLY` remain unchanged.
+- Focused verification proved inert construction, exact read-only surface, `9/20` Standards, `4/6` Essentials, `29/27` Curriculum items, Course separation, fail-closed gates, and normal-shell isolation. Publication, deployment, production reads, Samsung action, and authority transfer remain separately unauthorized.

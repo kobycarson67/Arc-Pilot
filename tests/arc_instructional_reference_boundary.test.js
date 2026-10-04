@@ -1,0 +1,31 @@
+const assert=require('assert'),fs=require('fs');
+const Storage=require('../src/arc_v8_storage');
+const Boundary=require('../src/arc_instructional_reference_boundary');
+const PKG=Boundary.PACKAGE_ID;
+function fixture(options={}){
+  let gateCalls=0,ownerCalls=[],available=options.available!==false;
+  const counts={WT:{standards:9,essentials:4,items:29},AWT:{standards:20,essentials:6,items:27}};
+  const code=id=>id==='arc-course-wt'?'WT':'AWT';
+  const packageAuthority={assertOrdinaryReadGate:async input=>{gateCalls++;assert.equal(input.packageId,PKG);if(!available)throw new Storage.StorageError('PACKAGE_READ_GATE_CLOSED','Package unavailable.');return{state:'available'};}};
+  const curriculum={
+    getCourseStandards:async input=>{ownerCalls.push(['getCourseStandards',input]);let c=code(input.courseId),n=counts[c].standards;return{catalogs:[{courseId:input.courseId}],catalogVersions:[{standardCatalogVersionId:c+'-catalog-v1'}],standards:Array.from({length:n},(_,i)=>({definition:{courseId:options.wrongOwnerCourse&&i===0?'arc-course-awt':input.courseId},version:{standardVersionId:c+'-standard-'+i}}))};},
+    getEssentialStandards:async input=>{ownerCalls.push(['getEssentialStandards',input]);let c=code(input.courseId);return{designations:Array.from({length:counts[c].essentials},(_,i)=>({courseId:input.courseId,essentialStandardDesignationId:c+'-essential-'+i}))};},
+    getCurriculumMap:async input=>{ownerCalls.push(['getCurriculumMap',input]);let c=code(input.courseId);return{map:{courseId:input.courseId,curriculumMapId:c+'-map'},version:{courseId:input.courseId,curriculumMapVersionId:c+'-map-v1'},items:Array.from({length:counts[c].items},(_,i)=>({item:{courseId:input.courseId,curriculumMapItemId:c+'-item-'+i}}))};},
+    getCurriculumItem:async input=>{ownerCalls.push(['getCurriculumItem',input]);let c=input.curriculumMapItemId.startsWith('WT-')?'WT':'AWT';return{item:{courseId:c==='WT'?'arc-course-wt':'arc-course-awt',curriculumMapItemId:input.curriculumMapItemId},standardLinks:[]};},
+    getCurriculumCoverage:async input=>{ownerCalls.push(['getCurriculumCoverage',input]);let c=input.curriculumMapVersionId.startsWith('WT-')?'WT':'AWT';return{courseId:c==='WT'?'arc-course-wt':'arc-course-awt',curriculumMapVersionId:input.curriculumMapVersionId,itemCount:counts[c].items};}
+  };
+  return{api:Boundary.create({services:{packageAuthority,curriculum}}),get gateCalls(){return gateCalls},ownerCalls};
+}
+let pass=0,total=0;async function test(name,fn){total++;try{await fn();pass++;console.log('PASS',name)}catch(error){console.error('FAIL',name,error);process.exitCode=1}}
+(async()=>{
+await test('construction is inert and performs no package or owner read',async()=>{let f=fixture();assert.equal(f.gateCalls,0);assert.equal(f.ownerCalls.length,0)});
+await test('surface contains only approved reference reads and constants',async()=>{let f=fixture(),keys=Object.keys(f.api).sort();assert.deepEqual(keys,['constants','getCurriculumCoverage','getCurriculumItem','getCurriculumMap','getEssentialStandards','getStandards']);for(const forbidden of ['write','create','update','delete','getSectionPacing','getSectionPacingHistory','appendPacingCommand','getLessons','getCompetencies','getStudents','getEvidence','getGradebook'])assert.equal(f.api[forbidden],undefined)});
+await test('WT and AWT Standards remain separate canonical owner reads',async()=>{let f=fixture(),wt=await f.api.getStandards({course:'WT'}),awt=await f.api.getStandards({course:'AWT'});assert.equal(wt.standards.length,9);assert.equal(awt.standards.length,20);assert.deepEqual(f.ownerCalls.map(x=>x[1].courseId),['arc-course-wt','arc-course-awt']);assert.equal(f.gateCalls,2)});
+await test('available package returns exact Essential and Curriculum counts',async()=>{let f=fixture(),wtE=await f.api.getEssentialStandards({course:'WT'}),awtE=await f.api.getEssentialStandards({course:'AWT'}),wtM=await f.api.getCurriculumMap({course:'WT'}),awtM=await f.api.getCurriculumMap({course:'AWT'});assert.deepEqual([wtE.designations.length,awtE.designations.length],[4,6]);assert.deepEqual([wtM.items.length,awtM.items.length],[29,27])});
+await test('Curriculum item and coverage reads remain Course-scoped owner delegates',async()=>{let f=fixture(),item=await f.api.getCurriculumItem({course:'WT',curriculumMapItemId:'WT-item-3'}),coverage=await f.api.getCurriculumCoverage({course:'AWT'});assert.equal(item.item.courseId,'arc-course-wt');assert.equal(coverage.itemCount,27);assert(f.ownerCalls.some(x=>x[0]==='getCurriculumItem'));assert(f.ownerCalls.some(x=>x[0]==='getCurriculumCoverage'))});
+await test('unavailable package fails closed before any curriculum owner read',async()=>{let f=fixture({available:false});await assert.rejects(f.api.getStandards({course:'WT'}),e=>e.code==='PACKAGE_READ_GATE_CLOSED');assert.equal(f.ownerCalls.length,0)});
+await test('wrong database package and Course identities fail closed',async()=>{assert.throws(()=>Boundary.create({databaseName:'arc_classroom_v8_stage2_verification'}),e=>e.code==='REFERENCE_DATABASE_MISMATCH');assert.throws(()=>Boundary.create({packageId:'another-package'}),e=>e.code==='REFERENCE_PACKAGE_MISMATCH');let f=fixture();await assert.rejects(f.api.getStandards({course:'OTHER'}),e=>e.code==='REFERENCE_COURSE_REQUIRED');assert.equal(f.gateCalls,0)});
+await test('cross-Course owner result is refused rather than reinterpreted',async()=>{let f=fixture({wrongOwnerCourse:true});await assert.rejects(f.api.getStandards({course:'WT'}),e=>e.code==='REFERENCE_COURSE_MISMATCH')});
+await test('boundary reads no stores directly and normal ARC stays Schema 7 V7_ONLY unwired',async()=>{let source=fs.readFileSync('src/arc_instructional_reference_boundary.js','utf8'),index=fs.readFileSync('index.html','utf8');assert(!source.includes('.query('));assert(!source.includes('.read('));assert(!source.includes('.put('));assert(!source.includes('.add('));assert(index.includes('const CURRENT_SCHEMA_VERSION = 7;'));assert(!index.includes('arc_instructional_reference_boundary'));assert(!fs.readFileSync('sw.js','utf8').includes('arc_instructional_reference_boundary'))});
+if(!process.exitCode)console.log(`\n${pass}/${total} ARC instructional reference read boundary tests passed.`)
+})();

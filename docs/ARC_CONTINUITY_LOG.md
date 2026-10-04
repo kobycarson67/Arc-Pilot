@@ -328,3 +328,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Completed a real installed-Edge production-shaped rehearsal from the supplied Samsung PU3 post-upgrade backup. The exact 859 roles, 359 retained links, 259 intentional absences, 51 WT links, zero AWT competency links, and 124 reference-only Lessons survived complete import, close/reopen, destructive backup restore, and exact per-store parity.
 - The package remained `verified_complete` and unavailable; ordinary owner reads remained blocked. Only canonical WT/AWT Courses were created. No Student or other classroom transaction was created, no teaching guide was fabricated, and `V7_ONLY` was preserved.
 - Physical Samsung production remained untouched. PI1 does not authorize Samsung instructional import, package availability, normal v8 activation, real Student data, or classroom authority transfer.
+
+## 2026-10-03 — P10D-PI1 Repair 1 instructional inspection wiring
+
+- Began from the exact published PI1 commit `4b019f95ff6a4584ad68fbae528917cc222146ce`, tree `c435d5e147f860a1086c981b086e6268aa88ca19`, with local rollback `rollback/pre-p10d-pi1-repair-1-inspection-wiring` and publication rollback `rollback/pre-p10d-pi1-repair-1-main-publication`.
+- Corrected the existing Stage-2 engineering controller so **Inspect instructional-import readiness** delegates to the production physical bridge's exported `inspectReadiness()` API. The obsolete `inspectProduction()` call was removed from that controller; the production bridge itself was not changed and no compatibility alias was added.
+- Advanced only the engineering controller query/cache key to `p10d-pi1-production-instructional-import-bridge-1-repair-1`. The PI1 production physical runtime remains `p10d-pi1-production-instructional-import-bridge-1`, and `app-build.js` remains unchanged.
+- Added executable controller-path regression coverage plus Pages guardrails that require the repaired call and reject the obsolete call.
+- Normal ARC remains Schema 7 / `V7_ONLY`. Storage, packages, import coordination, frozen instructional authority, Samsung production, and classroom authority remain unchanged.

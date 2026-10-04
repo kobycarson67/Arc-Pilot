@@ -22,7 +22,7 @@ CORE.push('./src/arc_v8_evidence.js?v=p10d-pi1-production-instructional-import-b
 CORE.push('./src/arc_v8_lesson_plans.js?v=p10d-pi1-production-instructional-import-bridge-1');
 CORE.push('./src/arc_v8_instructional_import_coordinator.js?v=p10d-pi1-production-instructional-import-bridge-1');
 CORE.push('./src/arc_v8_instructional_import_production_physical.js?v=p10d-pi1-production-instructional-import-bridge-1');
-CORE.push('./engineering/arc_v8_stage2_verification_page.js?v=p10d-pi1-production-instructional-import-bridge-1');
+CORE.push('./engineering/arc_v8_stage2_verification_page.js?v=p10d-pi1-production-instructional-import-bridge-1-repair-1');
 CORE.push('./src/arc_v8_production_academic_configuration.js');
 CORE.push('./engineering/arc_v8_production_academic_configuration.html');
 CORE.push('./engineering/arc_v8_production_academic_configuration_page.js');

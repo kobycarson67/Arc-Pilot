@@ -20,4 +20,7 @@ assert(workflow.includes('arc_v8_protected_production_upgrade_physical.js?v=p10d
 assert(workflow.includes("RUNTIME='p10d-pi1-production-instructional-import-bridge-1'"),'guardrail must verify the PI1 runtime');
 assert(workflow.includes('IMPORT VERIFIED INSTRUCTIONAL PACKAGE UNDER V7_ONLY'),'guardrail must verify the PI1 destructive confirmation');
 assert(workflow.includes('arc_v8_instructional_import_production_physical.js?v=p10d-pi1-production-instructional-import-bridge-1'),'guardrail must verify the query-keyed PI1 bridge');
+assert(workflow.includes('arc_v8_stage2_verification_page.js?v=p10d-pi1-production-instructional-import-bridge-1-repair-1'),'guardrail must verify the repaired controller query key');
+assert(workflow.includes('grep --fixed-strings "instructional.inspectReadiness()"'),'guardrail must verify the repaired readiness delegation');
+assert(workflow.includes('if grep --fixed-strings "instructional.inspectProduction()"'),'guardrail must refuse the obsolete instructional inspection call');
 console.log('PASS Pages live-deployment guardrail contracts');

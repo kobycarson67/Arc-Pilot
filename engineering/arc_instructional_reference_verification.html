@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ARC Instructional Reference Verification</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#07111f;color:#f6f8fb}body{margin:0;padding:24px;background:linear-gradient(145deg,#07111f,#101d2c);min-height:100vh}main{max-width:920px;margin:auto}.banner{border:2px solid #72a7ff;background:#102b50;padding:18px;border-radius:12px}.guard{color:#ffd36a;font-weight:800}.actions{display:grid;gap:12px;margin:20px 0}button{min-height:52px;padding:12px 16px;border:0;border-radius:10px;background:#1e66d0;color:white;font-weight:750;text-align:left}button:disabled{opacity:.42}.panel{background:#111d2b;border:1px solid #33465d;border-radius:12px;padding:16px;margin-top:14px}pre{white-space:pre-wrap;word-break:break-word;margin:0;color:#d7e5f8}.error{border-color:#ff7373;color:#ffd5d5}.ok{border-color:#62d598}.small{font-size:.92rem;color:#bbcadc}
+  </style>
+</head>
+<body>
+<main>
+  <section class="banner">
+    <h1>ENGINEERING / READ-ONLY PHYSICAL VERIFICATION</h1>
+    <p class="guard">No real Student data. Normal ARC remains V7_ONLY.</p>
+    <p>No package transition. No authority transfer. This surface contains read-only inspection, verified recovery capture, owner-read verification, and nonmutation proof only.</p>
+  </section>
+  <section class="actions" aria-label="Read-only verification steps">
+    <button id="inspectStructure" type="button">1. Inspect exact structure</button>
+    <button id="capturePre" type="button" disabled>2. Capture/download PRE backup</button>
+    <button id="runReference" type="button" disabled>3. Run reference verification</button>
+    <button id="capturePost" type="button" disabled>4. Capture/download POST backup / verify nonmutation</button>
+  </section>
+  <section class="panel" id="statusPanel" aria-live="polite"><pre id="status">Ready. No database has been opened.</pre></section>
+  <section class="panel"><h2>Fixed safety authority</h2><pre id="authority"></pre></section>
+  <p class="small">Closing or reloading this page performs no cleanup, reset, restore, import, availability, or authority action.</p>
+</main>
+<script src="../src/arc_v8_storage.js"></script>
+<script src="../src/arc_v8_backup_recovery.js"></script>
+<script src="../src/arc_v8_instructional_content_packages.js"></script>
+<script src="../src/arc_v8_curriculum_pacing.js"></script>
+<script src="../src/arc_v8_lesson_plans.js"></script>
+<script src="../src/arc_instructional_reference_boundary.js"></script>
+<script src="../src/arc_instructional_reference_physical_verification.js?v=instructional-reference-samsung-verification-surface-1"></script>
+<script src="arc_instructional_reference_verification_page.js?v=instructional-reference-samsung-verification-surface-1"></script>
+</body>
+</html>

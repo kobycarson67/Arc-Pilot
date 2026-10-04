@@ -361,3 +361,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Absent database creation is aborted and remains absent. Older, newer, missing-store, and extra-store states fail closed before package or Curriculum owner access and before any versioned storage open.
 - The validated native connection remains open until the same-version owner connection succeeds, closing the inspection/open race without reading or changing any domain record.
 - Normal ARC remains Schema 7 / `V7_ONLY`; `index.html`, service worker, build/cache authority, production, Samsung, package history, Lessons, and classroom authority remain untouched and unwired.
+
+## 2026-10-04 — Instructional Reference Samsung verification surface
+
+- Began from the exact published boundary authority `b1808da261b2aa16cbffaf48a6558edac8c60c2e`, tree `0a9a6db67a065126d33d84d8938cf253e9470aae`, with rollback `rollback/pre-instructional-reference-samsung-verification-surface-1`.
+- Added a dedicated engineering-only page with four read-only steps: exact native IDB 14/74 inspection, verified PRE recovery capture, boundary/owner read verification, and verified POST recovery capture with all-store nonmutation proof.
+- The page does not reuse Stage-2 upgrade/import/availability controls, is inert on load, and exposes no writer, upgrade, import, availability, restore, reset, Student, pacing, Lesson mutation, grade, or authority-transfer action.
+- Exact later physical gates are 891 records, 12 available-package events with no event 13, `9/20` Standards, `4/6` Essentials, `29/27` Curriculum items, 124 preserved `reference_only` Lessons, zero ordinary/Auto Build Lessons, empty classroom transaction stores, healthy audit, and unchanged canonical store/migration checksums.
+- Service-worker navigation isolates the engineering path from cached normal `index.html`; future Pages verification is prepared for exact asset and normal-shell isolation checks.
+- Normal ARC remains Schema 7 / `V7_ONLY`. No publication, deployment, Samsung access, protected-production access, package action, real Student data, or authority transfer occurred.

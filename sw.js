@@ -49,7 +49,7 @@ self.addEventListener('fetch',event=>{
   const url=new URL(event.request.url);
   if(url.origin!==self.location.origin)return;
   if(event.request.mode==='navigate'){
-    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':url.pathname.endsWith('/engineering/arc_v8_production_academic_configuration.html')?'./engineering/arc_v8_production_academic_configuration.html':'./index.html';
+    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':url.pathname.endsWith('/engineering/arc_v8_production_academic_configuration.html')?'./engineering/arc_v8_production_academic_configuration.html':url.pathname.endsWith('/engineering/arc_instructional_reference_verification.html')?'./engineering/arc_instructional_reference_verification.html':'./index.html';
     event.respondWith(fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;}).catch(()=>target==='./index.html'?caches.match('./index.html'):caches.match(target)));
     return;
   }

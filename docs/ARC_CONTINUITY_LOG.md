@@ -337,3 +337,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Added executable controller-path regression coverage plus Pages guardrails that require the repaired call and reject the obsolete call.
 - The Pages readiness loop waits for exact repaired controller bytes because `app-build.js` and the PI1 production physical runtime are intentionally unchanged.
 - Normal ARC remains Schema 7 / `V7_ONLY`. Storage, packages, import coordination, frozen instructional authority, Samsung production, and classroom authority remain unchanged.
+
+## 2026-10-03 — P10D-PA1 guarded instructional-package availability bridge
+
+- Began from the accepted PI1 Repair 1 publication `cf7c9e9e8f7a9199a967562f69fd72e1760b8f7e`, tree `408d6339885a258749d24e6bcf1f0984bf591ca8`, with local rollback `rollback/pre-p10d-pa1-production-instructional-package-availability-bridge-1` and publication rollback `rollback/pre-p10d-pa1-main-publication`.
+- Added one inert engineering-only bridge that accepts only the exact physical PI2 `verified_complete` package after exact 14/74 protection, declaration, role/link/absence, canonical Course, empty-classroom, Lesson-policy, retained-baseline, fresh-recovery, publication, operator, rollback, and confirmation checks.
+- The only write delegates once to package authority `markAvailable()`. It must produce exactly 890→891 records and 11→12 package events while every non-package store retains exact count/checksum parity.
+- Real installed-Edge production-shaped rehearsal passed from the supplied Samsung PI2 backup, including exact ordinary Standards, Essential, Curriculum and Competency reads; zero ordinary/Auto Build Lessons; `LESSON_REFERENCE_ONLY`; close/reopen; recovery backup; destructive task-profile restore/reopen parity; and cleanup.
+- Normal ARC remains Schema 7 / `V7_ONLY`. The physical Samsung was untouched, and its package remains unavailable. Production academic activation, real Student authorization, classroom transfer, dual write, and any following stage remain unauthorized.

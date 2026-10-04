@@ -370,3 +370,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Exact later physical gates are 891 records, 12 available-package events with no event 13, `9/20` Standards, `4/6` Essentials, `29/27` Curriculum items, 124 preserved `reference_only` Lessons, zero ordinary/Auto Build Lessons, empty classroom transaction stores, healthy audit, and unchanged canonical store/migration checksums.
 - Service-worker navigation isolates the engineering path from cached normal `index.html`; future Pages verification is prepared for exact asset and normal-shell isolation checks.
 - Normal ARC remains Schema 7 / `V7_ONLY`. No publication, deployment, Samsung access, protected-production access, package action, real Student data, or authority transfer occurred.
+
+## 2026-10-04 — Academic Cutover Prerequisite Reconciliation 1
+
+- Began from exact published authority `b236a16fe047546564b2a13fd99598261a8e5aef`, tree `d0b9d100a530e6247e55438de9254af563e0757d`, with rollback `rollback/pre-academic-cutover-prerequisite-reconciliation-1`.
+- Replaced the obsolete blanket later-domain emptiness prerequisite with an explicit classifier for the historical empty Stage-1 profile and the exact approved package `ae06a3f8-cd1b-4a2a-943f-2f3d4e1f3f3b` instructional-reference profile.
+- Exact store counts, canonical WT/AWT Courses, package events 1–12, the ordinary owner-read gate, intentional relationship absences, and all 124 reference-only Lesson protections are now mandatory for the approved populated profile.
+- Student, Enrollment, Schedule Assignment, pacing, Project, Evidence, assessment, Workplace, Safety, Behavior, Gradebook, Attendance, Pass, Artifact, Booth, and all other classroom transaction/domain records remain fail-closed. Partial, foreign, extra, or changed instructional content also fails closed.
+- The existing Production Academic Configuration engineering page loads the package owner before cutover preflight; verified preparation can reach recovery/review without a write. No configuration was entered or applied.
+- The supplied post-reference backup hash remained unchanged during read-only verification. Normal ARC remains Schema 7 / `V7_ONLY`; no production, Samsung, package, publication, deployment, Student, authority-transfer, or Stage 3 action occurred.

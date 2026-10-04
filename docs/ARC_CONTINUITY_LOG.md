@@ -335,4 +335,5 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Corrected the existing Stage-2 engineering controller so **Inspect instructional-import readiness** delegates to the production physical bridge's exported `inspectReadiness()` API. The obsolete `inspectProduction()` call was removed from that controller; the production bridge itself was not changed and no compatibility alias was added.
 - Advanced only the engineering controller query/cache key to `p10d-pi1-production-instructional-import-bridge-1-repair-1`. The PI1 production physical runtime remains `p10d-pi1-production-instructional-import-bridge-1`, and `app-build.js` remains unchanged.
 - Added executable controller-path regression coverage plus Pages guardrails that require the repaired call and reject the obsolete call.
+- The Pages readiness loop waits for exact repaired controller bytes because `app-build.js` and the PI1 production physical runtime are intentionally unchanged.
 - Normal ARC remains Schema 7 / `V7_ONLY`. Storage, packages, import coordination, frozen instructional authority, Samsung production, and classroom authority remain unchanged.

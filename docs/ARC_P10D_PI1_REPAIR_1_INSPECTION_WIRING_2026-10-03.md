@@ -27,6 +27,8 @@ The Stage-2 action `inspectInstructionalImport` invoked `instructional.inspectPr
 
 The focused Stage-2 test executes the real page controller action with browser-shaped stubs. It requires exactly one call to `inspectReadiness()` and zero calls to `inspectProduction()`. Static and Pages verification additionally require the repaired query key and refuse the obsolete call in the published controller.
 
+Because `app-build.js` and the PI1 production physical runtime are intentionally unchanged, Pages readiness waits for exact bytes of the repaired engineering controller before comparing the complete public asset set.
+
 The full verification and publication evidence is recorded in the task closeout and exact-byte review export. No Samsung operation is part of this repair.
 
 ## Authority boundary

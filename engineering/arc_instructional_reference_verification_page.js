@@ -9,7 +9,7 @@
     var verifier=factory(),status=doc.getElementById('status'),panel=doc.getElementById('statusPanel'),inspect=doc.getElementById('inspectStructure'),pre=doc.getElementById('capturePre'),run=doc.getElementById('runReference'),post=doc.getElementById('capturePost'),authority=doc.getElementById('authority');
     authority.textContent=pretty(verifier.constants);var busy=false;
     function show(value,ok){status.textContent=pretty(value);panel.classList.remove('error','ok');panel.classList.add(ok?'ok':'error');}
-    async function action(button,operation,next,shouldDownload){if(busy)return;busy=true;button.disabled=true;try{var value=await operation();if(shouldDownload)download(value);show(value,true);if(next)next.disabled=false;}catch(error){show({code:error&&error.code||'VERIFICATION_FAILED',message:error&&error.message||String(error),context:error&&error.context||null},false);button.disabled=false;}finally{busy=false;}}
+    async function action(button,operation,next,shouldDownload){if(busy)return;busy=true;button.disabled=true;try{var value=await operation();if(shouldDownload)download(value.postBackup||value);show(value,true);if(next)next.disabled=false;}catch(error){show({code:error&&error.code||'VERIFICATION_FAILED',message:error&&error.message||String(error),context:error&&error.context||null},false);button.disabled=false;}finally{busy=false;}}
     inspect.addEventListener('click',function(){action(inspect,function(){return verifier.inspectExactStructure();},pre,false);});
     pre.addEventListener('click',function(){action(pre,function(){return verifier.capturePreBackup();},run,true);});
     run.addEventListener('click',function(){action(run,function(){return verifier.runReferenceVerification();},post,false);});

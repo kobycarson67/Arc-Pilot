@@ -388,3 +388,100 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The initial malformed external review manifest is superseded. Repair 1 export requires literal-safe actual authority values, control-character refusal, complete inventory verification, reconstructed-tree equality, and zero raw Git-byte mismatches.
 - All earlier package-owner, event 1–12, event-12 availability, reference-only Lesson, intentional-absence, Course, transaction refusal, nonmutating preparation, recovery, normal-shell, Schema 7, and `V7_ONLY` protections remain in force.
 - No academic configuration, Student data, production/Samsung access, package transition, publication, deployment, activation, authority transfer, or Stage 3 action occurred.
+
+## 2026-10-04 — Academic Administration / Schedule Parity Repair 1
+
+- Began at published authority `9017aad6b45f74ef076c682ac442cf5edb95280b`, tree `222bf7bd3be458551aa8aada456519d2efe290b8`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-1`.
+- Reconciled the inactive v8 schedule layer to the accepted Schema-7 product contract: ordinary Bell periods, separate effective-dated Planning, Bell + instruction-mode weekday defaults, five calendar day types, atomic Planning/Section swaps, lifecycle-safe override/event removal, and ordinary-period Semester Transition fixtures.
+- Added a pure read-only schedule migration planner. The supplied current-school snapshot is retained only as editable test evidence; changing the input changes the output, and missing School Year/Semester/Grading Period boundaries remain explicit review requirements.
+- Corrected only the stale `2026-12-14` default from PD + Regular Instruction to PD + No Instruction. Normal Schedule Setup, calendar, Planning, Section movement, Semester Transition UI, localStorage authority, navigation, Schema 7, and `V7_ONLY` remain unchanged.
+- Student/Enrollment/Schedule Assignment Semester coordination and reviewed production migration/application remain cutover blockers. No production/Samsung access, academic configuration, Student data, package/Lesson change, publication, deployment, dual write, activation, or authority transfer occurred.
+
+## 2026-10-04 — Academic Administration / Schedule Parity Repair 2
+
+- Continued from rejected Repair 1 candidate `5152cab52daa6539a7f1e1e28d7b6100dbc1d8d5`, tree `5d3007bbac5aeaf48b051511ade2a1b7d1099630`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-2`.
+- Repaired all seven independently verified parity defects: routine audited Bell-time editing; Bell-independent Section/Planning period placement; specialized-only period mutation; range-safe same-day/later movement; one coherent override save/range/clear authority; exact isolated `bell-time` delegation; and complete event time/reminder retention.
+- Current product authority supersedes historical P2 Bell-period immutability for implementation. The existing editable ARC workflow controls over engine convenience; the historical P2 document remains unchanged for lineage.
+- Normal `index.html` remains the exact Repair 1 Git blob. Schema 7 / `V7_ONLY`, normal Schedule Setup/calendar/Semester Transition behavior, the PD correction, five day types, four modes, Friday Open Shop, unknown future schedules, and the Student transition stop boundary remain intact.
+- No production/Samsung access, Production Academic Configuration, Student/Enrollment/Schedule Assignment creation, package transition/event 13, Lesson change, dual write, normal-v8 activation, authority transfer, push, publication, or deployment occurred.
+- The next boundary remains reviewed academic migration/application plus Student/Enrollment/Schedule Assignment coordination and production-shaped/Samsung verification under separate authorization.
+
+## 2026-10-05 — Academic Administration / Schedule Parity Repair 3
+
+- Continued from local Repair 2 commit `6d187e1c9803bd46f3bef332b652e22e550b8705`, tree `ccb35e0972f6fd3002e046effbed56768298b1db`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-3`.
+- Preserved effective range ends during same-day and later Section/Planning movement, added complete-interval future conflict validation, and required explicit Planning for known Semester Transition schedules through the target Semester end.
+- Added one read-only effective Section-context resolver and converted shared academic projection, Attendance, Booth, Student History, Daily Teaching, Curriculum/Pacing, and Backup/Recovery lineage away from static current `Section.period` / `Section.semesterId` authority.
+- Enriched only existing normal Schedule action payloads. Visible Schema-7 Schedule Setup and Semester Transition behavior remains unchanged; `V7_ONLY` still performs exactly one legacy mutation and no dual write.
+- The repository audit classified all 42 named direct Section period/Semester matches with 0 unclassified and 0 `UNRESOLVED`. Retained matches are Schema-7 legacy behavior, creation metadata, or frozen historical description.
+- No production/Samsung access, academic configuration, real Student data, instructional package/Lesson change, publication, deployment, build/cache change, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Academic Administration / Schedule Parity Repair 4
+
+- Continued from local Repair 3 commit `7b396276a51a4c915b47341cf734d8e1f576cc21`, tree `7022cc77275bc54d02ac04162acdf94a90c9a55e`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-4`.
+- Semester Transition now refuses exact-start or later preconfigured target-Semester Section and Planning authority during preview and repeats the same fail-closed protection transactionally during apply. Source-Semester/year-wide authority remains distinct.
+- Effective Section and pacing context now requires real matching School Year/Semester parents and bounded placement intervals. Historical closed parents remain valid; malformed lineage cannot produce a normal-looking current context.
+- Section and Planning placement creation now always ends within its Semester or School Year, and movement retains that end. Backup/Recovery audits the same parent, scope, overlap, and period-collision authority read only.
+- Daily Teaching consumes the accepted five-day-type/four-instruction-mode Schedule contract. PD, holidays, no-school, other, and No Instruction never reach Pacing; unknown values fail safe. Actual Schedule-owner integration covers the instructor-confirmed `2026-12-14` PD rule.
+- Normal ARC remains Schema 7 / `V7_ONLY` with one legacy mutation path and unchanged visible behavior. No production/Samsung access, academic configuration, real Student data, package/Lesson change, build/cache change, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Academic Administration / Schedule Parity Repair 5
+
+- Continued from local Repair 4 commit `5b9e6d05831fa42f2d4b01deff90cd04b07859d0`, tree `2b3874494aa6b00bcbe20f3268757353525debb3`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-5`.
+- Semester Transition now refuses target-Semester authority and every active Section or Planning row beginning at/after the transition boundary, including exact-start School-Year-scoped authority. Only source authority beginning before the boundary may transition.
+- Editable Semester and School Year corrections atomically project dependent boundary-following schedule rows, preserve valid narrower explicit intervals, revalidate occupancy, and fail without writes when an explicit interval or collision cannot be preserved. Changed dependent rows and the academic record retain append-first before/after audit evidence.
+- Effective Section reads require a normalized period identity and reader-backed resolution checks the active global Bell-period union. Backup/Recovery rejects missing or unknown period identity and accepts retired placement history only when retained Bell authority preserves that period definition.
+- Repairs 2–4 and the accepted Daily Teaching day semantics remain intact. Normal ARC remains Schema 7 / `V7_ONLY` with unchanged visible behavior and one legacy mutation path. No production/Samsung access, academic configuration, real Student data, package/Lesson change, build/cache change, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Historical Schedule / Academic Hierarchy Integrity Repair 6
+
+- Continued from local Repair 5 commit `8e56c68eca837d721a6aa32f2b2f54ab17f3d841`, tree `e0e1fb12e43e5ded4744ac4ffc6e05379c40baef`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-6`.
+- Effective Section reads and Backup/Recovery now classify period authority by the placement's end date instead of lifecycle: ended history may use retained active/retired Bell identity, while current/future placement requires active period authority.
+- Bell correction/retirement refuses removal of the last active period definition required by current/future Section or Planning authority. Ended history remains readable after retirement without storing Bell identity on placements.
+- School Year correction protects every retained Semester, and Semester correction protects every retained Grading Period, including archived history. Invalid corrections fail atomically with dependent-history context.
+- Backup/Recovery audits all retained Semester, Grading Period, and Section parent/date/lineage scope regardless lifecycle.
+- Repairs 2–5 remain intact. Normal ARC remains Schema 7 / `V7_ONLY`; no production/Samsung access, academic configuration, real Student data, package/Lesson change, build/cache change, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Schedule Reference Lifecycle Integrity Repair 7
+
+- Continued from local Repair 6 commit `5d8a161b9bf6ab089eca4435e017ff0b63483ed4`, tree `9f303ffd23cf2949aac762ce00d6411c938a64c7`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-7`.
+- Bell retirement now refuses active current/future instructional Weekly Schedule Mode, Date Override, and Calendar Day dependencies; Schedule Mode retirement refuses active today/future Date Override references. Noninstructional records do not acquire a Bell dependency from an incidental retained ID. Refusals are atomic and carry dependent authority context.
+- `scheduleForDate()` now fails closed for unavailable current/future Bell or Mode authority instead of projecting a normal school day with empty periods. Ended active schedule history can read retained retired Bell authority; noninstructional days remain Bell independent.
+- Backup/Recovery now audits Weekly Mode, Date Override, and Calendar Day schedule references with temporal and instructional context. Missing parents and unusable current/future parents are integrity errors.
+- The bounded lifecycle audit records deliberately retired historical Weekly Schedule Mode readback as `UNRESOLVED`; no product policy was invented. Repairs 2–6 remain intact.
+- Normal ARC remains Schema 7 / `V7_ONLY`; no production/Samsung access, academic configuration, real Student data, package availability, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Resolved Schedule Reference Integrity Repair 8
+
+- Continued from local Repair 7 commit `0d18bc1c16c4bf97d4ff7908396d5befb126b0db`, tree `9bd4fd76bac20ea7f1c37a027f8cecc254d83bbe`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-8`.
+- Academic Administration and Backup/Recovery now share one pure resolved-date authority calculation across direct Bell, named mode, weekday, unique default-mode, Calendar Day, and Date Override precedence.
+- Current/future instructional dated writes and reads fail closed when the resolved weekday has no usable Bell, a named mode is unavailable, active defaults overlap, or active dated authority is duplicated. Backup/Recovery reports the same states as integrity errors.
+- Bell and Mode retirement now closes indirect dependencies through explicitly reused ended modes and default fallback. Explicit named-mode reuse outside its default range and direct dated-Bell precedence remain supported.
+- The deliberately retired historical Weekly Schedule Mode readback rule remains `UNRESOLVED`; retained retired Bell history and Repairs 2–7 remain intact.
+- Normal ARC remains Schema 7 / `V7_ONLY`; no production/Samsung access, academic configuration, real Student data, package availability, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Projected Schedule Mode Mutation Integrity Repair 9
+
+- Continued from local Repair 8 commit `f2f91060b14b5e4c76e97634340a2d5dd687da14`, tree `46b5330d3afaf0874f4915bf3b0dc359dded955b`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-9`.
+- Weekly Schedule Mode correction now projects changes to weekday/Bell/instruction rules, effective range, default status, and lifecycle in the owning transaction, then re-resolves every active current/future Calendar Day and Date Override before committing.
+- Invalid or ambiguous dependent dates refuse the complete edit with dependent identity/date/reason context. Valid Bell-template, instruction-mode, range, default-status, lifecycle, and metadata edits remain supported when all persisted dated authority stays usable.
+- The adjacent mutation audit also closed old/new-date gaps in Calendar Day and Date Override correction and Override clearing. The edit gate, normal schedule projection, and Backup/Recovery use the same Repair 8 resolver.
+- Deliberately retired historical Weekly Schedule Mode readback remains `UNRESOLVED`; no policy was invented. Repairs 2–8 remain intact.
+- Normal ARC remains Schema 7 / `V7_ONLY`; no production/Samsung access, academic configuration, real Student data, package availability, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Resolved Bell Period Coverage Integrity Repair 10
+
+- Continued from local Repair 9 commit `2a946a5461e3d878f60ce19b944c4afa08a309d5`, tree `7ec09f8cacb93590dc1d60c315219e210ce3e0f2`, with rollback `rollback/pre-academic-administration-schedule-parity-repair-10`.
+- The shared schedule resolver now fails instructional dates with `BELL_MISSING_REQUIRED_PERIOD` when the resolved Bell omits an effective Section or Planning period, while noninstructional dates remain Bell independent.
+- One pure interval/UTC-weekday validator covers active current/future Weekly Schedule Mode dates that have no persisted Calendar Day or Date Override. It does not false-fail intervals without an occurrence of the relevant weekday.
+- Bell, Mode, dated authority, Section/Planning placement, movement, academic-boundary correction, and Semester Transition paths validate projected coverage before commit. Placements remain Bell-template independent and routine Bell-time editing remains supported.
+- Backup/Recovery applies the same exact-date and implicit-weekly rules under `resolved_bell_period_coverage`. Repairs 2–9 remain intact, and deliberately retired historical Weekly Schedule Mode readback remains `UNRESOLVED`.
+- Normal ARC remains Schema 7 / `V7_ONLY`; no production/Samsung access, academic configuration, real Student data, package/Lesson change, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-05 — Schedule Cutover Closure Stabilization
+
+- Continued from Repair 10 commit `4fb24a9828c902219a7f4b6bbe43533aea95155a`, tree `e5399039e079e3b65f14b1fc7d7bb86fa7989d07`, with rollback `rollback/pre-schedule-cutover-closure-stabilization-1`. The earlier narrow Repair 11 proposal was superseded and was not executed.
+- Replaced fragmented dated-reference and implicit-weekly coverage validation with one shared projected-state postcondition built around the accepted exact-date resolver. Every schedule-resolution-affecting Academic Administration mutation and Backup/Recovery now uses that postcondition.
+- The deterministic independent oracle reached 50,000/50,000 agreement. The 2,500-case precedence-aware implicit-weekly matrix reached zero false positives and zero false negatives, closing the supplied Repair 10 helper's 881 false positives.
+- All five reproduced unsafe Calendar/Override shadow-removal paths now refuse atomically. A deterministic 16-sequence, 192-transition mutation state machine proved 140 valid commits, 52 atomic refusals, runtime/Backup agreement, and unchanged store/audit state after refusal.
+- Repairs 2–10 and editable normal Schedule behavior remain intact. Deliberately retired historical Weekly Schedule Mode readback remains `UNRESOLVED`.
+- Normal ARC remains Schema 7 / `V7_ONLY`; no production/Samsung access, academic configuration, real Student data, package/Lesson change, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.

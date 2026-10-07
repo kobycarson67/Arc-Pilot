@@ -24,7 +24,8 @@
   function project(input){
     if(!input||typeof input!=='object'||Array.isArray(input))fail('INVALID_CONFIGURATION_SNAPSHOT','An explicit Schema-7 configuration snapshot is required.');
     var source=input.currentStateExample&&typeof input.currentStateExample==='object'?input.currentStateExample:input;
-    var schedules=Object.keys(source.bellSchedules||{}).sort().map(function(key){var row=source.bellSchedules[key]||{},id=text(row.id)||key;return{sourceId:id,name:text(row.name)||id,periods:normalizeTimes(Object.assign({},row,{id:id}))};});
+    var bellIds={};
+    var schedules=Object.keys(source.bellSchedules||{}).sort().map(function(key){var row=source.bellSchedules[key]||{},id=text(row.id)||key;if(Object.prototype.hasOwnProperty.call(bellIds,id))fail('DUPLICATE_BELL_SOURCE_ID','Migration input contains duplicate normalized Bell source identity.',{sourceId:id,keys:[bellIds[id],key]});bellIds[id]=key;return{sourceId:id,name:text(row.name)||id,periods:normalizeTimes(Object.assign({},row,{id:id}))};});
     var scheduleIds=new Set(schedules.map(function(row){return row.sourceId;}));
     var week=Object.keys(source.weeklyScheduleDefaults||{}).sort(function(a,b){return Number(a)-Number(b);}).map(function(key){
       var row=source.weeklyScheduleDefaults[key]||{},mode=text(row.instructionMode),scheduleId=text(row.scheduleId);
@@ -33,8 +34,10 @@
     });
     var overrides=Object.keys(source.calendarOverrides||{}).sort().map(function(schoolDate){
       var row=source.calendarOverrides[schoolDate]||{},dayType=text(row.dayType),mode=text(row.instructionMode),scheduleId=text(row.scheduleId);
-      if(!DAY_TYPES.includes(dayType)||!MODES.includes(mode)||!scheduleIds.has(scheduleId))fail('INVALID_CALENDAR_OVERRIDE','Migration input contains an unsupported calendar override.',{schoolDate:schoolDate});
-      return{schoolDate:schoolDate,dayType:dayType,bellScheduleSourceId:scheduleId,instructionMode:dayType==='school'?mode:'none'};
+      if(!DAY_TYPES.includes(dayType)||!MODES.includes(mode))fail('INVALID_CALENDAR_OVERRIDE','Migration input contains an unsupported calendar override.',{schoolDate:schoolDate});
+      var instructional=dayType==='school'&&mode!=='none';
+      if(instructional&&!scheduleIds.has(scheduleId))fail('INVALID_CALENDAR_OVERRIDE','Instructional migration override requires a known Bell source identity.',{schoolDate:schoolDate,scheduleId:scheduleId});
+      return{schoolDate:schoolDate,dayType:dayType,bellScheduleSourceId:instructional?scheduleId:null,instructionMode:instructional?mode:'none'};
     });
     var events=(source.calendarEvents||[]).map(function(row){var schoolDate=text(row.date);return{id:text(row.id),schoolDate:schoolDate,startDate:schoolDate,endDate:schoolDate,title:text(row.title),label:text(row.title),time:eventTime(row.time),remindDaysBefore:reminderLead(row.remindDaysBefore),createdAt:text(row.createdAt)||null};}).sort(function(a,b){return(a.schoolDate+'|'+a.id).localeCompare(b.schoolDate+'|'+b.id);});
     var sections=(source.sections||[]).map(function(row){return{sourceSectionId:text(row.id),courseCode:text(row.course).toUpperCase(),displayName:text(row.name),periodCode:String(row.period)};}).sort(function(a,b){return a.sourceSectionId.localeCompare(b.sourceSectionId);});

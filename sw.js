@@ -25,10 +25,12 @@ CORE.push('./src/arc_v8_instructional_import_production_physical.js?v=p10d-pi1-p
 CORE.push('./src/arc_v8_instructional_package_availability_physical.js?v=p10d-pa1-production-instructional-package-availability-bridge-1');
 CORE.push('./engineering/arc_v8_stage2_verification_page.js?v=p10d-pa1-production-instructional-package-availability-bridge-1');
 CORE.push('./src/arc_v8_production_academic_configuration.js');
+CORE.push('./src/arc_v7_schedule_configuration_capture.js');
 CORE.push('./engineering/arc_v8_production_academic_configuration.html');
 CORE.push('./engineering/arc_v8_production_academic_configuration_page.js');
-CORE.push('./src/arc_v8_production_academic_configuration.js?v=stage2-production-academic-configuration-1');
-CORE.push('./engineering/arc_v8_production_academic_configuration_page.js?v=stage2-production-academic-configuration-1');
+CORE.push('./src/arc_v7_schedule_configuration_capture.js?v=stage2-production-academic-configuration-closure-1');
+CORE.push('./src/arc_v8_production_academic_configuration.js?v=stage2-production-academic-configuration-closure-1');
+CORE.push('./engineering/arc_v8_production_academic_configuration_page.js?v=stage2-production-academic-configuration-closure-1');
 CORE.push('./src/arc_v8_academic_administration.js');
 CORE.push('./src/arc_schedule_authority_adapter.js');
 CORE.push('./src/arc_academic_consumer_projection.js');

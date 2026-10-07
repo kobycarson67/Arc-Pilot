@@ -485,3 +485,45 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - All five reproduced unsafe Calendar/Override shadow-removal paths now refuse atomically. A deterministic 16-sequence, 192-transition mutation state machine proved 140 valid commits, 52 atomic refusals, runtime/Backup agreement, and unchanged store/audit state after refusal.
 - Repairs 2–10 and editable normal Schedule behavior remain intact. Deliberately retired historical Weekly Schedule Mode readback remains `UNRESOLVED`.
 - Normal ARC remains Schema 7 / `V7_ONLY`; no production/Samsung access, academic configuration, real Student data, package/Lesson change, publication, deployment, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-06 — Production Academic Configuration Reconciliation 1
+
+- Continued from published Schedule Cutover Closure commit `cb227e721c64d883fdf61d333530c181f3beedf2`, tree `faf815688d6058272b0965ad1a9b74d76c49e5f3`, with rollback `rollback/pre-production-academic-configuration-reconciliation-1`.
+- Reconciled the protected coordinator with the pure Schema-7 schedule migration projector, Academic Administration owners, the shared schedule postcondition, Academic Cutover prerequisite/recovery authority, and Backup/Recovery audit/rollback.
+- The reviewed foundation now covers Courses, explicit School Year/Semester/Grading Period boundaries, Sections, Bell Schedules, one default Weekly Schedule Mode, Calendar Events, Date Overrides, effective Section Placements, and separate Planning Placement. Future Semester schedule may remain unknown.
+- Added engineering-only same-origin `weld_v013` read capture that fails closed, never falls back to defaults, and strips Student/classroom transaction data. Normal `index.html` remains unchanged and does not load the capture or coordinator.
+- Preparation fingerprints academic input, schedule snapshot, migration plan, and Git/operator authority. Apply refuses stale review; failures restore and prove exact pre-configuration store parity.
+- Calendar Event titles never synthesize academic boundaries. Instructor-approved structured boundaries remain a physical execution prerequisite. Historical retired Weekly Schedule Mode readback remains `UNRESOLVED`.
+- Normal ARC remains Schema 7 / `V7_ONLY`; no publication/deployment, Samsung/production access, academic configuration, Student data, package transition, Lesson change, dual write, normal-v8 activation, or authority transfer occurred.
+
+## 2026-10-06 — Production Academic Configuration Reconciliation 1 Repair 1
+
+- Continued from local PACR1 candidate `14197ea7fcd5f323313e22d471db4e60d7f199fc`, tree `c01f04407317bd337a3488b9b6349e3ba5ebfed4`, with rollback `rollback/pre-production-academic-configuration-reconciliation-1-repair-1`.
+- Closed PACR1-01 through PACR1-05: deep configuration-only Schema-7 capture, full protected-database apply binding, stale-preparation invalidation, explicit School Year identity, Bell-independent noninstructional overrides, and duplicate Bell source-ID refusal.
+- Direct failure injection after every major write phase continues to restore exact prepare-time full-store parity. Successful fictional execution still produces the reviewed academic and schedule foundation, healthy Backup/Recovery audit, deterministic reopen, zero Student/Enrollment/Schedule Assignment records, and a pending-activation `V7_ONLY` manifest.
+- The accepted PACR1 and Schedule Cutover Closure architecture remains intact. Historical deliberately retired Weekly Schedule Mode readback remains `UNRESOLVED`.
+- Normal ARC remains Schema 7 / `V7_ONLY`. No publication/deployment, Samsung/production access, academic configuration, real Student data, package/Lesson change, dual write, normal-v8 activation, or authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-06 — Production Academic Configuration Reconciliation 1 Repair 2
+
+- Continued from local Repair 1 commit `9da11e33fe6e9eaffefe909fb101b2d72b3162f7`, tree `80fd738710d0eb6d88ea9a534d5780dafad959c7`, with rollback `rollback/pre-production-academic-configuration-reconciliation-1-repair-2`.
+- Closed `PACR1-R1-01`: the verified recovery and final prepare baseline must have identical complete store inventories, and the final apply backup/checksum is now the last awaited prewrite validation after semantic gates.
+- Preparation is one-shot after entering the write/restore path. Successful rollback, restore failure, and rollback-parity failure all leave no reusable preparation. Prewrite drift remains untouched and requires a new verified prepare.
+- All Repair 1 findings, all-major-phase exact rollback proof, the accepted PACR1 architecture, and Schedule Cutover Closure authority remain intact. Historical deliberately retired Weekly Schedule Mode readback remains `UNRESOLVED`.
+- Normal ARC remains Schema 7 / `V7_ONLY`. No publication/deployment, Samsung/production access, academic configuration, real Student data, package/Lesson change, dual write, normal-v8 activation, or authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-06 — PACR Closure Stabilization / Repair 3
+
+- Continued from PACR Repair 2 commit `97788283128686978f0fd3f147608bab8b4ae693`, tree `918dff7d35262e40ec37b2adb1384b3ac316e364`, with rollback `rollback/pre-production-academic-configuration-reconciliation-closure-repair-3`.
+- Replaced the fragmented apply/reopen boundary with one durable lifecycle: in-progress before owner writes, written pending reopen after owners finish, and final pending activation only after exact preclose plus fresh-reopen semantic proof.
+- Apply now requires the downloaded recovery JSON to be explicitly loaded, verified, and matched to the live complete-store baseline. Interrupted state is `RECOVERY_REQUIRED`; exact recovery uses fresh connections/services and never automatically resumes partial work.
+- One exact postcondition verifies academic/schedule meaning, zero classroom transactions, current-Semester-only placements, fingerprints/authority, and unchanged non-PACR stores before and after reopen. Accepted 12-event instructional package authority, 124 reference-only Lessons, and package-event-13 absence remain protected.
+- Added operation reentry refusal, global engineering-page control disabling, URL-bound publication commit/tree authority, and runtime/cache identity `stage2-production-academic-configuration-closure-1`. Normal `index.html` remains unchanged.
+- Normal ARC remains Schema 7 / `V7_ONLY`. No publication/deployment, Samsung/production access, academic configuration, real Student data, package/Lesson change, dual write, normal-v8 activation, or authority transfer occurred. Historical retired Weekly Schedule Mode readback remains `UNRESOLVED`. Status: local candidate pending independent closure review.
+
+## 2026-10-06 — PACR Closure Stabilization Semantic Oracle Correction
+
+- Continued from local Repair 3 candidate `f02ea5f3563b6f16e264b71b276ff74f606a29ad`, tree `ec54c18363d913d99a78ca2a697a8ca5d19a6a28`, with rollback `rollback/pre-pacr-closure-stabilization-semantic-oracle-correction-1`.
+- Corrected `PACR-CLOSURE-R3-01`: expected semantic state is now derived from the frozen reviewed academic configuration and schedule migration plan. Generated owner IDs are retained only as opaque source-role bindings; owner-created content is no longer reused as expected content.
+- Nine wrong-but-stable academic, Bell, Mode, Event, Override, Section, Planning, and final-lifecycle mappings are each refused by the semantic postcondition and restore exact preconfiguration parity. The focused PACR suite is 41/41.
+- Accepted Repair 3 lifecycle/recovery behavior remains intact. Normal ARC remains Schema 7 / `V7_ONLY`; no publication/deployment, Samsung/production access, physical configuration, Student data, package event 13, Lesson acceptance change, dual write, normal-v8 activation, or authority transfer occurred. Status: local correction candidate pending independent review.

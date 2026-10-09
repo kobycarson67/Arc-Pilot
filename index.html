@@ -240,6 +240,115 @@ function showStorageCompatibilityWarning() {
 }
 window.addEventListener("error", function (e) { console.error("Welding Classroom runtime error:", e.error || e.message); });
 function cloneStateData(x) { return JSON.parse(JSON.stringify(x)); }
+const ArcAcademicStructureOperationalTruth = (() => {
+    const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+    function copy(value) { return value == null ? value : JSON.parse(JSON.stringify(value)); }
+    function text(value) { return String(value == null ? "" : value).trim(); }
+    function fail(code, message, context = {}) { let error = new Error(message); error.code = code; error.context = context; throw error; }
+    function date(value, field) {
+        let result = text(value);
+        if (!ISO_DATE.test(result)) fail("INVALID_ACADEMIC_DATE", `${field} must use YYYY-MM-DD.`, { field, value });
+        let parsed = new Date(result + "T00:00:00.000Z");
+        if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== result) fail("INVALID_ACADEMIC_DATE", `${field} is not a real calendar date.`, { field, value });
+        return result;
+    }
+    function required(value, field) { let result = text(value); if (!result) fail("ACADEMIC_FIELD_REQUIRED", `${field} is required.`, { field }); return result; }
+    function integer(value, field) { let result = Number(value); if (!Number.isInteger(result) || result < 1) fail("INVALID_ACADEMIC_ORDER", `${field} must be a positive whole number.`, { field, value }); return result; }
+    function unique(rows, field, family, normalize = value => value) {
+        let seen = new Set();
+        rows.forEach(row => { let value = normalize(row[field]); if (seen.has(value)) fail("DUPLICATE_ACADEMIC_IDENTITY", `${family} ${field} values must be unique.`, { family, field, value }); seen.add(value); });
+    }
+    function noOverlap(rows, family) {
+        let ordered = rows.slice().sort((a, b) => a.startDate.localeCompare(b.startDate) || a.endDate.localeCompare(b.endDate));
+        for (let i = 1; i < ordered.length; i++) if (ordered[i].startDate <= ordered[i - 1].endDate) fail("ACADEMIC_DATE_OVERLAP", `${family} date ranges must not overlap.`, { family, firstKey: ordered[i - 1].key, secondKey: ordered[i].key });
+    }
+    function validate(input) {
+        if (!input || typeof input !== "object" || Array.isArray(input)) fail("INVALID_ACADEMIC_STRUCTURE", "Academic Structure must be an object.");
+        if (Number(input.version) !== 1) fail("INVALID_ACADEMIC_STRUCTURE_VERSION", "Academic Structure version must be 1.");
+        let yearInput = input.schoolYear || {}, schoolYear = { key: required(yearInput.key, "School Year identity"), label: required(yearInput.label, "School Year label"), startDate: date(yearInput.startDate, "School Year start date"), endDate: date(yearInput.endDate, "School Year end date") };
+        if (schoolYear.endDate < schoolYear.startDate) fail("INVALID_ACADEMIC_RANGE", "School Year end date cannot precede its start date.", { key: schoolYear.key });
+        if (!Array.isArray(input.semesters) || !input.semesters.length) fail("SEMESTER_REQUIRED", "At least one known Semester is required.");
+        let semesters = input.semesters.map((source, semesterIndex) => {
+            source = source || {};
+            let semester = { key: required(source.key, `Semester ${semesterIndex + 1} identity`), code: required(source.code, `Semester ${semesterIndex + 1} code`), label: required(source.label, `Semester ${semesterIndex + 1} label`), startDate: date(source.startDate, `Semester ${semesterIndex + 1} start date`), endDate: date(source.endDate, `Semester ${semesterIndex + 1} end date`), order: integer(source.order, `Semester ${semesterIndex + 1} order`), gradingPeriods: [] };
+            if (semester.endDate < semester.startDate || semester.startDate < schoolYear.startDate || semester.endDate > schoolYear.endDate) fail("SEMESTER_OUTSIDE_SCHOOL_YEAR", "Every Semester must fall within the School Year.", { semesterKey: semester.key, schoolYearKey: schoolYear.key });
+            if (!Array.isArray(source.gradingPeriods) || !source.gradingPeriods.length) fail("GRADING_PERIOD_REQUIRED", "Every known Semester requires at least one Grading Period.", { semesterKey: semester.key });
+            semester.gradingPeriods = source.gradingPeriods.map((periodSource, periodIndex) => {
+                periodSource = periodSource || {};
+                let period = { key: required(periodSource.key, `Grading Period ${periodIndex + 1} identity`), code: required(periodSource.code, `Grading Period ${periodIndex + 1} code`), label: required(periodSource.label, `Grading Period ${periodIndex + 1} label`), startDate: date(periodSource.startDate, `Grading Period ${periodIndex + 1} start date`), endDate: date(periodSource.endDate, `Grading Period ${periodIndex + 1} end date`), order: integer(periodSource.order, `Grading Period ${periodIndex + 1} order`) };
+                if (period.endDate < period.startDate || period.startDate < semester.startDate || period.endDate > semester.endDate) fail("GRADING_PERIOD_OUTSIDE_SEMESTER", "Every Grading Period must fall within its Semester.", { gradingPeriodKey: period.key, semesterKey: semester.key });
+                return period;
+            });
+            unique(semester.gradingPeriods, "key", "Grading Period"); unique(semester.gradingPeriods, "code", "Grading Period", value => text(value).toLowerCase()); unique(semester.gradingPeriods, "order", "Grading Period", Number); noOverlap(semester.gradingPeriods, "Grading Period");
+            semester.gradingPeriods.sort((a, b) => a.order - b.order || a.startDate.localeCompare(b.startDate));
+            return semester;
+        });
+        unique(semesters, "key", "Semester"); unique(semesters, "code", "Semester", value => text(value).toLowerCase()); unique(semesters, "order", "Semester", Number); noOverlap(semesters, "Semester");
+        semesters.sort((a, b) => a.order - b.order || a.startDate.localeCompare(b.startDate));
+        let currentSemesterKey = required(input.currentSemesterKey, "Current Semester");
+        if (!semesters.some(row => row.key === currentSemesterKey)) fail("INVALID_CURRENT_SEMESTER", "Current Semester must identify one configured Semester.", { currentSemesterKey });
+        return { version: 1, schoolYear, semesters, currentSemesterKey };
+    }
+    function createKey(family) {
+        let random = globalThis.crypto && typeof globalThis.crypto.randomUUID === "function" ? globalThis.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        return `arc-${family}-${random}`;
+    }
+    function draft(existing, academicYearLabel, semesterLabel) {
+        if (existing) return copy(validate(existing));
+        let semesterKey = createKey("semester");
+        return { version: 1, schoolYear: { key: createKey("school-year"), label: text(academicYearLabel), startDate: "", endDate: "" }, semesters: [{ key: semesterKey, code: "S1", label: text(semesterLabel) || "Semester 1", startDate: "", endDate: "", order: 1, gradingPeriods: [{ key: createKey("grading-period"), code: "Q1", label: "Quarter 1", startDate: "", endDate: "", order: 1 }] }], currentSemesterKey: semesterKey };
+    }
+    function appendHistory(target, before, after, options) {
+        if (!Array.isArray(target.academicStructureHistory)) target.academicStructureHistory = [];
+        target.academicStructureHistory.push({ id: createKey("academic-structure-history"), before: copy(before), after: copy(after), timestamp: text(options.timestamp) || new Date().toISOString(), reason: required(options.reason, "Change reason"), source: text(options.source) || "normal-arc-academic-structure" });
+    }
+    function apply(target, input, options = {}) {
+        let next = validate(input), before = target.academicStructure ? validate(target.academicStructure) : null, current = next.semesters.find(row => row.key === next.currentSemesterKey), operationalYear = text(target.academicYear), operationalSemester = text(target.semester);
+        required(options.reason, "Change reason");
+        if (before) {
+            let priorCurrent = before.semesters.find(row => row.key === before.currentSemesterKey);
+            if (before.schoolYear.key !== next.schoolYear.key) fail("ACADEMIC_IDENTITY_IMMUTABLE", "The School Year internal identity cannot be changed.");
+            if (next.currentSemesterKey !== before.currentSemesterKey) fail("CURRENT_SCOPE_CHANGE_REQUIRES_SEMESTER_TRANSITION", "Use Semester Transition to change the current Semester.");
+            if (next.schoolYear.label !== before.schoolYear.label || next.schoolYear.label !== operationalYear) fail("CURRENT_SCOPE_RENAME_REQUIRES_REVIEW", "The active School Year label cannot be renamed here. Use a separately reviewed current-scope correction workflow.");
+            if (current.label !== priorCurrent.label || current.label !== operationalSemester) fail("CURRENT_SCOPE_RENAME_REQUIRES_REVIEW", "The active Semester label cannot be renamed here. Use Semester Transition to advance the Semester.");
+        }
+        else {
+            if (next.schoolYear.label !== operationalYear || current.label !== operationalSemester) fail("INITIAL_SCOPE_MISMATCH", "Initial Academic Structure must preserve the active School Year and Semester labels.", { academicYear: operationalYear, semester: operationalSemester });
+        }
+        target.academicStructure = copy(next);
+        appendHistory(target, before, next, options);
+        return copy(next);
+    }
+    function transition(target, targetSemesterKey, options = {}) {
+        let before = validate(target.academicStructure), active = before.semesters.find(row => row.key === before.currentSemesterKey), nextSemester = before.semesters.find(row => row.key === targetSemesterKey), targetYear = text(options.targetSchoolYearLabel);
+        if (!nextSemester) fail("UNKNOWN_TRANSITION_SEMESTER", "Semester Transition requires an exact known target Semester.", { targetSemesterKey });
+        if (targetSemesterKey === before.currentSemesterKey) fail("CURRENT_SEMESTER_UNCHANGED", "Semester Transition must select a different known Semester.");
+        if (nextSemester.order <= active.order || nextSemester.startDate <= active.endDate) fail("SEMESTER_TRANSITION_NOT_FORWARD", "Semester Transition may select only a later configured Semester.", { currentSemesterKey: active.key, targetSemesterKey });
+        if (text(target.academicYear) !== before.schoolYear.label || text(target.semester) !== active.label) fail("CURRENT_SCOPE_MISMATCH", "Current operational scope does not match Academic Structure before Semester Transition.");
+        if (targetYear !== before.schoolYear.label) fail("UNKNOWN_TRANSITION_SCHOOL_YEAR", "Configure and review the target School Year before Semester Transition.", { targetSchoolYearLabel: targetYear });
+        let after = copy(before); after.currentSemesterKey = nextSemester.key;
+        target.academicStructure = after;
+        target.academicYear = before.schoolYear.label;
+        target.semester = nextSemester.label;
+        appendHistory(target, before, after, { reason: options.reason || `Semester Transition to ${nextSemester.label}`, source: options.source || "normal-arc-semester-transition", timestamp: options.timestamp });
+        return copy(after);
+    }
+    function transitionSchoolYear(target, targetSchoolYearLabel, targetSemesterLabel, options = {}) {
+        let before = validate(target.academicStructure), active = before.semesters.find(row => row.key === before.currentSemesterKey), nextYear = required(targetSchoolYearLabel, "Target School Year"), nextSemester = required(targetSemesterLabel, "Target Semester");
+        required(options.reason || `School Year Transition to ${nextYear} ${nextSemester}`, "Change reason");
+        if (text(target.academicYear) !== before.schoolYear.label || text(target.semester) !== active.label) fail("CURRENT_SCOPE_MISMATCH", "Current operational scope does not match Academic Structure before School Year Transition.");
+        let later = before.semesters.filter(row => row.order > active.order && row.startDate > active.endDate);
+        if (active.label !== "Semester 2" || later.length) fail("SCHOOL_YEAR_TRANSITION_NOT_READY", "A later Semester must be completed/configured before starting the next School Year.", { currentSemesterKey: active.key, currentSemesterLabel: active.label, laterSemesterKeys: later.map(row => row.key) });
+        if (!/^\d{4}-\d{2}$/.test(nextYear) || nextYear === before.schoolYear.label) fail("INVALID_NEXT_SCHOOL_YEAR", "School Year Transition requires an explicitly entered different School Year in YYYY-YY format.", { targetSchoolYearLabel: nextYear });
+        if (nextSemester !== "Semester 1") fail("INVALID_NEXT_SCHOOL_YEAR_SEMESTER", "A new School Year begins with the explicitly selected Semester 1.", { targetSemesterLabel: nextSemester });
+        target.academicYear = nextYear;
+        target.semester = nextSemester;
+        delete target.academicStructure;
+        appendHistory(target, before, null, { reason: options.reason || `Instructor applied School Year Transition to ${nextYear} ${nextSemester}`, source: "normal-arc-school-year-transition", timestamp: options.timestamp });
+        return { academicYear: nextYear, semester: nextSemester, academicStructure: null };
+    }
+    return Object.freeze({ validate, draft, apply, transition, transitionSchoolYear, createKey });
+})();
 function stateSchemaVersion(x) { var _a; let n = Number((_a = x === null || x === void 0 ? void 0 : x.schemaVersion) !== null && _a !== void 0 ? _a : 0); return Number.isInteger(n) && n >= 0 ? n : 0; }
 function validateLegacyStateShape(candidate) {
     if (!candidate || typeof candidate !== "object" || Array.isArray(candidate))
@@ -280,6 +389,14 @@ function validateCurrentStateShape(candidate) {
         throw new Error("Booth issue history is invalid.");
     if (!Array.isArray(candidate.projectBank))
         throw new Error("Project Bank definitions are invalid.");
+    if (candidate.academicStructure != null)
+        {
+            let academic = ArcAcademicStructureOperationalTruth.validate(candidate.academicStructure), current = academic.semesters.find(row => row.key === academic.currentSemesterKey);
+            if (candidate.academicYear !== academic.schoolYear.label || candidate.semester !== current.label)
+                throw new Error("Academic Structure and the current School Year/Semester labels are inconsistent.");
+        }
+    if (candidate.academicStructureHistory != null && !Array.isArray(candidate.academicStructureHistory))
+        throw new Error("Academic Structure history is invalid.");
     return true;
 }
 function migrateStateData(input, declaredSchema = null) {
@@ -1998,8 +2115,44 @@ function renderDemoAndTesting() {
 function renderScheduleSetup() {
     navMark("setup", "Schedule Setup");
     ensureScheduleModel();
+    let structure = state.academicStructure || null, currentSemester = structure ? structure.semesters.find(row => row.key === structure.currentSemesterKey) : null;
+    let academicStructureCard = structure ? `<div class="card"><div class="row"><div><h3>Academic Structure</h3><p><b>${escapePhotoText(structure.schoolYear.label)}</b> • Current: <b>${escapePhotoText(currentSemester ? currentSemester.label : "Needs correction")}</b></p><p class="small">${structure.semesters.length} known Semester${structure.semesters.length === 1 ? "" : "s"}. Future Semesters may remain unconfigured until their dates are known. Internal identities stay hidden and stable.</p></div><button class="btn primary" onclick="showAcademicStructureEditor()">Edit Academic Structure</button></div></div>` : `<div class="card"><div class="row"><div><h3>Academic Structure</h3><p><b>Not configured</b></p><p class="small">Add the known School Year, current Semester, and Grading Period dates. Future Semester dates and schedules may remain unknown. Calendar Event titles are never used as academic boundaries.</p></div><button class="btn primary" onclick="showAcademicStructureEditor()">Configure Academic Structure</button></div></div>`;
     let scheduleCards = Object.values(state.bellSchedules).map(bs => `<div class="card"><h3>${bs.name}</h3><div class="small">${bs.id === "regular" ? "Normal instructional day" : bs.id === "friday" ? "Shortened Friday bell schedule" : "Weather/delay bell schedule"}</div>${[1, 2, 3, 4, 5, 6, 7].map(p => `<div class="entryrow"><div><b>${p}${ordinal(p)} Period${p === state.planningPeriod ? " — Planning" : ""}</b></div><div style="display:flex;gap:8px;flex-wrap:wrap"><label class="small">Start <input type="time" value="${bs.times[p].start}" onchange="updatePeriodTime(${p},'start',this.value,'${bs.id}')"></label><label class="small">End <input type="time" value="${bs.times[p].end}" onchange="updatePeriodTime(${p},'end',this.value,'${bs.id}')"></label></div></div>`).join("")}</div>`).join("");
-    document.getElementById("app").innerHTML = `<button class="btn" onclick="renderScheduleHome()">← Schedule</button><div class="row"><div><h2>Schedule Setup</h2></div><button class="btn primary" onclick="showSemesterTransition()">Semester Transition</button></div><p class="small">Classes keep their stable period assignments. Bell schedule templates control the times used on a particular date. The school calendar can override any individual day.</p><div class="card"><h3>Default Weekly Pattern</h3><p class="small">Monday–Thursday default to Regular Instruction. Friday defaults to the shortened Friday schedule with Open Shop. Calendar overrides can change any date—including making a Friday a Regular Day after a snow cancellation.</p></div>${scheduleCards}<div class="card"><b>Planning Period</b><select onchange="movePlanningPeriod(Number(this.value))" style="margin-left:8px">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${state.planningPeriod === n ? "selected" : ""}>${n}${ordinal(n)} Period</option>`).join("")}</select></div>${state.sections.slice().sort((a, b) => a.period - b.period).map(sec => `<div class="entryrow"><div><b>${sec.name}</b><br><span class="small">${sec.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} • ${sectionStudents(sec.id).length} students</span></div><div><select onchange="moveSectionPeriod('${sec.id}',Number(this.value))">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${sec.period === n ? "selected" : ""}>${n}${ordinal(n)}</option>`).join("")}</select><button class="btn" onclick="manageSectionRoster('${sec.id}')">Manage Students</button></div></div>`).join("")}`;
+    document.getElementById("app").innerHTML = `<button class="btn" onclick="renderScheduleHome()">← Schedule</button><div class="row"><div><h2>Schedule Setup</h2></div><button class="btn primary" onclick="showSemesterTransition()">Semester Transition</button></div><p class="small">Classes keep their stable period assignments. Bell schedule templates control the times used on a particular date. The school calendar can override any individual day.</p>${academicStructureCard}<div class="card"><h3>Default Weekly Pattern</h3><p class="small">Monday–Thursday default to Regular Instruction. Friday defaults to the shortened Friday schedule with Open Shop. Calendar overrides can change any date—including making a Friday a Regular Day after a snow cancellation.</p></div>${scheduleCards}<div class="card"><b>Planning Period</b><select onchange="movePlanningPeriod(Number(this.value))" style="margin-left:8px">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${state.planningPeriod === n ? "selected" : ""}>${n}${ordinal(n)} Period</option>`).join("")}</select></div>${state.sections.slice().sort((a, b) => a.period - b.period).map(sec => `<div class="entryrow"><div><b>${sec.name}</b><br><span class="small">${sec.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} • ${sectionStudents(sec.id).length} students</span></div><div><select onchange="moveSectionPeriod('${sec.id}',Number(this.value))">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${sec.period === n ? "selected" : ""}>${n}${ordinal(n)}</option>`).join("")}</select><button class="btn" onclick="manageSectionRoster('${sec.id}')">Manage Students</button></div></div>`).join("")}`;
+}
+let academicStructureEditorDraft = null;
+function academicStructureSemesterEditor(row) {
+    let periods = row.gradingPeriods.map(period => `<div class="card academicGradingPeriodEditor" data-grading-period-key="${escapePhotoText(period.key)}"><div class="row"><b>Grading Period</b><button class="btn" type="button" onclick="removeAcademicGradingPeriod('${row.key}','${period.key}')">Remove</button></div><div class="grid"><label>Code<input class="academicGpCode" value="${escapePhotoText(period.code)}"></label><label>Label<input class="academicGpLabel" value="${escapePhotoText(period.label)}"></label><label>Start date<input class="academicGpStart" type="date" value="${escapePhotoText(period.startDate)}"></label><label>End date<input class="academicGpEnd" type="date" value="${escapePhotoText(period.endDate)}"></label><label>Order<input class="academicGpOrder" type="number" min="1" value="${period.order}"></label></div></div>`).join("");
+    let current = row.key === academicStructureEditorDraft.currentSemesterKey;
+    return `<div class="card academicSemesterEditor" data-semester-key="${escapePhotoText(row.key)}"><div class="row"><h3>Semester${current ? " — Current" : ""}</h3><button class="btn" type="button" onclick="removeAcademicSemester('${row.key}')">Remove Semester</button></div><div class="grid"><label>Code<input class="academicSemesterCode" value="${escapePhotoText(row.code)}"></label><label>Label<input class="academicSemesterLabel" value="${escapePhotoText(row.label)}" ${current ? "readonly" : ""}></label><label>Start date<input class="academicSemesterStart" type="date" value="${escapePhotoText(row.startDate)}"></label><label>End date<input class="academicSemesterEnd" type="date" value="${escapePhotoText(row.endDate)}"></label><label>Order<input class="academicSemesterOrder" type="number" min="1" value="${row.order}"></label></div><h4>Grading Periods</h4>${periods}<button class="btn" type="button" onclick="addAcademicGradingPeriod('${row.key}')">Add Grading Period</button></div>`;
+}
+function renderAcademicStructureEditor() {
+    let overlay = document.getElementById("academicStructureOverlay");
+    if (!overlay) return;
+    let draft = academicStructureEditorDraft, options = draft.semesters.map(row => `<option value="${escapePhotoText(row.key)}" ${row.key === draft.currentSemesterKey ? "selected" : ""}>${escapePhotoText(row.label || row.code || "Unnamed Semester")}</option>`).join("");
+    overlay.innerHTML = `<div class="modalbox" style="width:min(1050px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeAcademicStructureEditor()">Close</button><h2>Academic Structure</h2><p class="small">Enter only known academic boundaries. Future Semesters and their class/Planning schedules may remain unknown until you add them later. Calendar Event titles are never interpreted as boundaries.</p><div class="card"><h3>School Year</h3><div class="grid"><label>Label<input id="academicSchoolYearLabel" value="${escapePhotoText(draft.schoolYear.label)}" readonly></label><label>Start date<input id="academicSchoolYearStart" type="date" value="${escapePhotoText(draft.schoolYear.startDate)}"></label><label>End date<input id="academicSchoolYearEnd" type="date" value="${escapePhotoText(draft.schoolYear.endDate)}"></label></div></div>${draft.semesters.map(academicStructureSemesterEditor).join("")}<p><button class="btn" type="button" onclick="addAcademicSemester()">Add known Semester</button></p><div class="card"><label><b>Current Semester</b><select id="academicCurrentSemester" disabled style="margin-left:8px">${options}</select></label><p class="small">Semester Transition is the only normal workflow that advances the current Semester.</p><label><b>Reason for this change</b><input id="academicStructureReason" placeholder="Required audit reason"></label><p class="small">Saving changes Academic Structure only. It does not create or move classes, Planning, students, pacing, grades, Calendar Events, or date overrides.</p><button class="btn primary" type="button" onclick="saveAcademicStructureEditor()">Save Academic Structure</button></div></div>`;
+}
+function showAcademicStructureEditor() {
+    academicStructureEditorDraft = ArcAcademicStructureOperationalTruth.draft(state.academicStructure, state.academicYear, state.semester);
+    let overlay = document.createElement("div"); overlay.id = "academicStructureOverlay"; overlay.className = "modal show"; overlay.onclick = closeAcademicStructureEditor; document.body.appendChild(overlay); renderAcademicStructureEditor();
+}
+function closeAcademicStructureEditor() { var _a; (_a = document.getElementById("academicStructureOverlay")) === null || _a === void 0 ? void 0 : _a.remove(); academicStructureEditorDraft = null; }
+function readAcademicStructureEditorDraft() {
+    let prior = academicStructureEditorDraft, semesters = [...document.querySelectorAll(".academicSemesterEditor")].map(semesterElement => ({ key: semesterElement.dataset.semesterKey, code: semesterElement.querySelector(".academicSemesterCode").value, label: semesterElement.querySelector(".academicSemesterLabel").value, startDate: semesterElement.querySelector(".academicSemesterStart").value, endDate: semesterElement.querySelector(".academicSemesterEnd").value, order: Number(semesterElement.querySelector(".academicSemesterOrder").value), gradingPeriods: [...semesterElement.querySelectorAll(".academicGradingPeriodEditor")].map(periodElement => ({ key: periodElement.dataset.gradingPeriodKey, code: periodElement.querySelector(".academicGpCode").value, label: periodElement.querySelector(".academicGpLabel").value, startDate: periodElement.querySelector(".academicGpStart").value, endDate: periodElement.querySelector(".academicGpEnd").value, order: Number(periodElement.querySelector(".academicGpOrder").value) })) }));
+    return { version: 1, schoolYear: { key: prior.schoolYear.key, label: document.getElementById("academicSchoolYearLabel").value, startDate: document.getElementById("academicSchoolYearStart").value, endDate: document.getElementById("academicSchoolYearEnd").value }, semesters, currentSemesterKey: document.getElementById("academicCurrentSemester").value };
+}
+function preserveAcademicEditorValues() { if (document.getElementById("academicStructureOverlay")) academicStructureEditorDraft = readAcademicStructureEditorDraft(); }
+function addAcademicSemester() { preserveAcademicEditorValues(); let key = ArcAcademicStructureOperationalTruth.createKey("semester"), order = academicStructureEditorDraft.semesters.length + 1; academicStructureEditorDraft.semesters.push({ key, code: `S${order}`, label: `Semester ${order}`, startDate: "", endDate: "", order, gradingPeriods: [{ key: ArcAcademicStructureOperationalTruth.createKey("grading-period"), code: `Q${order}`, label: `Quarter ${order}`, startDate: "", endDate: "", order: 1 }] }); renderAcademicStructureEditor(); }
+function removeAcademicSemester(key) { preserveAcademicEditorValues(); if (key === academicStructureEditorDraft.currentSemesterKey) return alert("The current Semester cannot be removed here. Use Semester Transition to advance the active Semester."); if (academicStructureEditorDraft.semesters.length === 1) return alert("At least one known Semester is required."); academicStructureEditorDraft.semesters = academicStructureEditorDraft.semesters.filter(row => row.key !== key); renderAcademicStructureEditor(); }
+function addAcademicGradingPeriod(semesterKey) { preserveAcademicEditorValues(); let semester = academicStructureEditorDraft.semesters.find(row => row.key === semesterKey), order = semester.gradingPeriods.length + 1; semester.gradingPeriods.push({ key: ArcAcademicStructureOperationalTruth.createKey("grading-period"), code: `Q${order}`, label: `Quarter ${order}`, startDate: "", endDate: "", order }); renderAcademicStructureEditor(); }
+function removeAcademicGradingPeriod(semesterKey, periodKey) { preserveAcademicEditorValues(); let semester = academicStructureEditorDraft.semesters.find(row => row.key === semesterKey); if (semester.gradingPeriods.length === 1) return alert("Every known Semester requires at least one Grading Period."); semester.gradingPeriods = semester.gradingPeriods.filter(row => row.key !== periodKey); renderAcademicStructureEditor(); }
+function saveAcademicStructureEditor() {
+    try {
+        let draft = readAcademicStructureEditorDraft(), reason = document.getElementById("academicStructureReason").value;
+        ArcAcademicStructureOperationalTruth.apply(state, draft, { reason, source: "normal-arc-schedule-setup" });
+        save(); closeAcademicStructureEditor(); renderScheduleSetup(); alert("Academic Structure saved. Class and Planning schedules were not changed.");
+    }
+    catch (error) { alert(error.message); }
 }
 function suggestedNextAcademicYear(year) {
     let m = String(year || "").match(/^(\d{4})-(\d{2}|\d{4})$/);
@@ -2008,15 +2161,26 @@ function suggestedNextAcademicYear(year) {
     let start = Number(m[1]) + 1, end = start + 1;
     return `${start}-${String(end).slice(-2)}`;
 }
+function semesterTransitionTargetModel() {
+    let currentSemester = state.semester || "Semester 1";
+    if (state.academicStructure) {
+        let academic = ArcAcademicStructureOperationalTruth.validate(state.academicStructure), active = academic.semesters.find(row => row.key === academic.currentSemesterKey), later = academic.semesters.filter(row => row.order > active.order && row.startDate > active.endDate);
+        if (later.length) return { mode: "same-year", targetYear: academic.schoolYear.label, targetSemester: later[0].label, targets: later.map(row => row.label), academicYearReadonly: true, requiresStructureAfter: false };
+        if (active.label === "Semester 2") return { mode: "cross-year", targetYear: suggestedNextAcademicYear(state.academicYear), targetSemester: "Semester 1", targets: ["Semester 1"], academicYearReadonly: false, requiresStructureAfter: true, blockedMessage: "" };
+        return { mode: "future-semester-unconfigured", targetYear: academic.schoolYear.label, targetSemester: "", targets: [], academicYearReadonly: true, requiresStructureAfter: false, blockedMessage: "Semester 2 is not configured yet. Add it in Settings → Schedule Setup → Academic Structure when the school provides the information." };
+    }
+    let targetSemester = currentSemester === "Semester 1" ? "Semester 2" : "Semester 1", crossYear = currentSemester === "Semester 2";
+    return { mode: crossYear ? "cross-year" : "legacy-same-year", targetYear: crossYear ? suggestedNextAcademicYear(state.academicYear) : state.academicYear, targetSemester, targets: ["Semester 1", "Semester 2"], academicYearReadonly: false, requiresStructureAfter: crossYear };
+}
 function showSemesterTransition() {
     ensureScheduleModel();
     ensurePlanningModel();
-    let currentSem = state.semester || "Semester 1", target = currentSem === "Semester 1" ? "Semester 2" : "Semester 1", targetYear = currentSem === "Semester 2" ? suggestedNextAcademicYear(state.academicYear) : state.academicYear;
+    let currentSem = state.semester || "Semester 1", targetModel = semesterTransitionTargetModel(), transitionSemesterOptions = targetModel.targets.length ? targetModel.targets.map(label => `<option value="${escapePhotoText(label)}" ${label === targetModel.targetSemester ? "selected" : ""}>${escapePhotoText(label)}</option>`).join("") : `<option value="">Semester 2 is not configured</option>`, structureNotice = targetModel.blockedMessage ? `<p class="small"><b>Needs attention:</b> ${targetModel.blockedMessage}</p>` : targetModel.requiresStructureAfter ? `<p class="small"><b>Academic Structure after transition:</b> The new School Year will remain Not configured until you enter its exact School Year, Semester, and Grading Period boundaries in Schedule Setup. No dates will be inferred.</p>` : "";
     let o = document.createElement("div");
     o.id = "semesterTransitionOverlay";
     o.className = "modal show";
     let rows = state.sections.slice().sort((a, b) => a.period - b.period).map(sec => `<div class="entryrow transitionRow" data-section="${sec.id}"><div><b>${sec.period}${ordinal(sec.period)} Period — ${sec.name}</b><br><span class="small">${courseLabel(sec.course)} • ${sectionStudents(sec.id).length} active students</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><select class="transitionAction" style="padding:8px"><option value="continue">Continue same class & pacing</option><option value="new">End this class + create fresh class</option><option value="end">End & archive; no replacement</option></select><select class="transitionPeriod" style="padding:8px">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${n === sec.period ? "selected" : ""}>${n}${ordinal(n)} Period</option>`).join("")}</select></div></div>`).join("");
-    o.innerHTML = `<div class="modalbox" style="width:min(980px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeSemesterTransition()">Close</button><h2>Semester Transition</h2><p class="small">This wizard makes the choice explicit: continue an existing section, start a fresh section, or archive it. Nothing changes until you review and apply.</p><div class="card"><div class="row"><label><b>Current</b><br>${state.academicYear} • ${currentSem}</label><label><b>Move to academic year</b><br><input id="transitionAcademicYear" value="${targetYear}" style="padding:9px;width:130px"></label><label><b>Move to semester</b><br><select id="transitionSemester" style="padding:9px"><option ${target === "Semester 1" ? "selected" : ""}>Semester 1</option><option ${target === "Semester 2" ? "selected" : ""}>Semester 2</option></select></label><label><b>Planning Period</b><br><select id="transitionPlanning" style="padding:9px">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${n === state.planningPeriod ? "selected" : ""}>${n}${ordinal(n)}</option>`).join("")}</select></label></div></div><div class="card"><h3>Choose what happens to each class</h3>${rows}</div><div class="card"><b>Rules</b><p class="small"><b>Continue</b> keeps the same section identity, curriculum-map position, and pacing forecast; current students roll into a new semester enrollment. <b>Fresh class</b> archives the old section and creates an empty replacement with fresh pacing/map position. <b>End</b> archives it with no replacement. Student profiles and old enrollment/history are preserved in all cases.</p></div><div id="transitionPreview"></div><div style="text-align:right"><button class="btn" onclick="previewSemesterTransition()">Review Changes</button> <button class="btn primary" onclick="applySemesterTransition()">Apply Transition</button></div></div>`;
+    o.innerHTML = `<div class="modalbox" style="width:min(980px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeSemesterTransition()">Close</button><h2>Semester Transition</h2><p class="small">This wizard makes the choice explicit: continue an existing section, start a fresh section, or archive it. Nothing changes until you review and apply.</p><div class="card"><div class="row"><label><b>Current</b><br>${state.academicYear} • ${currentSem}</label><label><b>Move to academic year</b><br><input id="transitionAcademicYear" value="${targetModel.targetYear}" ${targetModel.academicYearReadonly ? "readonly" : ""} style="padding:9px;width:130px"></label><label><b>Move to semester</b><br><select id="transitionSemester" style="padding:9px">${transitionSemesterOptions}</select></label><label><b>Planning Period</b><br><select id="transitionPlanning" style="padding:9px">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${n === state.planningPeriod ? "selected" : ""}>${n}${ordinal(n)}</option>`).join("")}</select></label></div>${structureNotice}</div><div class="card"><h3>Choose what happens to each class</h3>${rows}</div><div class="card"><b>Rules</b><p class="small"><b>Continue</b> keeps the same section identity, curriculum-map position, and pacing forecast; current students roll into a new semester enrollment. <b>Fresh class</b> archives the old section and creates an empty replacement with fresh pacing/map position. <b>End</b> archives it with no replacement. Student profiles and old enrollment/history are preserved in all cases.</p></div><div id="transitionPreview"></div><div style="text-align:right"><button class="btn" onclick="previewSemesterTransition()">Review Changes</button> <button class="btn primary" onclick="applySemesterTransition()" ${targetModel.blockedMessage ? "disabled" : ""}>Apply Transition</button></div></div>`;
     o.onclick = closeSemesterTransition;
     document.body.appendChild(o);
     previewSemesterTransition();
@@ -2026,6 +2190,9 @@ function semesterTransitionChoices() {
     return [...document.querySelectorAll(".transitionRow")].map(r => ({ sectionId: r.dataset.section, action: r.querySelector(".transitionAction").value, period: Number(r.querySelector(".transitionPeriod").value) }));
 }
 function validateSemesterTransition(choices, planning) {
+    if (!Number.isInteger(planning) || planning < 1 || planning > 7) return "Planning Period must be a valid period from 1 through 7.";
+    if (!Array.isArray(choices) || choices.length !== state.sections.length || new Set(choices.map(row => row.sectionId)).size !== state.sections.length || choices.some(row => !state.sections.some(section => section.id === row.sectionId))) return "Every current class requires exactly one transition choice.";
+    if (choices.some(row => !["continue", "new", "end"].includes(row.action) || !Number.isInteger(row.period) || row.period < 1 || row.period > 7)) return "Every transition choice requires a valid action and period.";
     let used = {};
     for (let c of choices.filter(x => x.action !== "end")) {
         if (c.period === planning)
@@ -2040,7 +2207,7 @@ function previewSemesterTransition() {
     let box = document.getElementById("transitionPreview");
     if (!box)
         return;
-    let choices = semesterTransitionChoices(), planning = Number(document.getElementById("transitionPlanning").value), err = validateSemesterTransition(choices, planning);
+    let choices = semesterTransitionChoices(), planning = Number(document.getElementById("transitionPlanning").value), target = document.getElementById("transitionSemester").value, targetYear = (document.getElementById("transitionAcademicYear").value || "").trim(), targetModel = semesterTransitionTargetModel(), err = targetModel.blockedMessage || (!/^\d{4}-\d{2}$/.test(targetYear) ? "Academic year should use the format 2026-27." : target ? validateSemesterTransition(choices, planning) : "Choose an explicit target Semester.");
     if (err) {
         box.innerHTML = `<div class="card"><b>Needs attention:</b> ${err}</div>`;
         return;
@@ -2057,7 +2224,7 @@ function semesterTransitionProductAction() { return { targetSchoolYearLabel: (do
 function applySemesterTransition() { return scheduleAuthorityAdapter.runLegacy("semester-transition", semesterTransitionProductAction(), applySemesterTransitionLegacy); }
 function applySemesterTransitionLegacy() {
     var _a;
-    let choices = semesterTransitionChoices(), planning = Number(document.getElementById("transitionPlanning").value), target = document.getElementById("transitionSemester").value, targetYear = (document.getElementById("transitionAcademicYear").value || state.academicYear).trim(), err = validateSemesterTransition(choices, planning);
+    let choices = semesterTransitionChoices(), planning = Number(document.getElementById("transitionPlanning").value), target = document.getElementById("transitionSemester").value, targetYear = (document.getElementById("transitionAcademicYear").value || state.academicYear).trim(), sameSchoolYear = targetYear === state.academicYear, academicTarget = state.academicStructure && sameSchoolYear ? state.academicStructure.semesters.find(row => row.label === target) : null, targetModel = semesterTransitionTargetModel(), err = targetModel.blockedMessage || (!target ? "Choose an explicit target Semester." : validateSemesterTransition(choices, planning));
     if (err) {
         alert(err);
         previewSemesterTransition();
@@ -2071,45 +2238,70 @@ function applySemesterTransitionLegacy() {
         alert("Choose a different target semester and/or academic year before applying the transition.");
         return;
     }
+    if (state.academicStructure) {
+        try {
+            let preflightState = cloneStateData(state);
+            if (sameSchoolYear) {
+                if (!academicTarget) throw new Error("Choose a later configured Semester in the current Academic Structure.");
+                ArcAcademicStructureOperationalTruth.transition(preflightState, academicTarget.key, { targetSchoolYearLabel: targetYear, reason: `Prevalidate Semester Transition to ${target}`, source: "normal-arc-semester-transition" });
+            }
+            else ArcAcademicStructureOperationalTruth.transitionSchoolYear(preflightState, targetYear, target, { reason: `Prevalidate School Year Transition to ${targetYear} ${target}` });
+        }
+        catch (error) {
+            alert(error.message);
+            previewSemesterTransition();
+            return;
+        }
+    }
     if (!confirm(`Apply transition from ${state.academicYear} ${state.semester} to ${targetYear} ${target}? This will archive/end sections according to the preview. Student profiles and prior history will be preserved.`))
         return;
-    let oldSemester = state.semester, newSections = [];
-    // Preserve visible competency levels as prior-term baseline/context, but tag them to the outgoing term so a new semester grade starts fresh.
-    stampUnscopedCompetencyRatingsForCurrentTerm();
-    // Preserve an immutable pacing-history snapshot for EVERY current section before rollover, including continuing sections.
-    choices.forEach(c => { createPacingHistorySnapshot(c.sectionId, c.action, { note: `Captured automatically before ${oldSemester} → ${target} semester transition.` }); });
-    choices.forEach(c => {
-        let sec = state.sections.find(x => x.id === c.sectionId);
-        if (!sec)
-            return;
-        let roster = sectionStudents(sec.id);
-        if (c.action === "continue") {
-            // Close the old enrollment record and open a new-semester record on the SAME section identity.
-            roster.forEach(st => {
-                (st.enrollments || []).filter(e => e.active && e.sectionId === sec.id).forEach(e => e.active = false);
-                st.enrollments = st.enrollments || [];
-                st.enrollments.push({ year: targetYear, semester: target, sectionId: sec.id, period: c.period, course: sec.course, active: true });
-            });
-            sec.period = c.period;
-            newSections.push(sec);
+    let beforeState = cloneStateData(state), oldSemester = state.semester, newSections = [];
+    try {
+        // Preserve visible competency levels as prior-term baseline/context, but tag them to the outgoing term so a new semester grade starts fresh.
+        stampUnscopedCompetencyRatingsForCurrentTerm();
+        // Preserve an immutable pacing-history snapshot for EVERY current section before rollover, including continuing sections.
+        choices.forEach(c => { createPacingHistorySnapshot(c.sectionId, c.action, { note: `Captured automatically before ${oldSemester} → ${target} semester transition.` }); });
+        choices.forEach(c => {
+            let sec = state.sections.find(x => x.id === c.sectionId), roster = sectionStudents(c.sectionId);
+            if (c.action === "continue") {
+                // Close the old enrollment record and open a new-semester record on the SAME section identity.
+                roster.forEach(st => {
+                    (st.enrollments || []).filter(e => e.active && e.sectionId === sec.id).forEach(e => e.active = false);
+                    st.enrollments = st.enrollments || [];
+                    st.enrollments.push({ year: targetYear, semester: target, sectionId: sec.id, period: c.period, course: sec.course, active: true });
+                });
+                sec.period = c.period;
+                newSections.push(sec);
+            }
+            else {
+                archiveSectionSnapshot(sec, c.action === "new" ? "semester_new_class" : "semester_end");
+                roster.forEach(st => (st.enrollments || []).filter(e => e.active && e.sectionId === sec.id).forEach(e => e.active = false));
+                if (c.action === "new") {
+                    let nid = "sec_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8), nsec = { id: nid, name: sec.name, course: sec.course, period: c.period };
+                    newSections.push(nsec);
+                    state.pacingPlans[nid] = { sectionId: nid, anchorDate: dateKey(), includeOpenShop: false, items: [] };
+                }
+            }
+        });
+        state.sections = newSections;
+        state.planningPeriod = planning;
+        if (state.academicStructure) {
+            if (sameSchoolYear) ArcAcademicStructureOperationalTruth.transition(state, academicTarget.key, { targetSchoolYearLabel: targetYear, reason: `Instructor applied normal ARC Semester Transition from ${oldSemester} to ${target}`, source: "normal-arc-semester-transition" });
+            else ArcAcademicStructureOperationalTruth.transitionSchoolYear(state, targetYear, target, { reason: `Instructor applied cross-School-Year Semester Transition from ${beforeState.academicYear} ${oldSemester} to ${targetYear} ${target}` });
         }
         else {
-            archiveSectionSnapshot(sec, c.action === "new" ? "semester_new_class" : "semester_end");
-            roster.forEach(st => (st.enrollments || []).filter(e => e.active && e.sectionId === sec.id).forEach(e => e.active = false));
-            if (c.action === "new") {
-                let nid = "sec_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8), nsec = { id: nid, name: sec.name, course: sec.course, period: c.period };
-                newSections.push(nsec);
-                state.pacingPlans[nid] = { sectionId: nid, anchorDate: dateKey(), includeOpenShop: false, items: [] };
-            }
+            state.academicYear = targetYear;
+            state.semester = target;
         }
-    });
-    state.sections = newSections;
-    state.planningPeriod = planning;
-    state.academicYear = targetYear;
-    state.semester = target;
-    if (!state.sections.some(x => x.id === state.activeSectionId))
-        state.activeSectionId = ((_a = state.sections[0]) === null || _a === void 0 ? void 0 : _a.id) || null;
-    save();
+        if (!state.sections.some(x => x.id === state.activeSectionId)) state.activeSectionId = ((_a = state.sections[0]) === null || _a === void 0 ? void 0 : _a.id) || null;
+        save();
+    }
+    catch (error) {
+        state = beforeState;
+        alert(`Semester transition was not applied: ${error.message}`);
+        previewSemesterTransition();
+        return;
+    }
     closeSemesterTransition();
     renderScheduleSetup();
     alert(`Semester transition applied. Prior records were preserved; the active schedule is now ${targetYear} ${target}.`);

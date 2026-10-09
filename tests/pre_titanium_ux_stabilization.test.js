@@ -79,7 +79,7 @@ test('Teaching Tips uses distinct lesson-connected shop guidance',()=>{
 
 test('schema remains v7 and build is truthful',()=>{
   assert(html.includes('const CURRENT_SCHEMA_VERSION = 7;'));
-  assert(fs.readFileSync('app-build.js','utf8').includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1-parity-p7-competency-evidence-open-shop-1-parity-p8a-behavior-structural-foundation-1-parity-p8-workplace-safety-behavior-1-parity-p9-gradebook-authority-1-parity-p10a-unified-student-history-1-parity-p10b-ui-1-parity-p10c-ui-1'"));
+  assert(fs.readFileSync('app-build.js','utf8').includes("build:'arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1-parity-p7-competency-evidence-open-shop-1-parity-p8a-behavior-structural-foundation-1-parity-p8-workplace-safety-behavior-1-parity-p9-gradebook-authority-1-parity-p10a-unified-student-history-1-parity-p10b-ui-1-parity-p10c-ui-1-academic-structure-operational-truth-1-repair-1-academic-structure-operational-truth-1-repair-2-academic-structure-operational-truth-1-repair-3'"));
 });
 
 if(!process.exitCode)console.log('\n'+pass+'/'+total+' Pre-Titanium UX Stabilization tests passed.');

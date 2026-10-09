@@ -14,6 +14,11 @@ assert(workflow.includes('cleanup-isolation-repair-1'),'guardrail must verify th
 assert(workflow.includes("RUNTIME='stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1'"),'guardrail must verify the repaired bridge runtime');
 assert(workflow.includes('arc_v8_stage2_verification.js?v=stage2-reload-rehydration-repair-2-cleanup-isolation-repair-1'),'guardrail must verify the repaired query-keyed bridge asset');
 assert(workflow.includes('production-academic-configuration-1'),'guardrail must verify the production academic configuration build and runtime');
+assert(workflow.includes('academic-structure-operational-truth-1-repair-1'),'guardrail must verify the AST1 Repair 1 build and cache authority');
+assert(workflow.includes('academic-structure-operational-truth-1-repair-2'),'guardrail must verify the AST1 Repair 2 build and cache authority');
+assert(workflow.includes('academic-structure-operational-truth-1-repair-3'),'guardrail must verify the AST1 Repair 3 build and cache authority');
+assert(workflow.includes('arc_v7_schedule_configuration_capture.js?v=academic-structure-operational-truth-1-repair-1'),'guardrail must verify the AST1 capture query key');
+assert(workflow.includes('arc_v8_production_academic_configuration_page.js?v=academic-structure-operational-truth-1-repair-1'),'guardrail must verify the AST1 PACR controller query key');
 assert(workflow.includes("RUNTIME='p10d-pu2-protected-upgrade-bridge-1'"),'guardrail must verify the PU2 protected-upgrade runtime');
 assert(workflow.includes('UPGRADE PROTECTED PRODUCTION TO IDB14'),'guardrail must verify the exact destructive confirmation');
 assert(workflow.includes('arc_v8_protected_production_upgrade_physical.js?v=p10d-pu2-protected-upgrade-bridge-1'),'guardrail must verify the query-keyed physical bridge');

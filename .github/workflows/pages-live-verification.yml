@@ -72,9 +72,9 @@ jobs:
           grep --fixed-strings "academic-structure-operational-truth-1-repair-2" "$verify_dir/app-build.js"
           grep --fixed-strings "academic-structure-operational-truth-1-repair-3" "$verify_dir/app-build.js"
           grep --fixed-strings "academic-authority-activation-1" "$verify_dir/app-build.js"
-          grep --fixed-strings "academic-authority-activation-1-repair-4" "$verify_dir/app-build.js"
-          grep --fixed-strings "arc_academic_authority_activation_production.js?v=academic-authority-activation-1-repair-4" "$verify_dir/engineering/arc_academic_authority_activation.html"
-          grep --fixed-strings "arc_academic_authority_activation_page.js?v=academic-authority-activation-1-repair-4" "$verify_dir/engineering/arc_academic_authority_activation.html"
+          grep --fixed-strings "academic-authority-activation-1-repair-5" "$verify_dir/app-build.js"
+          grep --fixed-strings "arc_academic_authority_activation_production.js?v=academic-authority-activation-1-repair-5" "$verify_dir/engineering/arc_academic_authority_activation.html"
+          grep --fixed-strings "arc_academic_authority_activation_page.js?v=academic-authority-activation-1-repair-5" "$verify_dir/engineering/arc_academic_authority_activation.html"
           grep --fixed-strings "ENGINEERING / AUTHORIZED INSTRUCTOR TOOLING ONLY" "$verify_dir/engineering/arc_academic_authority_activation.html"
           if grep --fixed-strings "arc_academic_authority_activation_production" "$verify_dir/index.html"; then
             echo 'Normal ARC must not load the production academic activation bridge.' >&2

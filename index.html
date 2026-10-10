@@ -555,6 +555,9 @@ function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAut
 async function refreshAuthoritativeAcademicRuntime(context = {}) {
     if (academicAuthorityMode !== "V8_AUTHORITATIVE" || !academicAuthorityRuntime) throw new Error("Authoritative academic runtime is unavailable.");
     const day = context.day || dateKey(), selectedSectionId = context.selectedSectionId === undefined ? state.activeSectionId : context.selectedSectionId;
+    const bindingState = await academicAuthorityRuntime.bindingAuthority.read();
+    academicAuthorityRuntime.identityBindings = bindingState.identityBindings;
+    await academicAuthorityRuntime.activationOwner.refreshIdentityBindings();
     await academicAuthorityRuntime.projectionCache.reload({ day, selectedSectionId });
     const projection = academicAuthorityRuntime.projectionCache.get({ day, selectedSectionId }), schedule = await academicAuthorityRuntime.scheduleAdmin.summary();
     const compatibility = ArcAcademicAuthorityActivation.createCompatibilityState({ projection, schedule, day, identityBindings: academicAuthorityRuntime.identityBindings, baseline: { activeSectionId: selectedSectionId, course: state.course } });
@@ -566,7 +569,7 @@ function rerenderAuthoritativeMutation() { if (typeof navRender === "function" &
 async function routeScheduleAuthority(action, payload, legacyMutation) { payload = payload || {}; if (academicAuthorityMode !== "V8_AUTHORITATIVE") return scheduleAuthorityAdapter.runLegacy(action, payload, legacyMutation); const result = await scheduleAuthorityAdapter.runV8(action, payload); if (action !== "semester-transition-prepare" && !payload.previewOnly) { await refreshAuthoritativeAcademicRuntime({ day: dateKey() }); rerenderAuthoritativeMutation(); } return result; }
 async function routeAcademicAuthority(action, payload, legacyMutation) { payload = payload || {}; if (academicAuthorityMode !== "V8_AUTHORITATIVE") return academicAuthorityAdapter.runLegacy(action, payload, legacyMutation); const result = await academicAuthorityAdapter.runV8(action, payload); if (action !== "projection") { await refreshAuthoritativeAcademicRuntime({ day: dateKey(), selectedSectionId: state.activeSectionId }); rerenderAuthoritativeMutation(); } return result; }
 function installAuthoritativeAcademicRuntime(runtime) {
-    if (!runtime || !ArcAcademicAuthorityActivation.isVerifiedGate(runtime.activationGate) || !runtime.projectionCache || !runtime.scheduleAdmin || !runtime.academic || !runtime.storage || !runtime.semesterTransitionCoordinator || !runtime.academicStructureCoordinator)
+    if (!runtime || !ArcAcademicAuthorityActivation.isVerifiedGate(runtime.activationGate) || !runtime.projectionCache || !runtime.scheduleAdmin || !runtime.academic || !runtime.storage || !runtime.bindingAuthority || !runtime.transitionalRecovery || !runtime.semesterTransitionCoordinator || !runtime.academicStructureCoordinator)
         throw new Error("Verified Academic Authority Activation runtime is required.");
     academicAuthorityRuntime = runtime;
     academicAuthorityMode = "V8_AUTHORITATIVE";
@@ -596,12 +599,14 @@ async function bootstrapAcademicAuthorityRuntime() {
     if (authority.authorityState !== "V8_AUTHORITATIVE") return false;
     const academic = ArcV8Academic.create({ storage, actor: "Instructor" }), scheduleAdmin = ArcV8AcademicAdministration.create({ storage, backup, actor: "Instructor" });
     const semesterTransitionCoordinator = ArcV8AcademicSemesterTransition.create({ storage, administration: scheduleAdmin, backup, actor: "Instructor" });
-    const academicStructureCoordinator = ArcAcademicAuthorityActivation.createAcademicStructureCoordinator({ storage, academic, administration: scheduleAdmin, backup, identityBindings: authority.marker.identityBindings, actor: "Instructor" });
+    const bindingAuthority = activationOwner.bindingAuthority, bindingState = await bindingAuthority.read();
+    const academicStructureCoordinator = ArcAcademicAuthorityActivation.createAcademicStructureCoordinator({ storage, academic, administration: scheduleAdmin, backup, bindingAuthority, actor: "Instructor" });
     const schedule = await scheduleAdmin.summary(), projection = activationOwner.projectionCache.get({ day: dateKey(), selectedSectionId: null }), sourceSectionId = state.activeSectionId;
-    const compatibilityState = ArcAcademicAuthorityActivation.createCompatibilityState({ projection, schedule, day: dateKey(), identityBindings: authority.marker.identityBindings, baseline: { activeSectionId: sourceSectionId, course: state.course } });
-    const resolveScheduleProductContext = async (action, payload) => { let p = activationOwner.projectionCache.get({ day: payload.effectiveDate || dateKey(), selectedSectionId: payload.sectionId || compatibilityState.activeSectionId }), year = p.schoolYear, semester = p.semester; if (action === "semester-transition") { let years = await storage.query(ArcV8Storage.STORES.schoolYears), semesters = await storage.query(ArcV8Storage.STORES.semesters), targetYear = years.find(x => x.label === payload.targetSchoolYearLabel), targetSemester = targetYear && semesters.find(x => x.schoolYearId === targetYear.schoolYearId && x.label === payload.targetSemesterLabel); if (!targetYear || !targetSemester) throw new Error("Semester Transition requires an explicitly configured target School Year and Semester."); return { targetSchoolYearId: targetYear.schoolYearId, targetSemesterId: targetSemester.semesterId, effectiveFrom: targetSemester.startDate, choices: payload.choices.map(choice => { let section = p.sections.find(x => x.sectionId === choice.sectionId); if (!section) throw new Error("Semester Transition Section is outside authoritative v8 scope."); return Object.assign({}, choice, { expectedRevision: section.revision }); }) }; } return { schoolYearId: year && year.schoolYearId, semesterId: semester && semester.semesterId, effectiveDate: payload.effectiveDate || dateKey() }; };
+    const compatibilityState = ArcAcademicAuthorityActivation.createCompatibilityState({ projection, schedule, day: dateKey(), identityBindings: bindingState.identityBindings, baseline: { activeSectionId: sourceSectionId, course: state.course } });
+    const resolveScheduleProductContext = async (action, payload) => { let p = activationOwner.projectionCache.get({ day: payload.effectiveDate || dateKey(), selectedSectionId: payload.sectionId || compatibilityState.activeSectionId }), year = p.schoolYear, semester = p.semester; if (action === "semester-transition") { let structure = state.academicStructure, targetDefinition = structure && structure.semesters.find(x => x.label === payload.targetSemesterLabel), bindings = (await bindingAuthority.read()).identityBindings, targetSemesterId = targetDefinition && bindings.semesters[targetDefinition.key], semesters = await storage.query(ArcV8Storage.STORES.semesters), years = await storage.query(ArcV8Storage.STORES.schoolYears), targetSemester = semesters.find(x => x.semesterId === targetSemesterId), targetYear = targetSemester && years.find(x => x.schoolYearId === targetSemester.schoolYearId); if (!targetYear || !targetSemester || targetYear.label !== payload.targetSchoolYearLabel) throw new Error("Semester Transition requires an explicitly configured and durably bound target School Year and Semester."); return { targetSchoolYearId: targetYear.schoolYearId, targetSemesterId: targetSemester.semesterId, effectiveFrom: targetSemester.startDate, choices: payload.choices.map(choice => { let section = p.sections.find(x => x.sectionId === choice.sectionId); if (!section) throw new Error("Semester Transition Section is outside authoritative v8 scope."); return Object.assign({}, choice, { expectedRevision: section.revision }); }) }; } return { schoolYearId: year && year.schoolYearId, semesterId: semester && semester.semesterId, effectiveDate: payload.effectiveDate || dateKey() }; };
     const resolveAcademicProductContext = async (action, payload) => { let p = activationOwner.projectionCache.get({ day: dateKey(), selectedSectionId: payload.newSectionId || payload.sectionId }), context = payload.studentId && p.contextForStudent(payload.studentId); if (action === "create-student-placement") return { effectiveFrom: dateKey() }; if (!context || !context.currentEnrollment || !context.currentScheduleAssignment) throw new Error("Student has no authoritative current Enrollment and Schedule Assignment."); if (action === "drop") return { enrollmentId: context.currentEnrollment.enrollmentId, scheduleAssignmentId: context.currentScheduleAssignment.scheduleAssignmentId, expectedEnrollmentRevision: context.currentEnrollment.revision, expectedAssignmentRevision: context.currentScheduleAssignment.revision, effectiveTo: dateKey() }; if (action === "move-or-reenroll" || action === "move") return { enrollmentId: context.currentEnrollment.enrollmentId, currentAssignmentId: context.currentScheduleAssignment.scheduleAssignmentId, expectedRevision: context.currentScheduleAssignment.revision, effectiveFrom: dateKey(), newSectionId: payload.newSectionId }; return {}; };
-    installAuthoritativeAcademicRuntime({ activationOwner, activationGate: authority.activationGate, projectionCache: activationOwner.projectionCache, storage, academic, scheduleAdmin, semesterTransitionCoordinator, academicStructureCoordinator, resolveScheduleProductContext, resolveAcademicProductContext, compatibilityState, identityBindings: authority.marker.identityBindings });
+    const transitionalRecovery = ArcAcademicAuthorityActivation.createTransitionalRecoveryAuthority({ backup, markerStore, legacyStore: persistentStorage, bindingAuthority });
+    installAuthoritativeAcademicRuntime({ activationOwner, activationGate: authority.activationGate, projectionCache: activationOwner.projectionCache, storage, academic, scheduleAdmin, semesterTransitionCoordinator, academicStructureCoordinator, bindingAuthority, transitionalRecovery, resolveScheduleProductContext, resolveAcademicProductContext, compatibilityState, identityBindings: bindingState.identityBindings });
     return true;
 }
 function ensureScheduleModel() {
@@ -2019,7 +2024,8 @@ function downloadBackupPayload(payload, prefix = "Welding_Classroom_Backup") {
     return a.download;
 }
 let lastBackupExportResult = null;
-function exportBackup() { if (simulationActive()) { alert("Leave the simulation before exporting a Live Classroom backup. Simulation data remains isolated and resettable inside Demo & Testing."); return null; } let filename = downloadBackupPayload(backupPayload()); lastBackupExportResult = { filename, at: new Date().toISOString() }; let target = document.getElementById("backupExportConfirmation"); if (target) { target.hidden = false; target.textContent = `✓ Backup exported successfully — ${filename}`; } return filename; }
+let transitionalImportRollback = null;
+function exportBackup() { if (simulationActive()) { alert("Leave the simulation before exporting a Live Classroom backup. Simulation data remains isolated and resettable inside Demo & Testing."); return null; } if (academicAuthorityMode === "V8_AUTHORITATIVE") return academicAuthorityRuntime.transitionalRecovery.exportBackup().then(result => { let filename = downloadBackupPayload(result.package, "ARC_v8_Authoritative_Classroom_Backup"); lastBackupExportResult = { filename, at: new Date().toISOString(), format: result.package.manifest.format }; let target = document.getElementById("backupExportConfirmation"); if (target) { target.hidden = false; target.textContent = `✓ Complete two-authority backup exported successfully — ${filename}`; } return filename; }); let filename = downloadBackupPayload(backupPayload()); lastBackupExportResult = { filename, at: new Date().toISOString() }; let target = document.getElementById("backupExportConfirmation"); if (target) { target.hidden = false; target.textContent = `✓ Backup exported successfully — ${filename}`; } return filename; }
 function chooseBackupImport() { if (simulationActive()) return alert("Leave the simulation before importing a Live Classroom backup."); let input = document.getElementById("backupImportInput"); if (input)
     input.click(); }
 function validateBackupWrapper(payload) {
@@ -2044,7 +2050,7 @@ function persistImportRollback(beforeState) {
     persistentStorage.setItem(IMPORT_ROLLBACK_KEY, JSON.stringify(rollback));
     return rollback;
 }
-function hasImportRollback() { try {
+function hasImportRollback() { if (academicAuthorityMode === "V8_AUTHORITATIVE") return !!transitionalImportRollback; try {
     let x = JSON.parse(persistentStorage.getItem(IMPORT_ROLLBACK_KEY) || "null");
     return !!(x && x.state);
 }
@@ -2053,6 +2059,7 @@ catch (e) {
 } }
 function commitImportedState(payload, opts = {}) {
     var _a, _b, _c;
+    if (academicAuthorityMode === "V8_AUTHORITATIVE") return commitAuthoritativeImportedState(payload, opts);
     let migrated = prepareImportedState(payload), beforeState = cloneStateData(state), beforeStored = persistentStorage.getItem(STORAGE_KEY), rollback = null;
     try {
         rollback = persistImportRollback(beforeState);
@@ -2081,7 +2088,28 @@ function commitImportedState(payload, opts = {}) {
         throw new Error(`Import was rolled back; current data was preserved. ${err.message}`);
     }
 }
+async function rehydrateAfterTransitionalRestore() {
+    let raw = persistentStorage.getItem(STORAGE_KEY);
+    if (typeof raw !== "string" || !raw.trim()) throw new Error("Restored still-V7 transaction authority is unavailable.");
+    let parsed = JSON.parse(raw), restoredState = migrateStateData(parsed, stateSchemaVersion(parsed));
+    validateCurrentStateShape(restoredState);
+    state = restoredState;
+    let authority = await academicAuthorityRuntime.activationOwner.rehydrate();
+    if (authority.authorityState !== "V8_AUTHORITATIVE") throw new Error("Restored activation authority did not rehydrate as V8_AUTHORITATIVE.");
+    academicAuthorityRuntime.activationGate = authority.activationGate;
+    await refreshAuthoritativeAcademicRuntime({ day: dateKey(), selectedSectionId: state.activeSectionId });
+}
+async function commitAuthoritativeImportedState(payload, opts = {}) {
+    if (!payload || !payload.manifest || payload.manifest.format !== academicAuthorityRuntime.transitionalRecovery.format) throw Object.assign(new Error("While v8 academic authority is active, restore requires a complete ARC v8 authoritative classroom backup. A legacy WeldingClassroomBackup cannot replace academic or schedule authority."), { code: "LEGACY_BACKUP_REFUSED_UNDER_V8" });
+    await academicAuthorityRuntime.transitionalRecovery.verifyPackage(payload);
+    let before = await academicAuthorityRuntime.transitionalRecovery.exportBackup({ purpose: "pre-normal-authoritative-import" });
+    transitionalImportRollback = before.package;
+    if (opts.downloadSafety !== false) downloadBackupPayload(before.package, "ARC_v8_Authoritative_PreImport_Safety");
+    let result = await academicAuthorityRuntime.transitionalRecovery.restoreBackup(payload, { confirmation: academicAuthorityRuntime.transitionalRecovery.restoreConfirmation, rehydrate: rehydrateAfterTransitionalRestore });
+    return { ok: true, schemaVersion: CURRENT_SCHEMA_VERSION, rollbackCreated: true, authorityState: "V8_AUTHORITATIVE", recovery: result.recoveryPackage };
+}
 function restoreImportRollback() {
+    if (academicAuthorityMode === "V8_AUTHORITATIVE") return restoreAuthoritativeImportRollback();
     var _a, _b;
     let raw = persistentStorage.getItem(IMPORT_ROLLBACK_KEY);
     if (!raw)
@@ -2118,16 +2146,29 @@ function restoreImportRollback() {
         alert("Rollback could not be restored: " + err.message);
     }
 }
+async function restoreAuthoritativeImportRollback() {
+    if (!transitionalImportRollback) return alert("No complete two-authority pre-import rollback is available in this browser session. Use the downloaded pre-import safety package after a reload.");
+    if (!confirm("Restore the complete pre-import v8 academic/schedule and still-V7 transaction authority? A fresh two-authority safety backup will download first.")) return;
+    try {
+        let safety = await academicAuthorityRuntime.transitionalRecovery.exportBackup({ purpose: "pre-authoritative-rollback-safety" });
+        downloadBackupPayload(safety.package, "ARC_v8_Authoritative_PreRollback_Safety");
+        await academicAuthorityRuntime.transitionalRecovery.restoreBackup(transitionalImportRollback, { confirmation: academicAuthorityRuntime.transitionalRecovery.restoreConfirmation, rehydrate: rehydrateAfterTransitionalRestore });
+        alert("Complete pre-import authority restored successfully.");
+        renderMainMenu();
+    } catch (err) { alert("Rollback could not be restored: " + err.message); }
+}
 function importBackupFile(input) {
     if (simulationActive()) { alert("Leave the simulation before importing a Live Classroom backup."); input.value = ""; return; }
     let file = input.files && input.files[0];
     if (!file)
         return;
     let reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         try {
-            let payload = JSON.parse(reader.result), preview = prepareImportedState(payload);
+            let payload = JSON.parse(reader.result), preview;
+            if (academicAuthorityMode === "V8_AUTHORITATIVE") { let checked = await academicAuthorityRuntime.transitionalRecovery.verifyPackage(payload); preview = migrateStateData(JSON.parse(checked.package.v7StateBytes), CURRENT_SCHEMA_VERSION); }
+            else preview = prepareImportedState(payload);
             let students = [...(((_a = preview.classes) === null || _a === void 0 ? void 0 : _a.wt) || []), ...(((_b = preview.classes) === null || _b === void 0 ? void 0 : _b.awt) || [])].length;
             let projects = (((_c = preview.projectLibrary) === null || _c === void 0 ? void 0 : _c.wt) || []).length + (((_d = preview.projectLibrary) === null || _d === void 0 ? void 0 : _d.awt) || []).length;
             let tech = (((_e = preview.technicalLibrary) === null || _e === void 0 ? void 0 : _e.wt) || []).length + (((_f = preview.technicalLibrary) === null || _f === void 0 ? void 0 : _f.awt) || []).length;
@@ -2136,7 +2177,7 @@ function importBackupFile(input) {
                 input.value = "";
                 return;
             }
-            let result = commitImportedState(payload);
+            let result = await commitImportedState(payload);
             alert(`Backup imported successfully.${result.migratedFrom < CURRENT_SCHEMA_VERSION ? ` Migrated schema ${result.migratedFrom} → ${CURRENT_SCHEMA_VERSION}.` : ""}`);
             renderMainMenu();
         }
@@ -2170,7 +2211,14 @@ function renderScheduleSetup() {
     ensureScheduleModel();
     let structure = state.academicStructure || null, currentSemester = structure ? structure.semesters.find(row => row.key === structure.currentSemesterKey) : null;
     let academicStructureCard = structure ? `<div class="card"><div class="row"><div><h3>Academic Structure</h3><p><b>${escapePhotoText(structure.schoolYear.label)}</b> • Current: <b>${escapePhotoText(currentSemester ? currentSemester.label : "Needs correction")}</b></p><p class="small">${structure.semesters.length} known Semester${structure.semesters.length === 1 ? "" : "s"}. Future Semesters may remain unconfigured until their dates are known. Internal identities stay hidden and stable.</p></div><button class="btn primary" onclick="showAcademicStructureEditor()">Edit Academic Structure</button></div></div>` : `<div class="card"><div class="row"><div><h3>Academic Structure</h3><p><b>Not configured</b></p><p class="small">Add the known School Year, current Semester, and Grading Period dates. Future Semester dates and schedules may remain unknown. Calendar Event titles are never used as academic boundaries.</p></div><button class="btn primary" onclick="showAcademicStructureEditor()">Configure Academic Structure</button></div></div>`;
-    let scheduleCards = Object.values(state.bellSchedules).map(bs => `<div class="card"><h3>${bs.name}</h3><div class="small">${bs.id === "regular" ? "Normal instructional day" : bs.id === "friday" ? "Shortened Friday bell schedule" : "Weather/delay bell schedule"}</div>${[1, 2, 3, 4, 5, 6, 7].map(p => `<div class="entryrow"><div><b>${p}${ordinal(p)} Period${p === state.planningPeriod ? " — Planning" : ""}</b></div><div style="display:flex;gap:8px;flex-wrap:wrap"><label class="small">Start <input type="time" value="${bs.times[p].start}" onchange="updatePeriodTime(${p},'start',this.value,'${bs.id}')"></label><label class="small">End <input type="time" value="${bs.times[p].end}" onchange="updatePeriodTime(${p},'end',this.value,'${bs.id}')"></label></div></div>`).join("")}</div>`).join("");
+    function bellScheduleDescription(schedule) {
+      let semantic = String(schedule.semanticType || schedule.scheduleType || "").toLowerCase();
+      let name = String(schedule.name || "").toLowerCase();
+      if (semantic === "regular" || /\bregular\b/.test(name)) return "Normal instructional day";
+      if (semantic === "friday" || /friday|shortened/.test(name)) return "Shortened Friday bell schedule";
+      return "Weather/delay bell schedule";
+    }
+    let scheduleCards = Object.values(state.bellSchedules).map(bs => `<div class="card"><h3>${bs.name}</h3><div class="small">${bellScheduleDescription(bs)}</div>${[1, 2, 3, 4, 5, 6, 7].map(p => `<div class="entryrow"><div><b>${p}${ordinal(p)} Period${p === state.planningPeriod ? " — Planning" : ""}</b></div><div style="display:flex;gap:8px;flex-wrap:wrap"><label class="small">Start <input type="time" value="${bs.times[p].start}" onchange="updatePeriodTime(${p},'start',this.value,'${bs.id}')"></label><label class="small">End <input type="time" value="${bs.times[p].end}" onchange="updatePeriodTime(${p},'end',this.value,'${bs.id}')"></label></div></div>`).join("")}</div>`).join("");
     document.getElementById("app").innerHTML = `<button class="btn" onclick="renderScheduleHome()">← Schedule</button><div class="row"><div><h2>Schedule Setup</h2></div><button class="btn primary" onclick="showSemesterTransition()">Semester Transition</button></div><p class="small">Classes keep their stable period assignments. Bell schedule templates control the times used on a particular date. The school calendar can override any individual day.</p>${academicStructureCard}<div class="card"><h3>Default Weekly Pattern</h3><p class="small">Monday–Thursday default to Regular Instruction. Friday defaults to the shortened Friday schedule with Open Shop. Calendar overrides can change any date—including making a Friday a Regular Day after a snow cancellation.</p></div>${scheduleCards}<div class="card"><b>Planning Period</b><select onchange="movePlanningPeriod(Number(this.value))" style="margin-left:8px">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${state.planningPeriod === n ? "selected" : ""}>${n}${ordinal(n)} Period</option>`).join("")}</select></div>${state.sections.slice().sort((a, b) => a.period - b.period).map(sec => `<div class="entryrow"><div><b>${sec.name}</b><br><span class="small">${sec.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} • ${sectionStudents(sec.id).length} students</span></div><div><select onchange="moveSectionPeriod('${sec.id}',Number(this.value))">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${sec.period === n ? "selected" : ""}>${n}${ordinal(n)}</option>`).join("")}</select><button class="btn" onclick="manageSectionRoster('${sec.id}')">Manage Students</button></div></div>`).join("")}`;
 }
 let academicStructureEditorDraft = null;

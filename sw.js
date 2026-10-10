@@ -35,6 +35,8 @@ CORE.push('./src/arc_v8_academic_administration.js');
 CORE.push('./src/arc_schedule_authority_adapter.js');
 CORE.push('./src/arc_academic_consumer_projection.js');
 CORE.push('./src/arc_academic_authority_adapter.js');
+CORE.push('./src/arc_v8_academic_semester_transition.js');
+CORE.push('./src/arc_academic_authority_activation.js');
 CORE.push('./src/arc_v8_behavior.js');
 CORE.push('./src/arc_workplace_safety_behavior_authority_adapter.js');
 CORE.push('./src/arc_v8_curriculum_pacing.js');

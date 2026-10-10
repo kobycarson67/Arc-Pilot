@@ -39,6 +39,8 @@
 <script src="src/arc_schedule_authority_adapter.js"></script>
 <script src="src/arc_academic_consumer_projection.js"></script>
 <script src="src/arc_academic_authority_adapter.js"></script>
+<script src="src/arc_v8_academic_semester_transition.js"></script>
+<script src="src/arc_academic_authority_activation.js"></script>
 <script src="src/arc_attendance_authority_adapter.js"></script>
 <script src="src/arc_project_technical_authority_adapter.js"></script>
 <script src="src/arc_competency_evidence_authority_adapter.js"></script>
@@ -542,8 +544,9 @@ let simulationStartupError = null, simulationSession = null;
 try { simulationSession = simulationManager.resume(); }
 catch (err) { simulationStartupError = err; }
 let state = simulationSession ? migrateStateData(simulationSession.state, CURRENT_SCHEMA_VERSION) : loadInitialState();
-const scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V7_ONLY" });
-const academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+let academicAuthorityMode = "V7_ONLY", academicAuthorityRuntime = null;
+let scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V7_ONLY" });
+let academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const attendanceAuthorityAdapter = ArcAttendanceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const projectTechnicalAuthorityAdapter = ArcProjectTechnicalAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const competencyEvidenceAuthorityAdapter = ArcCompetencyEvidenceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
@@ -553,6 +556,37 @@ const curriculumPacingAuthorityAdapter = ArcCurriculumPacingAuthorityAdapter.cre
 const lessonAuthorityAdapter = ArcLessonAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const studentHistoryProjection = ArcStudentHistoryProjection.create({ authorityState: "V7_ONLY" });
 function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAuthorityAdapter.runLegacy(action, payload, mutation); }
+function routeScheduleAuthority(action, payload, legacyMutation) { return academicAuthorityMode === "V8_AUTHORITATIVE" ? scheduleAuthorityAdapter.runV8(action, payload) : scheduleAuthorityAdapter.runLegacy(action, payload, legacyMutation); }
+function routeAcademicAuthority(action, payload, legacyMutation) { return academicAuthorityMode === "V8_AUTHORITATIVE" ? academicAuthorityAdapter.runV8(action, payload) : academicAuthorityAdapter.runLegacy(action, payload, legacyMutation); }
+function installAuthoritativeAcademicRuntime(runtime) {
+    if (!runtime || !ArcAcademicAuthorityActivation.isVerifiedGate(runtime.activationGate) || !runtime.projectionCache || !runtime.scheduleAdmin || !runtime.academic || !runtime.storage || !runtime.semesterTransitionCoordinator || !runtime.academicStructureCoordinator)
+        throw new Error("Verified Academic Authority Activation runtime is required.");
+    academicAuthorityRuntime = runtime;
+    academicAuthorityMode = "V8_AUTHORITATIVE";
+    scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V8_AUTHORITATIVE", databaseName: "arc_classroom_v8", admin: runtime.scheduleAdmin, semesterTransitionCoordinator: runtime.semesterTransitionCoordinator, academicStructureCoordinator: runtime.academicStructureCoordinator, activationGate: runtime.activationGate, verifyActivationGate: ArcAcademicAuthorityActivation.isVerifiedGate, resolveProductContext: runtime.resolveScheduleProductContext });
+    academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V8_AUTHORITATIVE", databaseName: "arc_classroom_v8", academic: runtime.academic, projection: ArcAcademicConsumerProjection, storage: runtime.storage, projectionCache: runtime.projectionCache, activationGate: runtime.activationGate, verifyActivationGate: ArcAcademicAuthorityActivation.isVerifiedGate, resolveProductContext: runtime.resolveAcademicProductContext });
+    if (runtime.compatibilityState) state = Object.assign({}, state, runtime.compatibilityState);
+    if (runtime.sourceSectionId && runtime.activationOwner) state.activeSectionId = runtime.activationOwner.translateSectionId(runtime.sourceSectionId);
+}
+async function bootstrapAcademicAuthorityRuntime() {
+    if (simulationActive() || !persistentStorage.getItem(ArcAcademicAuthorityActivation.constants.authorityHintKey)) return false;
+    const owner = ArcV8Storage.create({ databaseName: "arc_classroom_v8" }), connection = await owner.open();
+    const storage = { read: connection.read.bind(connection), add: connection.add.bind(connection), put: connection.put.bind(connection), delete: connection.delete.bind(connection), query: connection.query.bind(connection), transaction: connection.transaction.bind(connection), close: connection.close.bind(connection), generateId: () => owner.generateId() };
+    const backup = ArcV8BackupRecovery.create({ storage, databaseName: "arc_classroom_v8", crypto, build: ARC_BUILD });
+    const markerStore = { read: id => storage.read(ArcV8Storage.STORES.infrastructure, id), write: row => storage.put(ArcV8Storage.STORES.infrastructure, row), remove: id => storage.delete(ArcV8Storage.STORES.infrastructure, id) };
+    const activationOwner = ArcAcademicAuthorityActivation.create({ databaseName: "arc_classroom_v8", readinessProvider: async () => { throw new Error("Normal ARC cannot create activation readiness authority."); }, backup, markerStore, legacyStore: persistentStorage, storage });
+    const authority = await activationOwner.rehydrate();
+    if (authority.authorityState !== "V8_AUTHORITATIVE") return false;
+    const academic = ArcV8Academic.create({ storage, actor: "Instructor" }), scheduleAdmin = ArcV8AcademicAdministration.create({ storage, backup, actor: "Instructor" });
+    const semesterTransitionCoordinator = ArcV8AcademicSemesterTransition.create({ storage, administration: scheduleAdmin, backup, actor: "Instructor" });
+    const academicStructureCoordinator = ArcAcademicAuthorityActivation.createAcademicStructureCoordinator({ storage, academic, administration: scheduleAdmin, backup, identityBindings: authority.marker.identityBindings, actor: "Instructor" });
+    const schedule = await scheduleAdmin.summary(), projection = activationOwner.projectionCache.get({ day: dateKey(), selectedSectionId: null }), sourceSectionId = state.activeSectionId;
+    const compatibilityState = ArcAcademicAuthorityActivation.createCompatibilityState({ projection, schedule, day: dateKey(), baseline: { activeSectionId: sourceSectionId, course: state.course } });
+    const resolveScheduleProductContext = async (action, payload) => { let p = activationOwner.projectionCache.get({ day: payload.effectiveDate || dateKey(), selectedSectionId: payload.sectionId || compatibilityState.activeSectionId }), year = p.schoolYear, semester = p.semester; if (action === "semester-transition") { let years = await storage.query(ArcV8Storage.STORES.schoolYears), semesters = await storage.query(ArcV8Storage.STORES.semesters), targetYear = years.find(x => x.label === payload.targetSchoolYearLabel), targetSemester = targetYear && semesters.find(x => x.schoolYearId === targetYear.schoolYearId && x.label === payload.targetSemesterLabel); if (!targetYear || !targetSemester) throw new Error("Semester Transition requires an explicitly configured target School Year and Semester."); return { targetSchoolYearId: targetYear.schoolYearId, targetSemesterId: targetSemester.semesterId, effectiveFrom: targetSemester.startDate, choices: payload.choices.map(choice => { let section = p.sections.find(x => x.sectionId === choice.sectionId); if (!section) throw new Error("Semester Transition Section is outside authoritative v8 scope."); return Object.assign({}, choice, { expectedRevision: section.revision }); }) }; } return { schoolYearId: year && year.schoolYearId, semesterId: semester && semester.semesterId, effectiveDate: payload.effectiveDate || dateKey() }; };
+    const resolveAcademicProductContext = async (action, payload) => { let p = activationOwner.projectionCache.get({ day: dateKey(), selectedSectionId: payload.newSectionId || payload.sectionId }), context = payload.studentId && p.contextForStudent(payload.studentId); if (action === "create-student-placement") return { effectiveFrom: dateKey() }; if (!context || !context.currentEnrollment || !context.currentScheduleAssignment) throw new Error("Student has no authoritative current Enrollment and Schedule Assignment."); if (action === "drop") return { enrollmentId: context.currentEnrollment.enrollmentId, scheduleAssignmentId: context.currentScheduleAssignment.scheduleAssignmentId, expectedEnrollmentRevision: context.currentEnrollment.revision, expectedAssignmentRevision: context.currentScheduleAssignment.revision, effectiveTo: dateKey() }; if (action === "move-or-reenroll" || action === "move") return { enrollmentId: context.currentEnrollment.enrollmentId, currentAssignmentId: context.currentScheduleAssignment.scheduleAssignmentId, expectedRevision: context.currentScheduleAssignment.revision, effectiveFrom: dateKey(), newSectionId: payload.newSectionId }; return {}; };
+    installAuthoritativeAcademicRuntime({ activationOwner, activationGate: authority.activationGate, projectionCache: activationOwner.projectionCache, storage, academic, scheduleAdmin, semesterTransitionCoordinator, academicStructureCoordinator, resolveScheduleProductContext, resolveAcademicProductContext, compatibilityState, sourceSectionId });
+    return true;
+}
 function ensureScheduleModel() {
     if (!state.academicYear)
         state.academicYear = "2026-27";
@@ -655,7 +689,7 @@ function defaultDayPlan(d = new Date()) { let dow = d.getDay(); if (dow === 0 ||
 function dayPlan(d = new Date()) { ensureScheduleModel(); let base = defaultDayPlan(d), o = state.calendarOverrides[dateKey(d)]; return o ? Object.assign(Object.assign(Object.assign({}, base), o), { source: "override" }) : base; }
 function dayTypeLabel(x) { return { school: "School Day", no_school: "No School", holiday: "Holiday", pd: "PD / In-Service", other: "Special Day" }[x] || "School Day"; }
 function instructionModeLabel(x) { return { regular: "Regular Instruction", open_shop: "Open Shop", special: "Special Activity", none: "No Instruction" }[x] || "Regular Instruction"; }
-function updatePeriodTime(period, field, value, scheduleId = "regular") { return scheduleAuthorityAdapter.runLegacy("bell-time", { period, field, value, scheduleId }, () => { ensureScheduleModel(); bellSchedule(scheduleId).times[period][field] = value; if (scheduleId === "regular")
+function updatePeriodTime(period, field, value, scheduleId = "regular") { return routeScheduleAuthority("bell-time", { period, field, value, scheduleId }, () => { ensureScheduleModel(); bellSchedule(scheduleId).times[period][field] = value; if (scheduleId === "regular")
     state.periodTimes[period][field] = value; save(); renderScheduleSetup(); }); }
 function timeMinutes(v) { if (!v)
     return null; let [h, m] = v.split(":").map(Number); return h * 60 + m; }
@@ -690,11 +724,13 @@ function dismissNotification(id) { let n = state.notifications.find(x => x.id ==
     save();
     showNotifications();
 } }
-function academicConsumerProjection(day = dateKey(), currentPeriodCode = null) { ensureScheduleModel(); return ArcAcademicConsumerProjection.fromLegacy(state, { day, selectedSectionId: state.activeSectionId, currentPeriodCode }); }
+function academicConsumerProjection(day = dateKey(), currentPeriodCode = null) { ensureScheduleModel(); return academicAuthorityMode === "V8_AUTHORITATIVE" ? academicAuthorityRuntime.projectionCache.get({ day, selectedSectionId: state.activeSectionId, currentPeriodCode }) : ArcAcademicConsumerProjection.fromLegacy(state, { day, selectedSectionId: state.activeSectionId, currentPeriodCode }); }
 function academicConsumerContext(name, studentId = "", day = dateKey(), currentPeriodCode = null) { return academicConsumerProjection(day, currentPeriodCode).consumerContext(name, studentId); }
-function allStudents() { return academicConsumerProjection().students.map(x => x.student.legacyRecord); }
-function activeSection() { let selected = academicConsumerProjection().selectedSection; return selected && selected.legacyRecord; }
-function sectionStudents(id) { return academicConsumerProjection().rosterForSection(id).map(x => x.student.legacyRecord); }
+function projectionStudentRecord(x) { return x.student.legacyRecord || { id: x.studentId, name: x.displayName, grade: x.student.gradeLevel || "", archived: x.student.lifecycle !== "active", enrollments: x.enrollmentHistory || [], academicAuthority: "V8_AUTHORITATIVE" }; }
+function projectionSectionRecord(x) { return x && (x.legacyRecord || { id: x.sectionId, name: x.displayName, course: x.courseId === "arc-course-awt" ? "awt" : "wt", period: Number(x.period), academicAuthority: "V8_AUTHORITATIVE" }); }
+function allStudents() { return academicConsumerProjection().students.map(projectionStudentRecord); }
+function activeSection() { return projectionSectionRecord(academicConsumerProjection().selectedSection); }
+function sectionStudents(id) { return academicConsumerProjection().rosterForSection(id).map(projectionStudentRecord); }
 function selectSection(id) { state.activeSectionId = id; let sec = activeSection(); if (sec && sec.course)
     state.course = sec.course; save(); renderRoster(); }
 function ordinal(n) { return n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"; }
@@ -707,7 +743,7 @@ function persistNavigationContext() { try { sessionStorage.setItem(navigationCon
 function restoreNavigationContext() { let saved; try { saved = JSON.parse(sessionStorage.getItem(navigationContextStorageKey()) || "null"); } catch (e) { return false; } if (!saved || !RESTORABLE_VIEWS.includes(saved.view)) return false; let sec = state.sections.find(x => x.id === saved.sectionId); if (sec) { state.activeSectionId = sec.id; state.course = sec.course; } if (saved.view === "main") renderMainMenu(); else navRender(saved.view); if (saved.studentOpen && saved.studentId) { let student = allStudents().find(x => x.id === saved.studentId); if (student) { current = student; tab = RESTORABLE_STUDENT_TABS.includes(saved.studentTab) ? saved.studentTab : "summary"; document.getElementById("modal").classList.add("show"); renderModal(); updateNavigationBar(`${navViewLabel(navCurrentView)} › ${student.name}`); } } return true; }
 function setStudentTab(next) { if (!RESTORABLE_STUDENT_TABS.includes(next)) return; tab = next; renderModal(); }
 function simulationActive() { return simulationManager.active(); }
-function save() { state.schemaVersion = CURRENT_SCHEMA_VERSION; validateCurrentStateShape(state); if (simulationActive()) { simulationManager.saveActive(state); return true; } return persistentStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function save() { state.schemaVersion = CURRENT_SCHEMA_VERSION; validateCurrentStateShape(state); if (simulationActive()) { simulationManager.saveActive(state); return true; } let persisted = academicAuthorityMode === "V8_AUTHORITATIVE" ? academicAuthorityRuntime.activationOwner.protectLegacySave(state) : state; return persistentStorage.setItem(STORAGE_KEY, JSON.stringify(persisted)); }
 function students() { let sec = activeSection(); return sec ? sectionStudents(sec.id) : (state.classes[state.course] || []); }
 function ensureProjectLibrary() {
     if (!state.projectLibrary)
@@ -1284,22 +1320,22 @@ function saveCalendarDay(key, returnMonthOffset = 0) {
     if (type !== "school" && mode !== "none")
         mode = "none";
     let scheduleId = document.getElementById("calSchedule").value;
-    return scheduleAuthorityAdapter.runLegacy("calendar-day", { key, schoolDate: key, dayType: type, scheduleId, instructionMode: mode }, () => {
+    return routeScheduleAuthority("calendar-day", { key, schoolDate: key, dayType: type, scheduleId, instructionMode: mode }, () => {
     state.calendarOverrides[key] = { dayType: type, scheduleId, instructionMode: mode };
     save();
     showCalendar(Number(returnMonthOffset || 0), true); });
 }
-function clearCalendarDay(key, returnMonthOffset = 0) { return scheduleAuthorityAdapter.runLegacy("calendar-day-clear", { key }, () => { delete state.calendarOverrides[key]; save(); showCalendar(Number(returnMonthOffset || 0), true); }); }
+function clearCalendarDay(key, returnMonthOffset = 0) { return routeScheduleAuthority("calendar-day-clear", { key }, () => { delete state.calendarOverrides[key]; save(); showCalendar(Number(returnMonthOffset || 0), true); }); }
 function addCalendarEvent(key, returnMonthOffset = 0) {
     let title = document.getElementById("calEventTitle").value.trim();
     if (!title)
         return alert("Enter an event name.");
     let time = document.getElementById("calEventTime").value, remindDaysBefore = Number(document.getElementById("calEventReminder").value);
-    return scheduleAuthorityAdapter.runLegacy("calendar-event", { key, schoolDate: key, title, time, remindDaysBefore }, () => { state.calendarEvents.push({ id: "calev_" + Date.now(), date: key, title, time, remindDaysBefore, createdAt: new Date().toISOString() });
+    return routeScheduleAuthority("calendar-event", { key, schoolDate: key, title, time, remindDaysBefore }, () => { state.calendarEvents.push({ id: "calev_" + Date.now(), date: key, title, time, remindDaysBefore, createdAt: new Date().toISOString() });
     save();
     editCalendarDay(key, Number(returnMonthOffset || 0)); });
 }
-function deleteCalendarEvent(id, key, returnMonthOffset = 0) { return scheduleAuthorityAdapter.runLegacy("calendar-event-delete", { id, key }, () => { state.calendarEvents = state.calendarEvents.filter(e => e.id !== id); save(); editCalendarDay(key, Number(returnMonthOffset || 0)); }); }
+function deleteCalendarEvent(id, key, returnMonthOffset = 0) { return routeScheduleAuthority("calendar-event-delete", { id, key }, () => { state.calendarEvents = state.calendarEvents.filter(e => e.id !== id); save(); editCalendarDay(key, Number(returnMonthOffset || 0)); }); }
 function editSelectedCalendarDays(returnMonthOffset = 0) {
     let keys = sortedCalendarSelection();
     if (!keys.length)
@@ -1318,7 +1354,7 @@ function applySelectedCalendarDays(returnMonthOffset = 0) {
     let keys = sortedCalendarSelection(), type = document.getElementById("batchDayType").value, scheduleId = document.getElementById("batchSchedule").value, mode = document.getElementById("batchMode").value;
     if (type !== "school")
         mode = "none";
-    return scheduleAuthorityAdapter.runLegacy("calendar-range", { keys: keys.slice(), dayType: type, scheduleId, instructionMode: mode }, () => { keys.forEach(key => state.calendarOverrides[key] = { dayType: type, scheduleId, instructionMode: mode });
+    return routeScheduleAuthority("calendar-range", { keys: keys.slice(), dayType: type, scheduleId, instructionMode: mode }, () => { keys.forEach(key => state.calendarOverrides[key] = { dayType: type, scheduleId, instructionMode: mode });
     save();
     (_a = document.getElementById("batchOverlay")) === null || _a === void 0 ? void 0 : _a.remove();
     showCalendar(Number(returnMonthOffset || 0), true); });
@@ -2146,11 +2182,12 @@ function addAcademicSemester() { preserveAcademicEditorValues(); let key = ArcAc
 function removeAcademicSemester(key) { preserveAcademicEditorValues(); if (key === academicStructureEditorDraft.currentSemesterKey) return alert("The current Semester cannot be removed here. Use Semester Transition to advance the active Semester."); if (academicStructureEditorDraft.semesters.length === 1) return alert("At least one known Semester is required."); academicStructureEditorDraft.semesters = academicStructureEditorDraft.semesters.filter(row => row.key !== key); renderAcademicStructureEditor(); }
 function addAcademicGradingPeriod(semesterKey) { preserveAcademicEditorValues(); let semester = academicStructureEditorDraft.semesters.find(row => row.key === semesterKey), order = semester.gradingPeriods.length + 1; semester.gradingPeriods.push({ key: ArcAcademicStructureOperationalTruth.createKey("grading-period"), code: `Q${order}`, label: `Quarter ${order}`, startDate: "", endDate: "", order }); renderAcademicStructureEditor(); }
 function removeAcademicGradingPeriod(semesterKey, periodKey) { preserveAcademicEditorValues(); let semester = academicStructureEditorDraft.semesters.find(row => row.key === semesterKey); if (semester.gradingPeriods.length === 1) return alert("Every known Semester requires at least one Grading Period."); semester.gradingPeriods = semester.gradingPeriods.filter(row => row.key !== periodKey); renderAcademicStructureEditor(); }
-function saveAcademicStructureEditor() {
+async function saveAcademicStructureEditor() {
     try {
         let draft = readAcademicStructureEditorDraft(), reason = document.getElementById("academicStructureReason").value;
-        ArcAcademicStructureOperationalTruth.apply(state, draft, { reason, source: "normal-arc-schedule-setup" });
-        save(); closeAcademicStructureEditor(); renderScheduleSetup(); alert("Academic Structure saved. Class and Planning schedules were not changed.");
+        if (academicAuthorityMode === "V8_AUTHORITATIVE") { await routeScheduleAuthority("academic-structure", { draft, reason, source: "normal-arc-schedule-setup" }); academicAuthorityRuntime.projectionCache.invalidate(); await academicAuthorityRuntime.projectionCache.reload({ day: dateKey(), selectedSectionId: state.activeSectionId }); }
+        else { ArcAcademicStructureOperationalTruth.apply(state, draft, { reason, source: "normal-arc-schedule-setup" }); save(); }
+        closeAcademicStructureEditor(); renderScheduleSetup(); alert("Academic Structure saved. Class and Planning schedules were not changed.");
     }
     catch (error) { alert(error.message); }
 }
@@ -2221,7 +2258,24 @@ function archiveSectionSnapshot(sec, reason) {
     state.sectionArchives.push({ archiveId: "section_archive_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8), section: Object.assign({}, sec), year: state.academicYear, semester: state.semester, reason, studentIds: roster, pacingPlan: p ? JSON.parse(JSON.stringify(p)) : null, mapPosition: pos ? JSON.parse(JSON.stringify(pos)) : null, archivedAt: new Date().toISOString() });
 }
 function semesterTransitionProductAction() { return { targetSchoolYearLabel: (document.getElementById("transitionAcademicYear").value || state.academicYear).trim(), targetSemesterLabel: document.getElementById("transitionSemester").value, planningPeriodCode: String(document.getElementById("transitionPlanning").value), choices: semesterTransitionChoices().map(c => ({ sectionId: c.sectionId, action: c.action, periodCode: String(c.period) })), scheduleKnown: true, reason: "Instructor applied normal ARC Semester Transition" }; }
-function applySemesterTransition() { return scheduleAuthorityAdapter.runLegacy("semester-transition", semesterTransitionProductAction(), applySemesterTransitionLegacy); }
+async function applySemesterTransition() {
+    if (academicAuthorityMode !== "V8_AUTHORITATIVE") return routeScheduleAuthority("semester-transition", semesterTransitionProductAction(), applySemesterTransitionLegacy);
+    const payload = semesterTransitionProductAction();
+    try {
+        const prepared = await scheduleAuthorityAdapter.runV8("semester-transition-prepare", payload);
+        if (!prepared || !prepared.ready) throw new Error((prepared && prepared.reason) || "Semester Transition is not ready.");
+        if (!confirm(`Apply authoritative transition from ${state.academicYear} ${state.semester} to ${payload.targetSchoolYearLabel} ${payload.targetSemesterLabel}? A verified recovery package has been created. Student identity and prior history will be preserved.`)) return;
+        const result = await scheduleAuthorityAdapter.runV8("semester-transition", Object.assign({}, payload, { recoveryToken: prepared.token }));
+        academicAuthorityRuntime.projectionCache.invalidate();
+        await academicAuthorityRuntime.projectionCache.initialize({ day: dateKey(), selectedSectionId: state.activeSectionId });
+        const schedule = await academicAuthorityRuntime.scheduleAdmin.summary();
+        state = Object.assign({}, state, ArcAcademicAuthorityActivation.createCompatibilityState({ projection: academicAuthorityRuntime.projectionCache.get({ day: dateKey(), selectedSectionId: state.activeSectionId }), schedule, day: dateKey(), baseline: { activeSectionId: state.activeSectionId, course: state.course } }));
+        save();
+        showScheduleSetup();
+        alert(`Semester Transition completed under v8 authority. ${result.actions.length} Section action(s) were recorded.`);
+    }
+    catch (error) { alert(error.message); previewSemesterTransition(); }
+}
 function applySemesterTransitionLegacy() {
     var _a;
     let choices = semesterTransitionChoices(), planning = Number(document.getElementById("transitionPlanning").value), target = document.getElementById("transitionSemester").value, targetYear = (document.getElementById("transitionAcademicYear").value || state.academicYear).trim(), sameSchoolYear = targetYear === state.academicYear, academicTarget = state.academicStructure && sameSchoolYear ? state.academicStructure.semesters.find(row => row.label === target) : null, targetModel = semesterTransitionTargetModel(), err = targetModel.blockedMessage || (!target ? "Choose an explicit target Semester." : validateSemesterTransition(choices, planning));
@@ -2307,7 +2361,7 @@ function applySemesterTransitionLegacy() {
     alert(`Semester transition applied. Prior records were preserved; the active schedule is now ${targetYear} ${target}.`);
 }
 function movePlanningPeriod(newPeriod) {
-    return scheduleAuthorityAdapter.runLegacy("planning-period", { newPeriod, periodCode: String(newPeriod), effectiveDate: dateKey(), schoolYearLabel: state.academicYear, semesterLabel: state.semester, reason: "Instructor moved Planning Period" }, () => {
+    return routeScheduleAuthority("planning-period", { newPeriod, periodCode: String(newPeriod), effectiveDate: dateKey(), schoolYearLabel: state.academicYear, semesterLabel: state.semester, reason: "Instructor moved Planning Period" }, () => {
     ensureScheduleModel();
     let occupying = state.sections.find(x => x.period === newPeriod);
     let oldPlanning = state.planningPeriod;
@@ -2321,7 +2375,7 @@ function movePlanningPeriod(newPeriod) {
     renderScheduleSetup(); });
 }
 function moveSectionPeriod(sectionId, newPeriod) {
-    return scheduleAuthorityAdapter.runLegacy("section-period", { sectionId, newPeriod, periodCode: String(newPeriod), effectiveDate: dateKey(), schoolYearLabel: state.academicYear, semesterLabel: state.semester, reason: "Instructor moved Section period" }, () => {
+    return routeScheduleAuthority("section-period", { sectionId, newPeriod, periodCode: String(newPeriod), effectiveDate: dateKey(), schoolYearLabel: state.academicYear, semesterLabel: state.semester, reason: "Instructor moved Section period" }, () => {
     let sec = state.sections.find(x => x.id === sectionId);
     if (!sec)
         return;
@@ -2375,7 +2429,7 @@ function addExistingStudentToSection(sectionId) {
     manageSectionRoster(sectionId);
 }
 function createStudentInSection(sectionId) {
-    return academicAuthorityAdapter.runLegacy("create-student-placement", { sectionId }, () => {
+    return routeAcademicAuthority("create-student-placement", { sectionId }, () => {
     let sec = state.sections.find(x => x.id === sectionId), name = document.getElementById("newStudentName").value.trim(), grade = Number(document.getElementById("newStudentGrade").value);
     if (!name)
         return alert("Enter the student's name.");
@@ -2393,7 +2447,7 @@ function createStudentInSection(sectionId) {
     });
 }
 function moveStudentToSection(studentId, newSectionId) {
-    return academicAuthorityAdapter.runLegacy("move-or-reenroll", { studentId, newSectionId }, () => {
+    return routeAcademicAuthority("move-or-reenroll", { studentId, newSectionId }, () => {
     let s = allStudents().find(x => x.id === studentId);
     let sec = state.sections.find(x => x.id === newSectionId);
     if (!s || !sec)
@@ -2431,7 +2485,7 @@ function confirmDropStudent(sectionId, studentId) {
 function closeDropConfirm() { let o = document.getElementById("dropConfirm"); if (o)
     o.remove(); }
 function dropStudentConfirmed(sectionId, studentId) {
-    return academicAuthorityAdapter.runLegacy("drop", { sectionId, studentId }, () => {
+    return routeAcademicAuthority("drop", { sectionId, studentId }, () => {
     let sec = state.sections.find(x => x.id === sectionId), s = allStudents().find(x => x.id === studentId);
     if (!sec || !s)
         return;
@@ -4489,7 +4543,7 @@ installOverscrollGuard();
 installArcSidebarGesture();
 updateStickyHeaderOffset();
 if (simulationStartupError) { document.getElementById("app").innerHTML = `<div class="card"><h2>Simulation recovery required</h2><p>ARC could not verify the saved active simulation. Live Classroom has not been activated or modified.</p><p class="small">${escapePhotoText(simulationStartupError.message)}</p><p>Use a verified recovery backup before continuing.</p></div>`; updateSimulationIndicator(); }
-else { if (!restoreNavigationContext()) renderMainMenu(); save(); }
+else { bootstrapAcademicAuthorityRuntime().then(() => { if (!restoreNavigationContext()) renderMainMenu(); save(); }).catch(error => { document.getElementById("app").innerHTML = `<div class="card"><h2>Academic authority recovery required</h2><p>ARC found authoritative academic state but could not verify one safe v8 projection. Schema 7 academic fallback was not used.</p><p class="small">${escapePhotoText(error.message)}</p><p>Use the verified activation recovery procedure before continuing.</p></div>`; }); }
 arcTimeController.start();
 showStorageCompatibilityWarning();
 

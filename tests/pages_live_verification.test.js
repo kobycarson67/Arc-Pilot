@@ -18,7 +18,7 @@ assert(workflow.includes('academic-structure-operational-truth-1-repair-1'),'gua
 assert(workflow.includes('academic-structure-operational-truth-1-repair-2'),'guardrail must verify the AST1 Repair 2 build and cache authority');
 assert(workflow.includes('academic-structure-operational-truth-1-repair-3'),'guardrail must verify the AST1 Repair 3 build and cache authority');
 assert(workflow.includes('arc_v7_schedule_configuration_capture.js?v=academic-structure-operational-truth-1-repair-1'),'guardrail must verify the AST1 capture query key');
-assert(workflow.includes('arc_v8_production_academic_configuration_page.js?v=academic-structure-operational-truth-1-repair-1'),'guardrail must verify the AST1 PACR controller query key');
+assert(workflow.includes('arc_v8_production_academic_configuration_page.js?v=pacr-capture-review-wiring-repair-1'),'guardrail must verify the PACR Capture-to-Review controller query key');
 assert(workflow.includes("RUNTIME='p10d-pu2-protected-upgrade-bridge-1'"),'guardrail must verify the PU2 protected-upgrade runtime');
 assert(workflow.includes('UPGRADE PROTECTED PRODUCTION TO IDB14'),'guardrail must verify the exact destructive confirmation');
 assert(workflow.includes('arc_v8_protected_production_upgrade_physical.js?v=p10d-pu2-protected-upgrade-bridge-1'),'guardrail must verify the query-keyed physical bridge');

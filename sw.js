@@ -30,7 +30,7 @@ CORE.push('./engineering/arc_v8_production_academic_configuration.html');
 CORE.push('./engineering/arc_v8_production_academic_configuration_page.js');
 CORE.push('./src/arc_v7_schedule_configuration_capture.js?v=academic-structure-operational-truth-1-repair-1');
 CORE.push('./src/arc_v8_production_academic_configuration.js?v=stage2-production-academic-configuration-closure-1');
-CORE.push('./engineering/arc_v8_production_academic_configuration_page.js?v=academic-structure-operational-truth-1-repair-1');
+CORE.push('./engineering/arc_v8_production_academic_configuration_page.js?v=pacr-capture-review-wiring-repair-1');
 CORE.push('./src/arc_v8_academic_administration.js');
 CORE.push('./src/arc_schedule_authority_adapter.js');
 CORE.push('./src/arc_academic_consumer_projection.js');

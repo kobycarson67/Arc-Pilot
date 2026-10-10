@@ -587,3 +587,14 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Production Student creation and re-enrollment remain refused while `realStudentDataAuthorized` is false. Attendance through Lesson and all other later-domain transaction adapters remain `V7_ONLY`; no dual write exists.
 - Build and shell/cache identity now end `academic-authority-activation-1`; the two new runtime modules are covered by service-worker and Pages asset parity.
 - Normal ARC remains Schema 7 / `V7_ONLY`. No publication/deployment, Samsung/production access, PACR Prepare/Apply, production activation, Student data, package event 13, Lesson acceptance change, dual write, v7 shutdown, or authority transfer occurred. Historical retired Weekly Schedule Mode readback remains `UNRESOLVED`. Status: local activation candidate pending independent review.
+
+## 2026-10-09 — Academic Authority Activation 1 Repair 1
+
+- Continued from rejected candidate `7c1880136857bf5903b68f798e22203bb723431a`, tree `04fe1733aa29ce6f2af89cedb3634b4810d08865`. Preserved `rollback/pre-academic-authority-activation-1` and added `rollback/pre-academic-authority-activation-1-repair-1`.
+- Closed AAA1-01/02: normal compatibility uses numeric weekdays and exact v8 Bell UUIDs; static Section periods never fabricate current or future schedule; Friday remains shortened/Open Shop and no-instruction days require no Bell dereference.
+- Closed AAA1-03 with one authoritative post-mutation reload path for P3/P4 projection, schedule summary, compatibility state, selected Section validity, and normal-shell rerendering.
+- Closed AAA1-04 with a checksum-bound, durable exact V7 rollback authority verified during cold rehydration and used exclusively by rollback. Still-v7 transaction fields, including Curriculum/Pacing, remain writable.
+- Closed AAA1-05 with an inert engineering-only provider/surface that derives readiness from exact protected owners and records, validates complete PACR identity bindings, and binds preparation to exact expected publication commit/tree.
+- Build/cache authority now ends `academic-authority-activation-1-repair-1`; update activation remains user controlled. Normal ARC remains Schema 7 / `V7_ONLY`; every P5–P10 transaction adapter remains `V7_ONLY`.
+- Verification passed: activation `16/16`, Repair 1 adversarial integration `5/5`, Semester Transition `5/5`, P3 `8/8`, P4 `10/10`, PACR `46/46`, all required retained schedule/academic/backup/update suites, static `47/47`, complete JavaScript inventory `122/122`, parse checks, and `git diff --check`.
+- No publication/deployment, Samsung/production access, activation, Student data, package event 13, Lesson acceptance change, dual write, v7 shutdown, or authority transfer occurred. Historical retired Weekly Schedule Mode readback remains `UNRESOLVED`. Status: local Repair 1 candidate pending independent review.

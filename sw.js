@@ -37,6 +37,10 @@ CORE.push('./src/arc_academic_consumer_projection.js');
 CORE.push('./src/arc_academic_authority_adapter.js');
 CORE.push('./src/arc_v8_academic_semester_transition.js');
 CORE.push('./src/arc_academic_authority_activation.js');
+CORE.push('./src/arc_academic_authority_activation.js?v=academic-authority-activation-1-repair-1');
+CORE.push('./src/arc_academic_authority_activation_production.js?v=academic-authority-activation-1-repair-1');
+CORE.push('./engineering/arc_academic_authority_activation.html');
+CORE.push('./engineering/arc_academic_authority_activation_page.js?v=academic-authority-activation-1-repair-1');
 CORE.push('./src/arc_v8_behavior.js');
 CORE.push('./src/arc_workplace_safety_behavior_authority_adapter.js');
 CORE.push('./src/arc_v8_curriculum_pacing.js');
@@ -53,7 +57,7 @@ self.addEventListener('fetch',event=>{
   const url=new URL(event.request.url);
   if(url.origin!==self.location.origin)return;
   if(event.request.mode==='navigate'){
-    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':url.pathname.endsWith('/engineering/arc_v8_production_academic_configuration.html')?'./engineering/arc_v8_production_academic_configuration.html':url.pathname.endsWith('/engineering/arc_instructional_reference_verification.html')?'./engineering/arc_instructional_reference_verification.html':'./index.html';
+    const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':url.pathname.endsWith('/engineering/arc_v8_production_academic_configuration.html')?'./engineering/arc_v8_production_academic_configuration.html':url.pathname.endsWith('/engineering/arc_instructional_reference_verification.html')?'./engineering/arc_instructional_reference_verification.html':url.pathname.endsWith('/engineering/arc_academic_authority_activation.html')?'./engineering/arc_academic_authority_activation.html':'./index.html';
     event.respondWith(fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;}).catch(()=>target==='./index.html'?caches.match('./index.html'):caches.match(target)));
     return;
   }

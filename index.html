@@ -556,8 +556,19 @@ const curriculumPacingAuthorityAdapter = ArcCurriculumPacingAuthorityAdapter.cre
 const lessonAuthorityAdapter = ArcLessonAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const studentHistoryProjection = ArcStudentHistoryProjection.create({ authorityState: "V7_ONLY" });
 function p7RouteLegacy(action, payload, mutation) { return competencyEvidenceAuthorityAdapter.runLegacy(action, payload, mutation); }
-function routeScheduleAuthority(action, payload, legacyMutation) { return academicAuthorityMode === "V8_AUTHORITATIVE" ? scheduleAuthorityAdapter.runV8(action, payload) : scheduleAuthorityAdapter.runLegacy(action, payload, legacyMutation); }
-function routeAcademicAuthority(action, payload, legacyMutation) { return academicAuthorityMode === "V8_AUTHORITATIVE" ? academicAuthorityAdapter.runV8(action, payload) : academicAuthorityAdapter.runLegacy(action, payload, legacyMutation); }
+async function refreshAuthoritativeAcademicRuntime(context = {}) {
+    if (academicAuthorityMode !== "V8_AUTHORITATIVE" || !academicAuthorityRuntime) throw new Error("Authoritative academic runtime is unavailable.");
+    const day = context.day || dateKey(), selectedSectionId = context.selectedSectionId === undefined ? state.activeSectionId : context.selectedSectionId;
+    await academicAuthorityRuntime.projectionCache.reload({ day, selectedSectionId });
+    const projection = academicAuthorityRuntime.projectionCache.get({ day, selectedSectionId }), schedule = await academicAuthorityRuntime.scheduleAdmin.summary();
+    const compatibility = ArcAcademicAuthorityActivation.createCompatibilityState({ projection, schedule, day, baseline: { activeSectionId: selectedSectionId, course: state.course } });
+    state = Object.assign({}, state, compatibility);
+    academicAuthorityRuntime.compatibilityState = compatibility;
+    return { projection, schedule, compatibility };
+}
+function rerenderAuthoritativeMutation() { if (typeof navRender === "function" && navCurrentView) navRender(navCurrentView); else renderMainMenu(); }
+async function routeScheduleAuthority(action, payload, legacyMutation) { payload = payload || {}; if (academicAuthorityMode !== "V8_AUTHORITATIVE") return scheduleAuthorityAdapter.runLegacy(action, payload, legacyMutation); const result = await scheduleAuthorityAdapter.runV8(action, payload); if (action !== "semester-transition-prepare" && !payload.previewOnly) { await refreshAuthoritativeAcademicRuntime({ day: payload.schoolDate || payload.effectiveDate || dateKey() }); rerenderAuthoritativeMutation(); } return result; }
+async function routeAcademicAuthority(action, payload, legacyMutation) { payload = payload || {}; if (academicAuthorityMode !== "V8_AUTHORITATIVE") return academicAuthorityAdapter.runLegacy(action, payload, legacyMutation); const result = await academicAuthorityAdapter.runV8(action, payload); if (action !== "projection") { await refreshAuthoritativeAcademicRuntime({ day: payload.effectiveFrom || payload.effectiveTo || dateKey(), selectedSectionId: payload.newSectionId || state.activeSectionId }); rerenderAuthoritativeMutation(); } return result; }
 function installAuthoritativeAcademicRuntime(runtime) {
     if (!runtime || !ArcAcademicAuthorityActivation.isVerifiedGate(runtime.activationGate) || !runtime.projectionCache || !runtime.scheduleAdmin || !runtime.academic || !runtime.storage || !runtime.semesterTransitionCoordinator || !runtime.academicStructureCoordinator)
         throw new Error("Verified Academic Authority Activation runtime is required.");
@@ -683,9 +694,9 @@ function formatClock(v) { if (!v)
     return "Time not set"; let [h, m] = v.split(":").map(Number), amp = h >= 12 ? "PM" : "AM", hh = h % 12 || 12; return `${hh}:${String(m).padStart(2, "0")} ${amp}`; }
 function periodTimeLabel(period) { var _a; let t = ((_a = state.periodTimes) === null || _a === void 0 ? void 0 : _a[period]) || {}; return t.start && t.end ? `${formatClock(t.start)}–${formatClock(t.end)}` : "Time not set"; }
 function dateKey(d = new Date()) { let y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, "0"), day = String(d.getDate()).padStart(2, "0"); return `${y}-${m}-${day}`; }
-function bellSchedule(id) { ensureScheduleModel(); return state.bellSchedules[id] || state.bellSchedules.regular; }
+function bellSchedule(id) { ensureScheduleModel(); let value = id ? state.bellSchedules[id] : null; if (value) return value; if (academicAuthorityMode === "V8_AUTHORITATIVE") throw new Error("The authoritative schedule does not provide the requested Bell Schedule."); return state.bellSchedules.regular; }
 function defaultDayPlan(d = new Date()) { let dow = d.getDay(); if (dow === 0 || dow === 6)
-    return { dayType: "no_school", scheduleId: "regular", instructionMode: "none", source: "weekend" }; let x = state.weeklyScheduleDefaults[dow] || { scheduleId: "regular", instructionMode: "regular" }; return { dayType: "school", scheduleId: x.scheduleId, instructionMode: x.instructionMode, source: "default" }; }
+    return { dayType: "no_school", scheduleId: academicAuthorityMode === "V8_AUTHORITATIVE" ? null : "regular", instructionMode: "none", source: "weekend" }; let x = state.weeklyScheduleDefaults[dow]; if (!x && academicAuthorityMode === "V8_AUTHORITATIVE") return { dayType: "no_school", scheduleId: null, instructionMode: "none", source: "unconfigured" }; x = x || { scheduleId: "regular", instructionMode: "regular" }; return { dayType: "school", scheduleId: x.scheduleId, instructionMode: x.instructionMode, source: "default" }; }
 function dayPlan(d = new Date()) { ensureScheduleModel(); let base = defaultDayPlan(d), o = state.calendarOverrides[dateKey(d)]; return o ? Object.assign(Object.assign(Object.assign({}, base), o), { source: "override" }) : base; }
 function dayTypeLabel(x) { return { school: "School Day", no_school: "No School", holiday: "Holiday", pd: "PD / In-Service", other: "Special Day" }[x] || "School Day"; }
 function instructionModeLabel(x) { return { regular: "Regular Instruction", open_shop: "Open Shop", special: "Special Activity", none: "No Instruction" }[x] || "Regular Instruction"; }
@@ -693,9 +704,9 @@ function updatePeriodTime(period, field, value, scheduleId = "regular") { return
     state.periodTimes[period][field] = value; save(); renderScheduleSetup(); }); }
 function timeMinutes(v) { if (!v)
     return null; let [h, m] = v.split(":").map(Number); return h * 60 + m; }
-function periodTimeLabelFor(period, d = new Date()) { let plan = dayPlan(d), t = bellSchedule(plan.scheduleId).times[period] || {}; return t.start && t.end ? `${formatClock(t.start)}–${formatClock(t.end)}` : "Time not set"; }
+function periodTimeLabelFor(period, d = new Date()) { let plan = dayPlan(d); if (!plan.scheduleId) return "No instructional Bell"; let t = bellSchedule(plan.scheduleId).times[period] || {}; return t.start && t.end ? `${formatClock(t.start)}–${formatClock(t.end)}` : "Time not set"; }
 function currentScheduleContext(now = new Date()) { ensureScheduleModel(); let plan = dayPlan(now); if (plan.dayType !== "school")
-    return { kind: "off", label: dayTypeLabel(plan.dayType), time: bellSchedule(plan.scheduleId).name, plan }; let min = now.getHours() * 60 + now.getMinutes(), times = bellSchedule(plan.scheduleId).times, ordered = [1, 2, 3, 4, 5, 6, 7].map(period => (Object.assign({ period }, times[period]))).filter(x => x.start && x.end); for (let x of ordered) {
+    return { kind: "off", label: dayTypeLabel(plan.dayType), time: plan.scheduleId ? bellSchedule(plan.scheduleId).name : "No Instruction", plan }; let min = now.getHours() * 60 + now.getMinutes(), times = bellSchedule(plan.scheduleId).times, ordered = [1, 2, 3, 4, 5, 6, 7].map(period => (Object.assign({ period }, times[period]))).filter(x => x.start && x.end); for (let x of ordered) {
     let a = timeMinutes(x.start), b = timeMinutes(x.end);
     if (min >= a && min <= b)
         return { kind: x.period === state.planningPeriod ? "planning" : "class", period: x.period, label: x.period === state.planningPeriod ? "Planning Period" : `${x.period}${ordinal(x.period)} Period`, time: periodTimeLabelFor(x.period, now), plan };
@@ -2185,7 +2196,7 @@ function removeAcademicGradingPeriod(semesterKey, periodKey) { preserveAcademicE
 async function saveAcademicStructureEditor() {
     try {
         let draft = readAcademicStructureEditorDraft(), reason = document.getElementById("academicStructureReason").value;
-        if (academicAuthorityMode === "V8_AUTHORITATIVE") { await routeScheduleAuthority("academic-structure", { draft, reason, source: "normal-arc-schedule-setup" }); academicAuthorityRuntime.projectionCache.invalidate(); await academicAuthorityRuntime.projectionCache.reload({ day: dateKey(), selectedSectionId: state.activeSectionId }); }
+        if (academicAuthorityMode === "V8_AUTHORITATIVE") await routeScheduleAuthority("academic-structure", { draft, reason, source: "normal-arc-schedule-setup" });
         else { ArcAcademicStructureOperationalTruth.apply(state, draft, { reason, source: "normal-arc-schedule-setup" }); save(); }
         closeAcademicStructureEditor(); renderScheduleSetup(); alert("Academic Structure saved. Class and Planning schedules were not changed.");
     }
@@ -2265,11 +2276,7 @@ async function applySemesterTransition() {
         const prepared = await scheduleAuthorityAdapter.runV8("semester-transition-prepare", payload);
         if (!prepared || !prepared.ready) throw new Error((prepared && prepared.reason) || "Semester Transition is not ready.");
         if (!confirm(`Apply authoritative transition from ${state.academicYear} ${state.semester} to ${payload.targetSchoolYearLabel} ${payload.targetSemesterLabel}? A verified recovery package has been created. Student identity and prior history will be preserved.`)) return;
-        const result = await scheduleAuthorityAdapter.runV8("semester-transition", Object.assign({}, payload, { recoveryToken: prepared.token }));
-        academicAuthorityRuntime.projectionCache.invalidate();
-        await academicAuthorityRuntime.projectionCache.initialize({ day: dateKey(), selectedSectionId: state.activeSectionId });
-        const schedule = await academicAuthorityRuntime.scheduleAdmin.summary();
-        state = Object.assign({}, state, ArcAcademicAuthorityActivation.createCompatibilityState({ projection: academicAuthorityRuntime.projectionCache.get({ day: dateKey(), selectedSectionId: state.activeSectionId }), schedule, day: dateKey(), baseline: { activeSectionId: state.activeSectionId, course: state.course } }));
+        const result = await routeScheduleAuthority("semester-transition", Object.assign({}, payload, { recoveryToken: prepared.token }));
         save();
         showScheduleSetup();
         alert(`Semester Transition completed under v8 authority. ${result.actions.length} Section action(s) were recorded.`);

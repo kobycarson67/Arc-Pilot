@@ -26,8 +26,8 @@ const html=fs.readFileSync('index.html','utf8'),css=fs.readFileSync('src/arc_vis
 const dashboard=html.slice(html.indexOf('function renderMainMenu()'),html.indexOf('const MASTER_LESSON_BANKS'));
 const entry=html.slice(html.indexOf('function enterSimulation'),html.indexOf('function leaveSimulation'));
 assert(dashboard.includes('academicConsumerProjection(dateKey(today), ctx.kind === "class" ? ctx.period : null)'));
-assert(dashboard.includes('academicContext.currentSection && academicContext.currentSection.legacyRecord'));
-assert(dashboard.includes('academicContext.selectedSection && academicContext.selectedSection.legacyRecord'));
+assert(dashboard.includes('projectionSectionRecord(academicContext.currentSection, academicContext.currentSectionContext)'));
+assert(dashboard.includes('projectionSectionRecord(academicContext.selectedSection, academicContext.selectedSectionContext)'));
 assert(dashboard.includes('dashboardCurrentCardHtml(currentClass, ctx)'));
 assert(html.includes('No Current Class'));
 assert(dashboard.includes('Class Pulse'));

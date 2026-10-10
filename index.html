@@ -194,6 +194,7 @@ const APP_VERSION = "0.18.0";
 const BACKUP_FORMAT_VERSION = 1;
 const CURRENT_SCHEMA_VERSION = 7;
 const PREUPGRADE_RECOVERY_KEY = "weld_v013_preupgrade_recovery";
+let deferredPreupgradeRecoveryText = null;
 const IMPORT_ROLLBACK_KEY = "weld_v013_import_rollback";
 const BACKUP_META_KEY = "weld_v013_backup_meta";
 const NAV_CONTEXT_KEY = "arc_v018_navigation_context";
@@ -523,12 +524,7 @@ function loadInitialState() {
     }
     let from = stateSchemaVersion(raw);
     if (from < CURRENT_SCHEMA_VERSION) {
-        try {
-            persistentStorage.setItem(PREUPGRADE_RECOVERY_KEY, JSON.stringify(recoveryPayloadFor(raw, `Before schema ${from} → ${CURRENT_SCHEMA_VERSION}`)));
-        }
-        catch (err) {
-            console.warn("Could not write pre-upgrade recovery snapshot", err);
-        }
+        deferredPreupgradeRecoveryText = JSON.stringify(recoveryPayloadFor(raw, `Before schema ${from} → ${CURRENT_SCHEMA_VERSION}`));
     }
     return migrateStateData(raw, from);
 }
@@ -544,7 +540,7 @@ let simulationStartupError = null, simulationSession = null;
 try { simulationSession = simulationManager.resume(); }
 catch (err) { simulationStartupError = err; }
 let state = simulationSession ? migrateStateData(simulationSession.state, CURRENT_SCHEMA_VERSION) : loadInitialState();
-let academicAuthorityMode = "V7_ONLY", academicAuthorityRuntime = null;
+let academicAuthorityMode = "V7_ONLY", academicAuthorityRuntime = null, academicAuthorityStartupState = "UNRESOLVED";
 let scheduleAuthorityAdapter = ArcScheduleAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 let academicAuthorityAdapter = ArcAcademicAuthorityAdapter.create({ authorityState: "V7_ONLY" });
 const attendanceAuthorityAdapter = ArcAttendanceAuthorityAdapter.create({ authorityState: "V7_ONLY" });
@@ -690,21 +686,6 @@ function ensureScheduleModel() {
         state.activeSectionId = first ? first.id : null;
     }
 }
-function activeSection() { ensureScheduleModel(); return state.sections.find(x => x.id === state.activeSectionId); }
-function sectionStudents(sectionId) {
-    let sec = state.sections.find(x => x.id === sectionId);
-    if (!sec)
-        return [];
-    return (state.classes[sec.course] || []).filter(s => (s.enrollments || []).some(e => e.active && e.year === state.academicYear && e.semester === state.semester && e.sectionId === sectionId));
-}
-function selectSection(id) {
-    state.activeSectionId = id;
-    let sec = activeSection();
-    if (sec)
-        state.course = sec.course;
-    save();
-    renderRoster();
-}
 function ordinal(n) { return n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"; }
 function formatClock(v) { if (!v)
     return "Time not set"; let [h, m] = v.split(":").map(Number), amp = h >= 12 ? "PM" : "AM", hh = h % 12 || 12; return `${hh}:${String(m).padStart(2, "0")} ${amp}`; }
@@ -754,14 +735,23 @@ function dismissNotification(id) { let n = state.notifications.find(x => x.id ==
 function academicConsumerProjection(day = dateKey(), currentPeriodCode = null) { ensureScheduleModel(); return academicAuthorityMode === "V8_AUTHORITATIVE" ? academicAuthorityRuntime.projectionCache.get({ day, selectedSectionId: state.activeSectionId, currentPeriodCode }) : ArcAcademicConsumerProjection.fromLegacy(state, { day, selectedSectionId: state.activeSectionId, currentPeriodCode }); }
 function academicConsumerContext(name, studentId = "", day = dateKey(), currentPeriodCode = null) { return academicConsumerProjection(day, currentPeriodCode).consumerContext(name, studentId); }
 function projectionStudentRecord(x) { return x.student.legacyRecord || { id: x.studentId, name: x.displayName, grade: x.student.gradeLevel || "", archived: x.student.lifecycle !== "active", enrollments: x.enrollmentHistory || [], academicAuthority: "V8_AUTHORITATIVE" }; }
-function projectionSectionRecord(x) { return x && (x.legacyRecord || { id: x.sectionId, name: x.displayName, course: x.courseId === "arc-course-awt" ? "awt" : "wt", period: Number(x.period), academicAuthority: "V8_AUTHORITATIVE" }); }
+function projectionSectionRecord(x, context) {
+    if (!x)
+        return null;
+    if (x.legacyRecord)
+        return x.legacyRecord;
+    if (!context || context.sectionId !== x.sectionId || !context.periodCode)
+        return null;
+    return { id: x.sectionId, name: x.displayName, course: x.courseId === "arc-course-awt" ? "awt" : "wt", period: Number(context.periodCode), academicAuthority: "V8_AUTHORITATIVE", placementId: context.placementId || null };
+}
 function allStudents() { return academicConsumerProjection().students.map(projectionStudentRecord); }
-function activeSection() { return projectionSectionRecord(academicConsumerProjection().selectedSection); }
+function activeSection() { let projection = academicConsumerProjection(); return projectionSectionRecord(projection.selectedSection, projection.selectedSectionContext); }
+function currentPeriodSection(periodCode, day = dateKey()) { let projection = academicConsumerProjection(day, periodCode); return projectionSectionRecord(projection.currentSection, projection.currentSectionContext); }
+function operationalCourse() { let section = activeSection(); return section ? section.course : (academicAuthorityMode === "V8_AUTHORITATIVE" ? null : (state.course || null)); }
+function instructionalLibraryCoursePreference() { return state.instructionalLibraryCoursePreference || operationalCourse() || "wt"; }
 function sectionStudents(id) { return academicConsumerProjection().rosterForSection(id).map(projectionStudentRecord); }
-function selectSection(id) { state.activeSectionId = id; let sec = activeSection(); if (sec && sec.course)
-    state.course = sec.course; save(); renderRoster(); }
+function selectSection(id) { state.activeSectionId = id; let sec = activeSection(); state.course = sec ? sec.course : null; save(); renderRoster(); }
 function ordinal(n) { return n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"; }
-ensureScheduleModel();
 let current = null, tab = "summary";
 const RESTORABLE_VIEWS = ["main", "students-directory", "roster", "forecast", "booths", "projects", "projectbank", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"];
 const RESTORABLE_STUDENT_TABS = ["summary", "competencies", "attendance", "workplace", "behavior", "projects", "technical", "photos", "grades", "openshop", "history"];
@@ -770,8 +760,8 @@ function persistNavigationContext() { try { sessionStorage.setItem(navigationCon
 function restoreNavigationContext() { let saved; try { saved = JSON.parse(sessionStorage.getItem(navigationContextStorageKey()) || "null"); } catch (e) { return false; } if (!saved || !RESTORABLE_VIEWS.includes(saved.view)) return false; let sec = state.sections.find(x => x.id === saved.sectionId); if (sec) { state.activeSectionId = sec.id; state.course = sec.course; } if (saved.view === "main") renderMainMenu(); else navRender(saved.view); if (saved.studentOpen && saved.studentId) { let student = allStudents().find(x => x.id === saved.studentId); if (student) { current = student; tab = RESTORABLE_STUDENT_TABS.includes(saved.studentTab) ? saved.studentTab : "summary"; document.getElementById("modal").classList.add("show"); renderModal(); updateNavigationBar(`${navViewLabel(navCurrentView)} › ${student.name}`); } } return true; }
 function setStudentTab(next) { if (!RESTORABLE_STUDENT_TABS.includes(next)) return; tab = next; renderModal(); }
 function simulationActive() { return simulationManager.active(); }
-function save() { state.schemaVersion = CURRENT_SCHEMA_VERSION; validateCurrentStateShape(state); if (simulationActive()) { simulationManager.saveActive(state); return true; } let persisted = academicAuthorityMode === "V8_AUTHORITATIVE" ? academicAuthorityRuntime.activationOwner.protectLegacySave(state) : state; return persistentStorage.setItem(STORAGE_KEY, JSON.stringify(persisted)); }
-function students() { let sec = activeSection(); return sec ? sectionStudents(sec.id) : (state.classes[state.course] || []); }
+function save() { state.schemaVersion = CURRENT_SCHEMA_VERSION; validateCurrentStateShape(state); if (simulationActive()) { simulationManager.saveActive(state); return true; } if (!["V7_ONLY", "V8_AUTHORITATIVE"].includes(academicAuthorityStartupState)) throw Object.assign(new Error("Academic authority must be resolved before ARC can persist normal state."), { code: "ACADEMIC_AUTHORITY_UNRESOLVED" }); let persisted = academicAuthorityMode === "V8_AUTHORITATIVE" ? academicAuthorityRuntime.activationOwner.protectLegacySave(state) : state; return persistentStorage.setItem(STORAGE_KEY, JSON.stringify(persisted)); }
+function students() { let sec = activeSection(); return sec ? sectionStudents(sec.id) : []; }
 function ensureProjectLibrary() {
     if (!state.projectLibrary)
         state.projectLibrary = { wt: [], awt: [] };
@@ -789,7 +779,7 @@ function ensureProjectBank() {
 function ensureInventoryModel() { state.inventory = ArcInventory.normalize(state.inventory); return state.inventory; }
 function ensureMaterialInventory() { let normalized = ArcMaterialInventory.normalize(state.materialInventory), needsLiveSeed = !simulationActive() && normalized.definitionSeedVersion < 1; state.materialInventory = needsLiveSeed ? ArcMaterialInventory.seedStarterDefinitions(normalized) : normalized; if (needsLiveSeed) save(); return state.materialInventory; }
 function commitMaterialInventory(next) { let before = state.materialInventory; state.materialInventory = next; try { if (save() === false) throw new Error("Persistent storage rejected the inventory change."); } catch (err) { state.materialInventory = before; throw err; } return state.materialInventory; }
-function projectLibrary(includeArchived = false) { ensureProjectBank(); return state.projectBank.filter(p => (p.applicability && p.applicability[state.course]) && (includeArchived || !p.archived)); }
+function projectLibrary(includeArchived = false) { let course = instructionalLibraryCoursePreference(); ensureProjectBank(); return state.projectBank.filter(p => (p.applicability && p.applicability[course]) && (includeArchived || !p.archived)); }
 function projectDefinition(id) { ensureProjectBank(); return state.projectBank.find(p => p.id === id) || null; }
 function ensureTechnicalLibrary() {
     if (!state.technicalLibrary)
@@ -799,7 +789,7 @@ function ensureTechnicalLibrary() {
     if (!state.technicalLibrary.awt)
         state.technicalLibrary.awt = [];
 }
-function technicalLibrary(course) { ensureTechnicalLibrary(); return state.technicalLibrary[course || state.course] || []; }
+function technicalLibrary(course) { ensureTechnicalLibrary(); return state.technicalLibrary[course || instructionalLibraryCoursePreference()] || []; }
 function techStatusLabel(status) { return { completed: "Completed", makeup: "Absent / Make-up", excused: "Excused", ne: "NE / No Evidence" }[status] || "Not Entered"; }
 function normalizeTechRecord(x) {
     if (!x)
@@ -841,7 +831,7 @@ function currentGradeScope(sectionId) {
     var _a;
     if (sectionId === void 0) { sectionId = (_a = activeSection()) === null || _a === void 0 ? void 0 : _a.id; }
     let sec = state.sections.find(x => x.id === sectionId) || activeSection();
-    return { sectionId: (sec === null || sec === void 0 ? void 0 : sec.id) || null, course: (sec === null || sec === void 0 ? void 0 : sec.course) || state.course, academicYear: state.academicYear || null, semester: state.semester || null };
+    return { sectionId: (sec === null || sec === void 0 ? void 0 : sec.id) || null, course: (sec === null || sec === void 0 ? void 0 : sec.course) || operationalCourse(), academicYear: state.academicYear || null, semester: state.semester || null };
 }
 function stampGradeScope(obj, sectionId) {
     var _a;
@@ -960,7 +950,7 @@ function ensureTechnicalData() {
 function techScoreDisplay(rec) { let p = technicalPercent(rec); if (rec.status === "ne")
     return "0%"; if (p == null)
     return "—"; return `${Number(rec.pointsEarned)} / ${Number(rec.pointsPossible)} (${p.toFixed(1)}%)`; }
-function comps() { return COMP[state.course]; }
+function comps() { return COMP[operationalCourse()] || []; }
 function byCode(code) { return comps().find(c => c.code === code); }
 function competencyNumericValues(s) { return Object.values(s.ratings).filter(x => [1, 2, 3, 4].includes(x)); }
 function avgRating(s) { let a = competencyNumericValues(s); return a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0; }
@@ -1004,9 +994,9 @@ function gradeSnapshot(s) { let sv = currentScopedCompetencyValues(s), skill = s
     parts.push({ key: "project", label: "Fabrication & Projects", value: project, weight: .25 }); if (tech != null)
     parts.push({ key: "tech", label: "Technical Knowledge", value: tech, weight: .15 }); if (work != null)
     parts.push({ key: "work", label: "Workplace & Shop Practices", value: work, weight: .10 }); let den = parts.reduce((a, b) => a + b.weight, 0), total = den ? parts.reduce((a, b) => a + b.value * b.weight, 0) / den : null; parts.forEach(x => { x.effectiveWeight = den ? x.weight / den : null; x.contribution = den ? x.value * x.weight / den : null; }); return { skill, project, tech, work, total, den, parts }; }
-function switchCourse(v) { state.course = v; save(); renderRoster(); }
+function switchCourse(v) { if (academicAuthorityMode === "V8_AUTHORITATIVE") state.instructionalLibraryCoursePreference = v; else state.course = v; save(); renderRoster(); }
 let navCurrentView = null, navHistory = [], navSuppressHistory = false;
-function courseLabel(course) { return course === "wt" ? "Welding Technology" : "Advanced Welding Technology"; }
+function courseLabel(course) { return course === "wt" ? "Welding Technology" : course === "awt" ? "Advanced Welding Technology" : "No Current Class"; }
 const ARC_SIDEBAR_PREF_KEY = "arc_ui_titanium_sidebar_collapsed";
 function arcShellCollapsedPreference() { try { return localStorage.getItem(ARC_SIDEBAR_PREF_KEY) === "1"; } catch (e) { return false; } }
 const ARC_COLLAPSIBLE_SIDEBAR_QUERY = "(max-width:900px), (pointer:coarse) and (max-width:1366px)";
@@ -1037,7 +1027,7 @@ function handleArcPopState() {
     let navigation = document.getElementById("navOverlay"); if (navigation) { navigation.remove(); updateNavigationBar(); return; }
     let student = document.getElementById("modal"); if (student && student.classList.contains("show")) closeStudent(true);
 }
-function renderActiveCurriculum() { renderCurriculumHub((activeSection() || {}).course || state.course || "wt"); }
+function renderActiveCurriculum() { renderCurriculumHub((activeSection() || {}).course || instructionalLibraryCoursePreference()); }
 function runArcNavigation(action) { setArcMobileSidebarOpen(false); let fn = window[action]; if (typeof fn === "function") fn(); }
 function arcSidebarHtml() {
     return ArcTitaniumShell.navigation().map(group => `<section class="arc-nav-group" data-arc-nav-group="${group.id}"><h2 class="arc-nav-heading">${group.label}</h2>${group.items.map(item => `<button class="arc-nav-item" type="button" data-arc-route="${item.id}" aria-label="${item.label}" ${item.future ? `aria-disabled="true" title="${item.label} — reserved for a future ARC workflow"` : `title="${item.label}" onclick="runArcNavigation('${item.action}')"`}><span class="arc-nav-icon" aria-hidden="true">${ArcIcons.svg(item.icon)}</span><span class="arc-nav-label">${item.label}</span>${item.future ? `<span class="arc-nav-future">Future</span>` : ""}</button>`).join("")}</section>`).join("");
@@ -1149,7 +1139,7 @@ function navViewLabel(view) { let sec = activeSection(), base = sec ? `${sec.per
 function classContextVisible() { return ["roster", "booths", "projects", "forecast", "technical", "gradebook", "attendance", "workplace", "openshop", "behavior"].includes(navCurrentView); }
 function closeClassMenu() { let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (menu) menu.hidden = true; if (button) button.setAttribute("aria-expanded", "false"); }
 function toggleClassMenu(event) { if (event) event.stopPropagation(); let menu = document.getElementById("navClassMenu"), button = document.getElementById("navClassButton"); if (!menu || !button) return; let opening = menu.hidden; menu.hidden = !opening; button.setAttribute("aria-expanded", opening ? "true" : "false"); }
-function updateNavigationBar(label) { ensureScheduleModel(); let button = document.getElementById("navClassButton"), menu = document.getElementById("navClassMenu"), sec = activeSection(), academicSections = academicConsumerProjection().sections.map(x => x.legacyRecord); if (button) button.textContent = classContextVisible() && sec ? `${sec.period}${ordinal(sec.period)} — ${courseLabel(sec.course)} ▾` : "Classes ▾"; if (menu) menu.innerHTML = academicSections.slice().sort((a, b) => a.period - b.period).map(s => `<button class="navbtn ${classContextVisible() && sec && s.id === sec.id ? "is-active" : ""}" type="button" onclick="navSwitchClass('${s.id}')">${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</button>`).join(""); let bc = document.getElementById("navBreadcrumb"); if (bc)
+function updateNavigationBar(label) { ensureScheduleModel(); let button = document.getElementById("navClassButton"), menu = document.getElementById("navClassMenu"), projection = academicConsumerProjection(), sec = projectionSectionRecord(projection.selectedSection, projection.selectedSectionContext), academicSections = projection.sections.map(x => projectionSectionRecord(x, projection.sectionContextForSection(x.sectionId))).filter(Boolean); if (button) button.textContent = classContextVisible() && sec ? `${sec.period}${ordinal(sec.period)} — ${courseLabel(sec.course)} ▾` : "Classes ▾"; if (menu) menu.innerHTML = academicSections.slice().sort((a, b) => a.period - b.period).map(s => `<button class="navbtn ${classContextVisible() && sec && s.id === sec.id ? "is-active" : ""}" type="button" onclick="navSwitchClass('${s.id}')">${s.period}${ordinal(s.period)} — ${courseLabel(s.course)}</button>`).join(""); let bc = document.getElementById("navBreadcrumb"); if (bc)
     bc.textContent = label || navViewLabel(navCurrentView); let back = document.getElementById("navBackBtn"); if (back)
     back.disabled = !navHistory.length && !document.getElementById("modal").classList.contains("show"); let badge = document.getElementById("navNotificationBadge"), cnt = activeNotifications().length; if (badge) {
     badge.textContent = cnt;
@@ -1406,7 +1396,7 @@ function renderMainMenu() {
     navMark("main", "Dashboard");
     ensureScheduleModel();
     syncCalendarEventNotifications();
-    let today = new Date(), plan = dayPlan(today), ctx = currentScheduleContext(today), academicContext = academicConsumerProjection(dateKey(today), ctx.kind === "class" ? ctx.period : null), currentClass = academicContext.currentSection && academicContext.currentSection.legacyRecord, selectedClass = academicContext.selectedSection && academicContext.selectedSection.legacyRecord;
+    let today = new Date(), plan = dayPlan(today), ctx = currentScheduleContext(today), academicContext = academicConsumerProjection(dateKey(today), ctx.kind === "class" ? ctx.period : null), currentClass = projectionSectionRecord(academicContext.currentSection, academicContext.currentSectionContext), selectedClass = projectionSectionRecord(academicContext.selectedSection, academicContext.selectedSectionContext);
     let upcoming = upcomingCalendarItems(7).map(x => `<div class="card" style="min-width:135px;flex:1;${calendarAccent(x)}" onclick="editCalendarDay('${x.key}')"><b>${x.d.toLocaleDateString(undefined, { weekday: "short" })}</b><div class="big" style="font-size:20px">${x.d.getDate()}</div><div class="small">${dayTypeLabel(x.p.dayType)}</div>${x.p.dayType === "school" ? `<div class="small">${bellSchedule(x.p.scheduleId).name}</div>${x.p.instructionMode === "open_shop" ? `<div class="small"><b>Open Shop</b></div>` : ""}` : ""}${x.ev.map(e => `<div class="small"><b>📅 ${e.title}</b></div>`).join("")}</div>`).join("");
     let classList = selectedClass ? sectionStudents(selectedClass.id) : [], dashboardForecast = selectedClass ? ArcClassForecast.build({ state, section: selectedClass, students: classList, day: dateKey(), definitions: state.projectBank }) : { pulse: { present: 0, working: 0, needYouNow: 0, activeBooths: 0 } }, pulse = dashboardForecast.pulse;
     let selectedLabel = selectedClass ? `${selectedClass.period}${ordinal(selectedClass.period)} Period — ${courseLabel(selectedClass.course)}` : "No class selected";
@@ -2687,7 +2677,7 @@ function renderRoster() {
     if (sec)
         list = sortedRosterForToday(sec, list);
     let today = dateKey(), passes = sec ? activePasses(sec.id) : [];
-    document.getElementById("app").innerHTML = `<div class="row"><div><h2>${sec ? sec.period + ordinal(sec.period) + " Period — " : ""}${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"}</h2><div class="small">${sec ? sec.name + " • " : ""}${list.length} students${passes.length ? ` • <b>${passes.length} currently out</b>` : ""}</div></div><div><button class="btn primary" onclick="renderClassForecast()">Class Forecast</button><button class="btn" onclick="showBoothManager()">Booth Manager</button><button class="btn" onclick="renderGradebook()">Gradebook</button><button class="btn" onclick="renderAttendance()">Attendance & Passes</button><button class="btn" onclick="showClassProjects()">Class Projects</button><button class="btn" onclick="renderTechnicalScoring()">Technical Scoring</button><button class="btn" onclick="renderWholeClassWorkplace()">Whole-Class Workplace</button><button class="btn" onclick="renderClassBehavior()">Behavior & Incidents</button><button class="btn" onclick="renderOpenShopAll()">Open Shop</button></div></div>
+    document.getElementById("app").innerHTML = `<div class="row"><div><h2>${sec ? sec.period + ordinal(sec.period) + " Period — " : ""}${courseLabel(operationalCourse())}</h2><div class="small">${sec ? sec.name + " • " : ""}${list.length} students${passes.length ? ` • <b>${passes.length} currently out</b>` : ""}</div></div><div><button class="btn primary" onclick="renderClassForecast()">Class Forecast</button><button class="btn" onclick="showBoothManager()">Booth Manager</button><button class="btn" onclick="renderGradebook()">Gradebook</button><button class="btn" onclick="renderAttendance()">Attendance & Passes</button><button class="btn" onclick="showClassProjects()">Class Projects</button><button class="btn" onclick="renderTechnicalScoring()">Technical Scoring</button><button class="btn" onclick="renderWholeClassWorkplace()">Whole-Class Workplace</button><button class="btn" onclick="renderClassBehavior()">Behavior & Incidents</button><button class="btn" onclick="renderOpenShopAll()">Open Shop</button></div></div>
  <div class="card"><p class="small"><b>Fast roster:</b> Where are they? What are they doing? What do they need? Temporary passes never change roster position.</p></div>
  <div class="roster">${list.map(st => {
         let g = gaps(st).slice(0, 3), status = sec ? attendanceStatus(st.id, sec.id, today) : "present", pass = passes.find(x => x.studentId === st.id);
@@ -3176,7 +3166,7 @@ function renderModalObsolete() {
     let s = current;
     let g = gradeSnapshot(s);
     let tabs = [["summary", "Summary"], ["competencies", "Competencies"], ["attendance", "Attendance & Passes"], ["workplace", "Workplace"], ["behavior", "Behavior"], ["projects", "Projects"], ["technical", "Technical"], ["photos", "Photos"], ["grades", "Grades"], ["openshop", "Open Shop"], ["history", "History"]];
-    let html = `<div class="student-profile-nav"><h2>${s.name}</h2><p><span class="pill">${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="setStudentTab('${x[0]}')">${x[1]}</button>`).join("")}</div></div>`;
+    let html = `<div class="student-profile-nav"><h2>${s.name}</h2><p><span class="pill">${courseLabel(operationalCourse())}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="setStudentTab('${x[0]}')">${x[1]}</button>`).join("")}</div></div>`;
     if (tab === "summary") {
         let gs = gaps(s).slice(0, 3);
         html += `<div class="grid"><div class="card"><div class="small">Competency Average</div><div class="big">${avgRating(s).toFixed(1)}</div></div><div class="card"><div class="small">Proficient+</div><div class="big">${prof(s)}</div></div><div class="card"><div class="small">Current Grade Snapshot</div><div class="big">${g.total == null ? "—" : g.total.toFixed(1) + "%"}</div></div></div>
@@ -3254,7 +3244,7 @@ function renderModal() {
     let s = current;
     let g = gradeSnapshot(s);
     let tabs = [["summary", "Summary"], ["competencies", "Competencies"], ["attendance", "Attendance & Passes"], ["workplace", "Workplace"], ["behavior", "Behavior"], ["projects", "Projects"], ["technical", "Technical"], ["photos", "Photos"], ["grades", "Grades"], ["openshop", "Open Shop"], ["history", "History"]];
-    let html = `<h2>${s.name}</h2><p><span class="pill">${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="tab='${x[0]}';renderModal()">${x[1]}</button>`).join("")}</div>`;
+    let html = `<h2>${s.name}</h2><p><span class="pill">${courseLabel(operationalCourse())}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="tab='${x[0]}';renderModal()">${x[1]}</button>`).join("")}</div>`;
     if (tab === "summary") {
         let gs = gaps(s).slice(0, 3);
         html += `<div class="grid"><div class="card"><div class="small">Competency Average</div><div class="big">${avgRating(s).toFixed(1)}</div></div><div class="card"><div class="small">Proficient+</div><div class="big">${prof(s)}</div></div><div class="card"><div class="small">Current Grade Snapshot</div><div class="big">${g.total == null ? "—" : g.total.toFixed(1) + "%"}</div></div></div>
@@ -3527,7 +3517,7 @@ function showProjectAssigner() {
     let lib = projectLibrary();
     let assigned = new Set(current.projects.map(p => p.templateId).filter(Boolean));
     let body = `<button class="btn" onclick="renderModal()">← Back to Projects</button><h2>Assign Project</h2>
- <div class="card"><h3>Saved ${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} Projects</h3>
+ <div class="card"><h3>Saved ${courseLabel(instructionalLibraryCoursePreference())} Projects</h3>
  <p class="small">Tap once to assign. Projects already on this student's profile are marked Assigned.</p>
  ${lib.length ? lib.map(p => `<div class="entryrow"><div><b>${p.title}</b><br><span class="small">${p.source === "bank" ? "Project Bank" : "Class project"}</span></div>
  <div>${assigned.has(p.id) ? `<span class="pill good">Assigned</span>` : `<button class="btn primary" onclick="assignSavedProject('${p.id}')">Assign</button>`}</div></div>`).join("") : "<p class='small'>No saved projects yet.</p>"}
@@ -3670,7 +3660,7 @@ function technicalStandardOptions(course, selected = "") {
 }
 function currentStudentTechnicalCourse() {
     let e = ((current === null || current === void 0 ? void 0 : current.enrollments) || []).find(x => x.active && x.year === state.academicYear && x.semester === state.semester) || ((current === null || current === void 0 ? void 0 : current.enrollments) || []).find(x => x.active);
-    return (e === null || e === void 0 ? void 0 : e.course) || state.course || "wt";
+    return (e === null || e === void 0 ? void 0 : e.course) || operationalCourse() || instructionalLibraryCoursePreference();
 }
 function technicalStatusOptions(selected) { return [["completed", "Completed"], ["makeup", "Absent / Make-up"], ["excused", "Excused"], ["ne", "NE / No Evidence"]].map(x => `<option value="${x[0]}" ${x[0] === selected ? "selected" : ""}>${x[1]}</option>`).join(""); }
 function technicalAttendanceBadge(tplOrRec) { return ((tplOrRec === null || tplOrRec === void 0 ? void 0 : tplOrRec.daySpecific) || (tplOrRec === null || tplOrRec === void 0 ? void 0 : tplOrRec.attendanceLinked)) ? ` <span class="pill">Attendance-Linked</span>` : ""; }
@@ -3715,7 +3705,7 @@ function technicalAttendanceReason(rec) {
     return label;
 }
 function applyTechnicalAttendanceAction(studentId, templateId, action) {
-    let sec = activeSection(), tpl = technicalTemplateById(templateId, (sec === null || sec === void 0 ? void 0 : sec.course) || state.course), pair = techRecordForStudentTemplate(studentId, templateId), st = pair[0], rec = pair[1];
+    let sec = activeSection(), tpl = technicalTemplateById(templateId, (sec === null || sec === void 0 ? void 0 : sec.course) || operationalCourse()), pair = techRecordForStudentTemplate(studentId, templateId), st = pair[0], rec = pair[1];
     if (!sec || !tpl || !st || !rec)
         return;
     let ctx = technicalAttendanceContext(st, tpl, rec, sec.id), d = tpl.date || rec.date || dateKey();
@@ -3762,7 +3752,7 @@ function attendanceLinkedReviewRows(tpl, sec) {
     }).filter(Boolean).join("");
 }
 function showAttendanceLinkedReview(templateId) {
-    let sec = activeSection(), tpl = technicalTemplateById(templateId, (sec === null || sec === void 0 ? void 0 : sec.course) || state.course);
+    let sec = activeSection(), tpl = technicalTemplateById(templateId, (sec === null || sec === void 0 ? void 0 : sec.course) || operationalCourse());
     if (!sec || !tpl)
         return;
     let rows = attendanceLinkedReviewRows(tpl, sec), o = document.createElement("div");
@@ -3777,7 +3767,7 @@ function closeAttendanceGradeReview() { let o = document.getElementById("attenda
     o.remove(); }
 function showStudentTechnicalAssigner() {
     ensureTechnicalLibrary();
-    let lib = technicalLibrary(state.course);
+    let lib = technicalLibrary(instructionalLibraryCoursePreference());
     let assigned = new Set(ensureStudentTechnicalData(current).map(x => x.templateId).filter(Boolean));
     document.getElementById("modalBody").innerHTML = `<button class="btn" onclick="renderModal()">← Back to Technical</button><h2>${current.name} — Add Technical Assessment</h2>
  <div class="card"><h3>Technical Knowledge Bank</h3><p class="small">Assign an existing assessment to only this student.</p>${lib.length ? lib.map(tpl => `<div class="entryrow"><div><b>${tpl.title}</b><br><span class="small">${tpl.type} • ${tpl.pointsPossible} points${tpl.standard ? " • " + tpl.standard : ""}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center">${assigned.has(tpl.id) ? `<span class="pill good">Assigned</span>` : `<button class="btn primary" onclick="assignTechnicalToCurrent('${tpl.id}')">Assign</button>`}<button class="btn" onclick="showTechnicalTemplateEditor('edit','${tpl.id}','${currentStudentTechnicalCourse()}','student')">Edit</button><button class="btn" onclick="showTechnicalTemplateEditor('copy','${tpl.id}','${currentStudentTechnicalCourse()}','student')">Copy</button><button class="btn" style="background:#b91c1c;color:white" onclick="confirmDeleteTechnicalTemplate('${tpl.id}','${currentStudentTechnicalCourse()}','student')">Delete</button></div></div>`).join("") : "<p class='small'>No saved Technical assessments yet.</p>"}</div>
@@ -3788,7 +3778,7 @@ function showStudentTechnicalAssigner() {
 }
 function createTechnicalTemplate(title, type, points, standard, topic, sectionIds, daySpecific = false) {
     ensureTechnicalLibrary();
-    let lib = technicalLibrary(state.course);
+    let lib = technicalLibrary(instructionalLibraryCoursePreference());
     let existing = lib.find(x => x.title.toLowerCase() === title.toLowerCase() && Number(x.pointsPossible) === Number(points));
     if (existing) {
         if (sectionIds)
@@ -3797,7 +3787,7 @@ function createTechnicalTemplate(title, type, points, standard, topic, sectionId
             existing.daySpecific = true;
         return existing;
     }
-    let tpl = { id: "techtpl_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), title, type: type || "Knowledge Check", pointsPossible: Number(points) || 100, standard: standard || "", topic: topic || "", date: new Date().toISOString().slice(0, 10), sectionIds: sectionIds || [], daySpecific: !!daySpecific, course: state.course, academicYear: state.academicYear, semester: state.semester };
+    let tpl = { id: "techtpl_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), title, type: type || "Knowledge Check", pointsPossible: Number(points) || 100, standard: standard || "", topic: topic || "", date: new Date().toISOString().slice(0, 10), sectionIds: sectionIds || [], daySpecific: !!daySpecific, course: operationalCourse() || instructionalLibraryCoursePreference(), academicYear: state.academicYear, semester: state.semester };
     lib.push(tpl);
     return tpl;
 }
@@ -3815,7 +3805,7 @@ function createIndividualTechnical() {
     tab = "technical";
     renderModal();
 }
-function assignTechnicalToCurrent(id) { let tpl = technicalTemplateById(id, state.course); if (!tpl)
+function assignTechnicalToCurrent(id) { let tpl = technicalTemplateById(id, operationalCourse()); if (!tpl)
     return; assignTechnicalTemplateToStudent(current, tpl); logEvent("technical", "technical_assigned", "Technical Assessment Assigned", "", tpl.title, "Assigned from individual student profile."); save(); tab = "technical"; renderModal(); }
 function openStudentTechnical(i) {
     let rec = ensureStudentTechnicalData(current)[i];
@@ -4037,7 +4027,7 @@ function createClassTechnical() {
     renderTechnicalScoring();
 }
 function techRecordForStudentTemplate(studentId, templateId) { var _a, _b; let s = allStudents().find(x => x.id === studentId); if (!s)
-    return [null, null]; let tpl = technicalTemplateById(templateId, ((_b = (_a = s.enrollments) === null || _a === void 0 ? void 0 : _a.find(e => e.active)) === null || _b === void 0 ? void 0 : _b.course) || state.course) || technicalTemplateById(templateId, state.course); if (tpl)
+    return [null, null]; let tpl = technicalTemplateById(templateId, ((_b = (_a = s.enrollments) === null || _a === void 0 ? void 0 : _a.find(e => e.active)) === null || _b === void 0 ? void 0 : _b.course) || operationalCourse()) || technicalTemplateById(templateId, instructionalLibraryCoursePreference()); if (tpl)
     assignTechnicalTemplateToStudent(s, tpl); return [s, ensureStudentTechnicalData(s).find(x => x.templateId === templateId)]; }
 function saveClassTechScore(studentId, templateId) { let [s, rec] = techRecordForStudentTemplate(studentId, templateId); if (!s || !rec)
     return; let el = document.getElementById("classTechEarned_" + studentId), old = techScoreDisplay(rec), v = el.value; rec.pointsEarned = v === "" ? null : Number(v); rec.status = rec.pointsEarned == null ? "makeup" : "completed"; if (rec.attendanceAction)
@@ -4052,7 +4042,7 @@ function projectAssignmentNames(templateId) { let a = projectAssignedStudents(te
 function ensureProjectRecord(student, tpl, options = {}) { if (!student.projects)
     student.projects = []; let rec = options.forceNew ? null : student.projects.find(p => p.templateId === tpl.id && gradeRecordScopeState(p) !== "other" && p.status !== "completed"); if (!rec) {
     let sec = activeSection(), hasPrimary = !!ArcProjectBank.primary(student.projects);
-    rec = ArcProjectBank.assignment(tpl, { assignmentId: "pa_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), sectionId: sec ? sec.id : "", course: sec ? sec.course : state.course, academicYear: state.academicYear, semester: state.semester, timestamp: new Date().toISOString(), source: options.source || "Instructor", isPrimary: options.isPrimary === true || !hasPrimary });
+    rec = ArcProjectBank.assignment(tpl, { assignmentId: "pa_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), sectionId: sec ? sec.id : "", course: sec ? sec.course : operationalCourse(), academicYear: state.academicYear, semester: state.semester, timestamp: new Date().toISOString(), source: options.source || "Instructor", isPrimary: options.isPrimary === true || !hasPrimary });
     stampGradeScope(rec);
     student.projects.push(rec);
 } return rec; }
@@ -4210,7 +4200,7 @@ function renderGradebook(view) {
     document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><div class="row"><div><h2>${sec.period}${ordinal(sec.period)} Period — Gradebook</h2><div class="small">${sec.name} • ${courseLabel(sec.course)} • ${state.academicYear} • ${state.semester}</div></div></div><div class="tabs">${tabs.map(t => `<button class="tab ${view === t[0] ? "on" : ""}" onclick="renderGradebook('${t[0]}')">${t[1]}</button>`).join("")}</div><div class="card"><p class="small"><b>Current-term protection:</b> records explicitly stamped for another section, semester, or school year are excluded from this gradebook. Current records are stamped with ${state.academicYear} • ${state.semester}. <b>${sc.legacy} legacy/unscoped</b> record(s) are still included so older prototype data is not silently lost; they are identified in detailed views.</p><p class="small"><b>Transfer workflow:</b> choose a category above for a cleaner grid, then copy those values into the school's official gradebook. Tap any grade cell to open that student's existing source record. This page does not create duplicate grades.</p></div>${body}`;
 }
 function studentGradeDetailHtml(s) {
-    let cc = COMP[state.course] || [], projects = currentScopedProjects(s), tech = currentScopedTechnical(s), weeks = currentScopedWorkplaceWeeks(s);
+    let cc = COMP[operationalCourse()] || [], projects = currentScopedProjects(s), tech = currentScopedTechnical(s), weeks = currentScopedWorkplaceWeeks(s);
     let compRows = cc.map(c => { var _a; let d = gradebookCompetencyDisplay((_a = s.ratings) === null || _a === void 0 ? void 0 : _a[c.code]); return `<tr><td>${c.code} — ${c.name}</td><td>${d.sub || "—"}</td><td><b>${d.text}</b></td></tr>`; }).join("");
     let projRows = projects.length ? projects.map(p => { let d = gradebookProjectDisplay(p); return `<tr><td>${p.name || "Project"}</td><td>${d.sub || projectStatusLabel(p)}</td><td><b>${d.text}</b></td></tr>`; }).join("") : `<tr><td colspan="3">No projects assigned.</td></tr>`;
     let techRows = tech.length ? tech.map(r => { let d = gradebookTechDisplay(r); return `<tr><td>${r.name || r.title || "Technical Assessment"}</td><td>${d.sub || techStatusLabel(r.status)}</td><td><b>${d.text}</b></td></tr>`; }).join("") : `<tr><td colspan="3">No technical assessments assigned.</td></tr>`;
@@ -4250,7 +4240,7 @@ function saveEditedClassProject(id) { var _a; let tpl = projectLibrary().find(p 
     return alert('Enter a project title.'); let old = tpl.title; if (old === title) {
     closeProjectManage();
     return showClassProjects();
-} tpl.title = title; (state.classes[state.course] || []).forEach(s => (s.projects || []).filter(p => p.templateId === id).forEach(p => { p.name = title; logProjectForStudent(s, 'project_edited', 'Project Edited', old, title, 'Reusable project title changed; student assessment data preserved.'); })); save(); closeProjectManage(); showClassProjects(); }
+} tpl.title = title; (state.classes[operationalCourse()] || []).forEach(s => (s.projects || []).filter(p => p.templateId === id).forEach(p => { p.name = title; logProjectForStudent(s, 'project_edited', 'Project Edited', old, title, 'Reusable project title changed; student assessment data preserved.'); })); save(); closeProjectManage(); showClassProjects(); }
 function showCopyClassProject(id) { let tpl = projectLibrary().find(p => p.id === id); if (!tpl)
     return; let pre = projectAssignedStudents(id).map(s => s.id), o = document.createElement('div'); o.id = 'projectManageOverlay'; o.className = 'modal show'; o.innerHTML = `<div class="modalbox" style="width:min(760px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeProjectManage()">Close</button><h2>Copy Project</h2><p class="small">This creates a separate reusable project. Change the title before saving, and choose which students should receive the copy.</p><div class="card"><label><b>Project Title</b></label><input id="copyProjectTitle" value="${tpl.title} - Copy" style="width:100%;padding:11px;border:1px solid #d6dde6;border-radius:8px;margin-top:6px"></div><div class="card"><div class="row"><h3>Assign Copy To</h3><div><button class="btn" onclick="setAllProjectStudents(true)">Select All</button> <button class="btn" onclick="setAllProjectStudents(false)">Clear All</button></div></div>${renderProjectStudentChecks(pre, [])}</div><button class="btn primary" onclick="createCopiedClassProject('${id}')">Create Copy</button></div>`; o.onclick = e => { if (e.target === o)
     closeProjectManage(); }; document.body.appendChild(o); }
@@ -4259,10 +4249,10 @@ function createCopiedClassProject(sourceId) { var _a; let src = projectLibrary()
     return alert('Select at least one student.'); let tpl = { id: 'proj_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7), title, source: 'class', created: new Date().toISOString(), copiedFrom: sourceId }; projectLibrary().push(tpl); ids.forEach(sid => { let s = students().find(x => x.id === sid); if (!s)
     return; ensureProjectRecord(s, tpl); logProjectForStudent(s, 'project_copied', 'Project Copied', src.title, title, 'Copied from class Projects tab and assigned to this student.'); }); save(); closeProjectManage(); showClassProjects(); }
 function confirmDeleteClassProject(id) { let tpl = projectLibrary().find(p => p.id === id); if (!tpl)
-    return; let a = (state.classes[state.course] || []).filter(s => (s.projects || []).some(p => p.templateId === id)), o = document.createElement('div'); o.id = 'projectManageOverlay'; o.className = 'modal show'; o.innerHTML = `<div class="modalbox" style="width:min(560px,100%)" onclick="event.stopPropagation()"><h2>Delete Project?</h2><p>Are you sure you want to delete <b>${tpl.title}</b>?</p><p class="small">This will remove the reusable project and its assessment record from <b>${a.length}</b> currently assigned student${a.length === 1 ? '' : 's'} in this course, including rubric scores, notes, and status. A Project Deleted entry will remain in each affected student's History.</p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeProjectManage()">Cancel</button><button class="btn" style="background:#b91c1c;color:white" onclick="deleteClassProject('${id}')">Yes, Delete Project</button></div></div>`; o.onclick = e => { if (e.target === o)
+    return; let a = (state.classes[operationalCourse()] || []).filter(s => (s.projects || []).some(p => p.templateId === id)), o = document.createElement('div'); o.id = 'projectManageOverlay'; o.className = 'modal show'; o.innerHTML = `<div class="modalbox" style="width:min(560px,100%)" onclick="event.stopPropagation()"><h2>Delete Project?</h2><p>Are you sure you want to delete <b>${tpl.title}</b>?</p><p class="small">This will remove the reusable project and its assessment record from <b>${a.length}</b> currently assigned student${a.length === 1 ? '' : 's'} in this course, including rubric scores, notes, and status. A Project Deleted entry will remain in each affected student's History.</p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeProjectManage()">Cancel</button><button class="btn" style="background:#b91c1c;color:white" onclick="deleteClassProject('${id}')">Yes, Delete Project</button></div></div>`; o.onclick = e => { if (e.target === o)
     closeProjectManage(); }; document.body.appendChild(o); }
 function deleteClassProject(id) { let lib = projectLibrary(), idx = lib.findIndex(p => p.id === id); if (idx < 0)
-    return; let tpl = lib[idx]; (state.classes[state.course] || []).forEach(s => { let removed = (s.projects || []).filter(p => p.templateId === id); if (removed.length) {
+    return; let tpl = lib[idx]; (state.classes[operationalCourse()] || []).forEach(s => { let removed = (s.projects || []).filter(p => p.templateId === id); if (removed.length) {
     logProjectForStudent(s, 'project_deleted', 'Project Deleted', tpl.title, '', 'Deleted from class Projects tab with assessment data removed.');
     s.projects = s.projects.filter(p => p.templateId !== id);
 } }); lib.splice(idx, 1); save(); closeProjectManage(); showClassProjects(); }
@@ -4273,7 +4263,7 @@ function projectListValue(id) { return projectFieldValue(id).split(/[,\n]/).map(
 function projectMaterialsValue(id) { return projectFieldValue(id).split("\n").map(line => { let parts = line.split("|").map(x => x.trim()); return { name: parts[0] || "", quantity: parts[1] || "", notes: parts[2] || "" }; }).filter(x => x.name); }
 function projectStagesValue(id) { return projectFieldValue(id).split("\n").map((line, index) => { let parts = line.split("|").map(x => x.trim()), name = parts[0]; return name ? { id: name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "stage_" + (index + 1), name, requiresInstructorCheck: (parts[1] || "").toLowerCase() === "check" } : null; }).filter(Boolean); }
 function projectCheckpointsValue(id) { return projectFieldValue(id).split("\n").map((line, index) => { let parts = line.split("|").map(x => x.trim()), name = parts[0]; return name ? { id: "check_" + (index + 1), name, stageId: parts[1] || "", required: (parts[2] || "required").toLowerCase() !== "optional" } : null; }).filter(Boolean); }
-function projectDefinitionForm(definition) { let d = definition || ArcProjectBank.normalizeDefinition({ type: "Build Project", difficulty: 1, applicability: { wt: state.course === "wt", awt: state.course === "awt" }, stages: ArcProjectBank.DEFAULT_STAGES }), materialText = (d.materials || []).map(x => [x.name, x.quantity, x.notes].filter(Boolean).join(" | ")).join("\n"), stageText = (d.stages || []).map(x => x.name + (x.requiresInstructorCheck ? " | check" : "")).join("\n"), checkpointText = (d.instructorCheckpoints || []).map(x => x.name + (x.stageId ? " | " + x.stageId : "") + (x.required === false ? " | optional" : "")).join("\n"); return `<div class="project-bank-form"><div class="grid"><label>Instructor-facing title<input id="pbTitle" value="${escapePhotoText(d.title || "")}" placeholder="Example: Welding Helmet Rack"></label><label>Student-facing title<input id="pbStudentTitle" value="${escapePhotoText(d.studentTitle || "")}" placeholder="Example: Build a Helmet Rack"></label><label>Type<select id="pbType">${ArcProjectBank.TYPES.map(x => `<option ${d.type === x ? "selected" : ""}>${x}</option>`).join("")}</select></label><label>Difficulty Level 1–5<input id="pbDifficulty" type="number" min="1" max="5" value="${d.difficulty || 1}"></label></div><div class="grid"><label><input id="pbWT" type="checkbox" ${d.applicability && d.applicability.wt ? "checked" : ""}> WT applies</label><label><input id="pbAWT" type="checkbox" ${d.applicability && d.applicability.awt ? "checked" : ""}> AWT applies</label><label>Estimated shop time<input id="pbTime" value="${escapePhotoText(d.estimatedShopTime || "")}" placeholder="Example: 5–8 shop periods"></label><label>Recommended minimum clearance<input id="pbClearance" type="number" min="1" max="5" value="${d.minimumClearance == null ? "" : d.minimumClearance}" placeholder="Optional"></label></div><label>Kid-friendly description<textarea id="pbDescription" rows="2" placeholder="What are we making or practicing, and why?">${escapePhotoText(d.studentDescription || "")}</textarea></label><label>Kid-friendly instructions<textarea id="pbInstructions" rows="3" placeholder="Short, clear directions students can follow.">${escapePhotoText(d.studentInstructions || "")}</textarea></label><label>Instructor notes<textarea id="pbNotes" rows="2">${escapePhotoText(d.instructorNotes || "")}</textarea></label><label>Recommended readiness / prerequisites<textarea id="pbReadiness" rows="2" placeholder="Recommendation only; instructor can override.">${escapePhotoText(d.recommendedReadiness || "")}</textarea></label><div class="grid"><label>Materials — one per line: name | quantity | notes<textarea id="pbMaterials" rows="4">${escapePhotoText(materialText)}</textarea></label><label>Equipment requirements — comma or line separated<textarea id="pbEquipment" rows="4">${escapePhotoText((d.equipmentRequirements || []).join(", "))}</textarea></label><label>Processes — comma or line separated<textarea id="pbProcesses" rows="4">${escapePhotoText((d.processRequirements || []).join(", "))}</textarea></label><label>Linked standards codes — verified codes only<textarea id="pbStandards" rows="4">${escapePhotoText((d.linkedStandards || []).join(", "))}</textarea></label><label>Linked competency/evidence codes<textarea id="pbCompetencies" rows="4">${escapePhotoText((d.linkedCompetencies || []).join(", "))}</textarea></label></div><div class="grid"><label>Stages — one per line; add <code>| check</code> for an instructor check<textarea id="pbStages" rows="9">${escapePhotoText(stageText)}</textarea></label><label>Instructor checkpoints — name | stage id | optional<textarea id="pbCheckpoints" rows="9">${escapePhotoText(checkpointText)}</textarea></label></div><p class="small"><b>Boundary:</b> difficulty, stages, checkpoints, and completion never automatically change competency ratings or grades.</p></div>`; }
+function projectDefinitionForm(definition) { let d = definition || ArcProjectBank.normalizeDefinition({ type: "Build Project", difficulty: 1, applicability: { wt: instructionalLibraryCoursePreference() === "wt", awt: instructionalLibraryCoursePreference() === "awt" }, stages: ArcProjectBank.DEFAULT_STAGES }), materialText = (d.materials || []).map(x => [x.name, x.quantity, x.notes].filter(Boolean).join(" | ")).join("\n"), stageText = (d.stages || []).map(x => x.name + (x.requiresInstructorCheck ? " | check" : "")).join("\n"), checkpointText = (d.instructorCheckpoints || []).map(x => x.name + (x.stageId ? " | " + x.stageId : "") + (x.required === false ? " | optional" : "")).join("\n"); return `<div class="project-bank-form"><div class="grid"><label>Instructor-facing title<input id="pbTitle" value="${escapePhotoText(d.title || "")}" placeholder="Example: Welding Helmet Rack"></label><label>Student-facing title<input id="pbStudentTitle" value="${escapePhotoText(d.studentTitle || "")}" placeholder="Example: Build a Helmet Rack"></label><label>Type<select id="pbType">${ArcProjectBank.TYPES.map(x => `<option ${d.type === x ? "selected" : ""}>${x}</option>`).join("")}</select></label><label>Difficulty Level 1–5<input id="pbDifficulty" type="number" min="1" max="5" value="${d.difficulty || 1}"></label></div><div class="grid"><label><input id="pbWT" type="checkbox" ${d.applicability && d.applicability.wt ? "checked" : ""}> WT applies</label><label><input id="pbAWT" type="checkbox" ${d.applicability && d.applicability.awt ? "checked" : ""}> AWT applies</label><label>Estimated shop time<input id="pbTime" value="${escapePhotoText(d.estimatedShopTime || "")}" placeholder="Example: 5–8 shop periods"></label><label>Recommended minimum clearance<input id="pbClearance" type="number" min="1" max="5" value="${d.minimumClearance == null ? "" : d.minimumClearance}" placeholder="Optional"></label></div><label>Kid-friendly description<textarea id="pbDescription" rows="2" placeholder="What are we making or practicing, and why?">${escapePhotoText(d.studentDescription || "")}</textarea></label><label>Kid-friendly instructions<textarea id="pbInstructions" rows="3" placeholder="Short, clear directions students can follow.">${escapePhotoText(d.studentInstructions || "")}</textarea></label><label>Instructor notes<textarea id="pbNotes" rows="2">${escapePhotoText(d.instructorNotes || "")}</textarea></label><label>Recommended readiness / prerequisites<textarea id="pbReadiness" rows="2" placeholder="Recommendation only; instructor can override.">${escapePhotoText(d.recommendedReadiness || "")}</textarea></label><div class="grid"><label>Materials — one per line: name | quantity | notes<textarea id="pbMaterials" rows="4">${escapePhotoText(materialText)}</textarea></label><label>Equipment requirements — comma or line separated<textarea id="pbEquipment" rows="4">${escapePhotoText((d.equipmentRequirements || []).join(", "))}</textarea></label><label>Processes — comma or line separated<textarea id="pbProcesses" rows="4">${escapePhotoText((d.processRequirements || []).join(", "))}</textarea></label><label>Linked standards codes — verified codes only<textarea id="pbStandards" rows="4">${escapePhotoText((d.linkedStandards || []).join(", "))}</textarea></label><label>Linked competency/evidence codes<textarea id="pbCompetencies" rows="4">${escapePhotoText((d.linkedCompetencies || []).join(", "))}</textarea></label></div><div class="grid"><label>Stages — one per line; add <code>| check</code> for an instructor check<textarea id="pbStages" rows="9">${escapePhotoText(stageText)}</textarea></label><label>Instructor checkpoints — name | stage id | optional<textarea id="pbCheckpoints" rows="9">${escapePhotoText(checkpointText)}</textarea></label></div><p class="small"><b>Boundary:</b> difficulty, stages, checkpoints, and completion never automatically change competency ratings or grades.</p></div>`; }
 function collectProjectDefinition(existing) { let data = { id: existing ? existing.id : "pb_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), title: projectFieldValue("pbTitle"), studentTitle: projectFieldValue("pbStudentTitle"), studentDescription: projectFieldValue("pbDescription"), studentInstructions: projectFieldValue("pbInstructions"), type: document.getElementById("pbType").value, difficulty: Number(document.getElementById("pbDifficulty").value), applicability: { wt: document.getElementById("pbWT").checked, awt: document.getElementById("pbAWT").checked }, estimatedShopTime: projectFieldValue("pbTime"), instructorNotes: projectFieldValue("pbNotes"), materials: projectMaterialsValue("pbMaterials"), equipmentRequirements: projectListValue("pbEquipment"), processRequirements: projectListValue("pbProcesses"), linkedStandards: projectListValue("pbStandards"), linkedCompetencies: projectListValue("pbCompetencies"), recommendedReadiness: projectFieldValue("pbReadiness"), minimumClearance: projectFieldValue("pbClearance"), stages: projectStagesValue("pbStages"), instructorCheckpoints: projectCheckpointsValue("pbCheckpoints"), archived: existing ? existing.archived : false, source: existing ? existing.source : "instructor", createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(), copiedFrom: existing ? existing.copiedFrom : "", futureLinks: existing ? existing.futureLinks : {} }; return ArcProjectBank.normalizeDefinition(data); }
 function showClassProjects() { navMark("projects", navViewLabel("projects")); ensureProjectBank(); let sec = activeSection(), active = projectLibrary(false), archived = projectLibrary(true).filter(p => p.archived); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><div class="row"><div><h2>Project Bank & Class Projects</h2><div class="small">${sec ? sec.name : "Current class"} • reusable definitions stay separate from student assignments</div></div><button class="btn primary" onclick="showCreateClassProject()">+ New Project</button></div><div class="card"><p class="small">Assign to one student, selected students, or the full class. Every student receives independent stage, need, checkpoint, rubric, and history records.</p>${active.map(projectBankRow).join("") || `<p class="small">No active reusable projects.</p>`}</div>${archived.length ? `<details class="card"><summary><b>Archived Projects (${archived.length})</b></summary>${archived.map(projectBankRow).join("")}</details>` : ""}`; }
 function projectBankRow(p, global = false) { let assigned = global ? null : projectAssignedStudents(p.id); return `<div class="entryrow project-definition ${p.archived ? "archived" : ""}"><div><b>${escapePhotoText(p.title)}</b> <span class="pill">Level ${p.difficulty}</span><br><span class="small">${escapePhotoText(p.type)} • ${(p.applicability.wt ? "WT" : "") + (p.applicability.wt && p.applicability.awt ? " / " : "") + (p.applicability.awt ? "AWT" : "")} • ${escapePhotoText(p.estimatedShopTime || "Time not set")}${assigned ? ` • ${assigned.length} assigned in selected class` : ""}</span><br><span class="small">${escapePhotoText(p.studentDescription || "No student description yet.")}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${p.archived ? `<button class="btn" onclick="restoreClassProject('${p.id}')">Restore</button>` : `${global ? "" : `<button class="btn primary" onclick="showAssignProjectStudents('${p.id}')">Assign</button>`}<button class="btn" onclick="showEditClassProject('${p.id}')">Edit</button><button class="btn" onclick="showCopyClassProject('${p.id}')">Copy</button><button class="btn" onclick="confirmDeleteClassProject('${p.id}')">Archive</button>`}</div></div>`; }
@@ -4319,7 +4309,7 @@ function assignSavedProject(id) { if (!current)
 function createAndAssignProject() { showCreateClassProject(); }
 function saveStudentProjectCopy(i) { let sourceAssignment = current && current.projects[i], source = sourceAssignment && projectDefinition(sourceAssignment.templateId); if (!sourceAssignment)
     return; let title = projectFieldValue("studentCopyProjectTitle"); if (!title)
-    return alert("Enter a project title."); let copy = ArcProjectBank.normalizeDefinition(Object.assign({}, source || { type: "Build Project", applicability: { [state.course]: true } }, { id: "pb_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), title, studentTitle: title, copiedFrom: source ? source.id : sourceAssignment.templateId, source: "instructor", createdAt: new Date().toISOString(), archived: false })); ensureProjectBank(); state.projectBank.push(copy); let assignment = ensureProjectRecord(current, copy, { forceNew: true, source: "Instructor" }); logEvent("projects", "project_copied", "Project Copied", sourceAssignment.name, title, `Independent definition and assignment ${assignment.id} created for this student.`); save(); closeProjectManage(); tab = "projects"; renderModal(); }
+    return alert("Enter a project title."); let copy = ArcProjectBank.normalizeDefinition(Object.assign({}, source || { type: "Build Project", applicability: { [instructionalLibraryCoursePreference()]: true } }, { id: "pb_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), title, studentTitle: title, copiedFrom: source ? source.id : sourceAssignment.templateId, source: "instructor", createdAt: new Date().toISOString(), archived: false })); ensureProjectBank(); state.projectBank.push(copy); let assignment = ensureProjectRecord(current, copy, { forceNew: true, source: "Instructor" }); logEvent("projects", "project_copied", "Project Copied", sourceAssignment.name, title, `Independent definition and assignment ${assignment.id} created for this student.`); save(); closeProjectManage(); tab = "projects"; renderModal(); }
 const BEHAVIOR_CATEGORIES = ["Safety", "Horseplay / Hazard", "Refusal / Non-Participation", "Equipment / Tool Misuse", "Disruption", "Preparedness", "Positive / Improvement", "Other"];
 const BEHAVIOR_SEVERITIES = ["Routine", "Significant", "Serious", "Positive"];
 const BEHAVIOR_ACTIONS = ["None / Document Only", "Redirected / Warning", "Student Conference", "Safety Retraining", "Removed from Equipment / Activity", "Parent / Guardian Contact", "Office / Administrator Referral", "Other"];
@@ -4328,7 +4318,7 @@ function ensureBehaviorData(s) { if (!s.behaviorEvents)
 function behaviorSeverityClass(v) { return v === "Serious" ? "bad" : v === "Significant" ? "warn" : v === "Positive" ? "good" : ""; }
 function behaviorEventHtml(e) { return `<div class="entryrow"><div><span class="pill ${behaviorSeverityClass(e.severity)}">${e.severity}</span> <b>${e.category}</b><br><span class="small">${new Date(e.time).toLocaleString()}</span><br>${e.description}${e.action ? `<br><span class="small"><b>Action:</b> ${e.action}</span>` : ""}${e.followUp ? `<br><span class="small"><b>Follow-up:</b> ${e.followUp}</span>` : ""}</div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn" onclick="showBehaviorEditor('${current ? current.id : ""}','${e.id}')">Edit</button><button class="btn" onclick="confirmDeleteBehavior('${current ? current.id : ""}','${e.id}')">Delete</button></div></div>`; }
 function behaviorEventHtmlForStudent(s, e) { return `<div class="entryrow"><div><span class="pill ${behaviorSeverityClass(e.severity)}">${e.severity}</span> <b>${e.category}</b><br><span class="small">${new Date(e.time).toLocaleString()}</span><br>${e.description}</div><button class="btn" onclick="showBehaviorEditor('${s.id}','${e.id}')">Open</button></div>`; }
-function renderClassBehavior() { navMark("behavior", navViewLabel("behavior")); let list = students(); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><div class="row"><div><h2>${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} — Behavior & Incidents</h2><p class="small">Private teacher documentation. Recording an event here does not automatically change Workplace points or a student's grade.</p></div></div><div class="roster">${list.map(s => { let ev = ensureBehaviorData(s).slice().sort((a, b) => new Date(b.time) - new Date(a.time))[0], count = s.behaviorEvents.length; return `<div class="student"><div><b>${s.name}</b><br><span class="pill">${s.pathway}</span></div><div><span class="small">Events</span><br><b>${count}</b></div><div class="wide"><span class="small">Most Recent</span><br>${ev ? `<b>${ev.category}</b> <span class="pill ${behaviorSeverityClass(ev.severity)}">${ev.severity}</span><br><span class="small">${new Date(ev.time).toLocaleDateString()}</span>` : `<span class="small">No events recorded</span>`}</div><button class="btn primary" onclick="showBehaviorEditor('${s.id}')">+ Add Event</button><button class="btn" onclick="openStudentBehavior('${s.id}')">View</button></div>`; }).join("")}</div>`; }
+function renderClassBehavior() { navMark("behavior", navViewLabel("behavior")); let list = students(); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><div class="row"><div><h2>${courseLabel(operationalCourse())} — Behavior & Incidents</h2><p class="small">Private teacher documentation. Recording an event here does not automatically change Workplace points or a student's grade.</p></div></div><div class="roster">${list.map(s => { let ev = ensureBehaviorData(s).slice().sort((a, b) => new Date(b.time) - new Date(a.time))[0], count = s.behaviorEvents.length; return `<div class="student"><div><b>${s.name}</b><br><span class="pill">${s.pathway}</span></div><div><span class="small">Events</span><br><b>${count}</b></div><div class="wide"><span class="small">Most Recent</span><br>${ev ? `<b>${ev.category}</b> <span class="pill ${behaviorSeverityClass(ev.severity)}">${ev.severity}</span><br><span class="small">${new Date(ev.time).toLocaleDateString()}</span>` : `<span class="small">No events recorded</span>`}</div><button class="btn primary" onclick="showBehaviorEditor('${s.id}')">+ Add Event</button><button class="btn" onclick="openStudentBehavior('${s.id}')">View</button></div>`; }).join("")}</div>`; }
 function openStudentBehavior(studentId) { let all = allStudents(), s = all.find(x => x.id === studentId); if (!s)
     return; openStudent(studentId); tab = "behavior"; renderModal(); updateNavigationBar(`${navViewLabel("behavior")} › ${s.name}`); }
 function behaviorFieldOptions(arr, val) { return arr.map(x => `<option value="${x}" ${x === val ? "selected" : ""}>${x}</option>`).join(""); }
@@ -4375,7 +4365,7 @@ function confirmDeleteBehavior(studentId, eventId) { let s = allStudents().find(
     renderModal();
 else if (navCurrentView === "behavior")
     renderClassBehavior(); }
-function renderWholeClassWorkplace() { navMark("workplace", navViewLabel("workplace")); let day = workplaceDayKey(); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><h2>${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} — Today's Workplace</h2><p class="small">Everyone begins at 10/10. Tap a student only when you need to document an exception.</p><div class="roster">${students().map(s => { let d = ensureWorkDay(s, day), score = dayWorkplaceScore(d); return `<div class="student"><div><b>${s.name}</b><br><span class="pill">${s.pathway}</span></div><div><span class="small">Status</span><br><b>${d.status}</b></div><div><span class="small">Today</span><br><b>${score == null ? "—" : score + "/10"}</b></div><div class="wide"><span class="small">Events</span><br>${d.deductions.length ? d.deductions.map(x => `<span class="pill warn">-${x.points} ${x.label}</span>`).join(" ") : `<span class="pill good">No deductions</span>`}</div><button class="btn primary" onclick="openWholeClassDeduction('${s.id}')">Update</button></div>`; }).join("")}</div>`; }
+function renderWholeClassWorkplace() { navMark("workplace", navViewLabel("workplace")); let day = workplaceDayKey(); document.getElementById("app").innerHTML = `<button class="btn" onclick="renderRoster()">← Back to Roster</button><h2>${courseLabel(operationalCourse())} — Today's Workplace</h2><p class="small">Everyone begins at 10/10. Tap a student only when you need to document an exception.</p><div class="roster">${students().map(s => { let d = ensureWorkDay(s, day), score = dayWorkplaceScore(d); return `<div class="student"><div><b>${s.name}</b><br><span class="pill">${s.pathway}</span></div><div><span class="small">Status</span><br><b>${d.status}</b></div><div><span class="small">Today</span><br><b>${score == null ? "—" : score + "/10"}</b></div><div class="wide"><span class="small">Events</span><br>${d.deductions.length ? d.deductions.map(x => `<span class="pill warn">-${x.points} ${x.label}</span>`).join(" ") : `<span class="pill good">No deductions</span>`}</div><button class="btn primary" onclick="openWholeClassDeduction('${s.id}')">Update</button></div>`; }).join("")}</div>`; }
 function openWholeClassDeduction(studentId) { let s = students().find(x => x.id === studentId), d = ensureWorkDay(s, workplaceDayKey()), activeRules = new Set(d.deductions.map(x => x.ruleId)), o = document.createElement("div"); o.id = "workOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(760px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeWorkOverlay()">Close</button><h2>${s.name} — Workplace</h2><div class="big">${dayWorkplaceScore(d) == null ? "—" : dayWorkplaceScore(d) + "/10"}</div><div class="tabs"><button class="tab" onclick="quickStatus('${s.id}','present')">Present</button><button class="tab" onclick="quickStatus('${s.id}','absent')">Absent</button><button class="tab" onclick="quickStatus('${s.id}','excused')">Excused</button></div>${d.status === "present" ? `<div class="grid">${WORKPLACE_DEDUCTIONS.map(r => `<button class="btn workplace-deduction ${activeRules.has(r.id) ? "is-active" : ""}" aria-pressed="${activeRules.has(r.id) ? "true" : "false"}" style="text-align:left" onclick="quickDeduction('${s.id}','${r.id}')">${activeRules.has(r.id) ? "✓ " : ""}-${r.points} ${r.label}</button>`).join("")}</div>` : `<p>This day is excluded from Workplace scoring.</p>`}</div>`; o.onclick = e => { if (e.target === o)
     closeWorkOverlay(); }; document.body.appendChild(o); }
 function closeWorkOverlay() { let o = document.getElementById("workOverlay"); if (o)
@@ -4386,7 +4376,7 @@ function renderOpenShopAll() {
     if (!activeSection()) return;
     navMark("openshop", navViewLabel("openshop"));
     let html = `<button class="btn" onclick="renderRoster()">← Back to Roster</button>`;
-    html += `<h2>${state.course === "wt" ? "Welding Technology" : "Advanced Welding Technology"} — Open Shop</h2>`;
+    html += `<h2>${courseLabel(operationalCourse())} — Open Shop</h2>`;
     for (const s of students()) {
         const gs = gaps(s).slice(0, 3);
         html += `<div class="card"><b>${s.name}</b> <span class="pill">${s.pathway}</span>`;
@@ -4554,21 +4544,60 @@ confirmScheduleLesson = function() { return p10cUiRouteLegacy("confirmScheduleLe
 showAutoBuildPacing = function() { return p10cUiRouteLegacy("showAutoBuildPacing", arguments); };
 updateHistoricalBuildPreview = function() { return p10cUiRouteLegacy("updateHistoricalBuildPreview", arguments); };
 confirmAutoBuildPacing = function() { return p10cUiRouteLegacy("confirmAutoBuildPacing", arguments); };
-ensureProjectLibrary();
-ensureProjectBank();
-ensureBoothModel();
-closeExpiredBoothAssignments();
-ensureScheduleModel();
-ensureTechnicalData();
-initializeArcShell();
-registerAppShell();
-installOverscrollGuard();
-installArcSidebarGesture();
-updateStickyHeaderOffset();
-if (simulationStartupError) { document.getElementById("app").innerHTML = `<div class="card"><h2>Simulation recovery required</h2><p>ARC could not verify the saved active simulation. Live Classroom has not been activated or modified.</p><p class="small">${escapePhotoText(simulationStartupError.message)}</p><p>Use a verified recovery backup before continuing.</p></div>`; updateSimulationIndicator(); }
-else { bootstrapAcademicAuthorityRuntime().then(() => { if (!restoreNavigationContext()) renderMainMenu(); save(); }).catch(error => { document.getElementById("app").innerHTML = `<div class="card"><h2>Academic authority recovery required</h2><p>ARC found authoritative academic state but could not verify one safe v8 projection. Schema 7 academic fallback was not used.</p><p class="small">${escapePhotoText(error.message)}</p><p>Use the verified activation recovery procedure before continuing.</p></div>`; }); }
-arcTimeController.start();
-showStorageCompatibilityWarning();
+function runAcademicDependentStartup() {
+    ensureProjectLibrary();
+    ensureProjectBank();
+    ensureBoothModel();
+    closeExpiredBoothAssignments();
+    ensureScheduleModel();
+    ensureTechnicalData();
+    initializeArcShell();
+}
+async function resolveAcademicAuthorityBeforeStartup() {
+    if (simulationActive()) {
+        academicAuthorityStartupState = "SIMULATION_ISOLATED";
+        return false;
+    }
+    const activated = await bootstrapAcademicAuthorityRuntime();
+    academicAuthorityStartupState = activated ? "V8_AUTHORITATIVE" : "V7_ONLY";
+    return activated;
+}
+function persistDeferredPreupgradeRecovery() {
+    if (!deferredPreupgradeRecoveryText || simulationActive())
+        return;
+    try {
+        persistentStorage.setItem(PREUPGRADE_RECOVERY_KEY, deferredPreupgradeRecoveryText);
+        deferredPreupgradeRecoveryText = null;
+    }
+    catch (err) {
+        console.warn("Could not write pre-upgrade recovery snapshot", err);
+    }
+}
+async function initializeArcApplication() {
+    registerAppShell();
+    installOverscrollGuard();
+    installArcSidebarGesture();
+    updateStickyHeaderOffset();
+    if (simulationStartupError) {
+        document.getElementById("app").innerHTML = `<div class="card"><h2>Simulation recovery required</h2><p>ARC could not verify the saved active simulation. Live Classroom has not been activated or modified.</p><p class="small">${escapePhotoText(simulationStartupError.message)}</p><p>Use a verified recovery backup before continuing.</p></div>`;
+        updateSimulationIndicator();
+        return;
+    }
+    try {
+        await resolveAcademicAuthorityBeforeStartup();
+        persistDeferredPreupgradeRecovery();
+        runAcademicDependentStartup();
+        if (!restoreNavigationContext()) renderMainMenu();
+        save();
+        arcTimeController.start();
+        showStorageCompatibilityWarning();
+    }
+    catch (error) {
+        academicAuthorityStartupState = "RECOVERY_REQUIRED";
+        document.getElementById("app").innerHTML = `<div class="card"><h2>Academic authority recovery required</h2><p>ARC found authoritative academic state but could not verify one safe v8 projection. Schema 7 academic fallback was not used.</p><p class="small">${escapePhotoText(error.message)}</p><p>Use the verified activation recovery procedure before continuing.</p></div>`;
+    }
+}
+initializeArcApplication();
 
 </script>
 </body></html>

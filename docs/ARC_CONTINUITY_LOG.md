@@ -655,3 +655,10 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Preserved normal unversioned ARC dependencies, user-controlled service-worker activation, all Repair 1–6 behavior, Schema 7 / `V7_ONLY`, configured-pending-activation production state, and P5–P10 `V7_ONLY` transaction ownership.
 - Rollback: `rollback/pre-academic-activation-samsung-module-loading-repair-1` at published Repair 6 commit `cba321e0595b4647be2348e7c5b7af054d98ae11`.
 - No publication, Samsung/production access, PACR rerun, activation, real Student authorization, dual write, package event, or Lesson acceptance change occurred.
+# 2026-10-10 — Academic Activation Effective Section Dependency Repair 1
+
+- Began from published commit `99f7118fbb7761a888014b46992cc96d92af5dbb`, tree `72559907ba60c801bbf22ee8e6dccc3baf2c1f8b`, with rollback `rollback/pre-academic-activation-effective-section-dependency-repair-1`.
+- Reproduced the Samsung null `.resolve` error from the published engineering script order: `ArcAcademicConsumerProjection` captured a null `ArcEffectiveSectionContext` because the browser page omitted that dependency and had no CommonJS fallback.
+- Added the Effective context before projection under one revisioned engineering module set; added page, projection, and activation-owner fail-closed dependency checks before production coordinator construction or authority writes.
+- Installed Edge isolated verification passed clean-current, populated-old-cache, and missing-dependency refusal scenarios. The missing-dependency page disabled all controls and returned `ACADEMIC_EFFECTIVE_SECTION_CONTEXT_INCOMPATIBLE` with no page error.
+- Preserved Repair 6 recovery and Samsung Module Loading Repair 1 behavior. Normal ARC remains Schema 7 / `V7_ONLY`; no publication, Samsung/production access, PACR rerun, protected-data mutation, activation or authority transfer occurred. Status: local candidate pending independent review.

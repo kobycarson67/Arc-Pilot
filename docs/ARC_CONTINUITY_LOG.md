@@ -670,3 +670,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Added cache-separated activation owner/provider assets and adversarial prewrite tests without changing normal ARC, schedule data, schema or authority.
 - Rollback: `rollback/pre-academic-activation-bell-compatibility-repair-1` at `d7b25ac93898efec3e8b93fcd5db814dfe2b3fd6`.
 - Authority remains Schema 7 / `V7_ONLY`; no production, Samsung, PACR, recovery or activation operation occurred.
+
+## 2026-10-11 — Academic Structure v8 Cold-Start Repair 1
+
+- Continued from published Bell Compatibility Repair 1 commit `0678d690cd201ce346257e2b60ece38e2714617e`, tree `7a320cdf95502960a26e1d767c15409bf2c504aa`, with rollback `rollback/pre-academic-structure-v8-cold-start-repair-1`.
+- Reproduced the installed-PWA failure through the published v8 compatibility producer and unchanged normal Academic Structure validator: complete reviewed academic content omitted the required `version: 1` format marker.
+- Added only the format marker to the v8-derived compatibility structure. v8 remains the sole academic owner; stale V7 academic records are not defaulted or merged, and normal validation remains strict.
+- Added isolated activation-to-marker-to-first/second-cold-reload coverage, exact identity/date checks, malformed/binding failures, schedule/recovery protections and unknown future Semester placement checks.
+- Advanced the build/shell cache identity for eventual user-controlled PWA delivery. Normal ARC remains Schema 7 / `V7_ONLY`; all P5–P10 transaction adapters remain `V7_ONLY`.
+- No publication/deployment, Samsung/production access, PACR rerun, recovery preparation, physical activation, Student data, dual write or authority transfer occurred. Samsung physical acceptance remains pending separate authorization.

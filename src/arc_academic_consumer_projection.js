@@ -1,7 +1,7 @@
 /* Stage 14 P4 shared academic consumer projection. No persisted view state. */
 (function(root,factory){var req=typeof require==='function'?require:null,api=factory(root.ArcV8Storage||(req&&req('./arc_v8_storage')),root.ArcEffectiveSectionContext||(req&&req('./arc_effective_section_context')));if(typeof module==='object'&&module.exports)module.exports=api;else root.ArcAcademicConsumerProjection=api;}(this,function(Storage,Effective){
   'use strict';
-  var S=Storage.STORES,CONSUMERS=Object.freeze(['dashboard','class-selector','students-directory','global-search','fast-roster','student-profile','current-class','gradebook','projects','technical','workplace']);
+  var S=Storage.STORES,MODULE_REVISION='academic-activation-samsung-module-loading-repair-1',CONSUMERS=Object.freeze(['dashboard','class-selector','students-directory','global-search','fast-roster','student-profile','current-class','gradebook','projects','technical','workplace']);
   function copy(x){return x==null?x:JSON.parse(JSON.stringify(x));}
   function active(row,day,start,end){return row&&row.lifecycle!=='archived'&&row.lifecycle!=='void'&&row[start]<=day&&(!row[end]||row[end]>=day);}
   function studentName(s){return String(s.preferredName||[s.legalFirstName,s.legalLastName].filter(Boolean).join(' ')||s.name||'').trim();}
@@ -23,5 +23,5 @@
     return{initialize:reload,reload:reload,get:get,invalidate:invalidate,isReady:function(){return!!value&&loadedGeneration===generation;},generation:function(){return generation;}};
   }
   function createAuthoritativeCache(options){options=options||{};var storage=options.storage,authorityState=options.authorityState||'V8_AUTHORITATIVE',snapshot=null,generation=0;if(!storage)throw new Error('Authoritative projection cache requires v8 storage.');return{initialize:async function(){snapshot=await loadV8Snapshot(storage);generation++;return fromV8Snapshot(snapshot,Object.assign({},arguments[0],{authorityState:authorityState}));},reload:async function(context){snapshot=await loadV8Snapshot(storage);generation++;return fromV8Snapshot(snapshot,Object.assign({},context,{authorityState:authorityState}));},get:function(context){if(!snapshot){var e=new Error('The authoritative academic projection has not been initialized or was invalidated.');e.code='ACADEMIC_PROJECTION_NOT_READY';throw e;}return fromV8Snapshot(snapshot,Object.assign({},context,{authorityState:authorityState}));},invalidate:function(){snapshot=null;generation++;},isReady:function(){return!!snapshot;},generation:function(){return generation;}};}
-  return{fromLegacy:legacy,fromV8:v8,loadV8Snapshot:loadV8Snapshot,fromV8Snapshot:fromV8Snapshot,build:build,createCache:createCache,createAuthoritativeCache:createAuthoritativeCache,consumers:CONSUMERS};
+  return{fromLegacy:legacy,fromV8:v8,loadV8Snapshot:loadV8Snapshot,fromV8Snapshot:fromV8Snapshot,build:build,createCache:createCache,createAuthoritativeCache:createAuthoritativeCache,consumers:CONSUMERS,moduleRevision:MODULE_REVISION};
 }));

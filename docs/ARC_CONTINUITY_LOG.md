@@ -646,3 +646,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - False, null, or missing parity; silent or throwing V7 persistence failure; marker/binding mismatch; and rehydration failure now preserve the original error while reporting `restored: false` and `recoveryRequired: true`. No mixed-authority state is falsely certified as recovered.
 - Verification passed: activation `17/17`, Repair 1–6 `7/7`, `6/6`, `7/7`, `10/10`, `14/14`, `8/8`, static regression `47/47`, complete JavaScript inventory `127/127`, parse, Pages-contract, and diff checks.
 - Normal ARC remains Schema 7 / `V7_ONLY`; all P5–P10 transaction adapters remain `V7_ONLY`. No publication/deployment, Samsung/production access, PACR rerun, activation, Student data, package event 13, Lesson acceptance change, dual write, v7 shutdown, or authority transfer occurred. Historical retired Weekly Schedule Mode readback remains `UNRESOLVED`. Status: local Repair 6 candidate pending independent review.
+
+# 2026-10-10 — Academic Activation Samsung Module Loading Repair 1
+
+- Reproduced the Samsung read-only status failure exactly in installed Edge with the actual published cache-first service worker and the pre-Activation unversioned projection bytes.
+- Confirmed mixed cached module generations as the cause: the engineering page's unversioned projection URL could coexist with Repair 5 activation/controller URLs.
+- Bound the engineering projection, activation, production provider, and controller to `academic-activation-samsung-module-loading-repair-1`; added fail-closed page and owner compatibility diagnostics.
+- Preserved normal unversioned ARC dependencies, user-controlled service-worker activation, all Repair 1–6 behavior, Schema 7 / `V7_ONLY`, configured-pending-activation production state, and P5–P10 `V7_ONLY` transaction ownership.
+- Rollback: `rollback/pre-academic-activation-samsung-module-loading-repair-1` at published Repair 6 commit `cba321e0595b4647be2348e7c5b7af054d98ae11`.
+- No publication, Samsung/production access, PACR rerun, activation, real Student authorization, dual write, package event, or Lesson acceptance change occurred.

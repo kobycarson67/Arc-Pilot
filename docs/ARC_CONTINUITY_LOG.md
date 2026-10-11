@@ -662,3 +662,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Added the Effective context before projection under one revisioned engineering module set; added page, projection, and activation-owner fail-closed dependency checks before production coordinator construction or authority writes.
 - Installed Edge isolated verification passed clean-current, populated-old-cache, and missing-dependency refusal scenarios. The missing-dependency page disabled all controls and returned `ACADEMIC_EFFECTIVE_SECTION_CONTEXT_INCOMPATIBLE` with no page error.
 - Preserved Repair 6 recovery and Samsung Module Loading Repair 1 behavior. Normal ARC remains Schema 7 / `V7_ONLY`; no publication, Samsung/production access, PACR rerun, protected-data mutation, activation or authority transfer occurred. Status: local candidate pending independent review.
+## 2026-10-11 — Academic Activation Bell Schedule Compatibility Repair 1
+
+- Reproduced the published Sunday activation failure from an accepted `null` weekly Schedule Mode entry becoming a truthy empty compatibility plan.
+- Preserved null/unconfigured noninstructional weekdays and required exact resolved Bell authority only for actual instructional days.
+- Preserved Friday shortened Open Shop, explicit schedule overrides, unknown future Semester placement and all activation/recovery safeguards.
+- Added cache-separated activation owner/provider assets and adversarial prewrite tests without changing normal ARC, schedule data, schema or authority.
+- Rollback: `rollback/pre-academic-activation-bell-compatibility-repair-1` at `d7b25ac93898efec3e8b93fcd5db814dfe2b3fd6`.
+- Authority remains Schema 7 / `V7_ONLY`; no production, Samsung, PACR, recovery or activation operation occurred.

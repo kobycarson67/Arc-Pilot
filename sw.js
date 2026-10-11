@@ -40,8 +40,8 @@ CORE.push('./src/arc_academic_consumer_projection.js?v=academic-activation-effec
 CORE.push('./src/arc_academic_authority_adapter.js');
 CORE.push('./src/arc_v8_academic_semester_transition.js');
 CORE.push('./src/arc_academic_authority_activation.js');
-CORE.push('./src/arc_academic_authority_activation.js?v=academic-activation-effective-section-dependency-repair-1');
-CORE.push('./src/arc_academic_authority_activation_production.js?v=academic-activation-effective-section-dependency-repair-1');
+CORE.push('./src/arc_academic_authority_activation.js?v=academic-activation-bell-compatibility-repair-1');
+CORE.push('./src/arc_academic_authority_activation_production.js?v=academic-activation-bell-compatibility-repair-1');
 CORE.push('./engineering/arc_academic_authority_activation.html');
 CORE.push('./engineering/arc_academic_authority_activation_page.js?v=academic-activation-effective-section-dependency-repair-1');
 CORE.push('./src/arc_v8_behavior.js');

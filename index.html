@@ -697,6 +697,20 @@ function formatClock(v) { if (!v)
 function periodTimeLabel(period) { var _a; let t = ((_a = state.periodTimes) === null || _a === void 0 ? void 0 : _a[period]) || {}; return t.start && t.end ? `${formatClock(t.start)}–${formatClock(t.end)}` : "Time not set"; }
 function dateKey(d = new Date()) { let y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, "0"), day = String(d.getDate()).padStart(2, "0"); return `${y}-${m}-${day}`; }
 function bellSchedule(id) { ensureScheduleModel(); let value = id ? state.bellSchedules[id] : null; if (value) return value; if (academicAuthorityMode === "V8_AUTHORITATIVE") throw new Error("The authoritative schedule does not provide the requested Bell Schedule."); return state.bellSchedules.regular; }
+function bellTimesForResolvedDayPlan(plan) {
+    if (plan && (plan.dayType !== "school" || plan.instructionMode === "none")) return {};
+    if (!plan || !plan.scheduleId) {
+        if (academicAuthorityMode === "V8_AUTHORITATIVE") throw new Error("The authoritative schedule does not provide the requested Bell Schedule.");
+        return bellSchedule(plan && plan.scheduleId).times;
+    }
+    return bellSchedule(plan.scheduleId).times;
+}
+function periodTimeForResolvedDayPlan(plan, period) {
+    if (plan && (plan.dayType !== "school" || plan.instructionMode === "none")) return null;
+    let time = bellTimesForResolvedDayPlan(plan)[period];
+    if (!time && academicAuthorityMode === "V8_AUTHORITATIVE") throw new Error("The authoritative Bell Schedule does not provide the requested period.");
+    return time || (state.periodTimes && state.periodTimes[period]) || null;
+}
 function defaultDayPlan(d = new Date()) { let dow = d.getDay(); if (dow === 0 || dow === 6)
     return { dayType: "no_school", scheduleId: academicAuthorityMode === "V8_AUTHORITATIVE" ? null : "regular", instructionMode: "none", source: "weekend" }; let x = state.weeklyScheduleDefaults[dow]; if (!x && academicAuthorityMode === "V8_AUTHORITATIVE") return { dayType: "no_school", scheduleId: null, instructionMode: "none", source: "unconfigured" }; x = x || { scheduleId: "regular", instructionMode: "regular" }; return { dayType: "school", scheduleId: x.scheduleId, instructionMode: x.instructionMode, source: "default" }; }
 function dayPlan(d = new Date()) { ensureScheduleModel(); let base = defaultDayPlan(d), o = state.calendarOverrides[dateKey(d)]; return o ? Object.assign(Object.assign(Object.assign({}, base), o), { source: "override" }) : base; }
@@ -2573,7 +2587,7 @@ function boothById(id) { ensureBoothModel(); return state.booths.find(b => b.id 
 function activeBooths() { ensureBoothModel(); return ArcBoothAssignments.assignableBooths(state.booths); }
 function activeBoothAssignment(studentId, sectionId, day = dateKey()) { ensureBoothModel(); return ArcBoothAssignments.active(state.boothAssignments, studentId, sectionId, day); }
 function boothEndForSection(sectionId, day = dateKey()) {
-    let sec = state.sections.find(x => x.id === sectionId), d = new Date(day + "T12:00:00"), plan = dayPlan(d), times = sec ? (bellSchedule(plan.scheduleId).times[sec.period] || state.periodTimes[sec.period]) : null;
+    let sec = state.sections.find(x => x.id === sectionId), d = new Date(day + "T12:00:00"), plan = dayPlan(d), times = sec ? periodTimeForResolvedDayPlan(plan, sec.period) : null;
     if (!times || !times.end) return null;
     let end = new Date(day + "T" + times.end + ":00");
     return isNaN(end.getTime()) ? null : end;
@@ -4469,7 +4483,7 @@ document.addEventListener("click", function (event) {
 });
 function updateStickyHeaderOffset() { let header = document.querySelector("header"); if (header) document.documentElement.style.setProperty("--arc-header-height", Math.ceil(header.getBoundingClientRect().height) + "px"); }
 function refreshArcTime(now) {
-    let plan = dayPlan(now), ctx = currentScheduleContext(now), period = ArcTimeLifecycle.periodStatus(now, ctx, bellSchedule(plan.scheduleId).times, 10), clock = document.getElementById("arcHeaderClock"), cleanup = document.getElementById("arcCleanupBanner");
+    let plan = dayPlan(now), ctx = currentScheduleContext(now), period = ArcTimeLifecycle.periodStatus(now, ctx, bellTimesForResolvedDayPlan(plan), 10), clock = document.getElementById("arcHeaderClock"), cleanup = document.getElementById("arcCleanupBanner");
     if (clock) { clock.textContent = ArcTimeLifecycle.clock(now) + (period ? " · " + period.label : ""); clock.dateTime = now.toISOString(); }
     if (cleanup) cleanup.hidden = !period || period.kind !== "cleanup";
     if (navCurrentView !== "main") return period && period.nextDelay;

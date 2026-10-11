@@ -679,3 +679,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Added isolated activation-to-marker-to-first/second-cold-reload coverage, exact identity/date checks, malformed/binding failures, schedule/recovery protections and unknown future Semester placement checks.
 - Advanced the build/shell cache identity for eventual user-controlled PWA delivery. Normal ARC remains Schema 7 / `V7_ONLY`; all P5–P10 transaction adapters remain `V7_ONLY`.
 - No publication/deployment, Samsung/production access, PACR rerun, recovery preparation, physical activation, Student data, dual write or authority transfer occurred. Samsung physical acceptance remains pending separate authorization.
+
+## 2026-10-11 — End-to-End Academic Activation Integration Rehearsal
+
+- Continued from published Cold-Start Repair 1 commit `3f7bffbdf1aaf4fd2421cdf2d59b467ac53de4a3`, tree `9b0eb611cdcde90fa93bf7795f355c397850a41d`, with rollback `rollback/pre-end-to-end-academic-activation-integration-rehearsal-1`.
+- Reproduced the Samsung error in the actual normal-shell time refresh: accepted Sunday `no_school + none + null Bell` authority was incorrectly passed to strict instructional Bell lookup after successful activation. The adjacent audit found the same latent assumption in booth-expiration cleanup.
+- Centralized normal-shell Bell consumption so explicit noninstructional dates need no Bell while instructional dates and effective Section periods remain strict and fail closed.
+- A task-owned installed-Edge rehearsal used the actual normal `index.html`, service worker/cache, real IndexedDB, actual production-path owners, accepted instructional-reference shape, fictional academic/schedule records, zero v8 Students, recovery custody, activation, warm reload, cold process restart, UI projections, negative Bell/marker gates, and exact rollback to V7.
+- Verification passed static regression `47/47`, the complete full-history JavaScript inventory `132/132`, parse, Pages/cache, and diff checks.
+- The task-owned database, cache, service worker, local storage, and Edge profile were removed after evidence capture. No publication/deployment, Samsung/production access, PACR rerun, physical activation, real Student data, package event, Lesson acceptance change, dual write, or authority transfer occurred. Status: local candidate pending independent review.

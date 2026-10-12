@@ -688,3 +688,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - A task-owned installed-Edge rehearsal used the actual normal `index.html`, service worker/cache, real IndexedDB, actual production-path owners, accepted instructional-reference shape, fictional academic/schedule records, zero v8 Students, recovery custody, activation, warm reload, cold process restart, UI projections, negative Bell/marker gates, and exact rollback to V7.
 - Verification passed static regression `47/47`, the complete full-history JavaScript inventory `132/132`, parse, Pages/cache, and diff checks.
 - The task-owned database, cache, service worker, local storage, and Edge profile were removed after evidence capture. No publication/deployment, Samsung/production access, PACR rerun, physical activation, real Student data, package event, Lesson acceptance change, dual write, or authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-11 — Six-Section Academic Activation Fixture-Fidelity Rehearsal
+
+- Continued from accepted local integration candidate `a721df2689d8200b0e22267781c503e385e99ef8`, tree `f526cd3137046171f65cc12bd188c3cdb82a1aaf`, with rollback `rollback/pre-six-section-activation-fixture-fidelity-rehearsal-1`.
+- Extended the isolated real-Edge activation rehearsal to the accepted Semester 1 topology: AWT periods 1 and 5, WT periods 2, 3, 4, and 7, and separate Planning period 6.
+- Proved Regular, exact Late template, Friday shortened Open Shop, Sunday No School, December 14 PD/no instruction, six effective Semester 1 placements, and zero effective Semester 2 Section/Planning placements without inventing a Late date or future schedule.
+- The actual normal app passed activation, warm/background/offline reload, complete Edge-process cold restart, exact V7 rollback, wrong-recovery refusal, missing Bell/period refusal, marker/hint recovery gating, and task-only cleanup. All P5–P10 transaction adapters stayed `V7_ONLY`; zero Students, Enrollments, and Schedule Assignments were created.
+- Verification passed focused `8/8`, static `47/47`, complete full-history JavaScript `133/133`, parse/update/cache and diff gates. The fixture is Samsung-faithful in topology, not byte-identical Samsung data.
+- No publication/deployment, Samsung/production access, PACR rerun, physical recovery or activation, real Student data, package event, Lesson change, dual write, or authority transfer occurred. Status: local candidate evidence pending independent review.

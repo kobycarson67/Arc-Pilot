@@ -1,0 +1,31 @@
+{
+  "format": "ARC_AUTHORITY_CLOSURE_CONTRACT",
+  "version": 1,
+  "buildIdentity": "fictional-provenance-fixture",
+  "seeds": ["index.html", "sw.js"],
+  "seedGlobs": [],
+  "reviewedNonAuthorityExtensions": {},
+  "domainBounds": {
+    "compatibilityContractId": "arc-academic-schedule-v1",
+    "academicSchedule": "V8_AUTHORITATIVE",
+    "authorities": {
+      "attendancePasses": "V7_ONLY",
+      "projectsTechnical": "V7_ONLY",
+      "competencyEvidence": "V7_ONLY",
+      "workplaceSafetyBehavior": "V7_ONLY",
+      "gradebook": "V7_ONLY",
+      "curriculumPacing": "V7_ONLY",
+      "lessonPlans": "V7_ONLY"
+    },
+    "realStudentDataAuthorized": false,
+    "transfersAuthority": false
+  },
+  "approvedPaths": [
+    {"path":"app-build.js","role":"build-identity"},
+    {"path":"app.webmanifest","role":"runtime-metadata"},
+    {"path":"index.html","role":"normal-shell"},
+    {"path":"src/app.js","role":"authority-executable"},
+    {"path":"src/style.css","role":"safety-relevant-style"},
+    {"path":"sw.js","role":"service-worker"}
+  ]
+}

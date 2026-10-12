@@ -1,0 +1,411 @@
+{
+  "format": "ARC_AUTHORITY_CLOSURE_CONTRACT",
+  "version": 1,
+  "buildIdentity": "arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1-parity-p7-competency-evidence-open-shop-1-parity-p8a-behavior-structural-foundation-1-parity-p8-workplace-safety-behavior-1-parity-p9-gradebook-authority-1-parity-p10a-unified-student-history-1-parity-p10b-ui-1-parity-p10c-ui-1-academic-structure-operational-truth-1-repair-1-academic-structure-operational-truth-1-repair-2-academic-structure-operational-truth-1-repair-3-academic-authority-activation-1-repair-5-academic-structure-v8-cold-start-repair-1-end-to-end-academic-activation-integration-rehearsal-1",
+  "seeds": [
+    "index.html",
+    "sw.js"
+  ],
+  "seedGlobs": [
+    "engineering/*.html"
+  ],
+  "reviewedNonAuthorityExtensions": {
+    ".png": "visual-only raster",
+    ".webp": "visual-only raster",
+    ".svg": "visual-only vector",
+    ".ico": "visual-only icon"
+  },
+  "domainBounds": {
+    "compatibilityContractId": "arc-academic-schedule-v1",
+    "academicSchedule": "V8_AUTHORITATIVE",
+    "authorities": {
+      "attendancePasses": "V7_ONLY",
+      "projectsTechnical": "V7_ONLY",
+      "competencyEvidence": "V7_ONLY",
+      "workplaceSafetyBehavior": "V7_ONLY",
+      "gradebook": "V7_ONLY",
+      "curriculumPacing": "V7_ONLY",
+      "lessonPlans": "V7_ONLY"
+    },
+    "realStudentDataAuthorized": false,
+    "transfersAuthority": false
+  },
+  "approvedPaths": [
+    {
+      "path": "app-build.js",
+      "role": "build-identity"
+    },
+    {
+      "path": "app.webmanifest",
+      "role": "runtime-metadata"
+    },
+    {
+      "path": "engineering/arc_academic_authority_activation_page.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "engineering/arc_academic_authority_activation.html",
+      "role": "engineering-safety-surface"
+    },
+    {
+      "path": "engineering/arc_daily_teaching_verification_page.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "engineering/arc_daily_teaching_verification.html",
+      "role": "engineering-safety-surface"
+    },
+    {
+      "path": "engineering/arc_instructional_reference_verification_page.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "engineering/arc_instructional_reference_verification.html",
+      "role": "engineering-safety-surface"
+    },
+    {
+      "path": "engineering/arc_v8_production_academic_configuration_page.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "engineering/arc_v8_production_academic_configuration.html",
+      "role": "engineering-safety-surface"
+    },
+    {
+      "path": "engineering/arc_v8_stage2_verification_page.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "engineering/arc_v8_stage2_verification.html",
+      "role": "engineering-safety-surface"
+    },
+    {
+      "path": "engineering/arc_v8_verification_page.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "engineering/arc_v8_verification.html",
+      "role": "engineering-safety-surface"
+    },
+    {
+      "path": "index.html",
+      "role": "normal-shell"
+    },
+    {
+      "path": "src/app_update_controller.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_academic_authority_activation_production.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_academic_authority_activation.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_academic_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_academic_consumer_projection.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_attendance_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_competency_evidence_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_curriculum_pacing_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_curriculum_pacing_ui.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_daily_teaching_projection.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_daily_teaching_ui.css",
+      "role": "safety-relevant-style"
+    },
+    {
+      "path": "src/arc_daily_teaching_ui.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_daily_teaching_verification.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_effective_section_context.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_gradebook_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_icons.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_instructional_reference_boundary.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_instructional_reference_physical_verification.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_lesson_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_lesson_pacing_ui.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_project_technical_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_schedule_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_sidebar_gesture.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_student_history_projection.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_time_lifecycle.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_titanium_shell.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_titanium_visual_refinement_1.css",
+      "role": "safety-relevant-style"
+    },
+    {
+      "path": "src/arc_titanium_visual_system.css",
+      "role": "safety-relevant-style"
+    },
+    {
+      "path": "src/arc_v7_schedule_configuration_capture.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_academic_administration.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_academic_cutover.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_academic_semester_transition.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_academic.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_activity.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_artifacts.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_attendance.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_backup_recovery.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_behavior.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_booth_operations.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_curriculum_pacing.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_engineering_verification.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_evidence.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_gradebook.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_instructional_content_packages.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_instructional_import_coordinator.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_instructional_import_production_physical.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_instructional_package_availability_physical.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_lesson_plans.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_production_academic_configuration.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_production_initialization.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_project.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_protected_production_upgrade_physical.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_protected_production_upgrade.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_schedule_configuration_migration.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_stage2_verification.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_storage.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_workplace_safety.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_visual_foundation.css",
+      "role": "safety-relevant-style"
+    },
+    {
+      "path": "src/arc_workplace_safety_behavior_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/booth_assignment_lifecycle.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/class_forecast.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/current_student_directory.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/deployment_readiness.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/inventory.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/material_inventory_modal_lifecycle.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/material_inventory_presenter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/material_inventory.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_bank.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_checkpoint_card.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_checkpoint_controller.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_checkpoint_host_bridge.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_checkpoint_persistence.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_checkpoint_presenter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_checkpoints.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/project_tab_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/simulation_fixtures.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/simulation_foundation.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/teaching_tips.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "sw.js",
+      "role": "service-worker"
+    }
+  ]
+}

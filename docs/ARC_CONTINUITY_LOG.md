@@ -697,3 +697,13 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - The actual normal app passed activation, warm/background/offline reload, complete Edge-process cold restart, exact V7 rollback, wrong-recovery refusal, missing Bell/period refusal, marker/hint recovery gating, and task-only cleanup. All P5–P10 transaction adapters stayed `V7_ONLY`; zero Students, Enrollments, and Schedule Assignments were created.
 - Verification passed focused `8/8`, static `47/47`, complete full-history JavaScript `133/133`, parse/update/cache and diff gates. The fixture is Samsung-faithful in topology, not byte-identical Samsung data.
 - No publication/deployment, Samsung/production access, PACR rerun, physical recovery or activation, real Student data, package event, Lesson change, dual write, or authority transfer occurred. Status: local candidate evidence pending independent review.
+
+## 2026-10-11 — Stage 1D-Core inert provenance foundation
+
+- Continued from published `0be5f9f4e140c3778d8ac58f380c3eed72d83cb2`, tree `67dd96263a7e4d1db8fc347db2f02ea35030c68f`, with rollback `rollback/pre-stage-1d-core-local-implementation`.
+- Implemented pure canonical release-manifest, independent receipt, immutable in-memory compatibility-record, reviewed source-closure, and injected fake-cache verification modules. None is loaded by normal ARC, its service worker, or an engineering page.
+- Mechanically enumerated normal shell, worker, and all current engineering-page dependencies, then bound the discovered graph to a reviewed 94-asset authority closure. Missing, extra, unclassified, unsafe, duplicate, case-colliding, dynamic, cross-origin, dirty-tree, or mixed-byte inputs fail closed.
+- Preserved all 22 approved provenance-policy references: historical activation marker/recovery remains untouched; the minimum threat model excludes malicious origin/CI/device control; compatibility never transfers authority or authorizes real Student data.
+- Schema remains 8, IndexedDB 14, 74 stores. Academic/schedule physical authority is unchanged; P5–P10 remain `V7_ONLY`; no dual write exists.
+- Added fictional-only C-01 through C-20 tests and bounded implementation documentation. Focused `29/29`, static `47/47`, parse `6/6`, full-history JavaScript `136/136`, the exact 17-file boundary, and diff checks passed; exact commit/tree is recorded in the Stage 1D-Core review package.
+- No runtime/update/service-worker wiring, database/backup/recovery action, receipt import, compatibility-record persistence, publication/deployment, Samsung access, marker rewrite, Student creation, or authority transfer occurred. Stage 1D-Integration remains separately gated and blocked pending Core acceptance plus an approved bootstrap transition.

@@ -707,3 +707,13 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Schema remains 8, IndexedDB 14, 74 stores. Academic/schedule physical authority is unchanged; P5–P10 remain `V7_ONLY`; no dual write exists.
 - Added fictional-only C-01 through C-20 tests and bounded implementation documentation. Focused `29/29`, static `47/47`, parse `6/6`, full-history JavaScript `136/136`, the exact 17-file boundary, and diff checks passed; exact commit/tree is recorded in the Stage 1D-Core review package.
 - No runtime/update/service-worker wiring, database/backup/recovery action, receipt import, compatibility-record persistence, publication/deployment, Samsung access, marker rewrite, Student creation, or authority transfer occurred. Stage 1D-Integration remains separately gated and blocked pending Core acceptance plus an approved bootstrap transition.
+
+## 2026-10-12 — Stage 1D-I1 read-only bootstrap inspector
+
+- Continued from accepted local Core `79d5f0d0dda73b35d439fa8bbc60960add98a46f`, tree `b033c92bb7d5cad33a73d10f98374d2ca0c4ed06`, with rollback `rollback/pre-stage-1d-i1-read-only-bootstrap-inspector`.
+- Added one inert, non-enforcing inspector to the existing engineering activation surface. It composes accepted Core validators through injected read-only worker/cache interfaces and exposes no persistence, update, recovery, activation, rollback or authority operation.
+- URL commit/tree claims remain untrusted diagnostics. Missing receipt, compatibility record, worker identity, cache evidence, marker/hint agreement, or exact closure bytes fail visibly without fallback or mutation.
+- Independently reviewed the exact engineering-page reachability delta and expanded the frozen authority closure from 94 to 97 assets for only `arc_runtime_provenance.js`, `arc_service_worker_closure.js` and `arc_runtime_provenance_bootstrap.js`. Missing, duplicate, modified or unexpected transitive executables remain fail-closed.
+- Preserved original damaged detached custody documents and created four superseding external documents with measured hashes. The named independent supplement was unavailable, so no independent-verification claim was made.
+- Local verification passed Core `33/33`, I1 `15/15`, retained activation composition/Bell `17/17`, static `47/47`, parse `5/5`, focused update/cache/live-contract `4/4`, and the complete full-history JavaScript inventory `138/138`.
+- Normal ARC startup, service worker, build identity, update controller, activation authority, Backup/Recovery, storage, adapters, databases, production and Samsung remain unchanged. I2, publication, provisioning and enforcement remain separately gated.

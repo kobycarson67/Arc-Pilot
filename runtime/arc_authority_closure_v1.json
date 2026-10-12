@@ -176,7 +176,19 @@
       "role": "authority-executable"
     },
     {
+      "path": "src/arc_runtime_provenance.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_runtime_provenance_bootstrap.js",
+      "role": "authority-executable"
+    },
+    {
       "path": "src/arc_schedule_authority_adapter.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_service_worker_closure.js",
       "role": "authority-executable"
     },
     {

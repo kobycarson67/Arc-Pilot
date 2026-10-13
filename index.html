@@ -19,6 +19,7 @@
 <script src="src/current_student_directory.js"></script>
 <script src="src/arc_time_lifecycle.js"></script>
 <script src="src/arc_sidebar_gesture.js"></script>
+<script src="src/arc_runtime_release_transport.js"></script>
 <script src="src/app_update_controller.js"></script>
 <script src="src/arc_v8_storage.js"></script>
 <script src="src/arc_v8_academic.js"></script>
@@ -4653,6 +4654,8 @@ async function initializeArcApplication() {
         save();
         arcTimeController.start();
         showStorageCompatibilityWarning();
+        if (typeof navigator !== "undefined" && navigator.serviceWorker && navigator.serviceWorker.controller && typeof appUpdateController !== "undefined" && typeof appUpdateController.markApplicationHealthy === "function")
+            await appUpdateController.markApplicationHealthy(navigator.serviceWorker.controller);
     }
     catch (error) {
         academicAuthorityStartupState = "RECOVERY_REQUIRED";

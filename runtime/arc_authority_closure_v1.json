@@ -184,6 +184,10 @@
       "role": "authority-executable"
     },
     {
+      "path": "src/arc_runtime_release_transport.js",
+      "role": "authority-executable"
+    },
+    {
       "path": "src/arc_schedule_authority_adapter.js",
       "role": "authority-executable"
     },

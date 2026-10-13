@@ -717,3 +717,13 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Preserved original damaged detached custody documents and created four superseding external documents with measured hashes. The named independent supplement was unavailable, so no independent-verification claim was made.
 - Local verification passed Core `33/33`, I1 `15/15`, retained activation composition/Bell `17/17`, static `47/47`, parse `5/5`, focused update/cache/live-contract `4/4`, and the complete full-history JavaScript inventory `138/138`.
 - Normal ARC startup, service worker, build identity, update controller, activation authority, Backup/Recovery, storage, adapters, databases, production and Samsung remain unchanged. I2, publication, provisioning and enforcement remain separately gated.
+
+## 2026-10-12 — Stage 1D-I2 verified waiting-release transport
+
+- Continued from accepted local I1 `cb1c9047f058e0c424a8df84c512f51eb9881ba4`, tree `dba39ef883997fd9be7f68cbc3c0134d38a77948`, with rollback `rollback/pre-stage-1d-i2-local-implementation`.
+- Added a nonce-bound waiting-worker transport that validates canonical Core release evidence, stages and independently verifies exact same-origin authority bytes, preserves prior caches, refuses bare activation, and applies only the exact verified release after explicit user action.
+- Mechanically expanded the reviewed authority closure from 97 to 98 assets solely for `src/arc_runtime_release_transport.js`. No engineering harness, database owner, compatibility writer or transaction adapter entered the closure.
+- Preserved user-controlled updates, legacy-worker rollout compatibility, academic activation and recovery custody. P5–P10 transaction adapters remain `V7_ONLY`; the transport writes no database, activation marker, compatibility record or recovery authority.
+- Installed Microsoft Edge isolated verification passed verified waiting, explicit Apply, warm/offline/cold restart, six-section academic/schedule fidelity, prior-cache retention, state/marker parity, exact V7 rollback, fail-closed negative gates and task-owned cleanup with fictional zero-Student data.
+- Verification passed I2 `40/40`, retained Core/I1 and academic/update/recovery suites, static `47/47`, complete full-history JavaScript `140/140`, parse and diff gates. One preupdate rollout defect found by Edge was corrected with a legacy-controller feature check.
+- No publication/deployment, Samsung/production access, compatibility provisioning, database/marker/recovery mutation, Student creation, provenance enforcement or authority transfer occurred. Status: local unpublished non-enforcing I2 candidate pending independent review.

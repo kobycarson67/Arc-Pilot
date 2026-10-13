@@ -42,7 +42,7 @@ function fixture(options={}){
 let pass=0,total=0;async function test(name,fn){total++;try{await fn();pass++;console.log('PASS',name)}catch(error){console.error('FAIL',name,error);process.exitCode=1}}
 (async()=>{
 await test('Repair-01 reviewed non-authority graph is exactly the eleven approved icon and brand paths',()=>{
-  assert.equal(DISCOVERED.authorityAssets.length,98);assert.equal(REVIEWED.length,11);
+  assert.equal(DISCOVERED.authorityAssets.length,100);assert.equal(REVIEWED.length,11);
   assert.deepEqual(REVIEWED,[
     'assets/brand/runtime/arc-titanium-industrial-background-1440.webp','assets/brand/runtime/arc-welding-compact-lockup-720.png','assets/brand/runtime/arc-welding-dashboard-hero-1440.webp','assets/brand/runtime/arc-welding-lettermark-720.png','assets/brand/runtime/arc-welding-primary-logo-960.png','icons/apple-touch-icon-180.png','icons/favicon-32.png','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-192.png','icons/icon-maskable-512.png'
   ]);

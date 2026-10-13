@@ -56,6 +56,19 @@ CORE.push('./src/arc_lesson_pacing_ui.js');
 CORE.push('./src/arc_runtime_provenance.js');
 CORE.push('./src/arc_service_worker_closure.js');
 CORE.push('./src/arc_runtime_release_transport.js');
+const REVIEWED_NON_AUTHORITY_STATIC=new Set([
+  'assets/brand/runtime/arc-titanium-industrial-background-1440.webp',
+  'assets/brand/runtime/arc-welding-compact-lockup-720.png',
+  'assets/brand/runtime/arc-welding-dashboard-hero-1440.webp',
+  'assets/brand/runtime/arc-welding-lettermark-720.png',
+  'assets/brand/runtime/arc-welding-primary-logo-960.png',
+  'icons/apple-touch-icon-180.png',
+  'icons/favicon-32.png',
+  'icons/icon-192.png',
+  'icons/icon-512.png',
+  'icons/icon-maskable-192.png',
+  'icons/icon-maskable-512.png'
+]);
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));});
 self.addEventListener('activate',event=>{event.waitUntil(self.clients.claim());});
 const releaseTransport=self.ArcRuntimeReleaseTransport.createWorkerCoordinator({
@@ -70,6 +83,28 @@ const releaseTransport=self.ArcRuntimeReleaseTransport.createWorkerCoordinator({
   skipWaiting:()=>self.skipWaiting()
 });
 self.addEventListener('message',event=>{const message=event.data&&event.data.type==='SKIP_WAITING'?Object.assign({},event.data,{protocol:'ARC_RUNTIME_RELEASE_TRANSPORT',protocolVersion:1,nonce:event.data.nonce||'legacy-unqualified',payload:{}}):event.data;event.waitUntil(releaseTransport.dispatch(message).then(reply=>{if(event.ports&&event.ports[0])event.ports[0].postMessage(reply);else if(event.source&&event.source.postMessage)event.source.postMessage(reply);}));});
+function scopedRequestPath(url){
+  const scopePath=new URL(self.registration.scope).pathname;
+  if(!url.pathname.startsWith(scopePath))return null;
+  const path=url.pathname.slice(scopePath.length).replace(/^\/+/, '');
+  if(!path||path.includes('\\')||/%(?:2e|2f|5c|00)/i.test(path)||path.split('/').some(part=>part==='.'||part==='..'))return null;
+  return path;
+}
+async function reviewedStaticResponse(event,url,path){
+  const cache=await caches.open(CACHE),key='./'+path;
+  const cached=await cache.match(key,{ignoreSearch:true});
+  if(cached)return cached;
+  try{
+    const response=await fetch(event.request,{cache:'reload',credentials:'same-origin',redirect:'error'});
+    const responseUrl=new URL(response&&response.url||url.href);
+    if(!response||!response.ok||response.redirected||responseUrl.origin!==self.location.origin)return new Response('Reviewed ARC static asset is unavailable.',{status:503});
+    await cache.put(key,response.clone());
+    return response;
+  }catch(error){
+    const retry=await cache.match(key,{ignoreSearch:true});
+    return retry||new Response('Reviewed ARC static asset is unavailable.',{status:503});
+  }
+}
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET')return;
   const url=new URL(event.request.url);
@@ -79,5 +114,5 @@ self.addEventListener('fetch',event=>{
     event.respondWith(releaseTransport.currentVerified().then(async release=>{if(release){const verified=await caches.open(release.cacheName),cached=await verified.match(target,{ignoreSearch:true});return cached||new Response('Verified ARC release cache is incomplete.',{status:503});}return fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;}).catch(()=>target==='./index.html'?caches.match('./index.html'):caches.match(target));}));
     return;
   }
-  event.respondWith(releaseTransport.currentVerified().then(async release=>{if(release){const verified=await caches.open(release.cacheName),scopePath=new URL(self.registration.scope).pathname,path=(url.pathname.startsWith(scopePath)?url.pathname.slice(scopePath.length):url.pathname.replace(/^\//,'')).replace(/^\//,'')||'index.html',cached=await verified.match(path,{ignoreSearch:true});return cached||new Response('Verified ARC release asset is unavailable.',{status:503});}return caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}return response;}));}));
+  event.respondWith(releaseTransport.currentVerified().then(async release=>{if(release){const path=scopedRequestPath(url);if(path&&REVIEWED_NON_AUTHORITY_STATIC.has(path))return reviewedStaticResponse(event,url,path);if(!path)return new Response('ARC release request path is unavailable.',{status:503});const verified=await caches.open(release.cacheName),cached=await verified.match(path,{ignoreSearch:true});return cached||new Response('Verified ARC release asset is unavailable.',{status:503});}return caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}return response;}));}));
 });

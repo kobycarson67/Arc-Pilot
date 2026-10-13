@@ -727,3 +727,12 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 - Installed Microsoft Edge isolated verification passed verified waiting, explicit Apply, warm/offline/cold restart, six-section academic/schedule fidelity, prior-cache retention, state/marker parity, exact V7 rollback, fail-closed negative gates and task-owned cleanup with fictional zero-Student data.
 - Verification passed I2 `40/40`, retained Core/I1 and academic/update/recovery suites, static `47/47`, complete full-history JavaScript `140/140`, parse and diff gates. One preupdate rollout defect found by Edge was corrected with a legacy-controller feature check.
 - No publication/deployment, Samsung/production access, compatibility provisioning, database/marker/recovery mutation, Student creation, provenance enforcement or authority transfer occurred. Status: local unpublished non-enforcing I2 candidate pending independent review.
+
+## 2026-10-12 — Stage 1D-I2 Repair 1 verified asset routing
+
+- Continued from accepted local I2 `5bf6e328c3f01fc92edd585fa6be043c8fcd5cc5`, tree `f166135948c8e3da042ff7d34552f3c09dac17cc`, with rollback `rollback/pre-stage-1d-i2-repair-1-verified-asset-routing`.
+- Reproduced the verified-worker HTTP 503 defect for ordinary reviewed presentation assets that deliberately remain outside the 98-asset authority closure, including `icons/icon-192.png`.
+- Added one exact, case-sensitive allowlist for the five reviewed brand files and six reviewed icon files. Only those paths use the existing normal static cache/network route; redirect, cross-origin, unsafe, missing and unreviewed requests fail closed.
+- Navigation and all authority-bearing files remain exclusive to the exact complete verified release cache. The authority closure remains exactly 98 assets; user-controlled Apply, previous caches, academic activation and recovery custody remain unchanged.
+- Bounded routing verification covers all eleven reviewed paths online/offline plus unsafe aliases and authority/navigation exclusivity. Retained I2 `40/40`, Core, I1, source-closure and update suites pass. Complete repository and installed-Edge evidence are recorded in the external review package.
+- No publication/deployment, Samsung/production access, compatibility provisioning, database/marker/recovery mutation, Student creation, provenance enforcement or authority transfer occurred. P5–P10 remain `V7_ONLY`. Status: local unpublished non-enforcing repair candidate pending independent review.

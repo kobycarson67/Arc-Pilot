@@ -124,6 +124,14 @@
       "role": "authority-executable"
     },
     {
+      "path": "src/arc_batch_b_authority_activation.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_batch_b_projection.js",
+      "role": "authority-executable"
+    },
+    {
       "path": "src/arc_competency_evidence_authority_adapter.js",
       "role": "authority-executable"
     },

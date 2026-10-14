@@ -1,0 +1,8 @@
+const assert=require('assert'),fs=require('fs'),path=require('path'),root=path.join(__dirname,'..');let pass=0,fail=0;function test(n,f){try{f();pass++;console.log('PASS '+n)}catch(e){fail++;console.error('FAIL '+n,e)}}
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+test('normal shell loads Batch B gate and projection after Batch A',()=>{for(const x of ['arc_batch_a_authority_activation.js','arc_batch_b_authority_activation.js','arc_batch_b_projection.js'])assert(html.includes(x));assert(html.indexOf('bootstrapBatchBAuthorityRuntime')>html.indexOf('bootstrapBatchAAuthorityRuntime'))});
+test('P8 P9 and P10A use existing owner adapters and one projection',()=>{for(const x of ['workplaceSafetyBehaviorAuthorityAdapter.runV8','gradebookAuthorityAdapter.runV8','studentHistoryProjection.project','ArcBatchBProjection.create'])assert(html.includes(x))});
+test('privacy and grading boundaries remain explicit',()=>{assert(html.includes('Private teacher documentation'));assert(html.includes('standalone Safety never enter a grade automatically'));assert(html.includes('manual school-gradebook transfer only'))});
+test('P10B and P10C remain outside Batch B',()=>{assert(html.includes('curriculumPacingAuthorityAdapter'));assert(html.includes('lessonAuthorityAdapter'));assert(!/batchBAuthorityRuntime\s*=\s*\{[^}]*curriculumPacing/s.test(html))});
+test('no automatic package availability policy or grade-policy creation',()=>{const block=html.slice(html.indexOf('async function bootstrapBatchBAuthorityRuntime'),html.indexOf('function batchBContext'));assert(!block.includes('markAvailable'));assert(!block.includes('createPolicy'))});
+console.log(`\n${pass}/${pass+fail} Batch B normal index integration tests passed.`);if(fail)process.exitCode=1;

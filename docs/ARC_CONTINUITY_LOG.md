@@ -750,3 +750,11 @@ ARC Student, Growth Milestones, Advanced Welding Competition, lesson-module link
 ## 2026-10-14 — Classroom Ready Batch B P8–P10A local candidate
 
 Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gradebook owner, and read-only P10A Student History projection to normal ARC behind an inert verified gate. It adds no stores and preserves Schema 8 / IDB 14 / 74 stores. The exact Git-blob release-manifest correction removes platform checkout byte ambiguity, and authority closure grows mechanically from 100 to 102 assets. Production P8–P10, P10B, and P10C remain `V7_ONLY`; there was no publication, Samsung access, real Student authorization, or authority transfer. Independent local review is the next gate.
+
+## 2026-10-14 — Samsung verified waiting-release timeout repair
+
+- Continued from published Batch B `5d2fb9b689a39eac745a1123e4808e63475eba6a`, tree `1dc63bb442152b56812a1eddc51ef13b1447a4db`, with rollback `rollback/pre-samsung-waiting-release-timeout-repair-1`.
+- Reproduced the 10-second page timeout and the transport's inability to identify or retry an interrupted deterministic candidate cache. Added bounded provision timing, durable progress/status, single-flight staging, exact retry cleanup, and late-completion recognition without weakening release verification.
+- Installed Edge proved 18.5-second 102-asset staging, offline/readback, mid-fetch cleanup, slow-final-asset completion, service-worker termination detection/retry, and full-process cold restart. A cold-promoted unapplied cache remains nonrouting and requires exact explicit Apply.
+- Authority closure remains 102 and reviewed visual assets remain 11. No database, schema, store, compatibility, recovery, academic marker, adapter, or transaction authority changed.
+- No publication/deployment, Samsung/production access, physical staging, Apply, database operation, real Student authorization, or authority transfer occurred. Status: local candidate pending independent review.

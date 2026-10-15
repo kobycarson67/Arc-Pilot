@@ -45,6 +45,7 @@ CORE.push('./src/arc_academic_authority_activation_production.js?v=academic-acti
 CORE.push('./engineering/arc_academic_authority_activation.html');
 CORE.push('./engineering/arc_academic_authority_activation_page.js?v=academic-activation-effective-section-dependency-repair-1');
 CORE.push('./engineering/arc_academic_authority_activation_page.js?v=academic-activation-effective-section-dependency-repair-1&release=stage-1d-i2-verified-waiting-release-transport-1');
+CORE.push('./engineering/arc_academic_authority_activation_page.js?v=academic-activation-effective-section-dependency-repair-1&release=samsung-waiting-release-timeout-repair-1');
 CORE.push('./src/arc_v8_behavior.js');
 CORE.push('./src/arc_workplace_safety_behavior_authority_adapter.js');
 CORE.push('./src/arc_v8_curriculum_pacing.js');

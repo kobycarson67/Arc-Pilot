@@ -76,7 +76,11 @@ const REVIEWED_NON_AUTHORITY_STATIC=new Set([
   'icons/icon-maskable-192.png',
   'icons/icon-maskable-512.png'
 ]);
-self.addEventListener('activate',event=>{event.waitUntil(self.clients.claim());});
+const WORKER_ROLE_PATH=new URL('__arc_release_transport__/worker-role.txt',self.registration.scope).href;
+let releaseWorkerLifecycleRole='active';
+async function persistedWorkerLifecycleRole(){const cache=await caches.open(CACHE),saved=await cache.match(WORKER_ROLE_PATH,{ignoreSearch:false});return saved?await saved.text():releaseWorkerLifecycleRole;}
+async function persistWorkerLifecycleRole(role){releaseWorkerLifecycleRole=role;const cache=await caches.open(CACHE);await cache.put(WORKER_ROLE_PATH,new Response(role,{status:200,headers:{'Content-Type':'text/plain'}}));}
+self.addEventListener('activate',event=>{releaseWorkerLifecycleRole='active';event.waitUntil(persistWorkerLifecycleRole('active').then(()=>self.clients.claim()));});
 const releaseTransport=self.ArcRuntimeReleaseTransport.createWorkerCoordinator({
   provenance:self.ArcRuntimeProvenance,
   closureVerifier:self.ArcServiceWorkerClosure,
@@ -86,7 +90,7 @@ const releaseTransport=self.ArcRuntimeReleaseTransport.createWorkerCoordinator({
   baseUrl:self.registration.scope,
   expectedBuildIdentity:self.ARC_BUILD.build,
   recoveryCapability:self.ARC_BUILD.recoveryCapability,
-  lifecycleRole:()=>self.registration.installing||self.registration.waiting?'waiting':'active',
+  lifecycleRole:()=>persistedWorkerLifecycleRole(),
   skipWaiting:()=>self.skipWaiting()
 });
 function releaseEvidenceEndpoint(){const configured=self.ARC_BUILD.releaseEvidenceEndpoint,host=self.location.hostname;if(host!=='127.0.0.1'&&host!=='localhost')return configured;return new URL(self.location.href).searchParams.get('arcTestEvidence')||configured;}
@@ -113,14 +117,25 @@ async function ensureVerifiedWaitingRelease(){
   releaseBootstrapPromise=bootstrapVerifiedWaitingRelease();
   try{return await releaseBootstrapPromise;}finally{releaseBootstrapPromise=null;}
 }
-async function dispatchReleaseMessage(message){
+function exactLegacyApplyMessage(message){return !!message&&typeof message==='object'&&!Array.isArray(message)&&Object.keys(message).length===1&&message.type==='SKIP_WAITING';}
+function scopedLegacyApplyClient(event){
+  const source=event&&event.source;
+  if(!source||source.type!=='window'||typeof source.url!=='string'||!self.registration.active)return false;
+  try{const url=new URL(source.url),scope=new URL(self.registration.scope);return url.origin===scope.origin&&url.href.startsWith(scope.href);}catch(error){return false;}
+}
+async function dispatchReleaseMessage(message,event){
+  if(exactLegacyApplyMessage(message)){
+    if(!scopedLegacyApplyClient(event))return self.ArcRuntimeReleaseTransport.envelope(self.ArcRuntimeReleaseTransport.constants.types.response,'legacy-explicit-apply',{ok:false,error:{code:'LEGACY_APPLY_SOURCE_REFUSED',message:'Legacy Apply requires an existing ARC window controlled inside this service-worker scope.',details:null}});
+    try{return self.ArcRuntimeReleaseTransport.envelope(self.ArcRuntimeReleaseTransport.constants.types.response,'legacy-explicit-apply',{ok:true,result:await releaseTransport.applyLegacyVerified()});}
+    catch(error){return self.ArcRuntimeReleaseTransport.envelope(self.ArcRuntimeReleaseTransport.constants.types.response,'legacy-explicit-apply',{ok:false,error:{code:error.code||error.name||'TRANSPORT_FAILED',message:error.message||String(error),details:error.details||null}});}
+  }
   if(message&&message.type===self.ArcRuntimeReleaseTransport.constants.types.query&&(self.registration.installing||self.registration.waiting)){
     self.__arcReleaseBootstrapStatus=await ensureVerifiedWaitingRelease();
   }
   return releaseTransport.dispatch(message);
 }
-self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>ensureVerifiedWaitingRelease()).then(status=>{self.__arcReleaseBootstrapStatus=status;}));});
-self.addEventListener('message',event=>{const message=event.data&&event.data.type==='SKIP_WAITING'?Object.assign({},event.data,{protocol:'ARC_RUNTIME_RELEASE_TRANSPORT',protocolVersion:1,nonce:event.data.nonce||'legacy-unqualified',payload:{}}):event.data;event.waitUntil(dispatchReleaseMessage(message).then(reply=>{if(event.ports&&event.ports[0])event.ports[0].postMessage(reply);else if(event.source&&event.source.postMessage)event.source.postMessage(reply);}));});
+self.addEventListener('install',event=>{releaseWorkerLifecycleRole='waiting';event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>persistWorkerLifecycleRole('waiting')).then(()=>ensureVerifiedWaitingRelease()).then(status=>{self.__arcReleaseBootstrapStatus=status;}));});
+self.addEventListener('message',event=>{event.waitUntil(dispatchReleaseMessage(event.data,event).then(reply=>{if(event.ports&&event.ports[0])event.ports[0].postMessage(reply);else if(event.source&&event.source.postMessage)event.source.postMessage(reply);}));});
 function scopedRequestPath(url){
   const scopePath=new URL(self.registration.scope).pathname;
   if(!url.pathname.startsWith(scopePath))return null;

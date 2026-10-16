@@ -60,7 +60,8 @@ A new task-owned Microsoft Edge profile exercised the real normal application at
 - The published starting worker controlled the first load.
 - The candidate waiting worker independently staged and verified all **103 authority assets** and retained the **11 reviewed visual assets**.
 - The former `Arc-Pilot/app-build.js` mismatch was reproduced as the input shape and normalized to `app-build.js`.
-- The published normal App & Updates interface recognized the verified waiting worker.
+- The published predecessor's unchanged `./sw.js` registration discovered the candidate through `registration.update()`. The old normal App & Updates interface recognized the verified waiting worker.
+- When the configured evidence endpoint was initially unavailable, the waiting worker failed closed with no Apply. The old App & Updates check safely retried the same waiting worker after fictional evidence became available.
 - One explicit Apply activated the release and reloaded the normal application.
 - Exact legacy-state bytes, a fictional academic-authority sentinel, `P5–P10 = V7_ONLY`, `realStudentDataAuthorized = false`, and all **74 stores** survived Apply, reload, full Edge-process restart, and offline restart.
 - A complete 74-store backup verified, a temporary mutation was introduced, restore removed it, and every per-store checksum matched the pre-mutation package.

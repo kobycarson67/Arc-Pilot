@@ -107,8 +107,20 @@ async function bootstrapVerifiedWaitingRelease(){
     return reply&&reply.payload&&reply.payload.ok?reply.payload.result:{state:'BOOTSTRAP_BLOCKED',error:reply&&reply.payload&&reply.payload.error||null};
   }catch(error){return{state:'BOOTSTRAP_BLOCKED',error:{code:error.code||error.name,message:error.message}};}
 }
-self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>bootstrapVerifiedWaitingRelease()).then(status=>{self.__arcReleaseBootstrapStatus=status;}));});
-self.addEventListener('message',event=>{const message=event.data&&event.data.type==='SKIP_WAITING'?Object.assign({},event.data,{protocol:'ARC_RUNTIME_RELEASE_TRANSPORT',protocolVersion:1,nonce:event.data.nonce||'legacy-unqualified',payload:{}}):event.data;event.waitUntil(releaseTransport.dispatch(message).then(reply=>{if(event.ports&&event.ports[0])event.ports[0].postMessage(reply);else if(event.source&&event.source.postMessage)event.source.postMessage(reply);}));});
+let releaseBootstrapPromise=null;
+async function ensureVerifiedWaitingRelease(){
+  if(releaseBootstrapPromise)return releaseBootstrapPromise;
+  releaseBootstrapPromise=bootstrapVerifiedWaitingRelease();
+  try{return await releaseBootstrapPromise;}finally{releaseBootstrapPromise=null;}
+}
+async function dispatchReleaseMessage(message){
+  if(message&&message.type===self.ArcRuntimeReleaseTransport.constants.types.query&&(self.registration.installing||self.registration.waiting)){
+    self.__arcReleaseBootstrapStatus=await ensureVerifiedWaitingRelease();
+  }
+  return releaseTransport.dispatch(message);
+}
+self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>ensureVerifiedWaitingRelease()).then(status=>{self.__arcReleaseBootstrapStatus=status;}));});
+self.addEventListener('message',event=>{const message=event.data&&event.data.type==='SKIP_WAITING'?Object.assign({},event.data,{protocol:'ARC_RUNTIME_RELEASE_TRANSPORT',protocolVersion:1,nonce:event.data.nonce||'legacy-unqualified',payload:{}}):event.data;event.waitUntil(dispatchReleaseMessage(message).then(reply=>{if(event.ports&&event.ports[0])event.ports[0].postMessage(reply);else if(event.source&&event.source.postMessage)event.source.postMessage(reply);}));});
 function scopedRequestPath(url){
   const scopePath=new URL(self.registration.scope).pathname;
   if(!url.pathname.startsWith(scopePath))return null;

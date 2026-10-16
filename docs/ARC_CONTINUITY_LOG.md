@@ -768,3 +768,13 @@ Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gr
 - Mechanically expanded the authority closure from 102 to 103 assets only for `src/arc_update_release_distribution.js`; the 11 reviewed visual assets remain unchanged.
 - Installed Edge at the actual `/Arc-Pilot/` subpath passed published-active to verified-waiting staging, explicit Apply, reload, full process restart, offline restart, exact legacy-state preservation, fictional academic state preservation, and 74-store backup/restore with exact per-store checksum parity.
 - No publication/deployment, Samsung/production access, production update, compatibility provisioning, classroom-data migration, real Student authorization, P5–P10 transfer, or other authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-15 — Instructor-First Release Delivery Preparation
+
+- Continued from local candidate `609aed50dcdd69f85483b952da104e16e03d9537`, tree `722dc941a0b51ef5ebeac7507b807dced257fa8a`, with rollback `rollback/pre-instructor-first-release-delivery-preparation`.
+- Corrected the Edge evidence harness to pin the exact published predecessor and exercise its unchanged `./sw.js` registration instead of forcing a candidate-specific worker URL.
+- Added a waiting-worker evidence retry through the predecessor's existing query path. Missing evidence remains fail-closed and exposes no Apply; a later old-screen Check for Update can complete canonical evidence and 103-asset verification without automatic activation.
+- Added deterministic evidence-channel preparation from exact canonical manifest and independently supplied receipt bytes. Raw GitHub is documented as an operational distribution/custody boundary under the approved threat model, not cryptographically independent merely because its origin differs.
+- Installed Edge proved exact predecessor → blocked waiting candidate → evidence available → old UI ready → one explicit Apply → normal reload → cold/offline restart → 74-store checksum-exact restore, preserving academic authority, P5–P10 `V7_ONLY`, and zero real Student authorization.
+- Prepared one guarded publication/evidence-channel/Samsung delivery sequence. The predecessor remains unavailable as a code rollback target; verified data recovery custody is required for the one-time bridge, and later compatible releases may retain this candidate for code recovery.
+- No publication, remote evidence-branch mutation, Samsung/production access, physical stage/Apply, database/recovery mutation, real Student authorization, or authority transfer occurred. Status: local delivery-preparation candidate pending independent review.

@@ -758,3 +758,13 @@ Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gr
 - Installed Edge proved 18.5-second 102-asset staging, offline/readback, mid-fetch cleanup, slow-final-asset completion, service-worker termination detection/retry, and full-process cold restart. A cold-promoted unapplied cache remains nonrouting and requires exact explicit Apply.
 - Authority closure remains 102 and reviewed visual assets remain 11. No database, schema, store, compatibility, recovery, academic marker, adapter, or transaction authority changed.
 - No publication/deployment, Samsung/production access, physical staging, Apply, database operation, real Student authorization, or authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-15 — Instructor-First Update & Recovery local candidate
+
+- Continued from published timeout-repair commit `bd7a046f071f43d930cd53169da39918b04a8feb`, tree `552efbbffdd816e0c6fbcea2f510f1cd8a4f8dbb`, with rollback `rollback/pre-instructor-first-update-recovery-1`.
+- Corrected GitHub Pages project-scope cache normalization so absolute Cache API request URLs map once to repository-relative manifest paths. Cross-origin, out-of-scope, query, fragment, traversal, case, duplicate, missing, extra, hash, and size differences fail closed.
+- Added a strictly canonical, external release-evidence distribution boundary and an instructor-facing normal App & Updates flow. Exact independently accepted evidence is still required, while routine instructor use requires no hash entry or receipt upload and Apply remains explicit.
+- Added compatible verified-code recovery selection with exact confirmation. Code rollback cannot write classroom data, and data backup/restore remains a separate existing authority. The pre-capability published predecessor is retained but correctly reported as unavailable for code rollback.
+- Mechanically expanded the authority closure from 102 to 103 assets only for `src/arc_update_release_distribution.js`; the 11 reviewed visual assets remain unchanged.
+- Installed Edge at the actual `/Arc-Pilot/` subpath passed published-active to verified-waiting staging, explicit Apply, reload, full process restart, offline restart, exact legacy-state preservation, fictional academic state preservation, and 74-store backup/restore with exact per-store checksum parity.
+- No publication/deployment, Samsung/production access, production update, compatibility provisioning, classroom-data migration, real Student authorization, P5–P10 transfer, or other authority transfer occurred. Status: local candidate pending independent review.

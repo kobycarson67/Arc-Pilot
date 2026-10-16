@@ -30,10 +30,11 @@ class MemoryCaches{
 function fixture(options={}){
   const handlers={},caches=new MemoryCaches(),network=[],writes=[];
   const context={URL,Response,Request,Set,console,caches};
-  context.self={ARC_BUILD:{shell:'repair-1',build:CONTRACT.buildIdentity},location:{origin:ORIGIN},registration:{scope:SCOPE,waiting:null},clients:{claim:async()=>{}},skipWaiting:async()=>{},addEventListener:(name,handler)=>{handlers[name]=handler}};
+  context.self={ARC_BUILD:{shell:'repair-1',build:CONTRACT.buildIdentity,releaseEvidenceEndpoint:'https://evidence.invalid/channel.json',releaseEvidenceRepositoryPath:'/kobycarson67/Arc-Pilot/'},location:{origin:ORIGIN,hostname:'arc.invalid',href:SCOPE+'sw.js'},registration:{scope:SCOPE,waiting:null,active:null},clients:{claim:async()=>{}},skipWaiting:async()=>{},addEventListener:(name,handler)=>{handlers[name]=handler}};
   context.importScripts=()=>{};
   context.self.ArcRuntimeProvenance={};context.self.ArcServiceWorkerClosure={};
   context.self.ArcRuntimeReleaseTransport={createWorkerCoordinator:()=>({dispatch:async()=>({}),currentVerified:async()=>options.verified===false?null:{cacheName:'arc-release-v1-reviewed'}})};
+  context.self.ArcUpdateReleaseDistribution={create:()=>({load:async()=>{throw Error('fixture has no release evidence')}})};
   context.fetch=async(request,settings)=>{let url=new URL(request.url||request);network.push({url:url.href,settings});let mode=options.networkMode&&options.networkMode[url.pathname]||'ok';if(mode==='throw')throw Error('offline');let redirected=mode==='redirect',responseUrl=mode==='cross-origin'?'https://other.invalid/asset':url.href;return new FakeResponse('network:'+keyOf(url.href),{ok:mode!=='missing',status:mode==='missing'?404:200,redirected,url:responseUrl})};
   vm.createContext(context);vm.runInContext(fs.readFileSync('sw.js','utf8'),context,{filename:'sw.js'});
   async function request(path,requestOptions={}){let responsePromise=null,url=path.startsWith('http')?path:SCOPE+path;handlers.fetch({request:{method:'GET',url,mode:requestOptions.mode||'no-cors'},respondWith:value=>{responsePromise=Promise.resolve(value)}});if(!responsePromise)return null;let response=await responsePromise;return response}
@@ -42,7 +43,7 @@ function fixture(options={}){
 let pass=0,total=0;async function test(name,fn){total++;try{await fn();pass++;console.log('PASS',name)}catch(error){console.error('FAIL',name,error);process.exitCode=1}}
 (async()=>{
 await test('Repair-01 reviewed non-authority graph is exactly the eleven approved icon and brand paths',()=>{
-  assert.equal(DISCOVERED.authorityAssets.length,102);assert.equal(REVIEWED.length,11);for(const p of ['src/arc_batch_b_authority_activation.js','src/arc_batch_b_projection.js'])assert(DISCOVERED.authorityAssets.some(x=>x.path===p&&x.role==='authority-executable'));
+  assert.equal(DISCOVERED.authorityAssets.length,103);assert.equal(REVIEWED.length,11);for(const p of ['src/arc_batch_b_authority_activation.js','src/arc_batch_b_projection.js','src/arc_update_release_distribution.js'])assert(DISCOVERED.authorityAssets.some(x=>x.path===p&&x.role==='authority-executable'));
   assert.deepEqual(REVIEWED,[
     'assets/brand/runtime/arc-titanium-industrial-background-1440.webp','assets/brand/runtime/arc-welding-compact-lockup-720.png','assets/brand/runtime/arc-welding-dashboard-hero-1440.webp','assets/brand/runtime/arc-welding-lettermark-720.png','assets/brand/runtime/arc-welding-primary-logo-960.png','icons/apple-touch-icon-180.png','icons/favicon-32.png','icons/icon-192.png','icons/icon-512.png','icons/icon-maskable-192.png','icons/icon-maskable-512.png'
   ]);

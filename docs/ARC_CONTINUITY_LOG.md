@@ -795,3 +795,12 @@ Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gr
 - Preserved exact independent evidence, complete cache verification, explicit Apply, historical in-scope client bridging, prior caches, recovery selection, and fail-closed behavior. Authority closure remains 103 and reviewed visuals remain 11.
 - Installed Edge under `/Arc-Pilot/` passed a 10.405-second deliberately slowed stage, one 1.827-second explicit Apply, three full-process cold starts at 239/253/386 ms, a 424 ms offline restart, exact V7 byte preservation, and 74-store backup/restore checksum parity.
 - No publication/deployment, Samsung/production access, physical update, production database/recovery mutation, compatibility provisioning, real Student authorization, P5–P10 transfer, or other authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-16 — Classroom Roster and Simulation Authority Repair
+
+- Continued from published SSPR1 `916549a8512979a92007d7b33af7809552f6c34b`, tree `ba2c7ce163cd033c56fcfa1310dd7bba9485777b`, with rollback `rollback/pre-classroom-roster-simulation-authority-repair-1`.
+- Reproduced the published failure in installed Edge: Scenario 1 retained eight seeded fictional Students but projected zero Students and zero roster members under active academic v8 authority.
+- Made the active simulation the first read/write authority decision, preserving one canonical fictional scenario state across roster, Attendance, Project/Technical, Competency/Evidence/Open Shop, Workplace/Safety/Behavior, Gradebook, and Student History consumers.
+- Add Existing, Create & Add, and Drop now await confirmed mutations and retain actionable failures. Live Student controls fail clearly with `REAL_STUDENT_DATA_NOT_AUTHORIZED` unless the exact production activation record authorizes real Student data.
+- Installed Edge proved all five fictional roster totals, add/create/drop, cross-view agreement, reload persistence, scenario switching, isolated reset, unchanged live v8 and Schema-7 fingerprints, zero live Student/Enrollment/Assignment rows, 74-store restore parity, and offline cold restart.
+- No publication/deployment, Samsung/production access, physical scenario reset, protected recovery mutation, real Student authorization, or authority transfer occurred. Status: local candidate pending independent review.

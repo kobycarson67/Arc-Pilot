@@ -804,3 +804,11 @@ Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gr
 - Add Existing, Create & Add, and Drop now await confirmed mutations and retain actionable failures. Live Student controls fail clearly with `REAL_STUDENT_DATA_NOT_AUTHORIZED` unless the exact production activation record authorizes real Student data.
 - Installed Edge proved all five fictional roster totals, add/create/drop, cross-view agreement, reload persistence, scenario switching, isolated reset, unchanged live v8 and Schema-7 fingerprints, zero live Student/Enrollment/Assignment rows, 74-store restore parity, and offline cold restart.
 - No publication/deployment, Samsung/production access, physical scenario reset, protected recovery mutation, real Student authorization, or authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-17 — Classroom Roster and Simulation Authority Repair 2
+
+- Continued from reviewed roster candidate `5f8739cfeee6ed9a1e1769168c162fd5f9b97354`, tree `240fcaf842da6090e723c1a6e10f603a6df51820`, with rollback `rollback/pre-classroom-roster-simulation-authority-repair-2`.
+- Reproduced the release-readiness NO-GO in installed Edge. The simulation manager restored the exact verified Live snapshot, but the post-reload page still held `SIMULATION_ISOLATED` / `V7_ONLY` runtime selection and failed while rendering a v8 Bell Schedule UUID.
+- The Leave Simulation transition now reuses the accepted academic startup path after verified snapshot restoration and before Live navigation renders. No parallel authority, fallback Bell, fabricated schedule, or snapshot transformation was introduced.
+- All five fictional scenarios passed roster mutation, full reload, Leave Simulation, exact Live state restoration, v8 academic rehydration, unchanged v8/Schema-7 hashes, zero live Student records, 74-store restore parity, and offline restart without dialog suppression.
+- No publication/deployment, release-evidence mutation, Samsung/production access, physical scenario reset, real Student authorization, or authority transfer occurred. Status: local Repair 2 candidate pending independent review.

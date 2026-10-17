@@ -1324,11 +1324,16 @@ function enterSimulation(scenarioId) {
         renderSimulationStart(result.definition); updateSimulationIndicator(); showArcFeedback("Live Classroom backed up", "Safety snapshot verified");
     } catch (err) { state = liveBefore; alert("Simulation entry stopped. Live Classroom remains active.\n\n" + err.message); updateSimulationIndicator(); }
 }
-function leaveSimulation() {
+async function leaveSimulation() {
     if (!simulationActive()) return;
     if (simulationStartupError) return alert("The saved simulation could not be verified. ARC has not activated Live Classroom or changed either dataset. Use a recovery backup before continuing.");
-    try { let restored = simulationManager.leave(state); state = migrateStateData(restored.state, CURRENT_SCHEMA_VERSION); clearTransientUi(); renderRestoredNavigation(restored.navigation); updateSimulationIndicator(); }
-    catch (err) { alert("ARC could not leave the simulation safely. The simulation remains active.\n\n" + err.message); updateSimulationIndicator(); }
+    try {
+        let restored = simulationManager.leave(state);
+        state = migrateStateData(restored.state, CURRENT_SCHEMA_VERSION);
+        if (academicAuthorityStartupState === "SIMULATION_ISOLATED") await resolveAcademicAuthorityBeforeStartup();
+        clearTransientUi(); renderRestoredNavigation(restored.navigation); updateSimulationIndicator();
+    }
+    catch (err) { alert((simulationActive() ? "ARC could not leave the simulation safely. The simulation remains active." : "Live Classroom was restored, but ARC could not reopen its academic context safely. Reload ARC before continuing.") + "\n\n" + err.message); updateSimulationIndicator(); }
 }
 function resetCurrentSimulation() {
     let marker = simulationActive(); if (!marker) return; let definition = ArcSimulationFoundation.scenario(marker.scenarioId);

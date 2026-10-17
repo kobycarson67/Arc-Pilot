@@ -56,6 +56,15 @@ await test('Live Classroom remains closed without exact real Student authorizati
   assert.match(html,/Live student enrollment is not available yet/);
 });
 
+await test('cold Simulation reload rehydrates accepted academic authority before Live render',()=>{
+  const leave=html.slice(html.indexOf('async function leaveSimulation'),html.indexOf('function resetCurrentSimulation'));
+  assert.match(leave,/state = migrateStateData\(restored\.state, CURRENT_SCHEMA_VERSION\)/);
+  assert.match(leave,/academicAuthorityStartupState === "SIMULATION_ISOLATED"/);
+  assert.match(leave,/await resolveAcademicAuthorityBeforeStartup\(\)/);
+  assert(leave.indexOf('await resolveAcademicAuthorityBeforeStartup()')<leave.indexOf('renderRestoredNavigation(restored.navigation)'));
+  assert.match(leave,/simulationActive\(\) \? "ARC could not leave the simulation safely/);
+});
+
 await test('production adapter refuses a closed gate and accepts an independently verified fictional harness gate',async()=>{
   const activationGate={record:{realStudentDataAuthorized:false}},calls=[];
   const options={authorityState:'V8_AUTHORITATIVE',databaseName:'arc_classroom_v8',academic:{createStudentPlacement:async payload=>{calls.push(payload);return payload;}},projection:{},storage:{},projectionCache:{invalidate(){},get(){}},activationGate,verifyActivationGate:value=>value===activationGate,resolveProductContext:async()=>({effectiveFrom:'2026-10-16'})};

@@ -787,3 +787,11 @@ Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gr
 - Corrected worker-local lifecycle identity so an active worker cannot route from a different waiting worker's candidate cache before Apply. Current clients now validate the activation response and wait for exact controller takeover; a stalled takeover becomes an explicit stop state.
 - Installed Edge passed both the exact Samsung-era predecessor and current token-based predecessor transitions under `/Arc-Pilot/`, including a second client, one explicit Apply, cold/offline restart, exact legacy-state preservation, 74-store backup/restore checksum parity, and task-owned cleanup.
 - Schema 8 / IDB 14 / 74 stores, v8 academic authority, P5–P10 `V7_ONLY`, false real-Student authorization, classroom records, prior caches, and recovery separation remain preserved. No publication/deployment, Samsung/production access, physical update, database mutation, compatibility provisioning, or authority transfer occurred.
+
+## 2026-10-16 — Samsung Startup and Pending Apply Integrated Repair
+
+- Continued from published Apply Repair 1 `034ec9ff648072d712dc570e356b97e1c252f3cd`, tree `33f125e04958e5c2e2612b52803bc528d7737b7a`, with rollback `rollback/pre-samsung-startup-pending-apply-integrated-repair-1`.
+- Removed remote evidence and full closure staging from the install lifetime, made waiting status queries immediate with a five-second evidence-fetch bound, and reduced verified routing from repeated 103-asset hashing per request to one invalidatable verification per worker lifecycle.
+- Preserved exact independent evidence, complete cache verification, explicit Apply, historical in-scope client bridging, prior caches, recovery selection, and fail-closed behavior. Authority closure remains 103 and reviewed visuals remain 11.
+- Installed Edge under `/Arc-Pilot/` passed a 10.405-second deliberately slowed stage, one 1.827-second explicit Apply, three full-process cold starts at 239/253/386 ms, a 424 ms offline restart, exact V7 byte preservation, and 74-store backup/restore checksum parity.
+- No publication/deployment, Samsung/production access, physical update, production database/recovery mutation, compatibility provisioning, real Student authorization, P5–P10 transfer, or other authority transfer occurred. Status: local candidate pending independent review.

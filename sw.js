@@ -95,9 +95,14 @@ const releaseTransport=self.ArcRuntimeReleaseTransport.createWorkerCoordinator({
 });
 function releaseEvidenceEndpoint(){const configured=self.ARC_BUILD.releaseEvidenceEndpoint,host=self.location.hostname;if(host!=='127.0.0.1'&&host!=='localhost')return configured;return new URL(self.location.href).searchParams.get('arcTestEvidence')||configured;}
 const releaseEvidenceUrl=releaseEvidenceEndpoint();
+const RELEASE_EVIDENCE_FETCH_TIMEOUT_MS=5000;
+async function boundedReleaseEvidenceFetch(url,options){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),RELEASE_EVIDENCE_FETCH_TIMEOUT_MS);
+  try{return await fetch(url,Object.assign({},options,{signal:controller.signal}));}finally{clearTimeout(timer);}
+}
 const releaseDistribution=self.ArcUpdateReleaseDistribution.create({
   provenance:self.ArcRuntimeProvenance,
-  fetch:(url,options)=>fetch(url,options),
+  fetch:boundedReleaseEvidenceFetch,
   channelUrl:releaseEvidenceUrl,
   evidenceOrigin:new URL(releaseEvidenceUrl).origin,
   repositoryPath:self.ARC_BUILD.releaseEvidenceRepositoryPath,
@@ -126,15 +131,18 @@ function scopedLegacyApplyClient(event){
 async function dispatchReleaseMessage(message,event){
   if(exactLegacyApplyMessage(message)){
     if(!scopedLegacyApplyClient(event))return self.ArcRuntimeReleaseTransport.envelope(self.ArcRuntimeReleaseTransport.constants.types.response,'legacy-explicit-apply',{ok:false,error:{code:'LEGACY_APPLY_SOURCE_REFUSED',message:'Legacy Apply requires an existing ARC window controlled inside this service-worker scope.',details:null}});
-    try{return self.ArcRuntimeReleaseTransport.envelope(self.ArcRuntimeReleaseTransport.constants.types.response,'legacy-explicit-apply',{ok:true,result:await releaseTransport.applyLegacyVerified()});}
+    try{self.__arcReleaseBootstrapStatus=await ensureVerifiedWaitingRelease();return self.ArcRuntimeReleaseTransport.envelope(self.ArcRuntimeReleaseTransport.constants.types.response,'legacy-explicit-apply',{ok:true,result:await releaseTransport.applyLegacyVerified()});}
     catch(error){return self.ArcRuntimeReleaseTransport.envelope(self.ArcRuntimeReleaseTransport.constants.types.response,'legacy-explicit-apply',{ok:false,error:{code:error.code||error.name||'TRANSPORT_FAILED',message:error.message||String(error),details:error.details||null}});}
   }
   if(message&&message.type===self.ArcRuntimeReleaseTransport.constants.types.query&&(self.registration.installing||self.registration.waiting)){
-    self.__arcReleaseBootstrapStatus=await ensureVerifiedWaitingRelease();
+    const first=await releaseTransport.dispatch(message),state=first&&first.payload&&first.payload.ok&&first.payload.result&&first.payload.result.state;
+    if(state==='VERIFIED_RELEASE'||state==='VERIFIED_RELEASE_PENDING_APPLY'||state==='STAGING_IN_PROGRESS')return first;
+    ensureVerifiedWaitingRelease().then(result=>{self.__arcReleaseBootstrapStatus=result;},error=>{self.__arcReleaseBootstrapStatus={state:'BOOTSTRAP_BLOCKED',error:{code:error.code||error.name,message:error.message}};});
+    return first;
   }
   return releaseTransport.dispatch(message);
 }
-self.addEventListener('install',event=>{releaseWorkerLifecycleRole='waiting';event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>persistWorkerLifecycleRole('waiting')).then(()=>ensureVerifiedWaitingRelease()).then(status=>{self.__arcReleaseBootstrapStatus=status;}));});
+self.addEventListener('install',event=>{releaseWorkerLifecycleRole='waiting';event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>persistWorkerLifecycleRole('waiting')).then(()=>{self.__arcReleaseBootstrapStatus={state:'INSTALL_COMPLETE_AWAITING_VERIFICATION'};}));});
 self.addEventListener('message',event=>{event.waitUntil(dispatchReleaseMessage(event.data,event).then(reply=>{if(event.ports&&event.ports[0])event.ports[0].postMessage(reply);else if(event.source&&event.source.postMessage)event.source.postMessage(reply);}));});
 function scopedRequestPath(url){
   const scopePath=new URL(self.registration.scope).pathname;

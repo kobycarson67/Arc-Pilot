@@ -166,14 +166,49 @@ async function reviewedStaticResponse(event,url,path){
     return retry||new Response('Reviewed ARC static asset is unavailable.',{status:503});
   }
 }
+function verifiedReleaseUnavailable(error){
+  const code=error&&error.code||error&&error.name||'VERIFIED_RELEASE_UNAVAILABLE';
+  return new Response('ARC verified release is temporarily unavailable. Classroom data was not changed. Close ARC and follow the approved recovery procedure.\n'+code,{status:503,headers:{'Cache-Control':'no-store','Content-Type':'text/plain; charset=utf-8'}});
+}
+async function fetchRoutingState(){
+  try{
+    const release=await releaseTransport.currentVerified();
+    if(release)return{release};
+    if(await releaseTransport.expectedReleaseStatePresent())return{error:Object.assign(new Error('The expected verified release cache is incomplete.'),{code:'EXPECTED_RELEASE_CACHE_INVALID'})};
+    return{release:null};
+  }catch(error){
+    try{
+      const primary=await releaseTransport.currentPrimaryVerified();
+      if(primary)return{release:primary,recoveryBypassed:true,error};
+    }catch(primaryError){return{error:primaryError,priorError:error};}
+    return{error};
+  }
+}
+async function navigationResponse(event,url,target){
+  try{
+    const routing=await fetchRoutingState();
+    if(routing.error&&!routing.release)return verifiedReleaseUnavailable(routing.error);
+    if(routing.release){const verified=await caches.open(routing.release.cacheName),cached=await verified.match(new URL(target,self.registration.scope).href,{ignoreSearch:false});return cached||verifiedReleaseUnavailable(Object.assign(new Error('Verified release navigation is absent.'),{code:'VERIFIED_NAVIGATION_MISSING'}));}
+    try{return await fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;});}
+    catch(error){const cached=target==='./index.html'?await caches.match('./index.html'):await caches.match(target);return cached||verifiedReleaseUnavailable(error);}
+  }catch(error){return verifiedReleaseUnavailable(error);}
+}
+async function assetResponse(event,url){
+  try{
+    const routing=await fetchRoutingState();
+    if(routing.error&&!routing.release)return verifiedReleaseUnavailable(routing.error);
+    if(routing.release){const path=scopedRequestPath(url);if(path&&REVIEWED_NON_AUTHORITY_STATIC.has(path))return reviewedStaticResponse(event,url,path);if(!path)return verifiedReleaseUnavailable(Object.assign(new Error('ARC release request path is unavailable.'),{code:'VERIFIED_PATH_UNAVAILABLE'}));const verified=await caches.open(routing.release.cacheName),cached=await verified.match(new URL(path,self.registration.scope).href,{ignoreSearch:false});return cached||verifiedReleaseUnavailable(Object.assign(new Error('Verified release asset is absent.'),{code:'VERIFIED_ASSET_MISSING'}));}
+    return await caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}return response;}));
+  }catch(error){return verifiedReleaseUnavailable(error);}
+}
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET')return;
   const url=new URL(event.request.url);
   if(url.origin!==self.location.origin)return;
   if(event.request.mode==='navigate'){
     const target=url.pathname.endsWith('/engineering/arc_v8_verification.html')?'./engineering/arc_v8_verification.html':url.pathname.endsWith('/engineering/arc_v8_stage2_verification.html')?'./engineering/arc_v8_stage2_verification.html':url.pathname.endsWith('/engineering/arc_v8_production_academic_configuration.html')?'./engineering/arc_v8_production_academic_configuration.html':url.pathname.endsWith('/engineering/arc_instructional_reference_verification.html')?'./engineering/arc_instructional_reference_verification.html':url.pathname.endsWith('/engineering/arc_academic_authority_activation.html')?'./engineering/arc_academic_authority_activation.html':'./index.html';
-    event.respondWith(releaseTransport.currentVerified().then(async release=>{if(release){const verified=await caches.open(release.cacheName),cached=await verified.match(new URL(target,self.registration.scope).href,{ignoreSearch:false});return cached||new Response('Verified ARC release cache is incomplete.',{status:503});}return fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;}).catch(()=>target==='./index.html'?caches.match('./index.html'):caches.match(target));}));
+    event.respondWith(navigationResponse(event,url,target));
     return;
   }
-  event.respondWith(releaseTransport.currentVerified().then(async release=>{if(release){const path=scopedRequestPath(url);if(path&&REVIEWED_NON_AUTHORITY_STATIC.has(path))return reviewedStaticResponse(event,url,path);if(!path)return new Response('ARC release request path is unavailable.',{status:503});const verified=await caches.open(release.cacheName),cached=await verified.match(new URL(path,self.registration.scope).href,{ignoreSearch:false});return cached||new Response('Verified ARC release asset is unavailable.',{status:503});}return caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}return response;}));}));
+  event.respondWith(assetResponse(event,url));
 });

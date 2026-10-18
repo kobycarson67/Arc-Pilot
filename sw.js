@@ -189,8 +189,8 @@ async function navigationResponse(event,url,target){
     const routing=await fetchRoutingState();
     if(routing.error&&!routing.release)return verifiedReleaseUnavailable(routing.error);
     if(routing.release){const verified=await caches.open(routing.release.cacheName),cached=await verified.match(new URL(target,self.registration.scope).href,{ignoreSearch:false});return cached||verifiedReleaseUnavailable(Object.assign(new Error('Verified release navigation is absent.'),{code:'VERIFIED_NAVIGATION_MISSING'}));}
-    try{return await fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(target,copy));}return response;});}
-    catch(error){const cached=target==='./index.html'?await caches.match('./index.html'):await caches.match(target);return cached||verifiedReleaseUnavailable(error);}
+    const legacy=await caches.open(CACHE),cached=await legacy.match(new URL(target,self.registration.scope).href,{ignoreSearch:false});
+    return cached||verifiedReleaseUnavailable(Object.assign(new Error('Legacy ARC navigation is absent from the active worker cache.'),{code:'LEGACY_NAVIGATION_MISSING'}));
   }catch(error){return verifiedReleaseUnavailable(error);}
 }
 async function assetResponse(event,url){
@@ -198,7 +198,11 @@ async function assetResponse(event,url){
     const routing=await fetchRoutingState();
     if(routing.error&&!routing.release)return verifiedReleaseUnavailable(routing.error);
     if(routing.release){const path=scopedRequestPath(url);if(path&&REVIEWED_NON_AUTHORITY_STATIC.has(path))return reviewedStaticResponse(event,url,path);if(!path)return verifiedReleaseUnavailable(Object.assign(new Error('ARC release request path is unavailable.'),{code:'VERIFIED_PATH_UNAVAILABLE'}));const verified=await caches.open(routing.release.cacheName),cached=await verified.match(new URL(path,self.registration.scope).href,{ignoreSearch:false});return cached||verifiedReleaseUnavailable(Object.assign(new Error('Verified release asset is absent.'),{code:'VERIFIED_ASSET_MISSING'}));}
-    return await caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}return response;}));
+    const path=scopedRequestPath(url);
+    if(path&&REVIEWED_NON_AUTHORITY_STATIC.has(path))return reviewedStaticResponse(event,url,path);
+    if(!path)return verifiedReleaseUnavailable(Object.assign(new Error('Legacy ARC request path is unavailable.'),{code:'LEGACY_PATH_UNAVAILABLE'}));
+    const legacy=await caches.open(CACHE),cached=await legacy.match(new URL(path,self.registration.scope).href,{ignoreSearch:false});
+    return cached||verifiedReleaseUnavailable(Object.assign(new Error('Legacy ARC asset is absent from the active worker cache.'),{code:'LEGACY_ASSET_MISSING'}));
   }catch(error){return verifiedReleaseUnavailable(error);}
 }
 self.addEventListener('fetch',event=>{

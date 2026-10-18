@@ -828,3 +828,12 @@ Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gr
 - Fetch routing now catches every release-discovery failure. It may continue only through the exact primary release after that release independently passes the complete manifest, receipt, closure, asset, build, and lifecycle checks. Unrecoverable or incomplete current-release state returns an explicit no-store 503 without network, legacy-cache, or cross-release fallback.
 - Installed Edge proved the repaired exact-release route, one explicit Apply, three cold restarts, offline restart, unchanged legacy bytes, Schema 8 / IDB 14 / 74 stores, v8 academic authority, P5–P10 `V7_ONLY`, false real-Student authorization, exact backup/restore parity, and task-owned cleanup.
 - The physical Samsung was not accessed, and the exact device exception remains unobserved. No publication, release-evidence provisioning, cache/data clearing, production mutation, recovery action, real Student authorization, or authority transfer occurred. Status: local candidate pending independent review.
+
+## 2026-10-18 — Mixed-Asset Routing Repair 1 local candidate
+
+- Continued from published recovery commit `6a96d5fa0e8e711b20b5fdb7c0ebcbd3ba1411a9`, tree `70c62843b92f5e0764c3c4e321d4df4410895c0a`, with rollback `rollback/pre-mixed-asset-routing-repair-1`.
+- Reproduced global CacheStorage ordering selecting an older `app-build.js` while the active worker served current navigation, yielding a stale build identity and undefined release-evidence endpoint.
+- Legacy-controlled navigation and authority assets now use only the active worker's named cache. Missing required files return bounded no-store 503 responses; no other ARC cache is consulted.
+- Verified-release and recovery routing, explicit Apply, exact immutable verification, first uncontrolled bootstrap, previous caches, 103 authority assets, and 11 reviewed visuals remain intact.
+- Installed Edge proved coherent online startup, offline reload, and full offline restart with the deliberately historical first cache preserved. Complete JavaScript, static, closure, parse, and diff gates passed.
+- No publication/deployment, release-evidence mutation, Samsung/production access, cache clearing, database/Test Scenario 1 action, real Student authorization, or authority transfer occurred. Status: local candidate pending independent review.

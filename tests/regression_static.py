@@ -68,7 +68,7 @@ check('service worker caches maskable icons','./icons/icon-maskable-192.png' in 
 check('service worker caches touch and favicon','./icons/apple-touch-icon-180.png' in SW and './icons/favicon-32.png' in SW)
 check('service worker caches deployment module','./src/deployment_readiness.js' in SW)
 check('service worker update is user controlled','releaseTransport.dispatch' in SW and 'exactLegacyApplyMessage' in SW and 'applyLegacyVerified' in SW and 'scopedLegacyApplyClient' in SW)
-check('navigation has offline fallback',"request.mode==='navigate'" in SW and "caches.match('./index.html')" in SW)
+check('navigation has coherent offline fallback',"request.mode==='navigate'" in SW and "legacy.match(new URL(target,self.registration.scope).href" in SW and 'caches.match(' not in SW)
 check('backup integrity present',has('ArcDeployment.stateIntegrity') and has('ArcDeployment.verifyStateIntegrity'))
 check('persistent storage status present',has('navigator.storage.persist'))
 

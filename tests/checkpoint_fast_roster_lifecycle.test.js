@@ -53,7 +53,8 @@ test('Needs More Work clears review without corrupting the underlying manual nee
 test('host integration refreshes the dependent class view beneath an open student profile',()=>{
   const html=fs.readFileSync('index.html','utf8');
   assert(html.includes('refreshProjectContextView(result.student)'));
-  assert(html.includes('if (navCurrentView === "roster") renderRoster(); else if (navCurrentView === "forecast") renderClassForecast(); if (studentOpen)'));
+  assert(html.includes('if (navCurrentView === "roster") renderRoster({ preserveTransientUi: true }); else if (navCurrentView === "forecast") renderClassForecast({ preserveTransientUi: true });'));
+  assert(html.includes('if (snapshot.studentOpen) { current = student; tab = "projects"; renderModal(); restoreProjectContextRefresh(snapshot); }'));
 });
 
 if(!process.exitCode)console.log('PASS '+passed+' checkpoint/Fast Roster lifecycle tests');

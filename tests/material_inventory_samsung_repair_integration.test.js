@@ -4,7 +4,7 @@ assert(html.includes('src/material_inventory_presenter.js')&&sw.includes('./src/
 assert(css.includes('.modal.inventory-modal{z-index:120')&&css.includes('.inventory-modal-header{position:relative'));
 assert(html.includes('function closeInventoryOverlay(')&&lifecycle.includes('arcInventoryModal'));
 assert(html.includes('window.addEventListener("popstate"')&&html.includes('materialModalLifecycle.onPopState()')&&html.includes('if (document.getElementById("inventoryOverlay")) { closeInventoryOverlay(); return; }'));
-assert(html.includes('function navMark(view, label) { clearTransientUi({ preserveNavigation: true })')&&html.includes('materialModalLifecycle.beforeNavigate()'));
+assert(html.includes('function navMark(view, label, options = {}) { if (!options.preserveTransientUi) clearTransientUi({ preserveNavigation: true })')&&html.includes('materialModalLifecycle.beforeNavigate()'));
 assert(html.includes('Family')&&html.includes('Exact material / size')&&html.includes('Usable stock group'));
 assert(!html.includes('Source ${escapePhotoText(piece.id)}')&&!html.includes('Piece ${escapePhotoText(piece.id)}'),'ordinary source labels must not expose internal piece IDs');
 assert(html.includes('materialLengthFields("useLength"')&&html.includes('materialLengthFields("receiveLength"')&&html.includes('materialLengthFields("adjustLength"'));

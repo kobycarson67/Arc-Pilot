@@ -28,7 +28,7 @@ test('current directory groups each active enrollment once and filters without s
   assert.match(html,/function openDirectoryStudent\(studentId, sectionId\)/);
   assert.match(html,/sectionStudents\(sectionId\)\.some\(item => item\.id === studentId\)/);
   assert.match(html,/state\.activeSectionId = section\.id; state\.course = section\.course; save\(\); openStudent\(studentId\)/);
-  assert.match(html,/function renderRoster\(\)/);
+  assert.match(html,/function renderRoster\(options = \{\}\)/);
   assert.match(nav,/action:'renderCurrentStudentDirectory'/);
 });
 

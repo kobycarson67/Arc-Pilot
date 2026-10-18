@@ -812,3 +812,11 @@ Batch B connects the existing P8 Workplace/Safety/private Behavior owners, P9 Gr
 - The Leave Simulation transition now reuses the accepted academic startup path after verified snapshot restoration and before Live navigation renders. No parallel authority, fallback Bell, fabricated schedule, or snapshot transformation was introduced.
 - All five fictional scenarios passed roster mutation, full reload, Leave Simulation, exact Live state restoration, v8 academic rehydration, unchanged v8/Schema-7 hashes, zero live Student records, 74-store restore parity, and offline restart without dialog suppression.
 - No publication/deployment, release-evidence mutation, Samsung/production access, physical scenario reset, real Student authorization, or authority transfer occurred. Status: local Repair 2 candidate pending independent review.
+
+## 2026-10-17 — P6 Navigation and Status Repair 1 local candidate
+
+- Started from published commit `3711180314ac15040f0602b7bcd8ebf873f17551`, tree `0a6e8428e18fc8c40a0878dc4db6b5bb7b73f0db`, with rollback `rollback/pre-p6-navigation-status-repair-1`.
+- Corrected the P6 checkpoint refresh lifecycle so successful actions update Fast Roster or Class Forecast behind the open Student Projects profile without clearing Student, tab, project, scroll, or focus context. Explicit navigation retains the normal cleanup lifecycle.
+- Applied an explicit legible Titanium In Progress treatment and converted the real active-notification count into a labeled button that opens the existing Notifications view without changing records or policy.
+- Verification passed focused P6/project suites, complete JavaScript `155/155`, static `47/47`, parse/diff, and retained 103-asset release-closure gates. Isolated installed Edge verified all checkpoint actions plus Undo across three entry routes, portrait/landscape status legibility, the real fictional notification count, 74-store backup/restore parity, offline cold restart, exact legacy-state preservation, and cleanup.
+- This is a local candidate only. No publication, deployment, Samsung/production access, real Student authorization, database/package change, or authority transfer occurred.

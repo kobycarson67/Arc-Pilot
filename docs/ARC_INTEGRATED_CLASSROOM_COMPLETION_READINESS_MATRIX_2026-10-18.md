@@ -11,8 +11,8 @@ Date: 2026-10-18
 | P8 | Workplace / Safety / Behavior | Existing Batch B workflow retained | `V7_ONLY` | controlled cutover and privacy review |
 | P9 | Gradebook | Existing Gradebook is now directly visible in the sidebar; manual school transfer retained | `V7_ONLY` | controlled cutover and physical acceptance |
 | P10A | Student History | Existing joined projection retained in Student workflows | `V7_ONLY` | controlled cutover and privacy review |
-| P10B | Curriculum / Standards / Pacing | Existing owner and UI retained; reports consume read facts | `V7_ONLY` | controlled cutover |
-| P10C | Lesson Plans | Existing 124 sources remain reference-only; 124 replacement drafts are review-only | `V7_ONLY` | instructor content acceptance and controlled cutover |
+| P10B | Curriculum / Standards / Pacing | Existing owner and UI retained; an accepted-gate fictional rehearsal previews and places one exact Lesson Version only into an explicitly configured pacing plan | `V7_ONLY` | controlled production cutover and physical acceptance |
+| P10C | Lesson Plans | Existing 124 sources remain reference-only; 124 source-reviewed replacement drafts remain review-only; the real owner creates and rereads an exact fictional immutable Lesson Version in isolation | `V7_ONLY` | instructor content acceptance and controlled production cutover |
 
 No row advances production authority. The matrix is a local technical readiness inventory, not a cutover receipt.
 
@@ -23,3 +23,4 @@ No row advances production authority. The matrix is a local technical readiness 
 - FERPA/privacy and protected photo/media custody remain external policy and institutional gates.
 - Real Student data stays unauthorized.
 - Today's Focus remains unresolved because ranking policy is an instructor decision.
+- Build 3 closes local P10B/P10C composition evidence only. It does not advance production authority or instructional acceptance.

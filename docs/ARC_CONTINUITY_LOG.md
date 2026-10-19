@@ -876,3 +876,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Preserved the accepted gate split instead of claiming one database: P4–P10A uses `arc_classroom_v8_batch_b_verification`, P10B uses `arc_classroom_v8_p10b_verification`, and P10C uses `arc_classroom_v8_p10c_verification`. Production P4–P10C remains `V7_ONLY`.
 - Added whole-unit instructor review across all 124 draft Lessons with concrete teaching arcs, representative detail, meaningful WT/AWT demand, candidate-only Activity relevance, and visible unresolved mappings. All source Lessons remain `reference_only`; accepted instructional records remain zero.
 - Installed Edge passed the joined workflow, visible review UI, warm/offline/full-process-cold restart, exact IDB 14 / 74-store restore, and cleanup. No publication, Samsung/production access, real Student authorization, instructional acceptance, or authority transfer occurred.
+
+## 2026-10-18 — Integrated Classroom Completion Major Local Build 5 local candidate
+
+- Continued from independently accepted Build 4 `92d151c94abd44ebe1ed4ca5585f425e88a9c1e3`, tree `3cd68171d0a05182aaf447aa6dc33731664ad26d`, with rollback `rollback/pre-integrated-classroom-completion-major-local-build-5`.
+- Exercised the complete P4–P10A owner chain in one task-owned v8 database and added a fail-closed preflight that proves P10B/P10C cannot join it under the accepted isolated-database and authority-state contracts.
+- Connected the normal Classroom Workflow through Students, Attendance, instructional review, assigned work, instructor assessment, Gradebook, derived History, and Administration while retaining explicit human action and draft boundaries.
+- Expanded whole-unit review so all 124 replacement Lessons expose meaningful course-specific support, core, extension, independent work, checks, assessment choice, and only exact-identifier Activity candidates.
+- Unified P4–P10C remains `BLOCKED_AUTHORITY_CHANGE_REQUIRED`; the exact bounded authority proposal is documented without implementing or bypassing it. Production P4–P10C remains `V7_ONLY`.
+- No publication/deployment, Samsung/production access, real Student authorization, instructional acceptance, dual write, or authority transfer occurred. Status: local candidate pending independent technical and instructor-content review.

@@ -62,6 +62,7 @@ CORE.push('./src/arc_batch_a_authority_activation.js');
 CORE.push('./src/arc_batch_a_projection.js');
 CORE.push('./src/arc_batch_b_authority_activation.js');
 CORE.push('./src/arc_unified_classroom_authority_activation.js');
+CORE.push('./src/arc_unified_classroom_production_readiness.js');
 CORE.push('./src/arc_batch_b_projection.js');
 CORE.push('./src/arc_runtime_provenance.js');
 CORE.push('./src/arc_service_worker_closure.js');

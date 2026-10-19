@@ -848,3 +848,14 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Connected Resources, Gradebook, four Activity Library routes, and Administration to normal sidebar workflows. Administration creates editable explicit-export weekly-plan, SLO, and coverage/readiness drafts without inventing missing facts or human decisions.
 - Mechanically reviewed runtime closure expands from 104 to 106 authority assets for the two new pure modules. Academic/schedule authority remains `V8_AUTHORITATIVE`; P4–P10C remain `V7_ONLY`; Schema 7, real-Student prohibition, Simulation isolation, recovery, and release safeguards remain controlling.
 - Today's Focus, final instructional acceptance, exact product designs, OneDrive, FERPA/privacy, protected media custody, production cutovers, publication, and Samsung acceptance remain separate gates.
+
+## 2026-10-18 — Integrated Classroom Completion Major Local Build 2 local candidate
+
+- Continued from verified Build 1 `fcc07dbd84e17f614511c16ae34deaf2be076e58`, tree `d655d0eb734aa9cc30d396e399437fa980511ba3`, with rollback `rollback/pre-integrated-classroom-completion-major-local-build-2`.
+- Preserved all 124 historical WT/AWT Lessons as `reference_only` and replaced the generic review scaffold with 124 separate source-grounded teaching designs covering demonstration, choice, readiness, checks, support, course-specific independence, formative decisions, and Lesson-derived Activity needs.
+- Expanded the review-only Activity Library from 24 to 32 drafts, four per course in each library type, including useful WT/AWT products, practical Technical demonstrations, joint/process challenges, and nonqualifying Practice cycles.
+- Added normal-shell unit filtering, stronger Lesson and Activity review detail, a visible read-only Classroom Workflow hub, and an instructional coverage export in Administration.
+- Added an isolated all-or-nothing Batch A/B transition rehearsal with exact gates, no production activation, no dual write, false real-Student authorization, P10B/P10C retained on V7, and exact pre-gate rollback bytes.
+- Build/cache identity advances to `integrated-classroom-completion-major-local-build-2`; the mechanically reviewed authority closure remains 106 assets because no new runtime executable was added.
+- Complete verification passed 162/162 JavaScript tests, static 47/47, parse and diff checks, and installed Edge online/offline/cold-start workflow proof with exact Simulation reload isolation and verified 74-store restore parity.
+- No publication/deployment, release-channel change, Samsung/production access, database/schema change, real Student authorization, instructional acceptance, or authority transfer occurred. Status: local candidate pending independent technical and instructor-content review.

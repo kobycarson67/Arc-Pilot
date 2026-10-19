@@ -14,6 +14,7 @@
       {id:'forecast',label:'Class Forecast',icon:'forecast',action:'renderClassForecast',classScoped:true},
       {id:'attendance',label:'Attendance & Passes',icon:'attendance',action:'renderAttendance',classScoped:true},
       {id:'projects',label:'Projects',icon:'projects',action:'showClassProjects',classScoped:true},
+      {id:'classroom-workflow',label:'Classroom Workflow',icon:'focus',action:'renderClassroomWorkflowWorkspace',classScoped:true},
       {id:'openshop',label:'Open Shop',icon:'openshop',action:'renderOpenShopAll',classScoped:true},
       {id:'gradebook',label:'Gradebook',icon:'standards',action:'renderGradebook',classScoped:true}
     ]},

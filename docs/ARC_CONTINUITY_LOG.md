@@ -885,3 +885,13 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Expanded whole-unit review so all 124 replacement Lessons expose meaningful course-specific support, core, extension, independent work, checks, assessment choice, and only exact-identifier Activity candidates.
 - Unified P4–P10C remains `BLOCKED_AUTHORITY_CHANGE_REQUIRED`; the exact bounded authority proposal is documented without implementing or bypassing it. Production P4–P10C remains `V7_ONLY`.
 - No publication/deployment, Samsung/production access, real Student authorization, instructional acceptance, dual write, or authority transfer occurred. Status: local candidate pending independent technical and instructor-content review.
+
+## 2026-10-18 — Integrated Classroom Completion Major Local Build 6 local candidate
+
+- Continued from accepted Build 5 `af2f636a09032af02549a26454947d727be4d9b4`, tree `56023633e46664c6b311af92a499472c645dc041`, with rollback `rollback/pre-integrated-classroom-completion-major-local-build-6`.
+- Implemented the separately authorized nonproduction successor gate for P4–P10C using one activation record and one named task-owned database, `arc_classroom_v8_unified_p4_p10c_verification`.
+- Extended P10B Curriculum/Pacing and P10C Lessons with exact-gate `V8_UNIFIED_VERIFICATION` while preserving their `V7_ONLY` and isolated verification paths. Normal production rehydration refuses any physical database other than the task-owned name.
+- Added one-shot recovery custody, exact checksum binding, partial-transition restore, semantic postconditions, exact rollback, and complete 74-store parity. No dual write, real Student authorization, or competing source of truth was added.
+- Installed Edge proved the actual normal application from academic Sections through Students, Attendance, Projects, Practice/Technical/Competency, Workplace, explicit Gradebook, derived History, Curriculum/Pacing, Lessons, and Administration in one database; it also passed offline reload, full-process cold restart, exact rollback/restore, 74-store backup/restore, and task-owned cleanup.
+- Verification passed Build 6 `6/6`, complete JavaScript `166/166`, static `47/47`, 107-asset closure, retained regressions, parse and diff checks. Production P4–P10C remains `V7_ONLY`; all preserved Lessons remain `reference_only`; all replacements and Activities remain `DRAFT_INSTRUCTOR_REVIEW`.
+- No publication/deployment, release-channel change, Samsung/production access, production database mutation, real Student authorization, instructional acceptance, or authority transfer occurred. Status: local candidate pending independent review.

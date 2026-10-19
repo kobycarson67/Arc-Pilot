@@ -868,3 +868,11 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added an accepted-gate P10B/P10C fictional rehearsal over the actual v8 owners. Real Edge composition found and repaired the stale pacing-sequence read, then proved exact Lesson-Version placement, readback, and zero downstream mutation.
 - Complete verification passed 163/163 JavaScript tests, static 47/47, parse and diff checks, actual normal-app Edge online/offline/full-process-cold startup, exact Test Scenario 1 reload isolation and Live restoration, academic `V8_AUTHORITATIVE` rehydration, production P4–P10C `V7_ONLY`, and matched IDB 14 / 74-store backup/restore parity.
 - No publication/deployment, release-channel change, Samsung/production access, real Student authorization, instructional acceptance, production cutover, or authority transfer occurred. Status: local candidate pending independent technical and instructor-content review.
+
+## 2026-10-18 — Integrated Classroom Completion Major Local Build 4 local candidate
+
+- Continued from accepted Build 3 `169554616d5d4e8aaa9006e7fba57aaf0878e73e`, tree `9982ae7c134d00fa512c68e491f4303b72494406`, with rollback `rollback/pre-integrated-classroom-completion-major-local-build-4`.
+- Joined the existing P4–P10A normal owners and accepted isolated P10B/P10C owners in one installed Edge environment using exact shared course, Section, School Year, and Semester identities. The result fails closed on identity drift, wrong gates, missing records, or mixed authority writes.
+- Preserved the accepted gate split instead of claiming one database: P4–P10A uses `arc_classroom_v8_batch_b_verification`, P10B uses `arc_classroom_v8_p10b_verification`, and P10C uses `arc_classroom_v8_p10c_verification`. Production P4–P10C remains `V7_ONLY`.
+- Added whole-unit instructor review across all 124 draft Lessons with concrete teaching arcs, representative detail, meaningful WT/AWT demand, candidate-only Activity relevance, and visible unresolved mappings. All source Lessons remain `reference_only`; accepted instructional records remain zero.
+- Installed Edge passed the joined workflow, visible review UI, warm/offline/full-process-cold restart, exact IDB 14 / 74-store restore, and cleanup. No publication, Samsung/production access, real Student authorization, instructional acceptance, or authority transfer occurred.

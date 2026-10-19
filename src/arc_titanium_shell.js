@@ -15,7 +15,7 @@
       {id:'attendance',label:'Attendance & Passes',icon:'attendance',action:'renderAttendance',classScoped:true},
       {id:'projects',label:'Projects',icon:'projects',action:'showClassProjects',classScoped:true},
       {id:'openshop',label:'Open Shop',icon:'openshop',action:'renderOpenShopAll',classScoped:true},
-      {id:'gradebook-future',label:'Gradebook',icon:'standards',future:true}
+      {id:'gradebook',label:'Gradebook',icon:'standards',action:'renderGradebook',classScoped:true}
     ]},
     {id:'instruction',label:'Instruction',items:[
       {id:'today-focus',label:"Today's Focus",icon:'focus',future:true},
@@ -24,9 +24,9 @@
     ]},
     {id:'activity-library',label:'Activity Library',items:[
       {id:'projectbank',label:'Project Library',icon:'projectbank',action:'renderProjectBank'},
-      {id:'technical-assignments',label:'Technical Assignments',icon:'lessonbank',future:true},
-      {id:'skill-challenges',label:'Skill Challenges',icon:'openshop',future:true},
-      {id:'practice',label:'Practice',icon:'focus',future:true}
+      {id:'technical-assignments',label:'Technical Assignments',icon:'lessonbank',action:'renderTechnicalAssignmentLibrary'},
+      {id:'skill-challenges',label:'Skill Challenges',icon:'openshop',action:'renderSkillChallengeLibrary'},
+      {id:'practice',label:'Practice',icon:'focus',action:'renderPracticeLibrary'}
     ]},
     {id:'shop',label:'Shop',items:[
       {id:'inventory',label:'Material Inventory',icon:'inventory',action:'renderInventory'},
@@ -35,8 +35,8 @@
     {id:'arc',label:'ARC / Global',items:[
       {id:'notifications',label:'Notifications',icon:'notifications',action:'showNotifications'},
       {id:'search',label:'Search',icon:'search',action:'showGlobalSearch'},
-      {id:'resources',label:'Resources',icon:'help',future:true},
-      {id:'administration',label:'Administration',icon:'settings',future:true},
+      {id:'resources',label:'Resources',icon:'help',action:'renderResourcesWorkspace'},
+      {id:'administration',label:'Administration',icon:'settings',action:'renderAdministrationWorkspace'},
       {id:'help',label:'Help',icon:'help',future:true},
       {id:'settings',label:'Settings',icon:'settings',action:'renderAppSettings'}
     ]}

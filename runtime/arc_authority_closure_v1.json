@@ -1,7 +1,7 @@
 {
   "format": "ARC_AUTHORITY_CLOSURE_CONTRACT",
   "version": 1,
-  "buildIdentity": "arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1-parity-p7-competency-evidence-open-shop-1-parity-p8a-behavior-structural-foundation-1-parity-p8-workplace-safety-behavior-1-parity-p9-gradebook-authority-1-parity-p10a-unified-student-history-1-parity-p10b-ui-1-parity-p10c-ui-1-academic-structure-operational-truth-1-repair-1-academic-structure-operational-truth-1-repair-2-academic-structure-operational-truth-1-repair-3-academic-authority-activation-1-repair-5-academic-structure-v8-cold-start-repair-1-end-to-end-academic-activation-integration-rehearsal-1-instructor-first-update-recovery-1-samsung-apply-activation-stall-repair-1-samsung-startup-pending-apply-integrated-repair-1-classroom-roster-simulation-authority-repair-2-p6-samsung-err-failed-recovery-repair-1-mixed-asset-routing-repair-1",
+  "buildIdentity": "arc-schema-v8-integration-verification-12-sidebar-repair-2-repair-1-fixture-init-repair-1-stage2-physical-verification-bridge-1-reload-rehydration-repair-1-repair-2-cleanup-isolation-repair-1-production-academic-configuration-1-parity-p3-schedule-adapter-1-parity-p4-academic-consumers-1-parity-p5-attendance-pass-1-parity-p6-project-technical-1-parity-p7-competency-evidence-open-shop-1-parity-p8a-behavior-structural-foundation-1-parity-p8-workplace-safety-behavior-1-parity-p9-gradebook-authority-1-parity-p10a-unified-student-history-1-parity-p10b-ui-1-parity-p10c-ui-1-academic-structure-operational-truth-1-repair-1-academic-structure-operational-truth-1-repair-2-academic-structure-operational-truth-1-repair-3-academic-authority-activation-1-repair-5-academic-structure-v8-cold-start-repair-1-end-to-end-academic-activation-integration-rehearsal-1-instructor-first-update-recovery-1-samsung-apply-activation-stall-repair-1-samsung-startup-pending-apply-integrated-repair-1-classroom-roster-simulation-authority-repair-2-p6-samsung-err-failed-recovery-repair-1-mixed-asset-routing-repair-1-classroom-ready-activity-library-starter-content-1-integrated-classroom-completion-major-local-build-1",
   "seeds": [
     "index.html",
     "sw.js"
@@ -40,15 +40,11 @@
       "role": "runtime-metadata"
     },
     {
-      "path": "engineering/arc_academic_authority_activation_page.js",
-      "role": "authority-executable"
-    },
-    {
       "path": "engineering/arc_academic_authority_activation.html",
       "role": "engineering-safety-surface"
     },
     {
-      "path": "engineering/arc_daily_teaching_verification_page.js",
+      "path": "engineering/arc_academic_authority_activation_page.js",
       "role": "authority-executable"
     },
     {
@@ -56,7 +52,7 @@
       "role": "engineering-safety-surface"
     },
     {
-      "path": "engineering/arc_instructional_reference_verification_page.js",
+      "path": "engineering/arc_daily_teaching_verification_page.js",
       "role": "authority-executable"
     },
     {
@@ -64,7 +60,7 @@
       "role": "engineering-safety-surface"
     },
     {
-      "path": "engineering/arc_v8_production_academic_configuration_page.js",
+      "path": "engineering/arc_instructional_reference_verification_page.js",
       "role": "authority-executable"
     },
     {
@@ -72,7 +68,7 @@
       "role": "engineering-safety-surface"
     },
     {
-      "path": "engineering/arc_v8_stage2_verification_page.js",
+      "path": "engineering/arc_v8_production_academic_configuration_page.js",
       "role": "authority-executable"
     },
     {
@@ -80,12 +76,16 @@
       "role": "engineering-safety-surface"
     },
     {
-      "path": "engineering/arc_v8_verification_page.js",
+      "path": "engineering/arc_v8_stage2_verification_page.js",
       "role": "authority-executable"
     },
     {
       "path": "engineering/arc_v8_verification.html",
       "role": "engineering-safety-surface"
+    },
+    {
+      "path": "engineering/arc_v8_verification_page.js",
+      "role": "authority-executable"
     },
     {
       "path": "index.html",
@@ -96,11 +96,11 @@
       "role": "authority-executable"
     },
     {
-      "path": "src/arc_academic_authority_activation_production.js",
+      "path": "src/arc_academic_authority_activation.js",
       "role": "authority-executable"
     },
     {
-      "path": "src/arc_academic_authority_activation.js",
+      "path": "src/arc_academic_authority_activation_production.js",
       "role": "authority-executable"
     },
     {
@@ -109,6 +109,10 @@
     },
     {
       "path": "src/arc_academic_consumer_projection.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_activity_library_starter_content.js",
       "role": "authority-executable"
     },
     {
@@ -129,6 +133,10 @@
     },
     {
       "path": "src/arc_batch_b_projection.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_classroom_completion_readiness.js",
       "role": "authority-executable"
     },
     {
@@ -172,6 +180,10 @@
       "role": "authority-executable"
     },
     {
+      "path": "src/arc_instructional_draft_collection.js",
+      "role": "authority-executable"
+    },
+    {
       "path": "src/arc_instructional_reference_boundary.js",
       "role": "authority-executable"
     },
@@ -192,19 +204,15 @@
       "role": "authority-executable"
     },
     {
-      "path": "src/arc_runtime_provenance_bootstrap.js",
-      "role": "authority-executable"
-    },
-    {
       "path": "src/arc_runtime_provenance.js",
       "role": "authority-executable"
     },
     {
-      "path": "src/arc_runtime_release_transport.js",
+      "path": "src/arc_runtime_provenance_bootstrap.js",
       "role": "authority-executable"
     },
     {
-      "path": "src/arc_update_release_distribution.js",
+      "path": "src/arc_runtime_release_transport.js",
       "role": "authority-executable"
     },
     {
@@ -240,7 +248,15 @@
       "role": "safety-relevant-style"
     },
     {
+      "path": "src/arc_update_release_distribution.js",
+      "role": "authority-executable"
+    },
+    {
       "path": "src/arc_v7_schedule_configuration_capture.js",
+      "role": "authority-executable"
+    },
+    {
+      "path": "src/arc_v8_academic.js",
       "role": "authority-executable"
     },
     {
@@ -253,10 +269,6 @@
     },
     {
       "path": "src/arc_v8_academic_semester_transition.js",
-      "role": "authority-executable"
-    },
-    {
-      "path": "src/arc_v8_academic.js",
       "role": "authority-executable"
     },
     {
@@ -332,11 +344,11 @@
       "role": "authority-executable"
     },
     {
-      "path": "src/arc_v8_protected_production_upgrade_physical.js",
+      "path": "src/arc_v8_protected_production_upgrade.js",
       "role": "authority-executable"
     },
     {
-      "path": "src/arc_v8_protected_production_upgrade.js",
+      "path": "src/arc_v8_protected_production_upgrade_physical.js",
       "role": "authority-executable"
     },
     {
@@ -384,15 +396,15 @@
       "role": "authority-executable"
     },
     {
+      "path": "src/material_inventory.js",
+      "role": "authority-executable"
+    },
+    {
       "path": "src/material_inventory_modal_lifecycle.js",
       "role": "authority-executable"
     },
     {
       "path": "src/material_inventory_presenter.js",
-      "role": "authority-executable"
-    },
-    {
-      "path": "src/material_inventory.js",
       "role": "authority-executable"
     },
     {

@@ -867,6 +867,14 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added explicit proposed Lesson alignment for all 32 Activity drafts without creating Curriculum authority, assignment, Evidence, grades, qualification, Project completion, or unlock behavior.
 - Added an accepted-gate P10B/P10C fictional rehearsal over the actual v8 owners. Real Edge composition found and repaired the stale pacing-sequence read, then proved exact Lesson-Version placement, readback, and zero downstream mutation.
 - Complete verification passed 163/163 JavaScript tests, static 47/47, parse and diff checks, actual normal-app Edge online/offline/full-process-cold startup, exact Test Scenario 1 reload isolation and Live restoration, academic `V8_AUTHORITATIVE` rehydration, production P4–P10C `V7_ONLY`, and matched IDB 14 / 74-store backup/restore parity.
+
+## 2026-10-20 — Major Local Build 9 release candidate and legacy media custody
+
+- Assembled a single unpublished candidate over accepted Build 8 while preserving the separately published predecessor and all established classroom, update, recovery, authority, and instructional boundaries.
+- Added a dedicated V7 legacy photograph custody owner. It binds exact `weld_v013` metadata and `WeldingClassroomPhotoStore` blobs, distinguishes linked/orphaned/uncovered data, refuses corruption and mismatched restore authority, requires verified prewrite recovery custody, and proves exact binary readback without V8 migration or dual write.
+- Administration now exposes the separate legacy photo export and discloses the manual OneDrive, remote/session photo, privacy, and physical-restore boundaries. Simulation cannot export Live photo custody.
+- Advanced the build/shell identity and authority closure from 109 to 110 for the one new executable. Production P4–P10C remains `V7_ONLY`, real Student authorization remains false, original Lessons remain `reference_only`, and replacement Lessons/Activities remain `DRAFT_INSTRUCTOR_REVIEW`.
+- Added a concise publication and physical Samsung acceptance procedure. It stages local artifacts only and grants no publication, evidence-channel, device, cutover, Student, or content authority.
 - No publication/deployment, release-channel change, Samsung/production access, real Student authorization, instructional acceptance, production cutover, or authority transfer occurred. Status: local candidate pending independent technical and instructor-content review.
 
 ## 2026-10-18 — Integrated Classroom Completion Major Local Build 4 local candidate

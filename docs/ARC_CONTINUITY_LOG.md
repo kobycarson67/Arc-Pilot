@@ -903,3 +903,9 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added exact semantic-category postconditions and visibly exposed the Build 7 production readiness ledger in Administration. A successful local proof still returns production `NO-GO` until instructor content, FERPA/privacy, OneDrive, protected-media, Samsung, fresh recovery, and explicit cutover gates close.
 - Added distinct WT 13207 and AWT 13208 fictional progressions with explicit instructor decisions and no automatic Evidence, grade, qualification, Project unlock, or content acceptance.
 - Production P4–P10C remains `V7_ONLY`; all 124 preserved Lessons remain `reference_only`; all replacements and Activities remain `DRAFT_INSTRUCTOR_REVIEW`. No production or Samsung access, publication, real Student authorization, dual write, or authority transfer occurred.
+# 2026-10-19 — Major Local Build 8 classroom delivery and recovery
+
+- Continued from accepted Build 7 commit `9addef333a94fb01bb3b6966baff18543a47f98f`, tree `903ff16cd6fc55d1581186d734a12531d1d20e55`.
+- Added one bounded delivery controller around the accepted Schema 8 Backup/Recovery owner; the controller does not create storage or transaction authority.
+- Closed local 74-store recovery and Schema 8 protected-media delivery evidence, Administration review/export/print flows, and course-level instructional review exports.
+- Preserved the manual OneDrive and institutional privacy boundary, legacy-photo disclosure, production `V7_ONLY`, draft instructional status, and zero real-Student authorization.

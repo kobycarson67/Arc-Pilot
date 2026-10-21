@@ -917,3 +917,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added one bounded delivery controller around the accepted Schema 8 Backup/Recovery owner; the controller does not create storage or transaction authority.
 - Closed local 74-store recovery and Schema 8 protected-media delivery evidence, Administration review/export/print flows, and course-level instructional review exports.
 - Preserved the manual OneDrive and institutional privacy boundary, legacy-photo disclosure, production `V7_ONLY`, draft instructional status, and zero real-Student authorization.
+
+## 2026-10-20 — Post-Build-9 Classroom Ready convergence local candidate
+
+- Continued from published and physically accepted Build 9 commit `4e692c9c12082f7136a83e5d2c16cfbcb7cbffbc`, tree `314729a681212fb481722ec1f77ae5982b18944b`, with rollback `rollback/pre-post-build9-classroom-ready-convergence`.
+- Added a Course / Quarter / Unit instructional review workbench over the 124 preserved source Lessons, 124 replacement drafts, and proposed Activity relationships. Instructor recommendations are append-only and correctable but never accept content or create downstream Student outcomes.
+- Replaced the misleading normal Live Build 6 blocked diagnostic with truthful local-verification evidence while preserving production P4-P10C `V7_ONLY` and every activation gate.
+- Added distinct 74-store V8, protected-media, legacy-photo, persistent-storage, and external OneDrive recovery status, plus a district / IT decision sheet and an inert production-cutover checklist.
+- Original Lessons remain `reference_only`; all replacement Lessons and Activities remain `DRAFT_INSTRUCTOR_REVIEW`; real Student authorization remains false.
+- No publication, release-channel change, Samsung/production access, production cutover, real Student data, instructional acceptance, institutional approval, or authority transfer occurred. Status: local candidate pending independent technical and instructor review.

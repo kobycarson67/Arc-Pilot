@@ -59,6 +59,8 @@ CORE.push('./src/arc_activity_library_starter_content.js');
 CORE.push('./src/arc_instructional_draft_collection.js');
 CORE.push('./src/arc_classroom_completion_readiness.js');
 CORE.push('./src/arc_classroom_ready_convergence.js');
+CORE.push('./src/arc_live_classroom_launch.js');
+CORE.push('./src/arc_onedrive_recovery.js');
 CORE.push('./src/arc_batch_a_authority_activation.js');
 CORE.push('./src/arc_batch_a_projection.js');
 CORE.push('./src/arc_batch_b_authority_activation.js');

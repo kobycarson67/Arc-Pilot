@@ -6,8 +6,8 @@ test('Build 9 identity is coherent across shell, worker closure, and live contra
   const identity='integrated-classroom-completion-major-local-build-9';
   assert(build.includes(identity));assert.equal(closure.buildIdentity.includes(identity),true);assert(read('.github/workflows/pages-live-verification.yml').includes(identity));
 });
-test('authority closure advances exactly preserves the Build 9 legacy custody owner in the 111-path closure',()=>{
-  assert.equal(closure.approvedPaths.length,111);assert.equal(closure.approvedPaths.filter(x=>x.path==='src/arc_legacy_photo_custody.js').length,1);assert(sw.includes('src/arc_legacy_photo_custody.js'));
+test('authority closure advances exactly preserves the Build 9 legacy custody owner in the 113-path closure',()=>{
+  assert.equal(closure.approvedPaths.length,113);assert.equal(closure.approvedPaths.filter(x=>x.path==='src/arc_legacy_photo_custody.js').length,1);assert(sw.includes('src/arc_legacy_photo_custody.js'));
 });
 test('normal Administration exposes a separate V7 photo custody export',()=>{
   assert(index.includes('<script src="src/arc_legacy_photo_custody.js"></script>'));

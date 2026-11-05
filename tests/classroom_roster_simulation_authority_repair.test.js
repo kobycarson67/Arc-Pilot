@@ -72,7 +72,7 @@ await test('production adapter refuses a closed gate and accepts an independentl
   await assert.rejects(()=>closed.runV8('create-student-placement',{sectionId:'fictional-section'}),error=>error.code==='REAL_STUDENT_DATA_NOT_AUTHORIZED');
   assert.equal(calls.length,0);
   const fictionalGate={record:{fictionalStudentDataAuthorized:true}},open=AcademicAdapter.create({...options,studentWriteGate:fictionalGate,verifyStudentWriteGate:value=>value===fictionalGate});
-  await open.runV8('create-student-placement',{sectionId:'fictional-section',preferredName:'Fictional Learner'});
+  await open.runV8('create-student-placement',{sectionId:'fictional-section',preferredName:'Fictional Learner',dataClassification:'FICTIONAL_STUDENT'});
   assert.equal(calls.length,1);
 });
 

@@ -926,3 +926,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added distinct 74-store V8, protected-media, legacy-photo, persistent-storage, and external OneDrive recovery status, plus a district / IT decision sheet and an inert production-cutover checklist.
 - Original Lessons remain `reference_only`; all replacement Lessons and Activities remain `DRAFT_INSTRUCTOR_REVIEW`; real Student authorization remains false.
 - No publication, release-channel change, Samsung/production access, production cutover, real Student data, instructional acceptance, institutional approval, or authority transfer occurred. Status: local candidate pending independent technical and instructor review.
+
+## 2026-11-04 — Coordinated Live Classroom Launch local candidate
+
+- Continued from the independently accepted convergence commit `4c0f6a7e360f7ba8fff6b67c9237798fff8c1bde`, tree `e1ff44c59c8d923a3a22db8c1d526a29993e61bf`, with rollback `rollback/pre-live-classroom-launch-build`.
+- Made Students the main identity and Enrollment workspace, including atomic create-and-enroll across multiple distinct Courses, Add Existing, Edit, Move, Drop, Re-enroll, Archive, duplicate refusal, stable identity, History preservation, and clear feedback.
+- Hardened the P4 production adapter so every authoritative Student mutation requires explicit real/fictional classification plus the matching independently verified gate. Real Student authorization remains false.
+- Added instructor-initiated Microsoft Graph school OneDrive recovery using Entra SPA authorization code with PKCE, memory-only access tokens, App Folder least privilege, pre-upload ARC package verification, checksum sidecars, and verified download. No tenant contact or automatic sync occurred.
+- Advanced the service-worker/build identity and mechanically reviewed authority closure from 111 to 113 for the two new owners. Production P4–P10C remains `V7_ONLY`; original Lessons remain `reference_only`; replacement Lessons and Activities remain `DRAFT_INSTRUCTOR_REVIEW`.
+- Installed Edge used only task-owned fictional state and proved Students, attendance/pass, offline and process-cold continuity, Simulation isolation, Live restoration, one task-owned P4–P10C database, and exact 74-store recovery parity. No publication, Samsung/production access, real Student record, cloud operation, content acceptance, or authority transfer occurred.

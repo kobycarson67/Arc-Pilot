@@ -50,7 +50,7 @@ await test('roster actions await confirmed persistence and retain actionable fai
 
 await test('Live Classroom remains closed without exact real Student authorization',()=>{
   const status=html.slice(html.indexOf('function studentRosterMutationStatus'),html.indexOf('function assertStudentRosterMutationAvailable'));
-  assert.match(status,/record\.realStudentDataAuthorized === true/);
+  assert.match(status,/ArcLiveClassroomPilotActivation\.isVerifiedRealStudentGate/);
   assert.match(status,/REAL_STUDENT_DATA_NOT_AUTHORIZED/);
   assert.doesNotMatch(status,/fictionalStudentDataAuthorized/);
   assert.match(html,/Live student enrollment is not available yet/);

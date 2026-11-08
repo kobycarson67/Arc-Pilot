@@ -977,3 +977,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Installed Edge proved deterministic takeover plus online, offline, and full-process offline cold startup while retaining predecessor caches; incomplete and unauthorized releases still failed closed.
 - Verification passed the focused identity/profile/transport suites, the complete JavaScript inventory `179/179`, and static regression `47/47`.
 - No Samsung, production database, real Student, Enrollment, release-evidence, publication, recovery-selection, cache-deletion, authority, or instructional-content operation occurred. Physical recovery begins only after independent acceptance and separate authorization of one guarded existing-registration update request.
+
+## 2026-11-08 — Dual-period AWT and temporary shop visitor local candidate
+
+- Continued from accepted production baseline `3bf030e71e808eb6489089b127fa94ffe38d25a0`, tree `af26f911f76734ff0c04e6c7efdda8d1dd8ab254`, with rollback `rollback/pre-dual-period-temporary-shop-visitor-1` at that exact identity.
+- Extended existing P4 Schedule Assignment rules so one active Course Enrollment may own multiple different-period Sections while same-period collisions remain refused. Section-specific scope keeps Attendance independent and shared Enrollment identity keeps Projects, competencies, Gradebook, and History from duplicating.
+- Connected the existing P5 Supplemental Session owner to Fast Roster temporary visitor check-in/out and physical presence. Existing Booth and P8 owners accept only the exact active supplemental context; no visitor Attendance, Enrollment, grade, Evidence, or new store is created.
+- Non-enrolled visitors fail closed. Prior-day unclosed sessions are shown for instructor checkout review and are neither silently expired nor counted as current presence.
+- Verification used fictional task-owned state only: focused services/UI, JavaScript `180/180`, static `47/47`, installed Edge visible workflow, 74-store exact restore, full-process cold start, and verified-release offline restart.
+- No GitHub, deployment, Samsung, production database, real Student export, authority transfer, or instructional-content operation occurred. Visitor permission categories, missed-checkout consequences, cross-period attendance consequences, and external per-section grade reporting remain explicit instructor/school decisions.

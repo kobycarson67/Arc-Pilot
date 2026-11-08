@@ -2,6 +2,12 @@
 
 This log preserves settled product reasoning that should survive individual engineering threads. The Master Plan remains the product north star.
 
+## Live Classroom production-runtime repair boundary
+
+- A production `ARC_LIVE_CLASSROOM_PILOT_AUTHORITY` record is resolved from the exact accepted `ArcV8Storage` runtime identity: `arc_classroom_v8`, Schema 8, IndexedDB 14, and 74 stores. Production runtime correctness must not depend on `window.__ARC_PHYSICAL_DB`; that global remains confined to task-owned browser fixtures.
+- Production record database mismatches fail closed. The separate nonproduction unified-verification route continues to require its exact task-owned physical database and harness identity.
+- This repair does not itself transfer authority. The published/physical state remains Academic `V8_AUTHORITATIVE`, P4–P10C `V7_ONLY`, real Students unauthorized, and dual write disabled until the independently accepted publication and physical gates are completed.
+
 ## Recovered product-authority governance
 
 - Future ARC product and architecture work must read `ARC_MASTER_PRODUCT_AUTHORITY.md`, `ARC_CLASSROOM_READINESS_CONTRACT.md`, and `ARC_AUTHORITY_GOVERNANCE.md` alongside this continuity log and the Master Plan.

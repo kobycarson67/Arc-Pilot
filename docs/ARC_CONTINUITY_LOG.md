@@ -935,3 +935,11 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added instructor-initiated Microsoft Graph school OneDrive recovery using Entra SPA authorization code with PKCE, memory-only access tokens, App Folder least privilege, pre-upload ARC package verification, checksum sidecars, and verified download. No tenant contact or automatic sync occurred.
 - Advanced the service-worker/build identity and mechanically reviewed authority closure from 111 to 113 for the two new owners. Production P4–P10C remains `V7_ONLY`; original Lessons remain `reference_only`; replacement Lessons and Activities remain `DRAFT_INSTRUCTOR_REVIEW`.
 - Installed Edge used only task-owned fictional state and proved Students, attendance/pass, offline and process-cold continuity, Simulation isolation, Live restoration, one task-owned P4–P10C database, and exact 74-store recovery parity. No publication, Samsung/production access, real Student record, cloud operation, content acceptance, or authority transfer occurred.
+
+## 2026-11-07 — Single Coordinated Live Classroom Launch local candidate
+
+- Continued from accepted candidate `dffb8b533f097b5731460550aa984f35c28c0c94`, tree `c577196565981fad26035ad3818556539fc6ad49`, with rollback `rollback/pre-single-coordinated-live-classroom-launch-20261107`.
+- Recorded the instructor-approved recovery policy: Instructor custody and initial incident response, replacement only after exact download/checksum verification and isolated restore evidence, 30-day superseded retention, and no deletion of the current or sole recoverable backup.
+- OneDrive upload no longer changes current-backup status. Filename byte replacement is refused; verified download advances the local custody ledger; deletion is explicit, post-retention, and fail closed.
+- Bound the separate real-Student authorization preparation to the exact custody policy in addition to the retained independent-release, Samsung, semantic, recovery, and instructor-authorization evidence. `realStudentDataAuthorized` remains false.
+- Advanced the build/cache identity without adding an authority executable; the reviewed closure remains 114 assets. Production authority, publication, Samsung operation, real Student entry, and instructional acceptance remain outside this local candidate.

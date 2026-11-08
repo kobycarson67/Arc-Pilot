@@ -20,7 +20,8 @@ The same reproduction exposed a second projection-adaptation issue: the V8 compe
 - Existing values and collection identities are preserved. The adapter does not persist defaults or create ratings, grades, attendance, Evidence, qualifications, or History.
 - The Batch A competency catalog now adapts exact accepted `title`, `standardText`, `studentStatement`, and `levelDescriptors` fields for the existing profile renderer.
 - Gradebook treats a not-yet-refreshed optional Student projection as having zero approved sources instead of throwing.
-- The shell/cache identity advances by `live-student-profile-repair-1` so the existing verified update protocol can install a fresh coherent worker cache; the authority closure remains the same 114 reviewed paths.
+- Profile course and Section pills are derived from the Student's active authoritative Enrollment. They no longer use the globally selected class or render a missing legacy `pathway` as `undefined`.
+- The shell/cache identity advances through `live-student-profile-repair-1-profile-enrollment-label-repair-1` so the existing verified update protocol can install a fresh coherent worker cache; the authority closure remains the same 114 reviewed paths.
 
 No database schema, store, authority record, Student record, or write-owner contract changes.
 
@@ -28,7 +29,7 @@ No database schema, store, authority record, Student record, or write-owner cont
 
 The installed-Edge verification uses only task-owned fictional data. It creates one new unassessed AWT Student and one new unassessed WT Student through the actual production-authoritative workflow, opens all 11 profile tabs, verifies Fast Roster, Gradebook, Open Shop, and History reads, performs an offline reload and a separate full-process cold restart, confirms exactly one correct active Enrollment per Student, checks exact Student revision preservation, exercises Test Scenario 1 isolation, and verifies a complete 74-store recovery package.
 
-The pre-fix run reproduced the `AWT-P4` failure. The post-fix and cold-restart runs pass without profile-read mutation.
+The pre-fix run reproduced the `AWT-P4` failure. The accepted-candidate evidence also exposed an incorrect/undefined profile enrollment subtitle. The amended post-fix and cold-restart runs prove exact AWT/WT course and Section labels without profile-read mutation.
 
 ## Guarded publication and Samsung update preparation
 

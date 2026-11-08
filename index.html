@@ -1146,6 +1146,14 @@ function gradeSnapshot(s) { let sv = currentScopedCompetencyValues(s), skill = s
 function switchCourse(v) { if (academicAuthorityMode === "V8_AUTHORITATIVE") state.instructionalLibraryCoursePreference = v; else state.course = v; save(); renderRoster(); }
 let navCurrentView = null, navHistory = [], navSuppressHistory = false;
 function courseLabel(course) { return course === "wt" ? "Welding Technology" : course === "awt" ? "Advanced Welding Technology" : "No Current Class"; }
+function studentProfileEnrollmentContext(student) {
+    let active = ((student && student.enrollments) || []).filter(enrollment => enrollment && enrollment.active), enrollment = active.find(row => row.sectionId === state.activeSectionId) || active[0] || null;
+    if (!enrollment)
+        return { course: null, courseLabel: "Not currently enrolled", sectionLabel: "" };
+    let projection = academicConsumerProjection(), section = (projection.sections || []).find(row => row.sectionId === enrollment.sectionId), legacySection = (state.sections || []).find(row => row.id === enrollment.sectionId), course = enrollment.course || (section && (section.courseId === "arc-course-awt" ? "awt" : section.courseId === "arc-course-wt" ? "wt" : null)) || (legacySection && legacySection.course) || null, sectionLabel = (section && section.displayName) || (legacySection && legacySection.name) || (enrollment.period ? `${enrollment.period}${ordinal(Number(enrollment.period))} Period` : "Active enrollment");
+    return { course, courseLabel: courseLabel(course), sectionLabel };
+}
+function studentProfileEnrollmentPills(student) { let context = studentProfileEnrollmentContext(student); return `<span class="pill">${escapePhotoText(context.courseLabel)}</span>${context.sectionLabel ? ` <span class="pill">${escapePhotoText(context.sectionLabel)}</span>` : ""}`; }
 const ARC_SIDEBAR_PREF_KEY = "arc_ui_titanium_sidebar_collapsed";
 function arcShellCollapsedPreference() { try { return localStorage.getItem(ARC_SIDEBAR_PREF_KEY) === "1"; } catch (e) { return false; } }
 const ARC_COLLAPSIBLE_SIDEBAR_QUERY = "(max-width:900px), (pointer:coarse) and (max-width:1366px)";
@@ -3454,7 +3462,7 @@ function renderModalObsolete() {
     let s = current;
     let g = batchBAuthorityActive() ? batchBGradeSnapshot(s) : gradeSnapshot(s);
     let tabs = [["summary", "Summary"], ["competencies", "Competencies"], ["attendance", "Attendance & Passes"], ["workplace", "Workplace"], ["behavior", "Behavior"], ["projects", "Projects"], ["technical", "Technical"], ["photos", "Photos"], ["grades", "Grades"], ["openshop", "Open Shop"], ["history", "History"]];
-    let html = `<div class="student-profile-nav"><h2>${s.name}</h2><p><span class="pill">${courseLabel(operationalCourse())}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="setStudentTab('${x[0]}')">${x[1]}</button>`).join("")}</div></div>`;
+    let html = `<div class="student-profile-nav"><h2>${s.name}</h2><p>${studentProfileEnrollmentPills(s)}</p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="setStudentTab('${x[0]}')">${x[1]}</button>`).join("")}</div></div>`;
     if (tab === "summary") {
         let gs = gaps(s).slice(0, 3);
         html += `<div class="grid"><div class="card"><div class="small">Competency Average</div><div class="big">${avgRating(s).toFixed(1)}</div></div><div class="card"><div class="small">Proficient+</div><div class="big">${prof(s)}</div></div><div class="card"><div class="small">Current Grade Snapshot</div><div class="big">${g.total == null ? "—" : g.total.toFixed(1) + "%"}</div></div></div>
@@ -3532,7 +3540,7 @@ function renderModal() {
     let s = current;
     let g = batchBAuthorityActive() ? batchBGradeSnapshot(s) : gradeSnapshot(s);
     let tabs = [["summary", "Summary"], ["competencies", "Competencies"], ["attendance", "Attendance & Passes"], ["workplace", "Workplace"], ["behavior", "Behavior"], ["projects", "Projects"], ["technical", "Technical"], ["photos", "Photos"], ["grades", "Grades"], ["openshop", "Open Shop"], ["history", "History"]];
-    let html = `<h2>${s.name}</h2><p><span class="pill">${courseLabel(operationalCourse())}</span> <span class="pill">${s.pathway}</span></p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="tab='${x[0]}';renderModal()">${x[1]}</button>`).join("")}</div>`;
+    let html = `<h2>${s.name}</h2><p>${studentProfileEnrollmentPills(s)}</p><div class="tabs">${tabs.map(x => `<button class="tab ${tab === x[0] ? "on" : ""}" onclick="tab='${x[0]}';renderModal()">${x[1]}</button>`).join("")}</div>`;
     if (tab === "summary") {
         let gs = gaps(s).slice(0, 3);
         html += `<div class="grid"><div class="card"><div class="small">Competency Average</div><div class="big">${avgRating(s).toFixed(1)}</div></div><div class="card"><div class="small">Proficient+</div><div class="big">${prof(s)}</div></div><div class="card"><div class="small">Current Grade Snapshot</div><div class="big">${g.total == null ? "—" : g.total.toFixed(1) + "%"}</div></div></div>

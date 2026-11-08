@@ -56,6 +56,22 @@ test('student profiles reopen through the authoritative projection instead of le
   assert.match(html, /return normalizeStudentProfileRecord\(projected\);/);
 });
 
+test('profile enrollment labels come from the student enrollment instead of global class or optional pathway', () => {
+  const contextBlock = html.slice(html.indexOf('function studentProfileEnrollmentContext'), html.indexOf('const ARC_SIDEBAR_PREF_KEY'));
+  assert.match(contextBlock, /student\.enrollments/);
+  assert.match(contextBlock, /row\.sectionId === state\.activeSectionId/);
+  assert.match(contextBlock, /enrollment\.course/);
+  assert.match(contextBlock, /projection\.sections/);
+  assert.doesNotMatch(contextBlock, /operationalCourse\(\)/);
+
+  const profileRenderers = [...html.matchAll(/let html = `(?:<div class="student-profile-nav">)?<h2>\$\{s\.name\}<\/h2><p>([^`]+)<\/p><div class="tabs">/g)];
+  assert.equal(profileRenderers.length, 2);
+  for (const renderer of profileRenderers) {
+    assert.match(renderer[1], /studentProfileEnrollmentPills\(s\)/);
+    assert.doesNotMatch(renderer[1], /s\.pathway|operationalCourse/);
+  }
+});
+
 test('unassessed authoritative students remain readable across profile and Gradebook surfaces', () => {
   for (const source of [
     'Object.values(s.ratings)',
@@ -77,6 +93,7 @@ test('repair does not introduce fabricated assessment defaults or alternate auth
 
 test('repair advances only the successor shell identity needed for a fresh worker cache', () => {
   assert(build.includes("shell:'v0-18-"));
-  assert(build.includes("-live-classroom-runtime-repair-1-live-student-profile-repair-1'"));
+  assert(build.includes("-live-classroom-runtime-repair-1-live-student-profile-repair-1-profile-enrollment-label-repair-1'"));
   assert(build.includes("liveStudentProfileRepair:'live-student-profile-repair-1'"));
+  assert(build.includes("liveStudentProfileEnrollmentLabelRepair:'profile-enrollment-label-repair-1'"));
 });

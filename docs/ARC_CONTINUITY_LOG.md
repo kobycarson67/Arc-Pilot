@@ -959,3 +959,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - The repair creates no assessment, grade, attendance, Evidence, qualification, or History data and changes no schema, store, authority, ownership, recovery, or real-Student authorization contract.
 - Installed Edge passed new fictional AWT/WT creation, all profile tabs, related reads, offline reload, full-process cold restart, exact Enrollment attachment, exact Student revision preservation, Test Scenario 1 isolation, and verified 74-store recovery.
 - No real Student record was read, copied, changed, or included in evidence. No publication, release-channel action, Samsung access, production mutation, or authority transfer occurred. A fresh verified school-OneDrive production backup remains mandatory before any later physical update.
+
+## 2026-11-08 — Live Student Profile Repair 1 delivery amendment
+
+- Preserved accepted candidate `74f8a2d5efc831b83d24ec05d8d97a2c7c10a7ef` and created rollback `rollback/pre-live-student-profile-repair-1-delivery-amendment` at that exact commit.
+- Confirmed the accepted browser evidence's `undefined` profile subtitle was a real mapping defect: both profile renderers used the globally selected course and optional legacy `pathway` instead of the Student's authoritative Enrollment.
+- Added a nonmutating profile-label adapter that selects the Student's active Enrollment, maps its exact authoritative course and Section, and renders no missing legacy value. No Student, Enrollment, assessment, grade, History, or authority record is written.
+- Advanced the shell/cache identity once for a coherent successor worker while retaining the exact 114-asset authority closure.
+- Task-owned installed Edge proved newly created unassessed WT/AWT Students show exact course and Section labels across all 11 tabs, related reads, offline reload, full-process cold restart, Simulation isolation, exact Student revisions, and verified 74-store recovery.
+- The amended tree requires independent acceptance before publication. No GitHub publication, release-evidence action, Samsung access, production backup operation, production data access, or authority transition occurred.

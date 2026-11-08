@@ -22,11 +22,12 @@ test('task-owned unified verification still refuses the real database and requir
   assert(html.includes('window.__ARC_PHYSICAL_DB !== ArcUnifiedClassroomAuthorityActivation.constants.databaseName'));
   assert(html.includes('UNIFIED_NONPRODUCTION_DATABASE_REQUIRED'));
 });
-test('build and shell identities advance exactly once while the reviewed authority closure remains 114',()=>{
-  const before=buildAt('3943f05e847a5318c5cd8bee10f45ca905e57501'),after=buildAt(),suffix='-live-classroom-runtime-repair-1';
-  assert.equal(after.build,before.build+suffix);
-  assert.equal(after.shell,before.shell+suffix+'-live-student-profile-repair-1-profile-enrollment-label-repair-1');
+test('build and shell identities preserve runtime repair lineage and advance for the verified-release identity repair',()=>{
+  const before=buildAt('3943f05e847a5318c5cd8bee10f45ca905e57501'),after=buildAt(),runtime='-live-classroom-runtime-repair-1',identity='-live-student-profile-verified-release-identity-repair-1';
+  assert.equal(after.build,before.build+runtime+identity);
+  assert.equal(after.shell,before.shell+runtime+'-live-student-profile-repair-1-profile-enrollment-label-repair-1'+identity);
   assert.equal(after.liveClassroomRuntimeRepair,'live-classroom-runtime-repair-1');
+  assert.equal(after.liveStudentProfileVerifiedReleaseIdentityRepair,'live-student-profile-verified-release-identity-repair-1');
   assert.equal(closure.buildIdentity,after.build);
   assert.equal(closure.approvedPaths.length,114);
 });

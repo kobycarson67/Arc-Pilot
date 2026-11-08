@@ -968,3 +968,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Advanced the shell/cache identity once for a coherent successor worker while retaining the exact 114-asset authority closure.
 - Task-owned installed Edge proved newly created unassessed WT/AWT Students show exact course and Section labels across all 11 tabs, related reads, offline reload, full-process cold restart, Simulation isolation, exact Student revisions, and verified 74-store recovery.
 - The amended tree requires independent acceptance before publication. No GitHub publication, release-evidence action, Samsung access, production backup operation, production data access, or authority transition occurred.
+
+## 2026-11-08 — Live Student Profile Verified-Release Identity Repair 1 local candidate
+
+- Continued exactly from published profile repair `6d74481f6b96adc602a0ce2536891d5d7406ac66`, tree `4847c1bc05ac8467d24500963a285f89c5ee040e`, with rollback `rollback/pre-live-student-profile-repair-1-verified-release-identity-repair-1`.
+- Reproduced the physical failure shape in installed Edge: the retained Runtime Repair 1 predecessor was `active_healthy`, the profile repair was `activation_requested`, both carried the same build identity, and two distinct verified caches correctly produced bounded 503 `AMBIGUOUS_VERIFIED_RELEASE`.
+- Advanced the candidate build and shell identity through `live-student-profile-verified-release-identity-repair-1` and bound the unchanged 114-path authority closure to it. Service-worker selection, transport, sentinels, explicit Apply, recovery, and fail-closed checks were not weakened.
+- Installed Edge proved deterministic takeover plus online, offline, and full-process offline cold startup while retaining predecessor caches; incomplete and unauthorized releases still failed closed.
+- Verification passed the focused identity/profile/transport suites, the complete JavaScript inventory `179/179`, and static regression `47/47`.
+- No Samsung, production database, real Student, Enrollment, release-evidence, publication, recovery-selection, cache-deletion, authority, or instructional-content operation occurred. Physical recovery begins only after independent acceptance and separate authorization of one guarded existing-registration update request.

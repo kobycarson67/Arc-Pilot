@@ -91,9 +91,12 @@ test('repair does not introduce fabricated assessment defaults or alternate auth
   assert.match(block, /history[^;]+\[\]/);
 });
 
-test('repair advances only the successor shell identity needed for a fresh worker cache', () => {
+test('profile repair and verified-release recovery advance coherent successor identities', () => {
   assert(build.includes("shell:'v0-18-"));
-  assert(build.includes("-live-classroom-runtime-repair-1-live-student-profile-repair-1-profile-enrollment-label-repair-1'"));
+  assert(build.includes("-live-classroom-runtime-repair-1-live-student-profile-repair-1-profile-enrollment-label-repair-1-live-student-profile-verified-release-identity-repair-1'"));
+  assert(build.includes("build:'arc-schema-v8-"));
+  assert(build.includes("-live-classroom-runtime-repair-1-live-student-profile-verified-release-identity-repair-1'"));
   assert(build.includes("liveStudentProfileRepair:'live-student-profile-repair-1'"));
   assert(build.includes("liveStudentProfileEnrollmentLabelRepair:'profile-enrollment-label-repair-1'"));
+  assert(build.includes("liveStudentProfileVerifiedReleaseIdentityRepair:'live-student-profile-verified-release-identity-repair-1'"));
 });

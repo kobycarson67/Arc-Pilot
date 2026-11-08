@@ -986,3 +986,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Non-enrolled visitors fail closed. Prior-day unclosed sessions are shown for instructor checkout review and are neither silently expired nor counted as current presence.
 - Verification used fictional task-owned state only: focused services/UI, JavaScript `180/180`, static `47/47`, installed Edge visible workflow, 74-store exact restore, full-process cold start, and verified-release offline restart.
 - No GitHub, deployment, Samsung, production database, real Student export, authority transfer, or instructional-content operation occurred. Visitor permission categories, missed-checkout consequences, cross-period attendance consequences, and external per-section grade reporting remain explicit instructor/school decisions.
+
+## 2026-11-08 — Dual-period enrollment and temporary shop visitor completion
+
+- Continued from accepted local candidate `f8b32f091b9e0e22b3aafa2596d1dcb560dd8b34`, tree `55dd5270838912930bd0fe23f28b0d43de2c4b34`, with rollback `rollback/pre-complete-dual-period-temporary-shop-visitors-1` at that exact identity.
+- Completed the already-authorized course-generic behavior: distinct-period multi-Section assignment now has explicit WT and AWT acceptance evidence, while conventional single-Section enrollment remains intact. Move and drop/end operate on one assignment without duplicating or ending the shared Course Enrollment.
+- Projected current Supplemental Session and authoritative Booth facts consistently into Fast Roster, Booth Manager, Class Forecast, Workplace/Safety/Behavior, and Student History. WT-to-AWT and AWT-to-WT visits retain the home Enrollment and never create scheduled Attendance, grade, Evidence, qualification, or duplicated progress.
+- Advanced the local build/shell identity for a coherent successor service-worker cache while retaining the exact mechanically reviewed 114-path authority closure.
+- Existing Schema 8 / IndexedDB 14 / 74 stores, production `V8_AUTHORITATIVE` boundaries, `realStudentDataAuthorized`, exclusive ownership, backup/recovery, and Simulation isolation remain unchanged. No GitHub, deployment, Samsung, production record, authority transfer, or instructional-content operation occurred.
+- Structured visitor permission, missed-checkout consequences, cross-period attendance consequences, and external per-section grade reporting remain explicit instructor/school decisions.

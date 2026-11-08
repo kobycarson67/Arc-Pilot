@@ -53,8 +53,8 @@
     input=input||{};
     var state=input.state||{},section=input.section||{},day=text(input.day),students=arr(input.students),definitions=arr(input.definitions),positions=[];
     students.forEach(function(student){
-      var attendance=attendanceStatus(state,student.id,section.id,day),context=needFor(student),place=booth(state,student.id,section.id,day);
-      positions.push({studentId:student.id,studentName:student.name,attendance:attendance,present:isPresent(attendance),project:context.project,need:context.need,actionable:context.actionable,booth:place});
+      var visitor=student._physicalPresence==='temporary_shop_visitor',attendance=visitor?'supplemental':attendanceStatus(state,student.id,section.id,day),context=needFor(student),place=student._authoritativeBooth?{id:student._authoritativeBooth.boothId,name:student._authoritativeBooth.displayName||student._authoritativeBooth.code||'Booth',assignment:student._authoritativeBoothAssignment}:booth(state,student.id,section.id,day);
+      positions.push({studentId:student.id,studentName:student.name,attendance:attendance,present:visitor||isPresent(attendance),temporaryVisitor:visitor,project:context.project,need:context.need,actionable:context.actionable,booth:place});
     });
     var needs=positions.filter(function(item){return item.actionable;});
     var occupied={};positions.forEach(function(item){if(item.booth)occupied[item.booth.id]=true;});

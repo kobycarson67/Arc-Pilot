@@ -1,22 +1,22 @@
-# ARC Dual-Period AWT and Temporary Shop Visitor — Local Candidate
+# ARC Dual-Period Enrollment and Temporary Shop Visitor — Local Candidate
 
 Date: 2026-11-08
 
 Status: LOCAL / UNPUBLISHED / INDEPENDENT REVIEW REQUIRED
 
-Baseline: `3bf030e71e808eb6489089b127fa94ffe38d25a0`
+Accepted predecessor: `f8b32f091b9e0e22b3aafa2596d1dcb560dd8b34`
 
-Rollback: `rollback/pre-dual-period-temporary-shop-visitor-1`
+Rollback: `rollback/pre-complete-dual-period-temporary-shop-visitors-1`
 
 ## Implemented boundary
 
-- One active AWT Course Enrollment may own multiple active Schedule Assignments only when their effective Sections occupy distinct periods.
+- One active WT or AWT Course Enrollment may own multiple active Schedule Assignments only when their effective Sections occupy distinct periods. A conventional single-Section Enrollment remains unchanged.
 - A same-period collision, duplicate Section assignment, wrong Enrollment, stale revision, and wrong-owner request remain fail closed.
 - Academic projections expose every effective Section context and exact Section-specific Student scope.
 - Attendance remains independently owned per Section and scheduled session. Shared Enrollment identity prevents duplicate Projects, competencies, grades, and Student History.
-- Fast Roster can check in an already-enrolled Student as a temporary physical visitor through the existing Supplemental Session owner, then check that session out explicitly.
+- Fast Roster can check an enrolled WT Student into an AWT Section, or an enrolled AWT Student into a WT Section, as a temporary physical visitor through the existing Supplemental Session owner, then check that session out explicitly.
 - The physical roster includes scheduled Students and current authorized visitors, while preserving the visitor's home academic context.
-- Existing Booth and Workplace/Safety/Behavior owners accept the exact active Supplemental Session context; no new store or source of truth was introduced.
+- Fast Roster, Booth Manager, Class Forecast, Workplace/Safety/Behavior, and Student History derive the same physical-presence facts from existing owners. Supplemental Booth assignment and release require the exact active Session; no new store or source of truth was introduced.
 
 ## Preserved safety rules
 
@@ -31,16 +31,18 @@ Rollback: `rollback/pre-dual-period-temporary-shop-visitor-1`
 - Complete JavaScript inventory: `180/180`.
 - Static regression: `47/47`.
 - Installed Microsoft Edge, task-owned profile and fictional data:
-  - one AWT Enrollment projected into Periods 1 and 5;
+  - one AWT Enrollment and one WT Enrollment each projected into two different periods;
+  - one conventional WT Enrollment remained assigned to one Section;
   - independent Present/Tardy Attendance records per Section;
   - zero duplicate Gradebook entries;
-  - enrolled WT Student checked into AWT Fast Roster as a temporary visitor;
-  - supplemental Booth and positive Workplace context retained home Enrollment ownership;
+  - enrolled WT-to-AWT and AWT-to-WT temporary visits;
+  - supplemental Booth, Workplace, Safety, Forecast, Booth Manager, and Student History projections retained home Enrollment ownership;
+  - one assignment move and one assignment end preserved the shared Enrollment and other assignment;
   - no scheduled Attendance created for the visitor;
   - non-enrolled visitor refused;
   - missed checkout surfaced for instructor review;
   - exact 74-store backup/restore count parity;
-  - full browser-process cold restart preserved both assignments and sessions;
+  - full browser-process cold restart preserved both WT/AWT assignment sets and sessions;
   - established verified-release rehearsal passed explicit Apply, three cold starts, offline restart, and exact 74-store restore.
 
 ## Decisions not invented

@@ -25,7 +25,7 @@ test('task-owned unified verification still refuses the real database and requir
 test('build and shell identities advance exactly once while the reviewed authority closure remains 114',()=>{
   const before=buildAt('3943f05e847a5318c5cd8bee10f45ca905e57501'),after=buildAt(),suffix='-live-classroom-runtime-repair-1';
   assert.equal(after.build,before.build+suffix);
-  assert.equal(after.shell,before.shell+suffix);
+  assert.equal(after.shell,before.shell+suffix+'-live-student-profile-repair-1');
   assert.equal(after.liveClassroomRuntimeRepair,'live-classroom-runtime-repair-1');
   assert.equal(closure.buildIdentity,after.build);
   assert.equal(closure.approvedPaths.length,114);

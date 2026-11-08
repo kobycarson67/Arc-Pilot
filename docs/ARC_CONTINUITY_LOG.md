@@ -949,3 +949,13 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - OneDrive upload no longer changes current-backup status. Filename byte replacement is refused; verified download advances the local custody ledger; deletion is explicit, post-retention, and fail closed.
 - Bound the separate real-Student authorization preparation to the exact custody policy in addition to the retained independent-release, Samsung, semantic, recovery, and instructor-authorization evidence. `realStudentDataAuthorized` remains false.
 - Advanced the build/cache identity without adding an authority executable; the reviewed closure remains 114 assets. Production authority, publication, Samsung operation, real Student entry, and instructional acceptance remain outside this local candidate.
+
+## 2026-11-08 — Live Student Profile Repair 1 local candidate
+
+- Continued exactly from published Runtime Repair 1 `adb6ede1bcd12b5e422c5dd6cd745df48df5e001`, tree `6dc4e5dc9ddc44ebe1329c28f9cf907f4929362b`, with rollback `rollback/pre-urgent-live-student-profile-repair-1`.
+- Reproduced the production blocker in installed Edge through the real production-authoritative V8 Student creation path using fictional WT/AWT records: creation succeeded, while the legacy `state.classes` profile reopen failed on the first `AWT-P4` read.
+- Routed profile opening through the authoritative projection, added a nonpersisting compatibility view for omitted optional profile collections, completed the V8 competency renderer adaptation, and made the Gradebook read tolerate a not-yet-refreshed optional Student projection.
+- Advanced only the successor shell/cache revision required for a fresh coherent service-worker cache; the reviewed authority closure remains 114 assets.
+- The repair creates no assessment, grade, attendance, Evidence, qualification, or History data and changes no schema, store, authority, ownership, recovery, or real-Student authorization contract.
+- Installed Edge passed new fictional AWT/WT creation, all profile tabs, related reads, offline reload, full-process cold restart, exact Enrollment attachment, exact Student revision preservation, Test Scenario 1 isolation, and verified 74-store recovery.
+- No real Student record was read, copied, changed, or included in evidence. No publication, release-channel action, Samsung access, production mutation, or authority transfer occurred. A fresh verified school-OneDrive production backup remains mandatory before any later physical update.

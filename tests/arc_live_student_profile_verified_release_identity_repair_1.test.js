@@ -15,6 +15,7 @@ const REVISION = 'live-student-profile-verified-release-identity-repair-1';
 const CLASSROOM_OPERATIONS_REVISION = 'dual-period-temporary-shop-visitor-1';
 const COMBINED_UPDATE_REVISION = 'combined-classroom-usability-autobackup-1';
 const EQUIPMENT_AMENDMENT_REVISION = 'equipment-inventory-booth-amendment-1';
+const EQUIPMENT_SELECTOR_UI_REVISION = 'equipment-selector-ui-completion-1';
 const bounds = {
   compatibilityContractId: 'arc-academic-schedule-v1',
   academicSchedule: 'V8_AUTHORITATIVE',
@@ -124,12 +125,13 @@ test('current release identity is new, closure-bound, and distinct from both pub
   const closure = JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json', 'utf8'));
   assert.equal(failed.build, predecessor.build);
   assert.notEqual(current.build, failed.build);
-  assert.equal(current.build, `${failed.build}-${REVISION}-${CLASSROOM_OPERATIONS_REVISION}-${COMBINED_UPDATE_REVISION}-${EQUIPMENT_AMENDMENT_REVISION}`);
-  assert.equal(current.shell, `${failed.shell}-${REVISION}-${CLASSROOM_OPERATIONS_REVISION}-${COMBINED_UPDATE_REVISION}-${EQUIPMENT_AMENDMENT_REVISION}`);
+  assert.equal(current.build, `${failed.build}-${REVISION}-${CLASSROOM_OPERATIONS_REVISION}-${COMBINED_UPDATE_REVISION}-${EQUIPMENT_AMENDMENT_REVISION}-${EQUIPMENT_SELECTOR_UI_REVISION}`);
+  assert.equal(current.shell, `${failed.shell}-${REVISION}-${CLASSROOM_OPERATIONS_REVISION}-${COMBINED_UPDATE_REVISION}-${EQUIPMENT_AMENDMENT_REVISION}-${EQUIPMENT_SELECTOR_UI_REVISION}`);
   assert.equal(current.liveStudentProfileVerifiedReleaseIdentityRepair, REVISION);
   assert.equal(current.dualPeriodTemporaryShopVisitor, CLASSROOM_OPERATIONS_REVISION);
   assert.equal(current.combinedClassroomUsabilityAutoBackup, COMBINED_UPDATE_REVISION);
   assert.equal(current.equipmentInventoryBoothAmendment, EQUIPMENT_AMENDMENT_REVISION);
+  assert.equal(current.equipmentSelectorUiCompletion, EQUIPMENT_SELECTOR_UI_REVISION);
   assert.equal(closure.buildIdentity, current.build);
   assert.equal(closure.approvedPaths.length, 114);
 });

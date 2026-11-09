@@ -1014,3 +1014,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Existing Booth capability/resource definitions and historical associations remain intact. Archived or missing items remain identifiable in historical Project and Booth views but cannot be newly selected.
 - Advanced the local build/shell identity while retaining the exact mechanically reviewed 114-path authority closure. No production data, Samsung, publication, deployment, V8 authority, Student authorization, or release evidence was changed.
 - Verification passed the focused Equipment/Booth suite, complete JavaScript `182/182`, static `47/47`, and a task-owned installed-Edge create/select/link/rename/archive workflow with online/offline reload, full process cold restart, and exact 74-store backup/restore parity.
+
+## 2026-11-09 — Final Equipment Selector UI Completion 1
+
+- Continued exactly from accepted local amendment `72215f928d88caf81e7745ac4b99edd3fbc0e505`, tree `00f6152f431062acc38f11fbc273974ed73f6d35`, with rollback `rollback/pre-equipment-selector-ui-completion-1` at that exact identity.
+- Replaced permanently expanded inventory checkbox rows with one shared collapsed native-details multiselect used by Project Materials, Project Equipment, and Booth Equipment.
+- Added live search, visible selected counts, multiple selection, keyboard focus, tablet-touch sizing, bounded option-panel scrolling, and preserved disabled historical references. Project Material quantity and dimension inputs remain bound to their selected stable inventory IDs.
+- Preserved the accepted canonical Equipment Inventory, Project requirement-only semantics, Booth stable references, legacy capability definitions, archive/rename behavior, 114-asset closure, and every database/authority boundary.
+- Verification passed the focused selector suite `6/6`, complete JavaScript `183/183`, static `47/47`, and task-owned installed Edge interaction with multiple Project/Booth selections, Material quantity/dimensions, online/offline reload, process-cold restart, and exact 74-store backup/restore parity.
+- No GitHub, deployment, release-evidence, Samsung, production database, real Student record, V8 authority, or instructional-content operation occurred.

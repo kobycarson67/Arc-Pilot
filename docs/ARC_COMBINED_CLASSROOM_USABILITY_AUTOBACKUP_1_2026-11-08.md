@@ -30,6 +30,12 @@ Equipment now has a direct sidebar inventory workflow and one stable item identi
 
 Archive is non-destructive: new selection is refused while existing Project and Booth references remain visible with archived or historical status. Duplicate active item names within the same category and duplicate Booth associations are refused. The amendment adds no schema/store, quantity, booking, availability, or authority policy.
 
+### Final selector UI completion
+
+Project Materials, Project Equipment, and Booth Equipment now use the same compact native-details multiselect. Each selector is collapsed by default, exposes a clear Select control and selected-count badge, opens by keyboard or touch, searches the current inventory, and supports multiple checked selections. Selected and historical archived references remain visible. Material rows retain planned quantity and dimensions inside the dropdown.
+
+This is a presentation-only completion over the accepted stable-ID relationships. It changes no inventory ownership, Project reservation/consumption semantics, Booth authority, database schema, store inventory, or production data.
+
 ### Sidebar
 
 Administration now has a distinct icon from Settings. Attendance remains a global destination rather than a class-scoped navigation item. Applicable library/management destinations expose verified Create/Add actions; read-only analytics do not expose fake mutations.
@@ -43,7 +49,7 @@ This is not a background service or cross-device sync. It runs only while ARC is
 ## Verification
 
 - Focused combined tests: 7/7.
-- Complete JavaScript inventory after the Equipment/Booth amendment: 182/182 test files.
+- Complete JavaScript inventory after final selector completion: 183/183 test files.
 - Static regression: 47/47.
 - Installed Microsoft Edge, task-owned profile and fictional database:
   - whole-program Attendance dashboard and graphs;

@@ -12,7 +12,7 @@
       {id:'main',label:'Dashboard',icon:'dashboard',action:'renderMainMenu'},
       {id:'roster',label:'Students',icon:'students',action:'renderCurrentStudentDirectory'},
       {id:'forecast',label:'Class Forecast',icon:'forecast',action:'renderClassForecast',classScoped:true},
-      {id:'attendance',label:'Attendance & Passes',icon:'attendance',action:'renderAttendance',classScoped:true},
+      {id:'attendance',label:'Attendance & Passes',icon:'attendance',action:'renderAttendance'},
       {id:'projects',label:'Projects',icon:'projects',action:'showClassProjects',classScoped:true},
       {id:'classroom-workflow',label:'Classroom Workflow',icon:'focus',action:'renderClassroomWorkflowWorkspace',classScoped:true},
       {id:'openshop',label:'Open Shop',icon:'openshop',action:'renderOpenShopAll',classScoped:true},
@@ -37,7 +37,7 @@
       {id:'notifications',label:'Notifications',icon:'notifications',action:'showNotifications'},
       {id:'search',label:'Search',icon:'search',action:'showGlobalSearch'},
       {id:'resources',label:'Resources',icon:'help',action:'renderResourcesWorkspace'},
-      {id:'administration',label:'Administration',icon:'settings',action:'renderAdministrationWorkspace'},
+      {id:'administration',label:'Administration',icon:'administration',action:'renderAdministrationWorkspace'},
       {id:'help',label:'Help',icon:'help',future:true},
       {id:'settings',label:'Settings',icon:'settings',action:'renderAppSettings'}
     ]}

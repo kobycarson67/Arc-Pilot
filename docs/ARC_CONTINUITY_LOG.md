@@ -995,3 +995,13 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Advanced the local build/shell identity for a coherent successor service-worker cache while retaining the exact mechanically reviewed 114-path authority closure.
 - Existing Schema 8 / IndexedDB 14 / 74 stores, production `V8_AUTHORITATIVE` boundaries, `realStudentDataAuthorized`, exclusive ownership, backup/recovery, and Simulation isolation remain unchanged. No GitHub, deployment, Samsung, production record, authority transfer, or instructional-content operation occurred.
 - Structured visitor permission, missed-checkout consequences, cross-period attendance consequences, and external per-section grade reporting remain explicit instructor/school decisions.
+
+## 2026-11-08 — Combined classroom usability and automatic OneDrive backup 1
+
+- Continued exactly from accepted classroom-operations baseline `9d4602788590f61d0962d6b7e43bfdb6792ed1cc`, tree `1c721c9a982e440103d18fe480d9554a7cff212c`, with rollback `rollback/pre-combined-classroom-usability-autobackup-1` at that identity.
+- Attendance & Passes now opens a whole-program dashboard with class, Student, status, pass-type, and day/week/month/quarter/semester/year/custom filters; derived daily attendance-rate and pass-count graphs retain a direct selected-class entry path and create no analytics truth or grade mutation.
+- Fixed the production-authoritative Technical Assignment create path by awaiting the asynchronous P6 command and surfacing validation/persistence failures. The sidebar library now provides create, edit/version, copy/assign, archive, score, reassess, and review actions through existing P6 ownership.
+- Project definition now searches the existing canonical Material Inventory for material and equipment requirements, retains stable item IDs/units/dimensions/planned quantities, and never reserves, consumes, books, or decrements inventory.
+- Added bounded automatic school OneDrive backup scheduling with debounce, no overlap, offline pending/resume, visible status, Backup Now, and exact upload/download/package verification. Tokens remain memory-only; signed-out/expired sessions fail visibly; automatic backup operates only while ARC is open and never auto-restores or deletes custody copies.
+- Advanced the build/shell identity while retaining the exact 114-path authority closure. No schema, store, production authority, real-Student authorization, or instructional-content status changed.
+- Verification passed JavaScript `181/181`, static `47/47`, task-owned installed Edge workflow, online/offline reload, process-cold restart, and exact 74-store backup/restore. No GitHub, Pages, release-evidence, Samsung, production database, real Student, or actual school-cloud mutation occurred.

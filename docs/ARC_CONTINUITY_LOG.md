@@ -1005,3 +1005,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added bounded automatic school OneDrive backup scheduling with debounce, no overlap, offline pending/resume, visible status, Backup Now, and exact upload/download/package verification. Tokens remain memory-only; signed-out/expired sessions fail visibly; automatic backup operates only while ARC is open and never auto-restores or deletes custody copies.
 - Advanced the build/shell identity while retaining the exact 114-path authority closure. No schema, store, production authority, real-Student authorization, or instructional-content status changed.
 - Verification passed JavaScript `181/181`, static `47/47`, task-owned installed Edge workflow, online/offline reload, process-cold restart, and exact 74-store backup/restore. No GitHub, Pages, release-evidence, Samsung, production database, real Student, or actual school-cloud mutation occurred.
+
+## 2026-11-09 — Equipment Inventory and Booth Manager amendment 1
+
+- Continued the existing combined-update candidate at `99fe4f7e226ae94c48eb2b124010779543753118`, tree `87829462090d99e915147f868c1ce8fa99ee1097`, with rollback `rollback/pre-combined-classroom-equipment-booth-amendment-1` at that exact identity.
+- Added a direct Equipment Inventory workflow with stable IDs, active/archived lifecycle, duplicate refusal, rename-safe references, and non-destructive archive/restore. No schema or store was added.
+- Project Creation and Booth Manager now search the same canonical active equipment collection. Projects retain requirements only; Booths retain references to existing inventory items. Neither path reserves, consumes, books, copies, or infers equipment availability or exclusivity.
+- Existing Booth capability/resource definitions and historical associations remain intact. Archived or missing items remain identifiable in historical Project and Booth views but cannot be newly selected.
+- Advanced the local build/shell identity while retaining the exact mechanically reviewed 114-path authority closure. No production data, Samsung, publication, deployment, V8 authority, Student authorization, or release evidence was changed.
+- Verification passed the focused Equipment/Booth suite, complete JavaScript `182/182`, static `47/47`, and a task-owned installed-Edge create/select/link/rename/archive workflow with online/offline reload, full process cold restart, and exact 74-store backup/restore parity.

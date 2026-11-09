@@ -31,6 +31,7 @@
     ]},
     {id:'shop',label:'Shop',items:[
       {id:'inventory',label:'Material Inventory',icon:'inventory',action:'renderInventory'},
+      {id:'equipment-inventory',label:'Equipment Inventory',icon:'equipment',action:'renderEquipmentInventory'},
       {id:'booths',label:'Booth Manager',icon:'booths',action:'showBoothManager',classScoped:true}
     ]},
     {id:'arc',label:'ARC / Global',items:[

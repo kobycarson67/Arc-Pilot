@@ -24,6 +24,12 @@ The reported silent failure was caused by the normal V8 UI invoking an asynchron
 
 Project creation reads the canonical inventory model at render time and provides separately searchable Material and Equipment lists. Selected materials retain inventory ID, unit, planned quantity, and dimensions; equipment retains stable inventory IDs. Future inventory items appear without Project schema changes. Supplemental not-yet-inventory text remains available. Planning selections never reserve, consume, book, or decrement stock.
 
+### Equipment Inventory and Booth Manager amendment
+
+Equipment now has a direct sidebar inventory workflow and one stable item identity shared by Project Creation and Booth Manager. Both selectors search the live canonical Equipment Inventory, so additions and renames appear without hardcoded changes. Project selection records only a requirement; Booth selection records a reference to the existing item and does not copy, reserve, consume, or infer exclusive availability. Existing free-form Booth capabilities remain separate resource definitions.
+
+Archive is non-destructive: new selection is refused while existing Project and Booth references remain visible with archived or historical status. Duplicate active item names within the same category and duplicate Booth associations are refused. The amendment adds no schema/store, quantity, booking, availability, or authority policy.
+
 ### Sidebar
 
 Administration now has a distinct icon from Settings. Attendance remains a global destination rather than a class-scoped navigation item. Applicable library/management destinations expose verified Create/Add actions; read-only analytics do not expose fake mutations.
@@ -37,7 +43,7 @@ This is not a background service or cross-device sync. It runs only while ARC is
 ## Verification
 
 - Focused combined tests: 7/7.
-- Complete JavaScript inventory: 181/181 test files.
+- Complete JavaScript inventory after the Equipment/Booth amendment: 182/182 test files.
 - Static regression: 47/47.
 - Installed Microsoft Edge, task-owned profile and fictional database:
   - whole-program Attendance dashboard and graphs;
@@ -47,5 +53,7 @@ This is not a background service or cross-device sync. It runs only while ARC is
   - online reload, controlled offline reload, and process-cold restart;
   - Schema 8 / IndexedDB 14 / 74 stores;
   - exact backup verification and restore parity.
+
+The amended rehearsal additionally creates one fictional equipment record, selects the same stable identity from Project Creation and Booth Manager, proves those relationships remain independent, verifies rename propagation, archives the item without breaking either historical reference, performs online/offline reload and process-cold restart, and re-verifies 74-store backup/restore parity.
 
 The browser rehearsal used only task-owned fictional state and simulated the Graph transport contract. It did not contact the school tenant or claim fresh physical Samsung acceptance. Actual cloud/device acceptance remains a later guarded release boundary.

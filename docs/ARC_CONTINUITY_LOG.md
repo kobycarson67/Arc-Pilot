@@ -1033,3 +1033,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Missing attendance for day-specific Technical work is `unknown` and teacher-reviewed; no automatic zero, exemption, grade, rating, Evidence, or qualification was introduced.
 - Verification passed focused `7/7`, JavaScript `184/184`, static `47/47`, and task-owned installed Edge with online/offline/cold restart plus exact 74-store backup/restore. The reviewed authority closure remains 114 assets.
 - No publication, deployment, Samsung, production record, OneDrive production, schema, authority, Student authorization, or instructional-content operation occurred.
+
+## 2026-11-09 — Sidebar and Technical Repair 1 completion
+
+- Continued from independently reviewed local candidate `8d57c726cbe625649f1c3eed93139354e2fd81cd`, tree `dfadcb1ab6f185a6528de802556f1293ed1e2098`, with rollback `rollback/pre-sidebar-hubs-gradebook-attendance-technical-repair-completion-1` at that exact identity.
+- Corrected the retained profile/legacy Technical assignment boundary so individual, class, and selected-recipient assignments begin `Assigned / Not started`, retain Worksheet/type and assigned-date metadata, and use exact-version duplicate protection. Synchronizing the bank or merely opening scoring no longer creates Student work.
+- Recorded Present attendance produces ordinary assigned work; missing attendance remains unknown and explicitly teacher-reviewed. Existing historical statuses are preserved rather than silently normalized.
+- Installed Edge proved two fictional graded Worksheets across both active periods of one WT and one AWT Student. Both class Gradebook and central Gradebook retained the shared Course Enrollment grade while Attendance remained Section-specific.
+- Verification passed focused `10/10`, complete JavaScript `184/184`, static `47/47`, online/offline/full-process-cold Edge workflows, and exact 74-store backup/restore parity. The reviewed authority closure remains 114 assets.
+- No GitHub, deployment, Samsung, production Student, OneDrive production, schema, V8 authority, real-Student authorization, or instructional-content operation occurred.

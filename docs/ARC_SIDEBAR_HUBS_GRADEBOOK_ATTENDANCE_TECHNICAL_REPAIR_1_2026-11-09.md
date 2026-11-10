@@ -21,6 +21,8 @@ Status: LOCAL CANDIDATE — INDEPENDENT SOURCE REVIEW REQUIRED
 - Duplicate assignment is refused.
 - Removal archives the definition while preserving prior Student work, grades, revisions, and History.
 - Missing attendance for day-specific work remains `unknown` and requires teacher review; it never silently creates a zero, exemption, or grade.
+- The retained Student-profile and legacy assignment paths now use the same authoritative assignment boundary: newly assigned work starts `Assigned / Not started`, retains Worksheet/type and assigned-date metadata, and refuses exact-version duplicates.
+- Bank synchronization and opening a scoring surface are read-only with respect to assignment creation. Historical records are not silently rewritten.
 
 ## Dual-period and grading boundaries
 
@@ -31,10 +33,10 @@ Status: LOCAL CANDIDATE — INDEPENDENT SOURCE REVIEW REQUIRED
 
 ## Verification
 
-- Focused repair tests: 7/7.
+- Focused repair tests: 10/10.
 - Complete JavaScript inventory: 184/184.
 - Static regression: 47/47.
-- Installed Microsoft Edge: program-wide hubs, class-direct shortcuts, Technical creation/assignment, attendance-unknown handling, online reload, offline reload, full-process cold restart, and exact 74-store backup/restore passed with task-owned fictional data.
+- Installed Microsoft Edge: Student-profile Worksheet assignment under recorded Present attendance; program-wide hubs; class-direct shortcuts; missing-attendance teacher review; two graded fictional Worksheets from each period of one dual-period WT Student and one dual-period AWT Student in class and central Gradebooks; online reload; offline reload; full-process cold restart; and exact 74-store backup/restore all passed with task-owned fictional data.
 - The mechanically reviewed release closure remains 114 authority assets.
 
 ## Preserved boundaries

@@ -1,6 +1,7 @@
 const assert=require('assert');
 const crypto=require('crypto');
 const fs=require('fs');
+const Generator=require('../scripts/generate_arc_runtime_release_manifest');
 
 const html=fs.readFileSync('index.html','utf8');
 const refinement=fs.readFileSync('src/arc_titanium_visual_refinement_1.css','utf8');
@@ -9,6 +10,8 @@ const visual=fs.readFileSync('src/arc_titanium_visual_system.css','utf8');
 const manifest=JSON.parse(fs.readFileSync('app.webmanifest','utf8'));
 const sw=fs.readFileSync('sw.js','utf8');
 const workflow=fs.readFileSync('.github/workflows/pages-live-verification.yml','utf8');
+const contract=JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json','utf8'));
+const closure=Generator.discoverClosure(process.cwd(),contract);
 const build=fs.readFileSync('app-build.js','utf8');
 const builder=fs.readFileSync('scripts/build_arc_brand_derivatives.py','utf8');
 
@@ -37,7 +40,7 @@ for(const [file,[size,hash]] of Object.entries(derivatives)){
   assert.deepStrictEqual(pngSize(file),size,'wrong derivative dimensions: '+file);
   assert.strictEqual(sha(file),hash,'branding derivative changed: '+file);
   assert(sw.includes("'./"+file+"'"),'offline shell misses '+file);
-  assert(workflow.includes(file),'Pages verification misses '+file);
+  assert(closure.reviewedNonAuthority.includes(file),'Pages verification inventory misses '+file);
 }
 
 assert(builder.includes('LETTERMARK_CROP = (0, 0, 2048, 410)'));

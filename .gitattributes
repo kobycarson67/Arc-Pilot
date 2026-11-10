@@ -1,3 +1,14 @@
+/.gitattributes text eol=lf
 docs/ARC_MASTER_PRODUCT_AUTHORITY.md whitespace=-blank-at-eol
 docs/ARC_CLASSROOM_READINESS_CONTRACT.md whitespace=-blank-at-eol
 docs/ARC_AUTHORITY_GOVERNANCE.md whitespace=-blank-at-eol
+
+# Release text must have one representation in Git blobs, clean checkouts,
+# Pages artifacts, and the immutable-byte manifest.
+*.html text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.webmanifest text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

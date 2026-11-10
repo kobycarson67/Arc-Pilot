@@ -1042,3 +1042,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Installed Edge proved two fictional graded Worksheets across both active periods of one WT and one AWT Student. Both class Gradebook and central Gradebook retained the shared Course Enrollment grade while Attendance remained Section-specific.
 - Verification passed focused `10/10`, complete JavaScript `184/184`, static `47/47`, online/offline/full-process-cold Edge workflows, and exact 74-store backup/restore parity. The reviewed authority closure remains 114 assets.
 - No GitHub, deployment, Samsung, production Student, OneDrive production, schema, V8 authority, real-Student authorization, or instructional-content operation occurred.
+
+## 2026-11-09 — Publication Byte Representation Repair 1 local candidate
+
+- Continued from published Sidebar/Technical completion `3aca4f1e8afe82f56b10bad5b269de4984db98e0`, tree `45ba8529af30f54853fc111aca7fc22780534ae7`, with rollback `rollback/pre-publication-byte-representation-repair-1` at that exact identity.
+- Corrected the publication-stop diagnosis: Windows `git archive` output had been transformed to CRLF by checkout conversion and was not raw Git-object evidence. Direct `git cat-file` verification proved 114/114 authority assets and 11/11 reviewed visuals exactly match current Pages bytes.
+- Added explicit LF attributes for release text, changed Pages Live Verification to discover the reviewed 114+11 inventory from immutable Git blobs, and compare every public response directly with `git cat-file` bytes.
+- Added regression protection against CRLF/bare-CR immutable authority blobs, checkout-derived release comparisons, inventory drift, and missing LF attributes. Exact-byte integrity remains fail closed; no normalized comparison is accepted.
+- Verification passed focused manifest/Pages and retained physical/visual guardrails, complete JavaScript `184/184`, static `47/47`, workflow Bash syntax, JavaScript parse, and diff checks. Installed-Edge classroom testing was not repeated because no runtime/application byte changed.
+- No application functionality, build identity, authority closure, service worker, database, Student, grade, Samsung, release evidence, compatibility receipt, V8 authority, OneDrive recovery, or instructional content changed.

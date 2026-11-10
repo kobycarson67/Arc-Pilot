@@ -20,8 +20,8 @@
     ]},
     {id:'instruction',label:'Instruction',items:[
       {id:'today-focus',label:"Today's Focus",icon:'focus',future:true},
-      {id:'lessonbank',label:'Lesson Plans',icon:'lessonbank',action:'renderLessonBank'},
-      {id:'standards',label:'Curriculum & Standards',icon:'standards',action:'renderActiveCurriculum'}
+      {id:'lessonbank',label:'Lesson Plans',icon:'lessonbank',action:'renderLessonPlansHub'},
+      {id:'standards',label:'Curriculum & Standards',icon:'standards',action:'renderCurriculumStandardsHub'}
     ]},
     {id:'activity-library',label:'Activity Library',items:[
       {id:'projectbank',label:'Project Library',icon:'projectbank',action:'renderProjectBank'},

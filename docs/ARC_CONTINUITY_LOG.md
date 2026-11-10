@@ -1051,3 +1051,12 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Added regression protection against CRLF/bare-CR immutable authority blobs, checkout-derived release comparisons, inventory drift, and missing LF attributes. Exact-byte integrity remains fail closed; no normalized comparison is accepted.
 - Verification passed focused manifest/Pages and retained physical/visual guardrails, complete JavaScript `184/184`, static `47/47`, workflow Bash syntax, JavaScript parse, and diff checks. Installed-Edge classroom testing was not repeated because no runtime/application byte changed.
 - No application functionality, build identity, authority closure, service worker, database, Student, grade, Samsung, release evidence, compatibility receipt, V8 authority, OneDrive recovery, or instructional content changed.
+
+## 2026-11-09 — Technical Assignment, History, Sidebar, and Dual-Period Coordinated Repair 1
+
+- Continued exactly from accepted publication-integrity candidate `1a328257aed1a3161bc12e3c90aefeb3ce892c10`, tree `54ac02d7bc7547fba6b13f6628141573fe32d33f`, with rollback `rollback/pre-technical-assignment-history-sidebar-dual-period-coordinated-repair-1` at that identity.
+- Made reusable Technical definitions occurrence-aware so recurring daily work is permitted across dates while exact duplicates remain refused. Added Fast Roster bank selection, individual withdrawal/restoration, archive restoration, append-only assignment audit History, dependency-aware Undo, and superseding grade corrections.
+- Repaired Sidebar Lesson Plans and Curriculum & Standards as central v8-safe hubs, and corrected the Student directory so one WT/AWT Course Enrollment remains visible in every assigned Section without duplicating Course grades or collapsing Section Attendance.
+- Preserved all existing grades, Enrollments, Projects, History, production/academic authority, real-Student authorization, Schema 8 / IDB 14 / 74 stores, OneDrive recovery contracts, and the 114-asset closure.
+- Verification passed focused `7/7`, complete JavaScript `185/185`, static `47/47`, task-owned installed Edge online/offline/full-process-cold workflows, WT/AWT dual-period Gradebook/Attendance rehearsal, and verified 74-store backup/restore with exact record-count parity.
+- No GitHub, deployment, release-evidence, Samsung, production record, OneDrive production, authority transition, schema, Student authorization, or instructional-content operation occurred.

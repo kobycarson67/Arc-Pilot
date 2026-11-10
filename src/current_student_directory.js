@@ -5,13 +5,10 @@
   root.ArcCurrentStudentDirectory=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
   function build(state,sectionStudents){
-    var seen={};
     return (state.sections||[]).slice().sort(function(a,b){return Number(a.period)-Number(b.period)||String(a.name).localeCompare(String(b.name));}).map(function(section){
-      var students=sectionStudents(section.id).filter(function(student){
-        if(seen[student.id])return false;
-        seen[student.id]=true;
-        return true;
-      }).slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name));});
+      // One stable Student may legitimately appear in multiple same-course Sections.
+      // This is visibility, not duplicated Student or Course Enrollment authority.
+      var students=sectionStudents(section.id).slice().sort(function(a,b){return String(a.name).localeCompare(String(b.name));});
       return {section:section,students:students,count:students.length};
     });
   }

@@ -1023,3 +1023,13 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Preserved the accepted canonical Equipment Inventory, Project requirement-only semantics, Booth stable references, legacy capability definitions, archive/rename behavior, 114-asset closure, and every database/authority boundary.
 - Verification passed the focused selector suite `6/6`, complete JavaScript `183/183`, static `47/47`, and task-owned installed Edge interaction with multiple Project/Booth selections, Material quantity/dimensions, online/offline reload, process-cold restart, and exact 74-store backup/restore parity.
 - No GitHub, deployment, release-evidence, Samsung, production database, real Student record, V8 authority, or instructional-content operation occurred.
+
+## 2026-11-09 — Sidebar Hubs, Gradebook, Attendance, and Technical Repair 1
+
+- Continued exactly from accepted Combined Classroom Update `dc644057d37d7d5aef324a442a39d381c7a315fd`, tree `aa00cff54cc98657b875e8a03a2b148167ef3513`, with rollback `rollback/pre-sidebar-hubs-gradebook-attendance-technical-repair-1` at that identity.
+- Applied the instructor's navigation rule: Sidebar destinations are program-wide hubs, while Fast Roster actions remain selected-class shortcuts. Gradebook now has an all-class hub; Attendance retains its whole-program dashboard and historical graphs; both retain direct class actions.
+- Repaired the authoritative Technical Assignment workflow with program-wide WT/AWT banks, direct creation, optional selected-Student assignment, explicit assignment date, `Assigned / Not started`, duplicate refusal, archived-history preservation, and visible errors.
+- Exact requested Sections now flow through P6 and P9 reads for same-course dual-period Students. Course work and grades remain Enrollment-shared while Attendance remains Section-specific.
+- Missing attendance for day-specific Technical work is `unknown` and teacher-reviewed; no automatic zero, exemption, grade, rating, Evidence, or qualification was introduced.
+- Verification passed focused `7/7`, JavaScript `184/184`, static `47/47`, and task-owned installed Edge with online/offline/cold restart plus exact 74-store backup/restore. The reviewed authority closure remains 114 assets.
+- No publication, deployment, Samsung, production record, OneDrive production, schema, authority, Student authorization, or instructional-content operation occurred.

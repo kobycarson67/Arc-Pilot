@@ -23,7 +23,7 @@ test('task-owned unified verification still refuses the real database and requir
   assert(html.includes('UNIFIED_NONPRODUCTION_DATABASE_REQUIRED'));
 });
 test('build and shell identities preserve runtime repair lineage and advance for the verified-release identity repair',()=>{
-  const before=buildAt('3943f05e847a5318c5cd8bee10f45ca905e57501'),after=buildAt(),runtime='-live-classroom-runtime-repair-1',identity='-live-student-profile-verified-release-identity-repair-1',classroomOperations='-dual-period-temporary-shop-visitor-1-combined-classroom-usability-autobackup-1-equipment-inventory-booth-amendment-1-equipment-selector-ui-completion-1';
+  const before=buildAt('3943f05e847a5318c5cd8bee10f45ca905e57501'),after=buildAt(),runtime='-live-classroom-runtime-repair-1',identity='-live-student-profile-verified-release-identity-repair-1',classroomOperations='-dual-period-temporary-shop-visitor-1-combined-classroom-usability-autobackup-1-equipment-inventory-booth-amendment-1-equipment-selector-ui-completion-1-sidebar-hubs-gradebook-attendance-technical-repair-1';
   assert.equal(after.build,before.build+runtime+identity+classroomOperations);
   assert.equal(after.shell,before.shell+runtime+'-live-student-profile-repair-1-profile-enrollment-label-repair-1'+identity+classroomOperations);
   assert.equal(after.liveClassroomRuntimeRepair,'live-classroom-runtime-repair-1');

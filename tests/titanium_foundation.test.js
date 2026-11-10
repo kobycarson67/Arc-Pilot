@@ -13,7 +13,7 @@ const groups=shell.navigation();
 assert.deepStrictEqual(groups.map(x=>x.id),['classroom','instruction','activity-library','shop','arc']);
 const actions=shell.actionMap();
 assert.deepStrictEqual(actions,{
-  main:'renderMainMenu',roster:'renderCurrentStudentDirectory',forecast:'renderClassForecast',attendance:'renderAttendance',projects:'showClassProjects','classroom-workflow':'renderClassroomWorkflowWorkspace',openshop:'renderOpenShopAll',gradebook:'renderGradebook',
+  main:'renderMainMenu',roster:'renderCurrentStudentDirectory',forecast:'renderClassForecast',attendance:'renderAttendance',projects:'showClassProjects','classroom-workflow':'renderClassroomWorkflowWorkspace',openshop:'renderOpenShopAll',gradebook:'renderGradebookHub',
   lessonbank:'renderLessonBank',projectbank:'renderProjectBank','technical-assignments':'renderTechnicalAssignmentLibrary','skill-challenges':'renderSkillChallengeLibrary',practice:'renderPracticeLibrary',standards:'renderActiveCurriculum',inventory:'renderInventory','equipment-inventory':'renderEquipmentInventory',booths:'showBoothManager',
   notifications:'showNotifications',search:'showGlobalSearch',resources:'renderResourcesWorkspace',administration:'renderAdministrationWorkspace',settings:'renderAppSettings'
 });

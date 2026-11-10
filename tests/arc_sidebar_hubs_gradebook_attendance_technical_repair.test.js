@@ -1,0 +1,16 @@
+const assert=require('assert');
+const fs=require('fs');
+const ProjectTechnical=require('../src/arc_project_technical_authority_adapter');
+const Gradebook=require('../src/arc_gradebook_authority_adapter');
+let passed=0,total=0;
+async function test(name,fn){total++;try{await fn();passed++;console.log('PASS',name);}catch(error){console.error('FAIL',name,error);process.exitCode=1;}}
+(async()=>{
+await test('sidebar hubs are program-wide while Fast Roster shortcuts are class-direct',()=>{let html=fs.readFileSync('index.html','utf8'),shell=require('../src/arc_titanium_shell'),grade=shell.navigation().flatMap(x=>x.items).find(x=>x.id==='gradebook');assert.equal(grade.action,'renderGradebookHub');assert.equal(grade.classScoped,undefined);assert(html.includes('onclick="renderClassGradebook()">Gradebook'));assert(html.includes('onclick="renderAttendanceEntry()">Attendance & Passes'));assert(html.includes('Program-wide hub for every class'));assert(html.includes('Whole-program history and trends'));});
+await test('central Gradebook exposes class course student and category filters',()=>{let html=fs.readFileSync('index.html','utf8');for(const id of ['gradebookHub_sectionId','gradebookHub_course','gradebookHub_studentId','gradebookHub_category'])assert(html.includes(id),id);assert(html.includes('Shared same-course work and grades follow the stable Course Enrollment across dual periods'));assert(html.includes('Attendance remains section-specific'));});
+await test('Technical bank creates separately assigns selected recipients and preserves history on removal',()=>{let html=fs.readFileSync('index.html','utf8');for(const text of ['Save to Bank','Save & Assign Selected','Assigned date','DUPLICATE_TECHNICAL_ASSIGNMENT','Remove / Archive','Historical Student work and grading lineage were preserved'])assert(html.includes(text),text);assert(html.includes('Worksheet / Type'));assert(html.includes('activityAssignments'));});
+await test('new Technical work is not makeup and missing attendance remains unknown',()=>{let html=fs.readFileSync('index.html','utf8');assert(html.includes('["assigned", "Assigned / Not started"]'));assert(html.includes('Attendance not recorded — Teacher Review'));assert(html.includes('No grade action is proposed until attendance is recorded'));assert(html.includes('workflow==="Assigned"?"assigned"'));});
+await test('Project Technical adapter requests exact dual-period section scope',()=>{let source=fs.readFileSync('src/arc_project_technical_authority_adapter.js','utf8');assert(source.includes('scopeForStudent(id,payload.sectionId||undefined)'));});
+await test('Gradebook adapter requests exact section but retains Course Enrollment ownership',()=>{let source=fs.readFileSync('src/arc_gradebook_authority_adapter.js','utf8');assert(source.includes('scopeForStudent(input.studentId,input.sectionId||undefined)'));assert(source.includes('scopeForStudent(contexts[i],sectionId)'));assert(source.includes('enrollmentId:studentScope.enrollmentId'));});
+await test('build and shell identities advance for a coherent future cache',()=>{let source=fs.readFileSync('app-build.js','utf8');assert.equal((source.match(/sidebar-hubs-gradebook-attendance-technical-repair-1/g)||[]).length>=3,true);});
+console.log(`\n${passed}/${total} coordinated classroom workflow repair tests passed.`);
+})();

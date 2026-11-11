@@ -3,7 +3,7 @@ const crypto=require('crypto');
 const fs=require('fs');
 
 const html=fs.readFileSync('index.html','utf8');
-const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-1','');
+const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-2','');
 const visualFoundation=fs.readFileSync('src/arc_visual_foundation.css','utf8');
 
 const expectedBranding={

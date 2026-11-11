@@ -3,6 +3,7 @@ const fs=require('fs');
 const Attendance=require('../src/arc_v8_attendance');
 const Activity=require('../src/arc_v8_activity');
 const Gradebook=require('../src/arc_v8_gradebook');
+const Workplace=require('../src/arc_v8_workplace_safety');
 
 let passed=0,total=0;
 function test(name,fn){total++;try{fn();passed++;console.log('PASS',name);}catch(error){console.error('FAIL',name,error);process.exitCode=1;}}
@@ -56,24 +57,62 @@ test('current grading period resolves the narrow quarter over its containing sem
   assert.equal(period.gradingPeriodId,'q2');
 });
 
-test('assignment ledger exposes title date section and score without inventing rows',()=>{
+test('assignment ledger converges assigned, awaiting, makeup, excused, withdrawn, completed, and corrected occurrences',()=>{
   const ledger=Gradebook.assignmentLedger({
     definitions:[{definitionId:'d',type:'Technical Assignment',title:'Measurement Worksheet'}],
     versions:[{versionId:'v',definitionId:'d',titleSnapshot:'Measurement Worksheet'}],
-    assignments:[{assignmentId:'a',versionId:'v',sectionId:'sec-4',assignedDate:'2026-11-10'}],
-    studentActivities:[{studentActivityId:'sa',assignmentId:'a',versionId:'v',studentId:'s'}],
-    results:[{assessmentResultId:'r',studentId:'s',studentActivityId:'sa',pointsEarned:0,pointsPossible:10,percentage:0,finalizedAt:'2026-11-10T10:00:00Z'}]
+    assignments:['assigned','awaiting','makeup','excused','withdrawn','completed'].map((id,index)=>({assignmentId:'a-'+id,versionId:'v',sectionId:index%2?'sec-awt-6':'sec-wt-4',assignedDate:`2026-11-${String(10+index).padStart(2,'0')}`})),
+    studentActivities:[
+      {studentActivityId:'sa-assigned',assignmentId:'a-assigned',versionId:'v',studentId:'s',workflowState:'Assigned',assignmentState:'active'},
+      {studentActivityId:'sa-awaiting',assignmentId:'a-awaiting',versionId:'v',studentId:'s',workflowState:'Pending Instructor Review',assignmentState:'active'},
+      {studentActivityId:'sa-makeup',assignmentId:'a-makeup',versionId:'v',studentId:'s',workflowState:'Pending Make-Up',assignmentState:'active'},
+      {studentActivityId:'sa-excused',assignmentId:'a-excused',versionId:'v',studentId:'s',workflowState:'Excused',assignmentState:'active'},
+      {studentActivityId:'sa-withdrawn',assignmentId:'a-withdrawn',versionId:'v',studentId:'s',workflowState:'Assigned',assignmentState:'withdrawn'},
+      {studentActivityId:'sa-completed',assignmentId:'a-completed',versionId:'v',studentId:'s',workflowState:'Completed',assignmentState:'active'}
+    ],
+    results:[
+      {assessmentResultId:'r-old',studentId:'s',studentActivityId:'sa-completed',pointsEarned:7,pointsPossible:10,percentage:70,finalizedAt:'2026-11-15T10:00:00Z'},
+      {assessmentResultId:'r-new',studentId:'s',studentActivityId:'sa-completed',pointsEarned:0,pointsPossible:10,percentage:0,finalizedAt:'2026-11-16T10:00:00Z',supersedesAssessmentResultId:'r-old'}
+    ]
   });
-  assert.equal(ledger.length,1);
-  assert.equal(ledger[0].title,'Measurement Worksheet');
-  assert.equal(ledger[0].assignmentDate,'2026-11-10');
-  assert.equal(ledger[0].sectionId,'sec-4');
-  assert.equal(ledger[0].pointsEarned,0);
+  assert.equal(ledger.length,7);
+  assert.deepEqual(ledger.map(x=>x.status),['Assigned','Awaiting grade','Make-up','Excused','Withdrawn','Corrected — prior score','Corrected — current score']);
+  assert.equal(ledger.at(-1).pointsEarned,0);
+  assert.equal(ledger.at(-1).assignmentDate,'2026-11-15');
+  assert.equal(ledger.at(-1).sectionId,'sec-awt-6');
+  assert.equal(ledger.find(x=>x.status==='Awaiting grade').pointsEarned,null);
 });
 
-test('normal shell contains explicit workplace zero, working activity libraries, ledger, and eager logo',()=>{
+test('daily Workplace rows produce one visible provisional weekly total without double counting',()=>{
+  const summary=Workplace.provisionalWeekSummary([
+    {day:{workplaceDayId:'d1',revision:1},result:{workplaceDayId:'d1',schoolDate:'2026-11-09',applicable:true,earned:9,possible:10,percentage:90}},
+    {day:{workplaceDayId:'d1',revision:2},result:{workplaceDayId:'d1',schoolDate:'2026-11-09',applicable:true,earned:8,possible:10,percentage:80}},
+    {day:{workplaceDayId:'d2',revision:1},result:{workplaceDayId:'d2',schoolDate:'2026-11-10',applicable:true,earned:10,possible:10,percentage:100}},
+    {day:{workplaceDayId:'d3',revision:1},result:{workplaceDayId:'d3',schoolDate:'2026-11-11',applicable:false,earned:null,possible:0,percentage:null}}
+  ]);
+  assert.deepEqual([summary.earned,summary.possible,summary.percentage],[18,20,90]);
+  assert.equal(summary.dayResults.length,2);
+  assert.equal(summary.finalized,false);
+  assert.equal(summary.doubleCountPrevented,true);
+});
+
+test('Quarter 2 and the existing approved WT/AWT policy resolve without creating a duplicate policy',()=>{
+  const periods=[
+    {gradingPeriodId:'semester',semesterId:'s1',startDate:'2026-08-01',endDate:'2026-12-20',order:1,lifecycle:'active'},
+    {gradingPeriodId:'q2',semesterId:'s1',code:'Q2',startDate:'2026-10-20',endDate:'2026-12-20',order:2,lifecycle:'active'}
+  ];
+  const policies=[
+    {gradebookPolicyVersionId:'draft',policyKey:'WT-AWT',versionNumber:2,courseIds:['arc-course-wt','arc-course-awt'],lifecycle:'draft',approvedAt:null},
+    {gradebookPolicyVersionId:'approved',policyKey:'WT-AWT',versionNumber:1,courseIds:['arc-course-wt','arc-course-awt'],lifecycle:'approved',approvedAt:'2026-10-14T12:00:00Z'}
+  ];
+  assert.equal(Gradebook.resolveCurrentPeriod(periods,'2026-11-10','s1').gradingPeriodId,'q2');
+  assert.equal(Gradebook.resolveApprovedPolicy(policies,['arc-course-wt','arc-course-awt']).gradebookPolicyVersionId,'approved');
+  assert.equal(policies.length,2);
+});
+
+test('normal shell exposes the completed ledger, visible Workplace progress, policy diagnostics, History safeguards, and eager logo',()=>{
   const html=fs.readFileSync('index.html','utf8');
-  for(const token of ['No Work Completed — 0/10','recordNoWorkCompletedForStudent','showOwnedActivityEditor','assignOwnedActivity','Assignment ledger','fetchpriority="high"','Not Returned — Class Ended'])assert(html.includes(token),token);
+  for(const token of ['No Work Completed — 0/10','recordNoWorkCompletedForStudent','showOwnedActivityEditor','assignOwnedActivity','Assignment ledger','Daily Workplace & provisional week','gradebookConfiguration','requiresPreservedGradeConfirmation','fetchpriority="high"','Not Returned — Class Ended'])assert(html.includes(token),token);
   assert(html.includes("publicationState:'Approved'"));
   assert(html.includes('Create Approved Definition'));
   assert(html.includes('Existing review-only starter drafts remain locked'));
@@ -88,8 +127,8 @@ test('dual-period Batch B projection binds reads to the selected exact section',
 test('runtime identity and authority closure advance together',()=>{
   const build=fs.readFileSync('app-build.js','utf8');
   const closure=JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json','utf8'));
-  assert(build.includes('coordinated-classroom-repair-10-findings-1'));
-  assert(closure.buildIdentity.endsWith('coordinated-classroom-repair-10-findings-1'));
+  assert(build.includes('coordinated-classroom-repair-10-findings-2'));
+  assert(closure.buildIdentity.endsWith('coordinated-classroom-repair-10-findings-2'));
 });
 
 if(!process.exitCode)console.log(`\n${passed}/${total} coordinated classroom repair tests passed.`);

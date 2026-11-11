@@ -1070,3 +1070,10 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Resolved the academic grading period and added a Section-aware assignment ledger without duplicating Enrollment-shared grades. Dashboard logo loading now begins with the shell.
 - Preserved Schema 8 / IndexedDB 14 / 74 stores, academic and production authority, exclusive ownership, real-Student authorization, no-dual-write protections, Simulation isolation, and the exact 114-path closure.
 - Verification passed focused `10/10`, complete JavaScript `186/186`, static `47/47`, task-owned installed Edge online/offline/cold restart, and exact 74-store backup/restore. No GitHub, deployment, release evidence, Samsung, production record, or instructional-content acceptance occurred.
+
+## 2026-11-10 — Coordinated Classroom Repair — 10 Findings 2
+
+- Continued from withheld Candidate 1 `ac4d5b904a8955dc38c18a1c5e6f8ddeb37a9888`, tree `d4453919fd2e69ab136d154c452d03e87bbad8aa`; no accepted source work was restarted.
+- Completed the occurrence-based Gradebook ledger, visible daily/provisional Workplace scoring, existing-policy Quarter 2 resolution, full owner History projection, and bounded dependency-aware assignment Undo/Redo with destructive refusal.
+- Strengthened end-to-end fictional evidence through actual P6/P9 score and handoff owners, exact day-specific Attendance recommendation, partial/completed queue convergence, and task-owned History mutations. Fixed the projection-cache bootstrap ordering defect discovered by the installed-Edge rehearsal without introducing fallback authority.
+- Preserved all grades, Enrollments, authority states, Schema 8 / IDB 14 / 74 stores, real-Student protections, the 114-path closure, and every accepted earlier repair. No GitHub, release evidence, deployment, Samsung, production record, V8 transition, or instructional acceptance occurred.

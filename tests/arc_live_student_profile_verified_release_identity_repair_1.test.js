@@ -17,7 +17,7 @@ const COMBINED_UPDATE_REVISION = 'combined-classroom-usability-autobackup-1';
 const EQUIPMENT_AMENDMENT_REVISION = 'equipment-inventory-booth-amendment-1';
 const EQUIPMENT_SELECTOR_UI_REVISION = 'equipment-selector-ui-completion-1';
 const SIDEBAR_HUBS_REPAIR_REVISION = 'sidebar-hubs-gradebook-attendance-technical-repair-1-technical-profile-assignment-completion-1-technical-assignment-history-sidebar-dual-period-repair-1';
-const COORDINATED_CLASSROOM_REPAIR_REVISION = 'coordinated-classroom-repair-10-findings-1';
+const COORDINATED_CLASSROOM_REPAIR_REVISION = 'coordinated-classroom-repair-10-findings-2';
 const bounds = {
   compatibilityContractId: 'arc-academic-schedule-v1',
   academicSchedule: 'V8_AUTHORITATIVE',

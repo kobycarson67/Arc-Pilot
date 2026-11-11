@@ -1085,3 +1085,13 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Traced the 50/25/15/10 WT/AWT weights to the Master Product Authority and Gradebook design, then added one exact-confirmation, instructor-controlled, provenance-bearing establishment action. Existing or approved policy records are never silently replaced or duplicated.
 - Proved before/after Quarter 2 behavior, explicit source handoff without policy, duplicate posting refusal, audited fictional policy establishment, daily/provisional Workplace, History, dual-period coverage, offline/cold restart, and 74-store restore parity.
 - Verification passed Gradebook `16/16`, complete JavaScript `186/186`, static `47/47`, and installed Edge. No production policy, Student, Samsung, GitHub, release-evidence, deployment, authority, schema, OneDrive custody, or instructional-content mutation occurred.
+
+## 2026-11-11 — Batch B Multi-Section Startup Repair 1
+
+- Continued exactly from accepted Candidate 3 `7882125517dd6b0e3b6ff52e2aaa0324aa05a66b`, tree `1aee33b00ed9ff80e1d0c4ed8effa2936aa5b4f5`, with rollback `rollback/pre-batch-b-multi-section-startup-repair-1` at that identity.
+- Corrected program-wide Batch B startup so each active Student resolves through a legitimate per-Student P4 Section scope. The selected Section is preferred only for its members; no Student identity, membership, Enrollment, or cross-Section access is fabricated.
+- Preserved strict missing-scope and invalid Student/Section refusal, all Candidate 3 classroom repairs, Schema 8 / IndexedDB 14 / 74 stores, exclusive V8 authority, and the exact 114-path closure.
+- Added bounded release-health observability. Failed proof or acknowledgement now records a non-sensitive diagnostic state and code, while only verified worker confirmation can produce healthy success.
+- Verification passed focused Batch B `5/5`, multi-section startup `4/4`, update controller `20/20`, Batch B shell `5/5`, complete JavaScript `187/187`, and static `47/47`.
+- Task-owned installed Edge proved 25 Students across WT/AWT Sections, six selected Period 5 AWT Students, one legitimate dual-period Student, program-wide startup, exact Section switching, and offline restart with 74 stores.
+- No GitHub, release evidence, Samsung, production record, OneDrive, Gradebook policy, authority transition, schema, or instructional-content operation occurred. Current production recovery remains a separate mandatory gate because the existing verified backup is stale.

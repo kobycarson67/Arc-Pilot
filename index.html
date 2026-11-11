@@ -634,7 +634,9 @@ async function bootstrapBatchAAuthorityRuntime() {
 }
 function batchBContext() {
     if (!batchBAuthorityActive() || !batchBAuthorityRuntime) return {};
-    return { day: dateKey(), schoolDate: dateKey(), sectionId:(activeSection()||{}).id||null, studentIds: allStudents().filter(x => !x.archived).map(x => x.id), instructorAuthorized: true, includeHistory: true, gradingPeriodId: batchBAuthorityRuntime.gradingPeriodId, gradebookPolicyVersionId: batchBAuthorityRuntime.gradebookPolicyVersionId, workplaceStartDate:batchBAuthorityRuntime.gradingPeriod&&batchBAuthorityRuntime.gradingPeriod.startDate||dateKey(), workplaceEndDate:dateKey() };
+    const selectedSectionId=(activeSection()||{}).id||null, owner=batchAAuthorityRuntime&&batchAAuthorityRuntime.projectionCache&&batchAAuthorityRuntime.projectionCache.get(), studentIds=allStudents().filter(x => !x.archived).map(x => x.id), sectionIdsByStudent={};
+    studentIds.forEach(studentId=>{const selected=selectedSectionId&&owner&&owner.scopeForStudent(studentId,selectedSectionId),effective=selected||(owner&&owner.scopeForStudent(studentId));if(effective)sectionIdsByStudent[studentId]=effective.sectionId;});
+    return { day: dateKey(), schoolDate: dateKey(), selectedSectionId, sectionIdsByStudent, studentIds, instructorAuthorized: true, includeHistory: true, gradingPeriodId: batchBAuthorityRuntime.gradingPeriodId, gradebookPolicyVersionId: batchBAuthorityRuntime.gradebookPolicyVersionId, workplaceStartDate:batchBAuthorityRuntime.gradingPeriod&&batchBAuthorityRuntime.gradingPeriod.startDate||dateKey(), workplaceEndDate:dateKey() };
 }
 async function refreshBatchBProjection() {
     if (!batchBAuthorityActive() || !batchBAuthorityRuntime) throw new Error("Batch B authority is unavailable.");

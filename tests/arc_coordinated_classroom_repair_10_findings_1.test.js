@@ -110,9 +110,20 @@ test('Quarter 2 and the existing approved WT/AWT policy resolve without creating
   assert.equal(policies.length,2);
 });
 
+test('zero-policy production shape exposes the frozen proposal but requires explicit instructor establishment',()=>{
+  let blocked=Gradebook.approvedClassroomPolicyPlan([],{instructorAuthorized:false,confirmation:''});
+  assert.deepEqual([blocked.allowed,blocked.code],[false,'EXPLICIT_POLICY_CONFIRMATION_REQUIRED']);
+  let plan=Gradebook.approvedClassroomPolicyPlan([],{instructorAuthorized:true,confirmation:'ESTABLISH APPROVED WT-AWT POLICY'});
+  assert.equal(plan.allowed,true);
+  assert.deepEqual(plan.policy.categoryWeights,Gradebook.DEFAULT_WEIGHTS);
+  assert.equal(plan.policy.provenance.explicitInstructorAction,true);
+  assert.equal(Gradebook.resolveApprovedPolicy([],['arc-course-wt','arc-course-awt']),null);
+});
+
 test('normal shell exposes the completed ledger, visible Workplace progress, policy diagnostics, History safeguards, and eager logo',()=>{
   const html=fs.readFileSync('index.html','utf8');
-  for(const token of ['No Work Completed — 0/10','recordNoWorkCompletedForStudent','showOwnedActivityEditor','assignOwnedActivity','Assignment ledger','Daily Workplace & provisional week','gradebookConfiguration','requiresPreservedGradeConfirmation','fetchpriority="high"','Not Returned — Class Ended'])assert(html.includes(token),token);
+  for(const token of ['No Work Completed — 0/10','recordNoWorkCompletedForStudent','showOwnedActivityEditor','assignOwnedActivity','Assignment ledger','Daily Workplace & provisional week','gradebookConfiguration','Source Gradebook ledger available','Official weighted/current grades are not calculated or posted','requiresPreservedGradeConfirmation','fetchpriority="high"','Not Returned — Class Ended'])assert(html.includes(token),token);
+  assert(fs.readFileSync('src/arc_v8_gradebook.js','utf8').includes('ESTABLISH APPROVED WT-AWT POLICY'));
   assert(html.includes("publicationState:'Approved'"));
   assert(html.includes('Create Approved Definition'));
   assert(html.includes('Existing review-only starter drafts remain locked'));
@@ -127,8 +138,8 @@ test('dual-period Batch B projection binds reads to the selected exact section',
 test('runtime identity and authority closure advance together',()=>{
   const build=fs.readFileSync('app-build.js','utf8');
   const closure=JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json','utf8'));
-  assert(build.includes('coordinated-classroom-repair-10-findings-2'));
-  assert(closure.buildIdentity.endsWith('coordinated-classroom-repair-10-findings-2'));
+  assert(build.includes('coordinated-classroom-repair-10-findings-3'));
+  assert(closure.buildIdentity.endsWith('coordinated-classroom-repair-10-findings-3'));
 });
 
 if(!process.exitCode)console.log(`\n${passed}/${total} coordinated classroom repair tests passed.`);

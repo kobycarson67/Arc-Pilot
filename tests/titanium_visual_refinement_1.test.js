@@ -7,7 +7,7 @@ const css=fs.readFileSync('src/arc_titanium_visual_refinement_1.css','utf8');
 const icons=fs.readFileSync('src/arc_icons.js','utf8');
 const shell=fs.readFileSync('src/arc_titanium_shell.js','utf8');
 const sw=fs.readFileSync('sw.js','utf8');
-const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-2','');
+const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-3','');
 
 const assets={
   'assets/brand/source/arc-titanium-authoritative-visual-reference-v1.jpg':'04824a21ed3b47f2976cef351fedc3ebd8cf7bbb0d3dfc6a796f24727ac62787',

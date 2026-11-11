@@ -1077,3 +1077,11 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Completed the occurrence-based Gradebook ledger, visible daily/provisional Workplace scoring, existing-policy Quarter 2 resolution, full owner History projection, and bounded dependency-aware assignment Undo/Redo with destructive refusal.
 - Strengthened end-to-end fictional evidence through actual P6/P9 score and handoff owners, exact day-specific Attendance recommendation, partial/completed queue convergence, and task-owned History mutations. Fixed the projection-cache bootstrap ordering defect discovered by the installed-Edge rehearsal without introducing fallback authority.
 - Preserved all grades, Enrollments, authority states, Schema 8 / IDB 14 / 74 stores, real-Student protections, the 114-path closure, and every accepted earlier repair. No GitHub, release evidence, deployment, Samsung, production record, V8 transition, or instructional acceptance occurred.
+
+## 2026-11-10 — Coordinated Classroom Repair — 10 Findings 3
+
+- Continued exactly from withheld Candidate 2 `ca7c0129138ef6a416ac616c321d2f98b85731fd`, tree `2c0425c2fae02541a489a161418a172ada3e488e`, with rollback `rollback/pre-coordinated-classroom-repair-10-findings-3` at that identity.
+- Reproduced the actual zero-policy/zero-entry production shape in isolated fictional IndexedDB while retaining finalized AssessmentResults and four Grading Periods. The source assignment/assessment ledger remains visible while official weighted/current calculation is explicitly unavailable.
+- Traced the 50/25/15/10 WT/AWT weights to the Master Product Authority and Gradebook design, then added one exact-confirmation, instructor-controlled, provenance-bearing establishment action. Existing or approved policy records are never silently replaced or duplicated.
+- Proved before/after Quarter 2 behavior, explicit source handoff without policy, duplicate posting refusal, audited fictional policy establishment, daily/provisional Workplace, History, dual-period coverage, offline/cold restart, and 74-store restore parity.
+- Verification passed Gradebook `16/16`, complete JavaScript `186/186`, static `47/47`, and installed Edge. No production policy, Student, Samsung, GitHub, release-evidence, deployment, authority, schema, OneDrive custody, or instructional-content mutation occurred.

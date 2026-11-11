@@ -6,7 +6,7 @@ const Shell=require('../src/arc_titanium_shell');
 const html=fs.readFileSync('index.html','utf8');
 const css=fs.readFileSync('src/arc_visual_foundation.css','utf8');
 const refinement=fs.readFileSync('src/arc_titanium_visual_refinement_1.css','utf8');
-const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-2','');
+const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-3','');
 let passed=0;
 function test(name,fn){fn();passed++;console.log('PASS '+name);}
 const options={edgeWidth:24,intentDistance:8,drawerTravel:222,settleProgress:.5,flickVelocity:.55};

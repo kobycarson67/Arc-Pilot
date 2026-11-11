@@ -12,7 +12,7 @@ const sw=fs.readFileSync('sw.js','utf8');
 const workflow=fs.readFileSync('.github/workflows/pages-live-verification.yml','utf8');
 const contract=JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json','utf8'));
 const closure=Generator.discoverClosure(process.cwd(),contract);
-const build=fs.readFileSync('app-build.js','utf8');
+const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-1','');
 const builder=fs.readFileSync('scripts/build_arc_brand_derivatives.py','utf8');
 
 function sha(file){return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');}

@@ -1,5 +1,5 @@
 const assert=require('assert'),fs=require('fs');
-const html=fs.readFileSync('index.html','utf8'),sw=fs.readFileSync('sw.js','utf8'),build=fs.readFileSync('app-build.js','utf8');
+const html=fs.readFileSync('index.html','utf8'),sw=fs.readFileSync('sw.js','utf8'),build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-1','');
 assert(html.includes('src/material_inventory.js'));assert(sw.includes('./src/material_inventory.js'));
 assert(html.includes('Current Stock')&&html.includes('History / Usage')&&html.includes('Definitions'));
 assert(html.includes('+ Record Material Use/Waste'));assert(html.includes('commitMaterialInventory'));

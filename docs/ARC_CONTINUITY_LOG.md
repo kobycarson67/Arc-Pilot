@@ -1060,3 +1060,13 @@ A bounded review-only Activity Library layer adds 16 differentiated WT/AWT start
 - Preserved all existing grades, Enrollments, Projects, History, production/academic authority, real-Student authorization, Schema 8 / IDB 14 / 74 stores, OneDrive recovery contracts, and the 114-asset closure.
 - Verification passed focused `7/7`, complete JavaScript `185/185`, static `47/47`, task-owned installed Edge online/offline/full-process-cold workflows, WT/AWT dual-period Gradebook/Attendance rehearsal, and verified 74-store backup/restore with exact record-count parity.
 - No GitHub, deployment, release-evidence, Samsung, production record, OneDrive production, authority transition, schema, Student authorization, or instructional-content operation occurred.
+
+## 2026-11-10 — Coordinated Classroom Repair — 10 Findings 1
+
+- Continued exactly from accepted application baseline `2fb90efd8290a74ebee61f3ebe43eaa450147ded`, tree `3d1196ba66adf72ad5cad0008525e5e3fadc20e2`, with rollback `rollback/pre-coordinated-classroom-repair-10-findings-1` at that identity.
+- Reconciled exact-Section Attendance with Workplace eligibility, added explicit instructor-confirmed No Work Completed `0/10`, and capped open-pass display at Section end without rewriting the actual return record.
+- Connected instructor-owned Practice and Skill Challenge create/version/copy/assign/archive/restore through the existing P6 owner. Starter drafts remain locked and Practice remains non-graded and nonqualifying.
+- Made active Technical work the default scoring queue; preserved missing-Attendance review; distinguished blank from an explicit zero; completed scoring and StudentActivity state together through existing owners; and enriched Student History with grades, corrections, and Undo/Redo explanations.
+- Resolved the academic grading period and added a Section-aware assignment ledger without duplicating Enrollment-shared grades. Dashboard logo loading now begins with the shell.
+- Preserved Schema 8 / IndexedDB 14 / 74 stores, academic and production authority, exclusive ownership, real-Student authorization, no-dual-write protections, Simulation isolation, and the exact 114-path closure.
+- Verification passed focused `10/10`, complete JavaScript `186/186`, static `47/47`, task-owned installed Edge online/offline/cold restart, and exact 74-store backup/restore. No GitHub, deployment, release evidence, Samsung, production record, or instructional-content acceptance occurred.

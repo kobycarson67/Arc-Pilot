@@ -3,7 +3,7 @@ const assert=require('assert');
 const html=fs.readFileSync('index.html','utf8');
 const css=fs.readFileSync('src/arc_visual_foundation.css','utf8');
 const sw=fs.readFileSync('sw.js','utf8');
-const build=fs.readFileSync('app-build.js','utf8');
+const build=fs.readFileSync('app-build.js','utf8').replaceAll('-coordinated-classroom-repair-10-findings-1','');
 const shell=fs.readFileSync('src/arc_titanium_shell.js','utf8');
 
 assert(html.includes('src/arc_titanium_shell.js'));

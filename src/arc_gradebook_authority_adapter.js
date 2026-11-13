@@ -26,7 +26,7 @@
       case'quarter-preflight':return gradebook.quarterClosePreflight(x);
       case'quarter-snapshot':return gradebook.approveQuarterSnapshot(x);
       default:fail('UNSUPPORTED_GRADEBOOK_ACTION','Unknown Gradebook action.',{action:action});}}
-    return{authorityState:state,databaseName:state===V7?null:databaseName,runLegacy:legacy,runIsolated:v8,runV8:v8,isAuthoritativeV8:state===AUTHORITATIVE,dualWrite:false,automaticExternalPosting:false};
+    return{withStorage:function(boundStorage){if(state!==ISOLATED&&state!==AUTHORITATIVE)fail('V8_AUTHORITY_BLOCKED','Gradebook transaction binding requires v8 authority.');return create(Object.assign({},options,{storage:boundStorage,gradebook:gradebook.withStorage(boundStorage)}));},authorityState:state,databaseName:state===V7?null:databaseName,runLegacy:legacy,runIsolated:v8,runV8:v8,isAuthoritativeV8:state===AUTHORITATIVE,dualWrite:false,automaticExternalPosting:false};
   }
   return{create:create,states:Object.freeze({V7_ONLY:V7,V8_ISOLATED_VERIFICATION:ISOLATED,V8_AUTHORITATIVE:AUTHORITATIVE}),isolatedDatabaseName:ISOLATED_DB,productionDatabaseName:PRODUCTION_DB};
 }));

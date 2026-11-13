@@ -40,7 +40,8 @@ function fixture(){let storage=memory(),clock=0;storage.seed(Storage.STORES.stud
   });
 
   await test('Fast Roster bank selection, archive restore, individual unassignment and correction lineage are wired',()=>{
-    let html=fs.readFileSync('index.html','utf8');for(let expected of ['showFastRosterTechnicalBank','Assign from Bank','restoreTechnicalHubDefinition','withdrawTechnicalStudentActivity','technical-withdraw','technical-restore-assignment','supersedesAssessmentResultId:prior&&prior.assessmentResultId','accept-correction'])assert(html.includes(expected),expected);
+    let html=fs.readFileSync('index.html','utf8');for(let expected of ['showFastRosterTechnicalBank','Assign from Bank','restoreTechnicalHubDefinition','withdrawTechnicalStudentActivity','technical-withdraw','technical-restore-assignment','saveTechnicalScore'])assert(html.includes(expected),expected);
+    const coordinator=fs.readFileSync('src/arc_project_technical_authority_adapter.js','utf8');for(const expected of ['supersedesAssessmentResultId:prior&&prior.assessmentResultId','accept-correction'])assert(coordinator.includes(expected),expected);
   });
 
   await test('Student History exposes owner audit events and dependency-aware Undo',()=>{

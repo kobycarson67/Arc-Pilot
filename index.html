@@ -3089,7 +3089,7 @@ function renderRoster(options = {}) {
         let statusHtml = visitor ? `<span class="pill warn">Temporary visitor</span>` : pass ? `<span class="pill warn" data-roster-pass-id="${pass.id}">${rosterPassDurationText(pass)}</span>` : status === "present" ? `<span class="pill good">Present</span>` : `<span class="pill ${["unexcused", "excused", "activity", "left_early"].includes(status) ? "warn" : ""}">${attendanceStatusLabel(status)}</span>`;
         let passButton = pass ? `<button class="btn primary" onclick="returnStudentPass('${pass.id}')">Returned</button>` : (["present", "tardy"].includes(status) ? `<button class="btn" onclick="showQuickPassMenu('${st.id}')">Pass</button>` : "");
         let checkout=visitor&&st._supplementalSession?`<button class="btn" onclick="endTemporaryShopVisitor('${st._supplementalSession.supplementalSessionId}',${st._supplementalSession.revision})">Check Out</button>`:'';
-        return `<div class="student fast-roster-student"><div class="student-identity"><b>${st.name}</b><br><span class="pill">${st.pathway}</span> ${statusHtml}<br><span class="small">Competency ${avgRating(st).toFixed(1)} • ${prof(st)} Proficient+</span></div><div>${boothBadgeHtml(st, sec)}</div><div class="roster-project-context">${fastRosterProjectHtml(st)}</div><div>${fastRosterNeedHtml(st)}</div><div class="roster-actions" style="display:flex;gap:6px;flex-wrap:wrap">${passButton}${checkout}<button class="btn primary" onclick="openStudent('${st.id}')">Open</button></div></div>`;
+        return `<div class="student fast-roster-student"><div class="student-identity"><b>${st.name}</b><br>${typeof st.pathway==='string'&&st.pathway.trim()?'<span class="pill">'+escapePhotoText(st.pathway)+'</span> ':''}${statusHtml}<br><span class="small">Competency ${avgRating(st).toFixed(1)} • ${prof(st)} Proficient+</span></div><div>${boothBadgeHtml(st, sec)}</div><div class="roster-project-context">${fastRosterProjectHtml(st)}</div><div>${fastRosterNeedHtml(st)}</div><div class="roster-actions" style="display:flex;gap:6px;flex-wrap:wrap">${passButton}${checkout}<button class="btn primary" onclick="openStudent('${st.id}')">Open</button></div></div>`;
     }).join("")}</div>`;
     refreshRosterPassDurations();
 }
@@ -4578,6 +4578,18 @@ function gradebookProjectDisplay(p) {
         return { text: "—", sub: projectStatusLabel(p), kind: "missing" };
     return { text: `${sc.toFixed(1)}%`, sub: projectStatusLabel(p) + (gradeRecordScopeState(p) === "legacy" ? " • Legacy/Unscoped" : ""), kind: "score" };
 }
+function technicalGradeScopeDisplay(record, sec=activeSection()) {
+    if(!record||!record._authority)return gradeRecordScopeState(record,sec)==='legacy'?'Legacy/Unscoped':'';
+    let auth=record._authority,sa=auth.studentActivity,view;try{view=batchARead();}catch(error){return 'V8 scope unverified';}let snapshot=view&&view.snapshot;
+    if(!snapshot||!sa)return 'V8 scope unverified';
+    let owned=(snapshot.studentActivities||[]).find(x=>x.studentActivityId===sa.studentActivityId),assignment=owned&&(snapshot.activityAssignments||[]).find(x=>x.assignmentId===owned.assignmentId),version=owned&&(snapshot.activityVersions||[]).find(x=>x.versionId===owned.versionId),definition=version&&(snapshot.activityDefinitions||[]).find(x=>x.definitionId===version.definitionId);
+    if(!owned||owned.studentId!==sa.studentId||owned.enrollmentId!==sa.enrollmentId||owned.versionId!==sa.versionId||owned.assignmentId!==sa.assignmentId||!assignment||assignment.versionId!==owned.versionId||!version||!definition||!auth.version||auth.version.versionId!==version.versionId||!auth.definition||auth.definition.definitionId!==definition.definitionId)return 'V8 scope unverified';
+    if(auth.assessmentResult){let result=(snapshot.assessmentResults||[]).find(x=>x.assessmentResultId===auth.assessmentResult.assessmentResultId),finalization=result&&(snapshot.activityFinalizations||[]).find(x=>x.activityAssessmentFinalizationId===result.sourceId),attempt=finalization&&(snapshot.activityAttempts||[]).find(x=>x.attemptId===finalization.attemptId);if(!result||result.studentId!==owned.studentId||result.enrollmentId!==owned.enrollmentId||!finalization||finalization.studentActivityId!==owned.studentActivityId||!attempt||attempt.studentActivityId!==owned.studentActivityId)return 'V8 scope unverified';}
+    let academic=academicConsumerProjection(),context=academic.contextForStudent(owned.studentId),enrollment=context&&(context.enrollmentHistory||[]).find(x=>x.enrollmentId===owned.enrollmentId);
+    if(!enrollment)return 'V8 scope unverified';
+    let scope=sec&&context.isCurrent?academic.scopeForStudent(owned.studentId,sec.id):null;
+    return scope&&scope.enrollmentId===owned.enrollmentId?'V8 enrollment-linked':'V8 historical / other enrollment';
+}
 function gradebookTechDisplay(r) {
     if (!r)
         return { text: "—", kind: "missing" };
@@ -4590,7 +4602,7 @@ function gradebookTechDisplay(r) {
         return { text: "Excluded", sub: reason || techStatusLabel(r.status), kind: "excluded" };
     if (pct == null)
         return { text: "—", sub: reason || techStatusLabel(r.status), kind: "missing" };
-    return { text: `${pct.toFixed(1)}%`, sub: (reason || `${Number(r.pointsEarned)} / ${Number(r.pointsPossible)}`) + (gradeRecordScopeState(r) === "legacy" ? " • Legacy/Unscoped" : ""), kind: "score" };
+    return { text: `${pct.toFixed(1)}%`, sub: (reason || `${Number(r.pointsEarned)} / ${Number(r.pointsPossible)}`) + (technicalGradeScopeDisplay(r) ? " • "+technicalGradeScopeDisplay(r) : ""), kind: "score" };
 }
 function gradebookCompetencyDisplay(v) {
     let pct = competencyPercent(v);

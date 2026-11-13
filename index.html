@@ -686,7 +686,7 @@ async function bootstrapUnifiedClassroomAuthorityRuntime() {
         const activation = ArcLiveClassroomPilotActivation.create({ databaseName: "arc_classroom_v8", recordStore, packageAuthority, backup, academicGate: academicAuthorityRuntime.activationGate, verifyAcademicGate: ArcAcademicAuthorityActivation.isVerifiedGate, releaseEvidenceProvider: async () => { throw Object.assign(new Error("Normal ARC cannot prepare release evidence."), { code: "ENGINEERING_AUTHORITY_REQUIRED" }); }, readinessProvider: async () => { throw Object.assign(new Error("Normal ARC cannot prepare production readiness."), { code: "ENGINEERING_AUTHORITY_REQUIRED" }); }, semanticProvider: async () => { throw Object.assign(new Error("Normal ARC cannot prepare semantic authority."), { code: "ENGINEERING_AUTHORITY_REQUIRED" }); } });
         const inspected = await activation.inspect();
         if (!inspected.available) return false;
-        const curriculum = ArcV8CurriculumPacing.create({ storage, actor: "Instructor" }), lessons = ArcV8LessonPlans.create({ storage, actor: "Instructor", packageAuthority });
+        const curriculum = ArcV8CurriculumPacing.create({ storage, actor: "Instructor", packageAuthority }), lessons = ArcV8LessonPlans.create({ storage, actor: "Instructor", packageAuthority });
         curriculumPacingAuthorityAdapter = ArcCurriculumPacingAuthorityAdapter.create({ authorityState: "V8_AUTHORITATIVE", databaseName: "arc_classroom_v8", service: curriculum, activationGate: inspected.gate, verifyActivationGate: ArcLiveClassroomPilotActivation.isVerifiedActivationGate });
         lessonAuthorityAdapter = ArcLessonAuthorityAdapter.create({ authorityState: "V8_AUTHORITATIVE", databaseName: "arc_classroom_v8", service: lessons, activationGate: inspected.gate, verifyActivationGate: ArcLiveClassroomPilotActivation.isVerifiedActivationGate });
         const real = await activation.inspectRealStudentAuthorization();
@@ -705,7 +705,7 @@ async function bootstrapUnifiedClassroomAuthorityRuntime() {
     const activation = ArcUnifiedClassroomAuthorityActivation.create({ databaseName: raw.physicalDatabaseName, recordStore, packageAuthority, backup, batchAGate: batchAAuthorityRuntime.gate, verifyBatchAGate: ArcBatchAAuthorityActivation.isVerifiedGate, batchBGate: batchBAuthorityRuntime.gate, verifyBatchBGate: ArcBatchBAuthorityActivation.isVerifiedGate, batchAActivationId: ArcBatchAAuthorityActivation.constants.recordId, batchBActivationId: ArcBatchBAuthorityActivation.constants.recordId });
     const inspected = await activation.inspect();
     if (!inspected.available) return false;
-    const curriculum = ArcV8CurriculumPacing.create({ storage, actor: "Instructor" }), lessons = ArcV8LessonPlans.create({ storage, actor: "Instructor", packageAuthority });
+    const curriculum = ArcV8CurriculumPacing.create({ storage, actor: "Instructor", packageAuthority }), lessons = ArcV8LessonPlans.create({ storage, actor: "Instructor", packageAuthority });
     curriculumPacingAuthorityAdapter = ArcCurriculumPacingAuthorityAdapter.create({ authorityState: "V8_UNIFIED_VERIFICATION", databaseName: ArcUnifiedClassroomAuthorityActivation.constants.databaseName, service: curriculum, activationGate: inspected.gate, verifyActivationGate: ArcUnifiedClassroomAuthorityActivation.isVerifiedGate });
     lessonAuthorityAdapter = ArcLessonAuthorityAdapter.create({ authorityState: "V8_UNIFIED_VERIFICATION", databaseName: ArcUnifiedClassroomAuthorityActivation.constants.databaseName, service: lessons, activationGate: inspected.gate, verifyActivationGate: ArcUnifiedClassroomAuthorityActivation.isVerifiedGate });
     unifiedClassroomAuthorityRuntime = { activation, gate: inspected.gate, curriculum, lessons };
@@ -1207,7 +1207,7 @@ function handleArcPopState() {
     let navigation = document.getElementById("navOverlay"); if (navigation) { navigation.remove(); updateNavigationBar(); return; }
     let student = document.getElementById("modal"); if (student && student.classList.contains("show")) closeStudent(true);
 }
-function renderActiveCurriculum() { renderCurriculumHub((activeSection() || {}).course || instructionalLibraryCoursePreference()); }
+function renderActiveCurriculum() { const course=(activeSection() || {}).course || instructionalLibraryCoursePreference(); return unifiedClassroomAuthorityMode === "V8_AUTHORITATIVE" || unifiedClassroomAuthorityMode === "V8_UNIFIED_VERIFICATION" ? renderCurriculumStandardsHub(course) : renderCurriculumHub(course); }
 function runArcNavigation(action) { setArcMobileSidebarOpen(false); let fn = window[action]; if (typeof fn === "function") fn(); }
 function arcSidebarHtml() {
     return ArcTitaniumShell.navigation().map(group => `<section class="arc-nav-group" data-arc-nav-group="${group.id}"><h2 class="arc-nav-heading">${group.label}</h2>${group.items.map(item => `<button class="arc-nav-item" type="button" data-arc-route="${item.id}" aria-label="${item.label}" ${item.future ? `aria-disabled="true" title="${item.label} — reserved for a future ARC workflow"` : `title="${item.label}" onclick="runArcNavigation('${item.action}')"`}><span class="arc-nav-icon" aria-hidden="true">${ArcIcons.svg(item.icon)}</span><span class="arc-nav-label">${item.label}</span>${item.future ? `<span class="arc-nav-future">Future</span>` : ""}</button>`).join("")}</section>`).join("");
@@ -5014,7 +5014,40 @@ function filterFastRosterTechnicalBank(query) { let q=String(query||"").toLowerC
 const coordinatedTechnicalScoringRenderer=renderTechnicalScoring;
 renderTechnicalScoring=function(){let result=coordinatedTechnicalScoringRenderer.apply(null,arguments),header=document.querySelector("#app .row>div:last-child");if(header&&!document.getElementById("assignTechnicalFromBankButton")){let button=document.createElement("button");button.id="assignTechnicalFromBankButton";button.className="btn";button.textContent="Assign from Bank";button.onclick=showFastRosterTechnicalBank;header.prepend(button);}return result;};
 function renderLessonPlansHub(){navMark("lessonbank","Lesson Plans");let sections=state.sections.slice().sort((a,b)=>Number(a.period)-Number(b.period));document.getElementById("app").innerHTML=`<div class="row"><div><h2>Lesson Plans</h2><p class="small">Program-wide Lesson hub. Drafts remain instructor review; opening this hub never schedules or accepts content.</p></div></div>${["wt","awt"].map(course=>{let bank=(state.lessonBank&&state.lessonBank[course])||[];return `<section class="card"><div class="row"><h3>${courseLabel(course)}</h3><span class="pill">${bank.length} Lessons</span></div><input aria-label="Search ${courseLabel(course)} Lessons" placeholder="Search Lessons" oninput="this.parentElement.querySelectorAll('[data-lesson-row]').forEach(x=>x.hidden=!x.dataset.lessonRow.includes(this.value.toLowerCase()))"><div>${bank.map(l=>`<div class="entryrow" data-lesson-row="${escapePhotoText(((l.code||"")+" "+(l.title||"")).toLowerCase())}"><div><b>${escapePhotoText(l.code||"")} — ${escapePhotoText(l.title||"Untitled")}</b><br><span class="small">${l.referenceOnly?"reference_only":"DRAFT_INSTRUCTOR_REVIEW"}</span></div></div>`).join("")}</div></section>`;}).join("")}<section class="card"><h3>Class lesson-review shortcuts</h3><p class="small">These shortcuts preserve class context while opening the accepted read-only draft review. Production pacing remains gated.</p>${sections.map(s=>`<button class="btn" onclick="state.activeSectionId='${s.id}';state.course='${s.course}';renderDraftLessonCollection('${s.course}')">${s.period}${ordinal(s.period)} — ${escapePhotoText(s.name)}</button>`).join(" ")}</section>`;}
-function renderCurriculumStandardsHub(){navMark("standards","Curriculum & Standards");let rows=typeof courseStandards==="function"?["wt","awt"].map(course=>({course,standards:courseStandards(course)})):[{course:"wt",standards:[]},{course:"awt",standards:[]}];document.getElementById("app").innerHTML=`<div class="row"><div><h2>Curriculum & Standards</h2><p class="small">Program-wide read-only standards and pacing hub under unified v8 authority.</p></div></div>${rows.map(group=>`<section class="card"><h3>${courseLabel(group.course)}</h3>${group.standards.length?`<table><tr><th>Code</th><th>Standard</th></tr>${group.standards.map(s=>`<tr><td>${escapePhotoText(s.code||s[0]||"")}</td><td>${escapePhotoText(s.description||s.title||s[1]||"")}</td></tr>`).join("")}</table>`:'<p class="small">Use the accepted course curriculum map and competency records; no relationship is inferred here.</p>'}</section>`).join("")}`;}
+// Read-only Curriculum navigation. All facts come from the gated V8 owner; no legacy fallback.
+async function readCurriculumNavigation(course) {
+    if (course !== 'wt' && course !== 'awt') throw Object.assign(new Error('Choose WT or AWT.'), { code:'INVALID_COURSE' });
+    const courseId='arc-course-'+course;
+    const standards=await curriculumPacingAuthorityAdapter.runUnified('getCourseStandards',{courseId});
+    if (!standards || standards.courseId!==courseId || standards.standards.some(x=>x.definition.courseId!==courseId) || standards.catalogs.some(x=>x.courseId!==courseId)) throw Object.assign(new Error('Standards Course scope does not match.'), {code:'COURSE_SCOPE_MISMATCH'});
+    const essentials=[];
+    for (const catalog of standards.catalogVersions || []) {
+        const result=await curriculumPacingAuthorityAdapter.runUnified('getEssentialStandards',{courseId,catalogVersionId:catalog.standardCatalogVersionId});
+        if (!result || result.courseId!==courseId) throw Object.assign(new Error('Essential Standards Course scope does not match.'), {code:'COURSE_SCOPE_MISMATCH'});
+        essentials.push(...result.designations);
+    }
+    const map=await curriculumPacingAuthorityAdapter.runUnified('getCurriculumMap',{courseId});
+    if (map && (!map.version || map.version.courseId!==courseId || !map.map || map.map.courseId!==courseId || map.items.some(x=>x.item.courseId!==courseId))) throw Object.assign(new Error('Curriculum Course scope does not match.'), {code:'COURSE_SCOPE_MISMATCH'});
+    return {course,courseId,standards,essentials,map};
+}
+async function renderCurriculumStandardsHub(course) {
+    course=course || (activeSection() || {}).course || instructionalLibraryCoursePreference();
+    navMark('standards','Curriculum & Standards');
+    const app=document.getElementById('app');
+    app.innerHTML='<div id="curriculumReadView"><h2>Curriculum & Standards</h2><p role="status">Loading current read-only Curriculum...</p></div>';
+    const target=document.getElementById('curriculumReadView');
+    try {
+        const view=await readCurriculumNavigation(course);
+        if (document.getElementById('curriculumReadView')!==target) return;
+        const esc=escapePhotoText, essentialIds=new Set(view.essentials.map(x=>x.standardVersionId));
+        const rows=view.standards.standards.map(x=>'<tr><td>'+esc(x.definition.externalCode)+'</td><td>'+esc(x.version.wording)+'</td><td>'+(essentialIds.has(x.version.standardVersionId)?'Instructor-selected Essential':'')+'</td></tr>').join('');
+        const items=view.map?view.map.items.map(x=>{const item=x.item;return '<li><b>'+esc(item.title||item.focus||item.itemCode||item.orderPath)+'</b>'+(item.quarterName?' <span class="small">'+esc(item.quarterName)+'</span>':'')+(item.rawStandardsText?'<p class="small">Source Standards text: '+esc(item.rawStandardsText)+' (not an inferred link)</p>':'')+'</li>';}).join(''):'';
+        target.innerHTML='<button class="btn" onclick="renderMainMenu()">Main Menu</button><h2>Curriculum & Standards</h2><p>Read-only official Standards and Curriculum reference. Essential selections belong to the instructor. This view does not change pacing or accept Lesson drafts.</p><div class="row"><button class="btn" onclick="renderCurriculumStandardsHub(&quot;wt&quot;)">Welding Technology</button><button class="btn" onclick="renderCurriculumStandardsHub(&quot;awt&quot;)">Advanced Welding Technology</button></div><h3>'+esc(courseLabel(course))+'</h3><section class="card"><h3>Standards</h3>'+(rows?'<table><thead><tr><th>Code</th><th>Standard</th><th>Essential</th></tr></thead><tbody>'+rows+'</tbody></table>':'<p>No Standards are currently available through the authorized read gate. This does not mean preserved records are absent.</p>')+'</section><section class="card"><h3>Curriculum Map</h3>'+(view.map?'<p>'+esc(view.map.map.title||'Curriculum Map')+'</p><ol>'+items+'</ol>':'<p>No Curriculum Map is currently available through the authorized read gate. No source data has been changed.</p>')+'</section>';
+    } catch(error) {
+        if (document.getElementById('curriculumReadView')!==target) return;
+        target.innerHTML='<h2>Curriculum & Standards</h2><p role="alert">'+escapePhotoText(error.code||'CURRICULUM_READ_UNAVAILABLE')+': '+escapePhotoText(error.message||'Curriculum reference is unavailable.')+'</p><button class="btn" onclick="renderMainMenu()">Main Menu</button>';
+    }
+}
 const p8LegacyHandlers = { addWorkplaceDeduction, removeWorkplaceDeduction, setWorkplaceDayStatus, saveBehaviorEvent, confirmDeleteBehavior };
 function p8RouteLegacy(name, args) {
     return simulationScenarioAuthorityActive() ? p8LegacyHandlers[name].apply(null, args) : workplaceSafetyBehaviorAuthorityAdapter.runLegacy(name, { arguments: Array.from(args) }, () => p8LegacyHandlers[name].apply(null, args));

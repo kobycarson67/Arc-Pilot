@@ -4584,11 +4584,11 @@ function technicalGradeScopeDisplay(record, sec=activeSection()) {
     if(!snapshot||!sa)return 'V8 scope unverified';
     let owned=(snapshot.studentActivities||[]).find(x=>x.studentActivityId===sa.studentActivityId),assignment=owned&&(snapshot.activityAssignments||[]).find(x=>x.assignmentId===owned.assignmentId),version=owned&&(snapshot.activityVersions||[]).find(x=>x.versionId===owned.versionId),definition=version&&(snapshot.activityDefinitions||[]).find(x=>x.definitionId===version.definitionId);
     if(!owned||owned.studentId!==sa.studentId||owned.enrollmentId!==sa.enrollmentId||owned.versionId!==sa.versionId||owned.assignmentId!==sa.assignmentId||!assignment||assignment.versionId!==owned.versionId||!version||!definition||!auth.version||auth.version.versionId!==version.versionId||!auth.definition||auth.definition.definitionId!==definition.definitionId)return 'V8 scope unverified';
-    if(auth.assessmentResult){let result=(snapshot.assessmentResults||[]).find(x=>x.assessmentResultId===auth.assessmentResult.assessmentResultId),finalization=result&&(snapshot.activityFinalizations||[]).find(x=>x.activityAssessmentFinalizationId===result.sourceId),attempt=finalization&&(snapshot.activityAttempts||[]).find(x=>x.attemptId===finalization.attemptId);if(!result||result.studentId!==owned.studentId||result.enrollmentId!==owned.enrollmentId||!finalization||finalization.studentActivityId!==owned.studentActivityId||!attempt||attempt.studentActivityId!==owned.studentActivityId)return 'V8 scope unverified';}
+    if(auth.assessmentResult){let result=(snapshot.assessmentResults||[]).find(x=>x.assessmentResultId===auth.assessmentResult.assessmentResultId),finalization=result&&(snapshot.activityFinalizations||[]).find(x=>x.activityAssessmentFinalizationId===result.sourceId),attempt=finalization&&(snapshot.activityAttempts||[]).find(x=>x.attemptId===finalization.attemptId);if(!result||result.sourceType!=='ActivityAttempt'||(result.studentActivityId!=null&&result.studentActivityId!==owned.studentActivityId)||result.studentId!==owned.studentId||result.enrollmentId!==owned.enrollmentId||!finalization||finalization.studentActivityId!==owned.studentActivityId||!attempt||attempt.studentActivityId!==owned.studentActivityId)return 'V8 scope unverified';}
     let academic=academicConsumerProjection(),context=academic.contextForStudent(owned.studentId),enrollment=context&&(context.enrollmentHistory||[]).find(x=>x.enrollmentId===owned.enrollmentId);
     if(!enrollment)return 'V8 scope unverified';
     let scope=sec&&context.isCurrent?academic.scopeForStudent(owned.studentId,sec.id):null;
-    return scope&&scope.enrollmentId===owned.enrollmentId?'V8 enrollment-linked':'V8 historical / other enrollment';
+    return scope&&scope.enrollmentId===owned.enrollmentId?'V8 enrollment-linked':'V8 historical / other scope';
 }
 function gradebookTechDisplay(r) {
     if (!r)
@@ -4602,7 +4602,8 @@ function gradebookTechDisplay(r) {
         return { text: "Excluded", sub: reason || techStatusLabel(r.status), kind: "excluded" };
     if (pct == null)
         return { text: "—", sub: reason || techStatusLabel(r.status), kind: "missing" };
-    return { text: `${pct.toFixed(1)}%`, sub: (reason || `${Number(r.pointsEarned)} / ${Number(r.pointsPossible)}`) + (technicalGradeScopeDisplay(r) ? " • "+technicalGradeScopeDisplay(r) : ""), kind: "score" };
+    let scopeDisplay=technicalGradeScopeDisplay(r);
+    return { text: `${pct.toFixed(1)}%`, sub: (reason || `${Number(r.pointsEarned)} / ${Number(r.pointsPossible)}`) + (scopeDisplay ? " • "+scopeDisplay : ""), kind: "score" };
 }
 function gradebookCompetencyDisplay(v) {
     let pct = competencyPercent(v);

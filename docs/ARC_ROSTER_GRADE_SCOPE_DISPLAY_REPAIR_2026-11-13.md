@@ -20,3 +20,5 @@ The private ARC_SWEEP_PROFILE_HISTORY_2026-11-13.md identified an undefined Fast
 - Calculation scope helper byte comparison with base: identical. Inline script parse and git diff --check pass.
 
 Native normal-shell acceptance and full gates remain coordinating-reviewer work. No production/tablet/publication changes.
+
+Review hardening: validated native AssessmentResult sourceType ActivityAttempt and any supplied studentActivityId against its owner. Historical/other scope wording now covers an unrelated selected Section without falsely implying a different enrollment. Scope display is calculated once per row. Added malformed source-type/activity-ID refusal tests.

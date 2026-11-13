@@ -975,7 +975,7 @@ function normalizeTechRecord(x) {
     if (x.status === "completed" && x.pointsEarned == null && x.score != null)
         x.pointsEarned = Number(x.score);
     if (!x.date)
-        x.date = new Date().toISOString().slice(0, 10);
+        x.date = x._authority && x._authority.studentActivity ? "" : new Date().toISOString().slice(0, 10);
     if (!x.type)
         x.type = "Knowledge Check";
     if (x.standard == null)

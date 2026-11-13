@@ -1,8 +1,9 @@
 const assert=require('assert'),fs=require('fs'),vm=require('vm');
 const context={};vm.runInNewContext(fs.readFileSync('app-build.js','utf8'),context);
-const build=context.ARC_BUILD,suffix='-technical-score-atomic-repair-1';
+const build=context.ARC_BUILD,suffix='-technical-score-atomic-repair-1-technical-display-parity-repair-1';
 assert(build.build.endsWith(suffix));assert(build.shell.endsWith(suffix));
-assert.equal(build.technicalScoreAtomicRepair,suffix.slice(1));
+assert.equal(build.technicalScoreAtomicRepair,'technical-score-atomic-repair-1');
+assert.equal(build.technicalDisplayParityRepair,'technical-display-parity-repair-1');
 assert.equal(build.batchBMultiSectionStartupRepair,'batch-b-multi-section-startup-repair-1');
 const closure=JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json','utf8'));
 assert.equal(closure.buildIdentity,build.build);assert.equal(closure.approvedPaths.length,114);

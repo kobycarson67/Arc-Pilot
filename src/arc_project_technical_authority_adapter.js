@@ -28,13 +28,18 @@
         if(!scope||!sa||sa.studentId!==input.studentId||sa.enrollmentId!==scope.enrollmentId||scope.sectionId!==input.sectionId)fail('ACADEMIC_SCOPE_MISMATCH','This assignment belongs to a different enrollment. No score was saved.');
         if(sa.revision!==input.expectedRevision)fail('WRITE_CONFLICT','Technical assignment changed after it was opened. Reload and review the current score.');
         if(sa.assignmentState==='withdrawn')fail('INVALID_ASSIGNMENT_STATE','Restore withdrawn work before scoring.');
-        var transition=Activity.scoreTransition({pointsEarned:input.pointsEarned,pointsPossible:input.pointsPossible,workflowState:sa.workflowState,instructorConfirmed:true});
+        var version=await tx.get(S.activityVersions,sa.versionId),definition=version&&await tx.get(S.activityDefinitions,version.definitionId),demonstratedLevel=null,earned=input.pointsEarned,possible=input.pointsPossible;
+        if(!definition)fail('REFERENCE_NOT_FOUND','Activity definition is unavailable.');
+        if(definition.type==='Practice'||definition.type==='Project')fail('INELIGIBLE_ACTIVITY_GRADE','Use the activity-specific workflow; this activity is not a Technical score.');
+        if(input.explicitChallengeAssessment&&definition.type!=='Skill Challenge')fail('INVALID_ACTIVITY_TYPE','Challenge scoring requires a Skill Challenge.');
+        if(definition.type==='Skill Challenge'){if(!input.explicitChallengeAssessment||input.instructorConfirmed!==true)fail('CHALLENGE_CONFIRMATION_REQUIRED','Use the explicit demonstrated-level assessment action.');demonstratedLevel=Number(input.demonstratedLevel);var conversion=version.grading&&version.grading.conversion;earned=conversion&&Number(conversion[demonstratedLevel]);possible=Number(version.grading&&version.grading.pointsPossible);if([1,2,3,4].indexOf(demonstratedLevel)<0||!Number.isFinite(earned)||possible!==100)fail('INVALID_SCORE','Choose a valid demonstrated level using this version conversion.');}
+        var transition=Activity.scoreTransition({pointsEarned:earned,pointsPossible:possible,workflowState:sa.workflowState,instructorConfirmed:true});
         if(!transition.ok)fail(transition.code,transition.code==='BLANK_SCORE'?'Enter a score. Zero is a valid completed score.':'Enter a score between zero and points possible.');
         var results=(await tx.query(S.assessmentResults,'by_student',input.studentId)).filter(function(x){return x.studentActivityId===sa.studentActivityId&&x.lifecycle==='finalized';});
         // Lineage, not timestamps, identifies the latest result (timestamps may tie).
         var heads=results.filter(function(x){return !results.some(function(y){return y.supersedesAssessmentResultId===x.assessmentResultId;});});
         if(heads.length>1)fail('SOURCE_LINEAGE_MISMATCH','Technical source history has multiple unresolved correction heads.');
-        var prior=heads[0]||null,entries=(await tx.query(S.gradebookEntries,'by_student',input.studentId)).filter(function(x){return x.studentActivityId===sa.studentActivityId&&x.lifecycle==='active';});
+        var prior=heads[0]||null;if(definition.type==='Skill Challenge'&&prior&&version.reassessmentPolicy!=='allowed')fail('REASSESSMENT_NOT_ALLOWED','This assignment version does not permit reassessment.');var entries=(await tx.query(S.gradebookEntries,'by_student',input.studentId)).filter(function(x){return x.studentActivityId===sa.studentActivityId&&x.lifecycle==='active';});
         if(entries.length>1)fail('SOURCE_LINEAGE_MISMATCH','Multiple active ledger entries require review before scoring.');
         var entry=entries[0],revisions=entry?await tx.query(S.gradebookRevisions,'by_entry',entry.gradebookEntryId):[],currentRevision=revisions.filter(function(x){return x.lifecycle==='active';}).sort(function(a,b){return b.sequence-a.sequence;})[0];
         if(entry&&(entry.enrollmentId!==sa.enrollmentId||entry.gradingPeriodId!==input.gradingPeriodId))fail('ACADEMIC_SCOPE_MISMATCH','Existing grade entry is outside the selected scoring scope.');
@@ -47,16 +52,34 @@
         var base={studentId:input.studentId,sectionId:input.sectionId,schoolDate:input.schoolDate};
         async function run(action,payload){return owners.runV8(action,Object.assign({},base,payload));}
         if(['Assigned','Pending Make-Up','Completed'].indexOf(sa.workflowState)>=0)sa=await run('activity-transition',{studentActivityId:sa.studentActivityId,expectedRevision:sa.revision,workflowState:'In Progress'});
-        if(!attempt||attempt.workflowState==='Finalized')attempt=await run('attempt-start',{studentActivityId:sa.studentActivityId,type:prior?'Correction':'Initial',authorized:true,reason:prior?'Instructor correction of a completed Technical score':''});
+        if(!attempt||attempt.workflowState==='Finalized')attempt=await run('attempt-start',{studentActivityId:sa.studentActivityId,type:prior?(definition.type==='Skill Challenge'?'Reassessment':'Correction'):'Initial',authorized:definition.type!=='Skill Challenge',reason:prior?(definition.type==='Skill Challenge'?'Explicit instructor Skill Challenge reassessment':'Instructor correction of a completed Technical score'):''});
         attempt=await run('attempt-transition',{attemptId:attempt.attemptId,expectedRevision:attempt.revision,workflowState:'Finalized'});
-        var fin=await run('technical-finalize-assessment',{attemptId:attempt.attemptId,pointsEarned:transition.pointsEarned,pointsPossible:transition.pointsPossible,finalizedAt:input.finalizedAt,finalizedBy:'Instructor'});
+        var fin=await run('technical-finalize-assessment',{attemptId:attempt.attemptId,demonstratedLevel:demonstratedLevel,pointsEarned:transition.pointsEarned,pointsPossible:transition.pointsPossible,finalizedAt:input.finalizedAt,finalizedBy:'Instructor'});
         var result=await run('technical-gradebook-handoff',{activityAssessmentFinalizationId:fin.activityAssessmentFinalizationId,supersedesAssessmentResultId:prior&&prior.assessmentResultId,correctionReason:prior?'Instructor corrected a completed Technical grade.':''});
         sa=await run('activity-transition',{studentActivityId:sa.studentActivityId,expectedRevision:sa.revision,workflowState:'Completed'});
         if(entry)await ledger.runV8('accept-correction',Object.assign({},base,{gradingPeriodId:input.gradingPeriodId,gradebookEntryId:entry.gradebookEntryId,expectedEntryRevision:entry.revision,assessmentResultId:result.assessmentResultId,reason:'Instructor Correction',createdBy:'Instructor'}));
         return{transition:transition,result:result,studentActivity:sa};
       });
     }
-    return{saveTechnicalScore:saveTechnicalScore,authorityState:state,databaseName:state===V7?null:databaseName,runLegacy:legacy,runIsolated:routed,runV8:routed,isAuthoritativeV8:state===AUTHORITATIVE,dualWrite:false};
+    async function savePracticeProgress(input){
+      if(state!==ISOLATED&&state!==AUTHORITATIVE)fail('V8_AUTHORITY_BLOCKED','Practice progress requires v8 authority.');
+      var S=Storage.STORES,stores=['courses','schoolYears','semesters','gradingPeriods','sections','students','enrollments','scheduleAssignments','infrastructure','studentActivities','activityDefinitions','activityVersions','supplementalSessions'].map(function(k){return S[k];});
+      return storage.transaction(stores,async function(tx){
+        var bound={read:tx.get,query:tx.query,add:tx.add,put:tx.put,generateId:function(){return storage.generateId();},transaction:function(names,fn){(Array.isArray(names)?names:[names]).forEach(function(n){if(stores.indexOf(n)<0)fail('TRANSACTION_SCOPE_REQUIRED','Practice owner requested an unrelated store.');});return fn(tx);}};
+        var v=await projection.fromV8(bound,{day:input.schoolDate,selectedSectionId:input.sectionId}),scope=v.scopeForStudent(input.studentId,input.sectionId),sa=await tx.get(S.studentActivities,input.studentActivityId),version=sa&&await tx.get(S.activityVersions,sa.versionId),definition=version&&await tx.get(S.activityDefinitions,version.definitionId);
+        if(!scope||!sa||sa.studentId!==input.studentId||sa.enrollmentId!==scope.enrollmentId||scope.sectionId!==input.sectionId)fail('ACADEMIC_SCOPE_MISMATCH','Practice assignment is outside this enrollment.');
+        if(!definition||definition.type!=='Practice')fail('INVALID_ACTIVITY_TYPE','Only ungraded Practice uses this progress action.');
+        if(sa.revision!==input.expectedRevision)fail('WRITE_CONFLICT','Practice changed after it was opened.');
+        if(sa.assignmentState==='withdrawn')fail('INVALID_ASSIGNMENT_STATE','Restore withdrawn work first.');
+        if(['In Progress','Completed'].indexOf(input.workflowState)<0)fail('INVALID_WORKFLOW','Choose Start, Complete or Reopen.');
+        if(sa.workflowState===input.workflowState)return{studentActivity:sa,noChange:true};
+        var owner=activity.withStorage(bound);
+        if(input.workflowState==='Completed'&&['Assigned','Pending Make-Up'].indexOf(sa.workflowState)>=0)sa=await owner.transitionStudentActivity(sa.studentActivityId,sa.revision,'In Progress');
+        sa=await owner.transitionStudentActivity(sa.studentActivityId,sa.revision,input.workflowState);
+        return{studentActivity:sa,ungraded:true};
+      });
+    }
+    return{savePracticeProgress:savePracticeProgress,saveSkillChallengeAssessment:function(input,ledger){return saveTechnicalScore(Object.assign({},input,{explicitChallengeAssessment:true}),ledger);},saveTechnicalScore:saveTechnicalScore,authorityState:state,databaseName:state===V7?null:databaseName,runLegacy:legacy,runIsolated:routed,runV8:routed,isAuthoritativeV8:state===AUTHORITATIVE,dualWrite:false};
   }
   return{create:create,states:Object.freeze({V7_ONLY:V7,V8_ISOLATED_VERIFICATION:ISOLATED,V8_AUTHORITATIVE:AUTHORITATIVE}),isolatedDatabaseName:ISOLATED_DB,productionDatabaseName:PRODUCTION_DB};
 }));

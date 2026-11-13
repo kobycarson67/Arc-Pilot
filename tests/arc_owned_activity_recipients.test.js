@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const html=fs.readFileSync('index.html','utf8'),names=['ownedActivitySectionOptions','showOwnedActivityAssign','refreshOwnedActivityRecipients','assignOwnedActivity'];
+const src=names.map(n=>html.split(/\r?\n/).find(l=>l.startsWith('function '+n+'(')||l.startsWith('async function '+n+'('))).join('\n');
+let rows={},appended,route=[],checks=[],rosters={a1:[{id:'fiction1'}],a5:[{id:'fiction5'}],w2:[]};
+const ctx={state:{activeSectionId:'a1',sections:[{id:'a5',course:'awt',period:'5',name:'AWT5'},{id:'w2',course:'wt',period:2,name:'WT2'},{id:'a1',course:'awt',period:'1',name:'AWT1'}]},ordinal:n=>n===1?'st':'th',escapePhotoText:s=>s,dateKey:()=> '2026-11-13',technicalHubRecipientRows:id=>'ROSTER:'+id,sectionStudents:id=>rosters[id]||[],alert:()=>{throw Error('unexpected alert')},document:{createElement:()=>({}),body:{appendChild:o=>appended=o},getElementById:id=>rows[id],querySelectorAll:()=>checks},routeProjectTechnicalAuthority:async(a,p)=>route.push({a,p}),removeById:()=>{},showArcFeedback:()=>{},renderPracticeLibrary:()=>{},renderSkillChallengeLibrary:()=>{}};vm.createContext(ctx);vm.runInContext(src,ctx);
+ctx.showOwnedActivityAssign('Practice','awt','v');
+assert(appended.innerHTML.includes('value="a1" selected'));assert(appended.innerHTML.includes('data-section-id="a1"'));assert(appended.innerHTML.includes('ROSTER:a1'));
+ctx.state.activeSectionId='w2';ctx.showOwnedActivityAssign('Practice','awt','v');assert(appended.innerHTML.includes('value="a1" selected'));assert(appended.innerHTML.includes('ROSTER:a1'));
+ctx.state.activeSectionId='a5';ctx.showOwnedActivityAssign('Skill Challenge','awt','v');assert(appended.innerHTML.includes('value="a5" selected'));assert(appended.innerHTML.includes('ROSTER:a5'));
+rows={ownedActivitySection:{value:'a1'},ownedActivityDate:{value:'2026-11-13'},ownedActivityRecipients:{dataset:{sectionId:'a5'},innerHTML:''},ownedActivityResult:{}};checks=[{value:'fiction5'}];
+(async()=>{await ctx.assignOwnedActivity('Practice','v');assert.equal(route.length,0);assert.match(rows.ownedActivityResult.textContent,/Class and recipients changed/);
+ctx.refreshOwnedActivityRecipients('a1');assert.equal(rows.ownedActivityRecipients.dataset.sectionId,'a1');assert.equal(rows.ownedActivityRecipients.innerHTML,'ROSTER:a1');
+await ctx.assignOwnedActivity('Practice','v');assert.equal(route.length,0);checks=[];await ctx.assignOwnedActivity('Practice','v');assert.match(rows.ownedActivityResult.textContent,/Choose at least/);
+checks=[{value:'fiction1'}];await ctx.assignOwnedActivity('Practice','v');assert.equal(route.length,1);assert.equal(route[0].p.sectionId,'a1');assert.deepEqual(Array.from(route[0].p.studentIds),['fiction1']);
+console.log('PASS initial current-course selection, sorted fallback, both activity types, class-change refresh, stale/wrong recipients rejected before write, empty guard and valid exact-section assignment');})().catch(e=>{console.error(e);process.exitCode=1});

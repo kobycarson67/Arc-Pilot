@@ -1,0 +1,252 @@
+[
+  {
+    "definition": {
+      "lessonId": "6f8dbf9b-a499-4aca-8bb9-a53725ad88d7",
+      "courseId": "arc-course-wt",
+      "lessonCode": "R1",
+      "reusableKind": "reusable",
+      "lifecycle": "active",
+      "sourceAuthorityKey": "MASTER_LESSON_BANKS",
+      "sourceRecordKey": "lesson-wt-wt-master-lesson-banks-r1-8dcc0aa3db66",
+      "sourceHash": "e8db914247c5fb47d7d52e9027e810c2b076bd531f677565bc7598a4c04d3801",
+      "sourceOrdinal": 1,
+      "sourceDuplicateAssessment": {
+        "exact": false,
+        "probableOrNear": false
+      },
+      "sourceValidation": {
+        "learningTargetStemConforming": true,
+        "successCriteriaStemConforming": true
+      }
+    },
+    "version": {
+      "lessonVersionId": "59cbada2-8a14-45a4-aab9-73286bd09041",
+      "lessonId": "6f8dbf9b-a499-4aca-8bb9-a53725ad88d7",
+      "versionNumber": 1,
+      "versionRule": "source_declared_positive_version",
+      "title": "Open Shop Friday - Competency Development & Reassessment",
+      "learningTargets": [
+        "I am learning to use feedback and my current competency ratings to identify a skill that needs improvement.",
+        "I am learning to safely and productively practice an appropriate welding or fabrication skill.",
+        "I am learning to demonstrate improvement through new evidence when I am ready for reassessment."
+      ],
+      "successCriteria": [
+        "I can identify an appropriate competency or project goal.",
+        "I can use Open Shop time safely and productively.",
+        "I can apply instructor feedback while practicing.",
+        "I can demonstrate progress or provide new evidence toward competency proficiency."
+      ],
+      "engagementStrategies": [
+        "Individualized skill practice, student choice within approved activities, targeted coaching, peer collaboration where appropriate, project completion, remediation, reassessment, and extension."
+      ],
+      "assessment": "Observation, student work, weld/cut/project inspection, questioning, reassessment, and updated tracker evidence.",
+      "checksForUnderstanding": [],
+      "instructionalPhases": [],
+      "sourceStandardsText": [
+        "Select the specific WT standards connected to the competencies students are working on that Friday."
+      ],
+      "instructionalAvailability": "reference_only",
+      "instructionalAcceptanceRef": null,
+      "preservationState": "preserved",
+      "ordinarySchedulingEligible": false,
+      "autoBuildEligible": false,
+      "teachingGuideCapability": {
+        "supportedForImprovedVersions": true,
+        "presentInThisLegacyVersion": false
+      },
+      "sourceFieldShapes": [
+        {
+          "field": "learningTargets",
+          "sourceType": "array",
+          "exactValue": [
+            "I am learning to use feedback and my current competency ratings to identify a skill that needs improvement.",
+            "I am learning to safely and productively practice an appropriate welding or fabrication skill.",
+            "I am learning to demonstrate improvement through new evidence when I am ready for reassessment."
+          ],
+          "targetType": "array",
+          "targetCount": 3
+        },
+        {
+          "field": "successCriteria",
+          "sourceType": "array",
+          "exactValue": [
+            "I can identify an appropriate competency or project goal.",
+            "I can use Open Shop time safely and productively.",
+            "I can apply instructor feedback while practicing.",
+            "I can demonstrate progress or provide new evidence toward competency proficiency."
+          ],
+          "targetType": "array",
+          "targetCount": 4
+        },
+        {
+          "field": "engagementStrategies",
+          "sourceType": "scalar",
+          "exactValue": "Individualized skill practice, student choice within approved activities, targeted coaching, peer collaboration where appropriate, project completion, remediation, reassessment, and extension.",
+          "targetType": "array",
+          "targetCount": 1
+        },
+        {
+          "field": "checksForUnderstanding",
+          "sourceType": "missing",
+          "exactValue": null,
+          "targetType": "array",
+          "targetCount": 0
+        },
+        {
+          "field": "instructionalPhases",
+          "sourceType": "missing",
+          "exactValue": null,
+          "targetType": "array",
+          "targetCount": 0
+        },
+        {
+          "field": "sourceStandardsText",
+          "sourceType": "array",
+          "exactValue": [
+            "Select the specific WT standards connected to the competencies students are working on that Friday."
+          ],
+          "targetType": "array",
+          "targetCount": 1
+        }
+      ],
+      "sourceAuthorityKey": "MASTER_LESSON_BANKS",
+      "sourceRecordKey": "lesson-version-wt-lesson-wt-wt-master-lesson-banks-r1-8dcc0aa3db66-e8db914247c5fb47d7d52e9027e810c2b076bd531f677565bc7598a4c04d3801-4e7533302519",
+      "originalSourceChecksum": "e8db914247c5fb47d7d52e9027e810c2b076bd531f677565bc7598a4c04d3801",
+      "normalizedContentChecksum": "b9eca8caa7ef6836ec427f3567be01950133c7579d5438f6caa684132597acf4",
+      "sourceProvenance": {
+        "authority": "MASTER_LESSON_BANKS",
+        "course": "wt",
+        "ordinal": 1,
+        "repositoryPath": "index.html",
+        "sourceHash": "e8db914247c5fb47d7d52e9027e810c2b076bd531f677565bc7598a4c04d3801"
+      },
+      "supersedesLessonVersionId": null,
+      "lifecycle": "active"
+    },
+    "course": "wt"
+  },
+  {
+    "definition": {
+      "lessonId": "289ab39c-33fa-4077-a701-750e3e117ec5",
+      "courseId": "arc-course-awt",
+      "lessonCode": "1",
+      "reusableKind": "numbered",
+      "lifecycle": "active",
+      "sourceAuthorityKey": "MASTER_LESSON_BANKS",
+      "sourceRecordKey": "lesson-awt-awt-master-lesson-banks-1-85e2bfc536a7",
+      "sourceHash": "4c287ad6aff286cae2a46a31852d50de3e3eee82cd7c84cd7f759e7053f6e77c",
+      "sourceOrdinal": 1,
+      "sourceDuplicateAssessment": {
+        "exact": false,
+        "probableOrNear": false
+      },
+      "sourceValidation": {
+        "learningTargetStemConforming": true,
+        "successCriteriaStemConforming": true
+      }
+    },
+    "version": {
+      "lessonVersionId": "73adddbb-f67e-4c60-b4bd-67fa721d6c98",
+      "lessonId": "289ab39c-33fa-4077-a701-750e3e117ec5",
+      "versionNumber": 1,
+      "versionRule": "source_declared_positive_version",
+      "title": "Advanced Welding Orientation & Safety Verification",
+      "learningTargets": [
+        "I am learning to demonstrate advanced-shop safety practices.",
+        "I am learning to identify hazards in welding, cutting, fabrication, and material handling."
+      ],
+      "successCriteria": [
+        "I can correctly use PPE.",
+        "I can identify and correct hazards.",
+        "I can prepare work areas and equipment safely.",
+        "I can work safely with minimal prompting."
+      ],
+      "engagementStrategies": [
+        "Brief orientation followed by hands-on PPE, equipment, work-area, and hazard verification. Use realistic shop scenarios; provide targeted support for new/transfer students."
+      ],
+      "assessment": "Individual safety demonstration, observation, questioning, and competency evidence.",
+      "checksForUnderstanding": [],
+      "instructionalPhases": [],
+      "sourceStandardsText": [
+        "AWT 1.1 (Essential)"
+      ],
+      "instructionalAvailability": "reference_only",
+      "instructionalAcceptanceRef": null,
+      "preservationState": "preserved",
+      "ordinarySchedulingEligible": false,
+      "autoBuildEligible": false,
+      "teachingGuideCapability": {
+        "supportedForImprovedVersions": true,
+        "presentInThisLegacyVersion": false
+      },
+      "sourceFieldShapes": [
+        {
+          "field": "learningTargets",
+          "sourceType": "array",
+          "exactValue": [
+            "I am learning to demonstrate advanced-shop safety practices.",
+            "I am learning to identify hazards in welding, cutting, fabrication, and material handling."
+          ],
+          "targetType": "array",
+          "targetCount": 2
+        },
+        {
+          "field": "successCriteria",
+          "sourceType": "array",
+          "exactValue": [
+            "I can correctly use PPE.",
+            "I can identify and correct hazards.",
+            "I can prepare work areas and equipment safely.",
+            "I can work safely with minimal prompting."
+          ],
+          "targetType": "array",
+          "targetCount": 4
+        },
+        {
+          "field": "engagementStrategies",
+          "sourceType": "scalar",
+          "exactValue": "Brief orientation followed by hands-on PPE, equipment, work-area, and hazard verification. Use realistic shop scenarios; provide targeted support for new/transfer students.",
+          "targetType": "array",
+          "targetCount": 1
+        },
+        {
+          "field": "checksForUnderstanding",
+          "sourceType": "missing",
+          "exactValue": null,
+          "targetType": "array",
+          "targetCount": 0
+        },
+        {
+          "field": "instructionalPhases",
+          "sourceType": "missing",
+          "exactValue": null,
+          "targetType": "array",
+          "targetCount": 0
+        },
+        {
+          "field": "sourceStandardsText",
+          "sourceType": "array",
+          "exactValue": [
+            "AWT 1.1 (Essential)"
+          ],
+          "targetType": "array",
+          "targetCount": 1
+        }
+      ],
+      "sourceAuthorityKey": "MASTER_LESSON_BANKS",
+      "sourceRecordKey": "lesson-version-awt-lesson-awt-awt-master-lesson-banks-1-85e2bfc536a7-4c287ad6aff286cae2a46a31852d50de3e3eee82cd7c84cd7f759e7053f6e77c-6057959934d8",
+      "originalSourceChecksum": "4c287ad6aff286cae2a46a31852d50de3e3eee82cd7c84cd7f759e7053f6e77c",
+      "normalizedContentChecksum": "5b0336e2bcb1d68652f4f78ab0c1d899b19f8b0c42fbe3796b29ac5d504692be",
+      "sourceProvenance": {
+        "authority": "MASTER_LESSON_BANKS",
+        "course": "awt",
+        "ordinal": 1,
+        "repositoryPath": "index.html",
+        "sourceHash": "4c287ad6aff286cae2a46a31852d50de3e3eee82cd7c84cd7f759e7053f6e77c"
+      },
+      "supersedesLessonVersionId": null,
+      "lifecycle": "active"
+    },
+    "course": "awt"
+  }
+]

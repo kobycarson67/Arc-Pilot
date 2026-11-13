@@ -1,0 +1,10 @@
+const assert=require('assert'),fs=require('fs'),vm=require('vm');
+const context={};vm.runInNewContext(fs.readFileSync('app-build.js','utf8'),context);
+const build=context.ARC_BUILD,suffix='-technical-score-atomic-repair-1';
+assert(build.build.endsWith(suffix));assert(build.shell.endsWith(suffix));
+assert.equal(build.technicalScoreAtomicRepair,suffix.slice(1));
+assert.equal(build.batchBMultiSectionStartupRepair,'batch-b-multi-section-startup-repair-1');
+const closure=JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json','utf8'));
+assert.equal(closure.buildIdentity,build.build);assert.equal(closure.approvedPaths.length,114);
+assert(fs.readFileSync('sw.js','utf8').includes('const VERSION=self.ARC_BUILD.shell;'));
+console.log('PASS distinct synchronized Technical repair build/shell identity, 114-path closure and derived cache identity');

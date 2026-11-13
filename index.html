@@ -2252,16 +2252,24 @@ function closeNavOverlay() { let o = document.getElementById("navOverlay"); if (
     o.remove(); clearArcTransientHistoryMarker('navigation'); updateNavigationBar(); }
 function showGlobalSearch() { let all = allStudents().slice().sort((a, b) => a.name.localeCompare(b.name)), o = document.createElement("div"); o.id = "navOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(700px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeNavOverlay()">Close</button><h2>Search Students</h2><input id="globalSearchInput" placeholder="Type a student name…" style="width:100%;padding:11px;border:1px solid #d6dde6;border-radius:8px" oninput="filterGlobalSearch()"><div id="globalSearchResults" class="card" style="margin-top:10px">${all.map(s => globalSearchRow(s)).join("")}</div></div>`; o.onclick = e => { if (e.target === o)
     closeNavOverlay(); }; document.body.appendChild(o); pushArcTransientHistory('navigation'); }
-function globalSearchRow(s) { let e = (s.enrollments || []).find(x => x.active && x.year === state.academicYear && x.semester === state.semester), sec = e ? state.sections.find(x => x.id === e.sectionId) : null; return `<div class="entryrow globalSearchStudent" data-name="${s.name.toLowerCase()}"><div><b>${s.name}</b><br><span class="small">${sec ? sec.period + ordinal(sec.period) + " Period • " + courseLabel(sec.course) : "Not currently enrolled"}</span></div><button class="btn primary" onclick="openStudentFromSearch('${s.id}','${sec ? sec.id : ""}')">Open</button></div>`; }
+function globalSearchStudentContext(studentId) {
+    let projection=academicConsumerProjection(),context=projection.contextForStudent(studentId);
+    if(!context||!context.isCurrent)return {sections:[],selected:null};
+    let ids=[...new Set(projection.scopesForStudent(studentId).filter(Boolean).map(scope=>scope.sectionId))],sections=ids.map(id=>projectionSectionRecord(projection.sections.find(section=>section.sectionId===id),projection.sectionContextForSection(id))).filter(Boolean).sort((a,b)=>Number(a.period)-Number(b.period)||a.id.localeCompare(b.id));
+    return {sections,selected:sections.find(section=>section.id===state.activeSectionId)||(sections.length===1?sections[0]:null)};
+}
+function globalSearchRow(s) {
+    let {sections,selected}=globalSearchStudentContext(s.id),label=section=>section.period+ordinal(section.period)+' Period • '+courseLabel(section.course),selectorId='globalSearchSection_'+s.id,arg=sections.length>1?'document.getElementById('+JSON.stringify(selectorId)+').value':JSON.stringify(selected?selected.id:''),description=sections.length?sections.map(label).join(' / '):'No current eligible class';
+    return `<div class="entryrow globalSearchStudent" data-name="${escapePhotoText(s.name.toLowerCase())}"><div><b>${escapePhotoText(s.name)}</b><br><span class="small">${escapePhotoText(description)}</span>${sections.length>1?'<label class="small">Open in class<select id="'+escapePhotoText(selectorId)+'"><option value="">Choose a class</option>'+sections.map(section=>'<option value="'+escapePhotoText(section.id)+'" '+(selected&&selected.id===section.id?'selected':'')+'>'+escapePhotoText(label(section))+'</option>').join('')+'</select></label>':''}</div><button class="btn primary" ${sections.length?'':'disabled'} onclick="openStudentFromSearch(${escapePhotoText(JSON.stringify(s.id))},${escapePhotoText(arg)})">Open</button></div>`;
+}
 function filterGlobalSearch() { var _a; let q = (((_a = document.getElementById("globalSearchInput")) === null || _a === void 0 ? void 0 : _a.value) || "").toLowerCase(); document.querySelectorAll(".globalSearchStudent").forEach(x => x.style.display = x.dataset.name.includes(q) ? "grid" : "none"); }
-function openStudentFromSearch(studentId, sectionId) { closeNavOverlay(); if (sectionId) {
-    state.activeSectionId = sectionId;
-    let sec = activeSection();
-    if (sec)
-        state.course = sec.course;
-    save();
-    renderRoster();
-} openStudent(studentId); }
+function openStudentFromSearch(studentId, sectionId) {
+    let resolved=globalSearchStudentContext(studentId),sec=sectionId?resolved.sections.find(section=>section.id===sectionId):resolved.selected;
+    if(!resolved.sections.length)return alert('This Student has no current eligible class. Search will not open the profile in an unrelated class.');
+    if(!sec)return alert('Choose a current class for this Student. The class selection may have changed; reopen Search if needed.');
+    closeNavOverlay();state.activeSectionId=sec.id;state.course=sec.course;
+    renderRoster();openStudent(studentId);
+}
 function notificationCard(n) { let s = n.studentId ? allStudents().find(x => x.id === n.studentId) : null; return `<div class="card"><div class="row"><div><span class="pill">${notificationGroup(n)}</span> <b>${n.title}</b><br><span class="small">${notificationDueLabel(n)}${s ? ` • ${s.name}` : ""}</span>${n.details ? `<p>${n.details}</p>` : ""}</div><div style="display:flex;gap:6px;flex-wrap:wrap">${n.type === "behavior_followup" ? `<button class="btn primary" onclick="openBehaviorFromNotification('${n.id}')">Complete Incident Report</button>` : `<button class="btn primary" onclick="completeNotification('${n.id}')">Complete</button>`}<button class="btn" onclick="dismissNotification('${n.id}')">Dismiss</button></div></div></div>`; }
 function showNotifications() { syncCalendarEventNotifications(); let existing = document.getElementById("navOverlay"); if (existing)
     existing.remove(); ensureScheduleModel(); let list = activeNotifications(), groups = ["Now / Current Class", "Before Next Class", "Planning Period", "Today", "Upcoming"], body = list.length ? groups.map(g => { let arr = list.filter(n => notificationGroup(n) === g); return arr.length ? `<h3>${g}</h3>${arr.map(notificationCard).join("")}` : ""; }).join("") : `<div class="card"><p><b>No active notifications.</b></p><p class="small">Severe Workplace follow-ups and future classroom reminders will appear here.</p></div>`; let o = document.createElement("div"); o.id = "navOverlay"; o.className = "modal show"; o.innerHTML = `<div class="modalbox" style="width:min(780px,100%)" onclick="event.stopPropagation()"><button class="btn close" onclick="closeNavOverlay()">Close</button><h2>Notifications</h2><p class="small">Schedule-aware reminders are grouped by when they matter.</p>${body}</div>`; o.onclick = e => { if (e.target === o)

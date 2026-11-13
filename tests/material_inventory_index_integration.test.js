@@ -1,5 +1,5 @@
 const assert=require('assert'),fs=require('fs');
-const html=fs.readFileSync('index.html','utf8'),sw=fs.readFileSync('sw.js','utf8'),build=fs.readFileSync('app-build.js','utf8').replaceAll('-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1-classroom-workflow-sweep-repair-1','').replaceAll('-coordinated-classroom-repair-10-findings-3','');
+const html=fs.readFileSync('index.html','utf8'),sw=fs.readFileSync('sw.js','utf8'),build=fs.readFileSync('app-build.js','utf8').replaceAll('-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1-classroom-workflow-sweep-repair-1-classroom-navigation-history-repair-1','').replaceAll('-coordinated-classroom-repair-10-findings-3','');
 assert(html.includes('src/material_inventory.js'));assert(sw.includes('./src/material_inventory.js'));
 assert(html.includes('Current Stock')&&html.includes('History / Usage')&&html.includes('Definitions'));
 assert(html.includes('+ Record Material Use/Waste'));assert(html.includes('commitMaterialInventory'));

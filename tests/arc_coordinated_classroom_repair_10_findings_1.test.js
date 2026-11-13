@@ -139,7 +139,7 @@ test('runtime identity and authority closure advance together',()=>{
   const build=fs.readFileSync('app-build.js','utf8');
   const closure=JSON.parse(fs.readFileSync('runtime/arc_authority_closure_v1.json','utf8'));
   assert(build.includes('coordinated-classroom-repair-10-findings-3'));
-  assert(closure.buildIdentity.endsWith('coordinated-classroom-repair-10-findings-3-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1-classroom-workflow-sweep-repair-1'));
+  assert(closure.buildIdentity.endsWith('coordinated-classroom-repair-10-findings-3-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1-classroom-workflow-sweep-repair-1-classroom-navigation-history-repair-1'));
 });
 
 if(!process.exitCode)console.log(`\n${passed}/${total} coordinated classroom repair tests passed.`);

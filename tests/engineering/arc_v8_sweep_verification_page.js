@@ -1,0 +1,5 @@
+(function(){'use strict';const output=document.getElementById('output'),buttons=[...document.querySelectorAll('button')];let coordinator=null;
+async function action(id){buttons.forEach(b=>b.disabled=true);try{if(location.protocol!=='http:'||!['127.0.0.1','localhost'].includes(location.hostname))throw Error('Only a task-owned local HTTP origin is allowed.');if(navigator.serviceWorker&&navigator.serviceWorker.controller)throw Error('Use a clean origin without a controlling service worker.');coordinator=coordinator||ArcV8SweepVerification.create();const result=await coordinator[id]();output.textContent=JSON.stringify(result,null,2);return result;}catch(e){output.textContent=JSON.stringify({ok:false,code:e.code||e.name,message:e.message},null,2);throw e;}finally{buttons.forEach(b=>b.disabled=false);}}
+window.arcSweep=Object.freeze({inspect:()=>action('inspect'),run:()=>action('run')});
+for(const id of ['inspect','run'])document.getElementById(id).addEventListener('click',()=>action(id).catch(()=>{}));
+})();

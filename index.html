@@ -2470,6 +2470,36 @@ function renderDemoAndTesting() {
     let scenarios = ArcSimulationFoundation.SCENARIOS.map(item => `<div class="card"><h3>${escapePhotoText(item.displayName)}</h3>${item.subtitle ? `<p><b>${escapePhotoText(item.subtitle)}</b></p>` : `<p><b>Polished mid-quarter demonstration</b></p>`}<p class="small">Persistent fictional data • scenario version ${item.scenarioVersion}</p><button class="btn primary" ${marker ? "disabled" : ""} onclick="showSimulationEntry('${item.id}')">${marker && marker.scenarioId === item.id ? "Currently Active" : "Enter Scenario"}</button></div>`).join("");
     document.getElementById("app").innerHTML = `<button class="btn" onclick="renderAppSettings()">← Settings</button><h2>Demo & Testing</h2><p class="small">Every scenario uses real ARC workflows in a separate persistent store. Entering requires a verified Live Safety Snapshot.</p>${currentCard}<div class="grid">${scenarios}</div>`;
 }
+async function readTodaySchedule(day) {
+    let projection=academicConsumerProjection(day),sections=projection.sections.map(section=>projectionSectionRecord(section,projection.sectionContextForSection(section.sectionId))).filter(Boolean),plan,planning;
+    if(academicAuthorityMode==='V8_AUTHORITATIVE'&&!simulationScenarioAuthorityActive()) {
+        if(!academicAuthorityRuntime||!academicAuthorityRuntime.scheduleAdmin)throw new Error('Schedule authority is unavailable.');
+        let owner=academicAuthorityRuntime.scheduleAdmin;
+        plan=await owner.scheduleForDate(day);
+        if(!plan||plan.schoolDate!==day)throw new Error('Schedule authority did not return today\'s schedule.');
+        planning=projection.schoolYear?await owner.planningForDate(projection.schoolYear.schoolYearId,day):null;
+    } else {
+        let resolved=dayPlan(parseLocalDate(day)),times=bellTimesForResolvedDayPlan(resolved);
+        plan={schoolDate:day,dayType:resolved.dayType,instructionMode:resolved.instructionMode,periods:Object.keys(times).map(code=>({code,startTime:times[code].start,endTime:times[code].end}))};
+        planning=state.planningPeriod?{periodCode:String(state.planningPeriod)}:null;
+    }
+    return {plan,sections,planning};
+}
+async function renderScheduleHome() {
+    navMark('schedule',"Today's Schedule");let app=document.getElementById('app'),day=dateKey();
+    app.innerHTML=`<button class="btn" onclick="renderMainMenu()">Back to Dashboard</button><h2>Today's Schedule</h2><p class="small">${escapePhotoText(day)}. Read-only timetable for today.</p><div id="todayScheduleContent" role="status">Loading today's schedule...</div><p><button class="btn" onclick="showCalendar()">Open Calendar</button> <button class="btn" onclick="renderScheduleSetup()">Schedule Setup</button></p>`;
+    let content=document.getElementById('todayScheduleContent');
+    try {
+        let {plan,sections,planning}=await readTodaySchedule(day);
+        if(document.getElementById('todayScheduleContent')!==content||navCurrentView!=='schedule')return;
+        let instructional=plan.dayType==='school'&&plan.instructionMode!=='none',periods=instructional?(plan.periods||[]).slice():[];
+        periods.sort((a,b)=>String(a.startTime||a.start||'').localeCompare(String(b.startTime||b.start||''))||String(a.code||a.periodCode||a.period).localeCompare(String(b.code||b.periodCode||b.period),undefined,{numeric:true}));
+        content.innerHTML=`<div class="card"><h3>${escapePhotoText(dayTypeLabel(plan.dayType))}</h3><p>${escapePhotoText(instructionModeLabel(plan.instructionMode))}${plan.bellSchedule?' · '+escapePhotoText(plan.bellSchedule.name||''):''}</p>${!instructional?'<p>No instructional periods today.</p>':!periods.length?'<p>No instructional periods are available for today. Review Schedule Setup if this is unexpected.</p>':'<div style="overflow-x:auto"><table><tr><th>Period</th><th>Time</th><th>Class / Planning</th><th>Open</th></tr>'+periods.map(period=>{let code=String(period.code||period.periodCode||period.period),start=period.startTime||period.start,end=period.endTime||period.end,isPlanning=planning&&String(planning.periodCode)===code,matched=sections.filter(section=>String(section.period)===code),time=start&&end?formatClock(start)+'–'+formatClock(end):'Time unavailable';return '<tr><td>'+escapePhotoText(code)+'</td><td>'+escapePhotoText(time)+'</td><td>'+(isPlanning?'Planning Period':matched.length?matched.map(section=>escapePhotoText(section.name)+' · '+escapePhotoText(courseLabel(section.course))).join('<br>'):'No effective class placement')+'</td><td>'+(!isPlanning?matched.map(section=>'<button class="btn" onclick="navSwitchClass('+escapePhotoText(JSON.stringify(section.id))+')">Open Class</button>').join(' '):'')+'</td></tr>';}).join('')+'</table></div>'}</div>`;
+    } catch(error) {
+        if(document.getElementById('todayScheduleContent')!==content||navCurrentView!=='schedule')return;
+        content.innerHTML='<div class="banner">Today\'s schedule is unavailable: '+escapePhotoText(error.message||String(error))+'. No fallback timetable was substituted.</div>';
+    }
+}
 function renderScheduleSetup() {
     navMark("setup", "Schedule Setup");
     ensureScheduleModel();

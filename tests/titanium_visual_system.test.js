@@ -4,7 +4,7 @@ const fs=require('fs');
 const html=fs.readFileSync('index.html','utf8');
 const css=fs.readFileSync('src/arc_titanium_visual_system.css','utf8');
 const sw=fs.readFileSync('sw.js','utf8');
-const build=fs.readFileSync('app-build.js','utf8').replaceAll('-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1','').replaceAll('-coordinated-classroom-repair-10-findings-3','');
+const build=fs.readFileSync('app-build.js','utf8').replaceAll('-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1-classroom-workflow-sweep-repair-1','').replaceAll('-coordinated-classroom-repair-10-findings-3','');
 
 const inlineEnd=html.indexOf('</style>');
 const visualLink=html.indexOf('src/arc_titanium_visual_system.css');

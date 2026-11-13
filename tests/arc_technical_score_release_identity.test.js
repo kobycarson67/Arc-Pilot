@@ -1,6 +1,6 @@
 const assert=require('assert'),fs=require('fs'),vm=require('vm');
 const context={};vm.runInNewContext(fs.readFileSync('app-build.js','utf8'),context);
-const build=context.ARC_BUILD,suffix='-technical-score-atomic-repair-1-technical-display-parity-repair-1';
+const build=context.ARC_BUILD,suffix='-technical-score-atomic-repair-1-technical-display-parity-repair-1-classroom-workflow-sweep-repair-1';
 assert(build.build.endsWith(suffix));assert(build.shell.endsWith(suffix));
 assert.equal(build.technicalScoreAtomicRepair,'technical-score-atomic-repair-1');
 assert.equal(build.technicalDisplayParityRepair,'technical-display-parity-repair-1');

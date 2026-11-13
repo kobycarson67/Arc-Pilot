@@ -5,7 +5,7 @@ const Shell=require('../src/arc_titanium_shell');
 
 const html=fs.readFileSync('index.html','utf8');
 const css=fs.readFileSync('src/arc_visual_foundation.css','utf8');
-const build=fs.readFileSync('app-build.js','utf8').replaceAll('-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1','').replaceAll('-coordinated-classroom-repair-10-findings-3','');
+const build=fs.readFileSync('app-build.js','utf8').replaceAll('-batch-b-multi-section-startup-repair-1-technical-score-atomic-repair-1-technical-display-parity-repair-1-classroom-workflow-sweep-repair-1','').replaceAll('-coordinated-classroom-repair-10-findings-3','');
 const options={edgeWidth:24,intentDistance:8,drawerTravel:222,settleProgress:.5,flickVelocity:.55};
 let passed=0;
 function test(name,fn){fn();passed++;console.log('PASS '+name);}
